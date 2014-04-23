@@ -1,0 +1,1496 @@
+Array
+(
+    [0] => Array
+        (
+            [id_TypeFait] => 0
+            [titreFait] => Retard PM
+            [couleurFond] => ccaa00
+            [couleurTexte] => 000000
+            [typeDeRetenue] => 0
+            [ordre] => 1
+            [listeChamps] => ladate,idorigine,ideleve,idfait,type,qui
+            [champs] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 1
+                            [champ] => ladate
+                            [label] => Date du jour
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 1
+                            [typeDateRetenue] => 0
+                            [typeChamp] => text
+                            [size] => 12
+                            [maxlength] => 10
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onFocus
+                            [javascriptCommand] => javascript:blur();dater(0,0,'')
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 8
+                            [champ] => idorigine
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [2] => Array
+                        (
+                            [id] => 10
+                            [champ] => ideleve
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [3] => Array
+                        (
+                            [id] => 11
+                            [champ] => idfait
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [4] => Array
+                        (
+                            [id] => 12
+                            [champ] => type
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [5] => Array
+                        (
+                            [id] => 9
+                            [champ] => qui
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                )
+
+        )
+
+    [1] => Array
+        (
+            [id_TypeFait] => 1
+            [titreFait] => Retard au cours
+            [couleurFond] => 559900
+            [couleurTexte] => 000000
+            [typeDeRetenue] => 0
+            [ordre] => 2
+            [listeChamps] => ladate, idorigine, ideleve, idfait, professeur, type, qui
+            [focus] => professeur
+            [champs] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 1
+                            [champ] => ladate
+                            [label] => Date du jour
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 1
+                            [typeDateRetenue] => 0
+                            [typeChamp] => text
+                            [size] => 12
+                            [maxlength] => 10
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onFocus
+                            [javascriptCommand] => javascript:blur();dater(0,0,'')
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 8
+                            [champ] => idorigine
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [2] => Array
+                        (
+                            [id] => 10
+                            [champ] => ideleve
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [3] => Array
+                        (
+                            [id] => 11
+                            [champ] => idfait
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [4] => Array
+                        (
+                            [id] => 2
+                            [champ] => professeur
+                            [label] => Professeur
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => text
+                            [size] => 20
+                            [maxlength] => 30
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onChange
+                            [javascriptCommand] => javascript:this.value=this.value.toUpperCase()
+                        )
+
+                    [5] => Array
+                        (
+                            [id] => 12
+                            [champ] => type
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [6] => Array
+                        (
+                            [id] => 9
+                            [champ] => qui
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                )
+
+        )
+
+    [2] => Array
+        (
+            [id_TypeFait] => 2
+            [titreFait] => Exclusion du cours
+            [couleurFond] => aaaaaa
+            [couleurTexte] => ffffff
+            [typeDeRetenue] => 0
+            [ordre] => 3
+            [listeChamps] => ladate, idorigine, ideleve, idfait, professeur, motif, type, qui
+            [focus] => professeur
+            [champs] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 1
+                            [champ] => ladate
+                            [label] => Date du jour
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 1
+                            [typeDateRetenue] => 0
+                            [typeChamp] => text
+                            [size] => 12
+                            [maxlength] => 10
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onFocus
+                            [javascriptCommand] => javascript:blur();dater(0,0,'')
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 8
+                            [champ] => idorigine
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [2] => Array
+                        (
+                            [id] => 10
+                            [champ] => ideleve
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [3] => Array
+                        (
+                            [id] => 11
+                            [champ] => idfait
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [4] => Array
+                        (
+                            [id] => 2
+                            [champ] => professeur
+                            [label] => Professeur
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => text
+                            [size] => 20
+                            [maxlength] => 30
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onChange
+                            [javascriptCommand] => javascript:this.value=this.value.toUpperCase()
+                        )
+
+                    [5] => Array
+                        (
+                            [id] => 3
+                            [champ] => motif
+                            [label] => Motif
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => textarea
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 60
+                            [lignes] => 4
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onKeyPress
+                            [javascriptCommand] => textLimit(this,100)
+                        )
+
+                    [6] => Array
+                        (
+                            [id] => 12
+                            [champ] => type
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [7] => Array
+                        (
+                            [id] => 9
+                            [champ] => qui
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                )
+
+        )
+
+    [3] => Array
+        (
+            [id_TypeFait] => 3
+            [titreFait] => Divers
+            [couleurFond] => ffff00
+            [couleurTexte] => 000000
+            [typeDeRetenue] => 0
+            [ordre] => 4
+            [listeChamps] => ladate, idorigine, ideleve, idfait, professeur, motif, type, qui
+            [focus] => professeur
+            [champs] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 1
+                            [champ] => ladate
+                            [label] => Date du jour
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 1
+                            [typeDateRetenue] => 0
+                            [typeChamp] => text
+                            [size] => 12
+                            [maxlength] => 10
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onFocus
+                            [javascriptCommand] => javascript:blur();dater(0,0,'')
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 8
+                            [champ] => idorigine
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [2] => Array
+                        (
+                            [id] => 10
+                            [champ] => ideleve
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [3] => Array
+                        (
+                            [id] => 11
+                            [champ] => idfait
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [4] => Array
+                        (
+                            [id] => 2
+                            [champ] => professeur
+                            [label] => Professeur
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => text
+                            [size] => 20
+                            [maxlength] => 30
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onChange
+                            [javascriptCommand] => javascript:this.value=this.value.toUpperCase()
+                        )
+
+                    [5] => Array
+                        (
+                            [id] => 3
+                            [champ] => motif
+                            [label] => Motif
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => textarea
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 60
+                            [lignes] => 4
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onKeyPress
+                            [javascriptCommand] => textLimit(this,100)
+                        )
+
+                    [6] => Array
+                        (
+                            [id] => 12
+                            [champ] => type
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [7] => Array
+                        (
+                            [id] => 9
+                            [champ] => qui
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                )
+
+        )
+
+    [4] => Array
+        (
+            [id_TypeFait] => 5
+            [titreFait] => Retenue Disciplinaire
+            [couleurFond] => ffffff
+            [couleurTexte] => 000000
+            [typeDeRetenue] => 2
+            [ordre] => 5
+            [listeChamps] => ladate, idorigine, ideleve, idfait, type, qui, idretenue, motif, travail, professeur, materiel, dateRetenue, heure, duree, local
+            [focus] => motif
+            [champs] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 1
+                            [champ] => ladate
+                            [label] => Date du jour
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 1
+                            [typeDateRetenue] => 0
+                            [typeChamp] => text
+                            [size] => 12
+                            [maxlength] => 10
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onFocus
+                            [javascriptCommand] => javascript:blur();dater(0,0,'')
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 8
+                            [champ] => idorigine
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [2] => Array
+                        (
+                            [id] => 10
+                            [champ] => ideleve
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [3] => Array
+                        (
+                            [id] => 11
+                            [champ] => idfait
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [4] => Array
+                        (
+                            [id] => 12
+                            [champ] => type
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [5] => Array
+                        (
+                            [id] => 9
+                            [champ] => qui
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [6] => Array
+                        (
+                            [id] => 4
+                            [champ] => idretenue
+                            [label] => Date de retenue
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 1
+                            [typeChamp] => select
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [7] => Array
+                        (
+                            [id] => 3
+                            [champ] => motif
+                            [label] => Motif
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => textarea
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 60
+                            [lignes] => 4
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onKeyPress
+                            [javascriptCommand] => textLimit(this,100)
+                        )
+
+                    [8] => Array
+                        (
+                            [id] => 5
+                            [champ] => travail
+                            [label] => Travail à effectuer
+                            [contextes] => formulaire, billetRetenue
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => textarea
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 60
+                            [lignes] => 2
+                            [classCSS] => 
+                            [javascriptEvent] => onKeyPress
+                            [javascriptCommand] => textLimit(this,250)
+                        )
+
+                    [9] => Array
+                        (
+                            [id] => 2
+                            [champ] => professeur
+                            [label] => Professeur
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => text
+                            [size] => 20
+                            [maxlength] => 30
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onChange
+                            [javascriptCommand] => javascript:this.value=this.value.toUpperCase()
+                        )
+
+                    [10] => Array
+                        (
+                            [id] => 15
+                            [champ] => materiel
+                            [label] => Matériel à prévoir
+                            [contextes] => formulaire, billetRetenue
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => textarea
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 60
+                            [lignes] => 2
+                            [classCSS] => 
+                            [javascriptEvent] => onKeyPress
+                            [javascriptCommand] => textLimit(this,120)
+                        )
+
+                    [11] => Array
+                        (
+                            [id] => 16
+                            [champ] => dateRetenue
+                            [label] => Date de retenue
+                            [contextes] => tableau, billetRetenue
+                            [typeDate] => 1
+                            [typeDateRetenue] => 0
+                            [typeChamp] => 
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [12] => Array
+                        (
+                            [id] => 17
+                            [champ] => heure
+                            [label] => Heure
+                            [contextes] => tableau, billetRetenue
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => 
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascript] => 
+                        )
+
+                    [13] => Array
+                        (
+                            [id] => 18
+                            [champ] => duree
+                            [label] => Durée
+                            [contextes] => tableau, billetRetenue
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => 
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [14] => Array
+                        (
+                            [id] => 19
+                            [champ] => local
+                            [label] => Local
+                            [contextes] => tableau, billetRetenue
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => 
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                )
+
+        )
+
+    [5] => Array
+        (
+            [id_TypeFait] => 4
+            [titreFait] => Retenue de Travail
+            [couleurFond] => 4444ff
+            [couleurTexte] => 000000
+            [typeDeRetenue] => 1
+            [ordre] => 6
+            [listeChamps] => ladate, idorigine, ideleve, idfait, type, qui, idretenue, motif, travail, professeur, materiel, dateRetenue, heure, duree, local
+            [focus] => motif
+            [champs] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 1
+                            [champ] => ladate
+                            [label] => Date du jour
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 1
+                            [typeDateRetenue] => 0
+                            [typeChamp] => text
+                            [size] => 12
+                            [maxlength] => 10
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onFocus
+                            [javascriptCommand] => javascript:blur();dater(0,0,'')
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 8
+                            [champ] => idorigine
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [2] => Array
+                        (
+                            [id] => 10
+                            [champ] => ideleve
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [3] => Array
+                        (
+                            [id] => 11
+                            [champ] => idfait
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [4] => Array
+                        (
+                            [id] => 12
+                            [champ] => type
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [5] => Array
+                        (
+                            [id] => 9
+                            [champ] => qui
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [6] => Array
+                        (
+                            [id] => 4
+                            [champ] => idretenue
+                            [label] => Date de retenue
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 1
+                            [typeChamp] => select
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [7] => Array
+                        (
+                            [id] => 3
+                            [champ] => motif
+                            [label] => Motif
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => textarea
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 60
+                            [lignes] => 4
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onKeyPress
+                            [javascriptCommand] => textLimit(this,100)
+                        )
+
+                    [8] => Array
+                        (
+                            [id] => 5
+                            [champ] => travail
+                            [label] => Travail à effectuer
+                            [contextes] => formulaire, billetRetenue
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => textarea
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 60
+                            [lignes] => 2
+                            [classCSS] => 
+                            [javascriptEvent] => onKeyPress
+                            [javascriptCommand] => textLimit(this,250)
+                        )
+
+                    [9] => Array
+                        (
+                            [id] => 2
+                            [champ] => professeur
+                            [label] => Professeur
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => text
+                            [size] => 20
+                            [maxlength] => 30
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onChange
+                            [javascriptCommand] => javascript:this.value=this.value.toUpperCase()
+                        )
+
+                    [10] => Array
+                        (
+                            [id] => 15
+                            [champ] => materiel
+                            [label] => Matériel à prévoir
+                            [contextes] => formulaire, billetRetenue
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => textarea
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 60
+                            [lignes] => 2
+                            [classCSS] => 
+                            [javascriptEvent] => onKeyPress
+                            [javascriptCommand] => textLimit(this,120)
+                        )
+
+                    [11] => Array
+                        (
+                            [id] => 16
+                            [champ] => dateRetenue
+                            [label] => Date de retenue
+                            [contextes] => tableau, billetRetenue
+                            [typeDate] => 1
+                            [typeDateRetenue] => 0
+                            [typeChamp] => 
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [12] => Array
+                        (
+                            [id] => 17
+                            [champ] => heure
+                            [label] => Heure
+                            [contextes] => tableau, billetRetenue
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => 
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascript] => 
+                        )
+
+                    [13] => Array
+                        (
+                            [id] => 18
+                            [champ] => duree
+                            [label] => Durée
+                            [contextes] => tableau, billetRetenue
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => 
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [14] => Array
+                        (
+                            [id] => 19
+                            [champ] => local
+                            [label] => Local
+                            [contextes] => tableau, billetRetenue
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => 
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                )
+
+        )
+
+    [6] => Array
+        (
+            [id_TypeFait] => 7
+            [titreFait] => Renvoi
+            [couleurFond] => 999999
+            [couleurTexte] => ffffff
+            [typeDeRetenue] => 0
+            [ordre] => 8
+            [listeChamps] => ladate, idorigine, ideleve, idfait, type, qui, motif, sanction, nopv
+            [focus] => motif
+            [champs] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 1
+                            [champ] => ladate
+                            [label] => Date du jour
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 1
+                            [typeDateRetenue] => 0
+                            [typeChamp] => text
+                            [size] => 12
+                            [maxlength] => 10
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onFocus
+                            [javascriptCommand] => javascript:blur();dater(0,0,'')
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 8
+                            [champ] => idorigine
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [2] => Array
+                        (
+                            [id] => 10
+                            [champ] => ideleve
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [3] => Array
+                        (
+                            [id] => 11
+                            [champ] => idfait
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [4] => Array
+                        (
+                            [id] => 12
+                            [champ] => type
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [5] => Array
+                        (
+                            [id] => 9
+                            [champ] => qui
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [6] => Array
+                        (
+                            [id] => 3
+                            [champ] => motif
+                            [label] => Motif
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => textarea
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 60
+                            [lignes] => 4
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onKeyPress
+                            [javascriptCommand] => textLimit(this,100)
+                        )
+
+                    [7] => Array
+                        (
+                            [id] => 6
+                            [champ] => sanction
+                            [label] => Sanction
+                            [contextes] => formulaire, tableau
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => textarea
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 60
+                            [lignes] => 2
+                            [classCSS] => 
+                            [javascriptEvent] => onKeyPress
+                            [javascriptCommand] => textLimit(this,80)
+                        )
+
+                    [8] => Array
+                        (
+                            [id] => 7
+                            [champ] => nopv
+                            [label] => Numéro de PV
+                            [contextes] => formulaire, tableau
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => text
+                            [size] => 20
+                            [maxlength] => 20
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                )
+
+        )
+
+    [7] => Array
+        (
+            [id_TypeFait] => 8
+            [titreFait] => Félicitations
+            [couleurFond] => 9922ff
+            [couleurTexte] => ffff22
+            [typeDeRetenue] => 0
+            [ordre] => 99
+            [listeChamps] => ladate,idorigine,ideleve, idfait, qui, type, motif, professeur
+            [focus] => motif
+            [champs] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 1
+                            [champ] => ladate
+                            [label] => Date du jour
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 1
+                            [typeDateRetenue] => 0
+                            [typeChamp] => text
+                            [size] => 12
+                            [maxlength] => 10
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onFocus
+                            [javascriptCommand] => javascript:blur();dater(0,0,'')
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 8
+                            [champ] => idorigine
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [2] => Array
+                        (
+                            [id] => 10
+                            [champ] => ideleve
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [3] => Array
+                        (
+                            [id] => 11
+                            [champ] => idfait
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [4] => Array
+                        (
+                            [id] => 9
+                            [champ] => qui
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [5] => Array
+                        (
+                            [id] => 12
+                            [champ] => type
+                            [label] => 
+                            [contextes] => formulaire
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => hidden
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => 
+                            [javascriptEvent] => 
+                            [javascriptCommand] => 
+                        )
+
+                    [6] => Array
+                        (
+                            [id] => 3
+                            [champ] => motif
+                            [label] => Motif
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => textarea
+                            [size] => 0
+                            [maxlength] => 0
+                            [colonnes] => 60
+                            [lignes] => 4
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onKeyPress
+                            [javascriptCommand] => textLimit(this,100)
+                        )
+
+                    [7] => Array
+                        (
+                            [id] => 2
+                            [champ] => professeur
+                            [label] => Professeur
+                            [contextes] => formulaire, tableau, minimum
+                            [typeDate] => 0
+                            [typeDateRetenue] => 0
+                            [typeChamp] => text
+                            [size] => 20
+                            [maxlength] => 30
+                            [colonnes] => 0
+                            [lignes] => 0
+                            [classCSS] => obligatoire
+                            [javascriptEvent] => onChange
+                            [javascriptCommand] => javascript:this.value=this.value.toUpperCase()
+                        )
+
+                )
+
+        )
+
+)

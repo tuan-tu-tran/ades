@@ -1,0 +1,56 @@
+<!--
+Copyright (c) 2014 Educ-Action
+
+This file is part of ADES.
+
+ADES is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+ADES is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="inv">
+<div id="onglet1" class="ongletActif inv" onclick="swap('part2', 'part1', 'onglet2', 'onglet1')">
+	Informations personnelles</div>
+<div id="onglet2" class="ongletInactif inv" onclick="swap('part1', 'part2', 'onglet1', 'onglet2')">
+	Mémo</div>
+
+	<div id="part1" class="zone" style="display:block; clear: both;">
+	<fieldset id="cadreGauche">
+		<legend>Elève</legend>
+		<img style="width: 100px; height: 148px; float: right;" src="photos/##codeInfo##.jpg" alt="##nom## ##prenom##">
+		<p>Nom : <strong>##nom##</strong></p>
+		<p>Prénom : <strong>##prenom##</strong></p>
+		<p>Classe : <strong>##classe##</strong></p>
+		<p class="inv">Anniversaire : <strong>##anniv##</strong></p>
+		<p>Code Info : <strong>##codeInfo##</strong></p>
+		##contrat##
+	</fieldset>
+	<fieldset id="cadreDroit">
+		<legend>Parents</legend>
+		
+		<p>Nom du responsable : <strong>##nomResp##</strong></p>
+		<p>Courriel des parents : <strong>##courriel##</strong></p>
+		<p>Téléphone : <strong>##telephone1##</strong></p>
+		<p>GSM : <strong>##telephone2##</strong></p>
+		<p>Téléphone 2 : <strong>##telephone3##</strong></p>
+	</fieldset>
+	</div>
+	
+	<div id="part2" class="zone inv" style="display:none; clear: both;">
+		<fieldset>
+		<legend>
+        Mémo
+        </legend>
+		<div class="memo">##memo##</div>
+		</fieldset>
+	</div>
+	<hr style="clear:both" />
+</div>

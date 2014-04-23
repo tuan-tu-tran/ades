@@ -1,0 +1,83 @@
+<!--
+Copyright (c) 2014 Educ-Action
+
+This file is part of ADES.
+
+ADES is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+ADES is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<span id="onglet1" class="ongletActif"
+ onclick="swap('part2', 'part1', 'onglet2', 'onglet1')">
+ Informations personnelles</span> 
+ <span id="onglet2" class="ongletInactif"
+ onclick="swap('part1', 'part2', 'onglet1', 'onglet2')">
+ Mémo</span>
+ 
+<form name="formedit" action="<? echo $_SERVER['PHP_SELF']; ?>" method="POST"
+ onsubmit="return(verifForm(this))" id="formedit">
+ 
+<div id="part1" style="display: block; clear: both;">
+  
+<fieldset id="cadreGauche"> <legend>Elève</legend>
+ <p><span class="label">Nom :</span>
+ <input name="nom" size="25" maxlength="30" value="##nom##" class="obligatoire"> </p>
+ 
+ <p><span class="label">Prénom :</span> 
+ <input name="prenom" size="25" maxlength="30" value="##prenom##" class="obligatoire"> </p>
+ 
+ <p> <span class="label">Classe :</span>
+ <input name="classe" size="5" maxlength="3" value="##classe##" class="obligatoire"> </p>
+ <p> <span class="label">Anniversaire :</span>
+ <input name="anniv" size="8" maxlength="5" value="##anniv##"></p>
+ 
+ <p><span class="label">Code informatique :</span>
+<input name="codeInfo" size="8" maxlength="6" value="##codeInfo##"></p>
+  
+ <p> <span class="label">Contrat :</span>
+ <input name="contrat" value="O" ##contrat="" type="checkbox"> </p>
+
+</fieldset>
+
+<fieldset id="cadreDroit"><legend>Parents</legend>
+ <p><span class="label">Responsable :</span>
+ <input name="nomresp" size="25" maxlength="50" value="##nomresp##"> </p>
+ 
+ <p><span class="label">Courriel :</span>
+<input name="courriel" size="25" maxlength="40" id="email" value="##courriel##"></p>
+
+ <p><span class="label">Téléphone:</span> 
+ <input name="telephone1" size="15" maxlength="20" value="##telephone1##"></p>
+ 
+ <p><span class="label">GSM :</span> 
+ <input name="telephone2" size="15" maxlength="20" value="##telephone2##"></p>
+ 
+ <p><span class="label">Téléphone 2 :</span>
+ <input name="telephone3" size="15" maxlength="20" value="##telephone3##"> </p>
+ 
+ <input name="ideleve" value="##ideleve##" type="hidden"> 
+</fieldset>
+</div>
+
+<div id="part2" style="display: none; clear: both;">
+  <fieldset> <legend>Mémo</legend> 
+  <textarea name="memo" cols="70" rows="15">##memo##</textarea> 
+  </fieldset>
+</div>
+  <div style="text-align: center; clear:both"> 
+  <input name="mode" value="enregistrer" type="submit"> 
+  <input name="Reset" value="Réinitialiser" type="reset"> 
+  </div>
+</form>
+<script language="javascript" type="text/javascript">
+document.forms[0].elements['nom'].select();
+</script>

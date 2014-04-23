@@ -1,0 +1,32 @@
+<!--
+Copyright (c) 2014 Educ-Action
+
+This file is part of ADES.
+
+ADES is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+ADES is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<h2>##TITRE##</h2>
+<form name="ParNom" method="POST" action="">
+    <input name="nom" type="text" onKeyPress="return Completer(event)" size="50" ##OLIB##>
+    <input type="reset" value="Réinitialiser">
+	<!--
+	les deux "div"s suivants recueilleront le nombre de noms correspondants avec le motif
+	et les noms des élèves correspondants
+	-->
+	<div id="nombre"></div>
+	<div id="noms" style="height: 15em; width: 25em; overflow: auto;"></div>
+</form>
+<script language="javascript" type="text/javascript">
+document.forms[0].elements['nom'].select();
+</script>

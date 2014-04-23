@@ -1,0 +1,13 @@
+<form name="ParNom" method="POST" action="">
+    <input name="nom" type="text" onKeyPress="return Completer(event)" size="50" ##OLIB##>
+    <input type="reset" value="Réinitialiser">
+	<!--
+	les deux "div"s suivants recueilleront le nombre de noms correspondants avec le motif
+	et les noms des élèves correspondants
+	-->
+	<div id="nombre"></div>
+	<div id="noms" style="height: 15em; width: 25em; overflow: auto;"></div>
+</form>
+<script language="javascript" type="text/javascript">
+document.forms[0].elements['nom'].select();
+</script>

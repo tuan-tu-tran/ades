@@ -1,0 +1,58 @@
+/**
+ * Copyright (c) 2014 Educ-Action
+ * 
+ * This file is part of ADES.
+ * 
+ * ADES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * ADES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+*/
+#blocConteneur {
+  padding: 10px;
+  width: 80%;
+  min-height: 400px;
+  height: 400px;
+  background-color: #9999ff;
+  clear: both;
+}
+
+.onglet {
+  border: 1px solid #dddddd;
+  width: 8em;
+  float: left;
+  cursor: pointer;
+  padding-left: 5px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+   background-color: #cccccc;
+  color: #aaaaaa;
+}
+
+.sousBloc {
+  display: none;
+}
+
+ul#blocOnglets {
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.ongletActif {
+  border: 1px solid blue;
+  width: 8em;
+  float: left;
+  cursor: pointer;
+  padding-left: 5px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  background-color: #ffaa00;
+}

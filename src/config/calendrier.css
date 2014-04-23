@@ -1,0 +1,71 @@
+/**
+ * Copyright (c) 2014 Educ-Action
+ * 
+ * This file is part of ADES.
+ * 
+ * ADES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * ADES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+.calendrier
+{
+font-family:Arial, Helvetica, sans-serif;
+border: 1px solid red;
+background-color:white;
+font-size:9pt;
+}
+
+.lienVide
+	{
+	cursor:pointer;
+	color:blue;
+	text-decoration:underline;
+	}
+.titreMois 
+	{
+	background-color:#FFCC33; 
+	color: blue;
+	font-weight:bold;
+	text-align:center;
+	}
+.we
+	{
+	color: black;
+	}
+.jourSemaine
+	{
+	background-color:#FFFF66; 
+	font-weight: bold;
+	}
+.aujourdhui
+	{
+	color: red;
+	font-weight:bolder;
+	cursor:pointer;
+	}
+.unJour
+	{
+	background-color:#FFFFCC;
+	color: #CC9900;
+	cursor:pointer;
+	}
+.case
+	{
+	cursor:pointer;
+	border: 1px solid blue;
+	}
+.fleche
+	{
+	cursor: pointer;
+	font-weight:bolder;
+	}
