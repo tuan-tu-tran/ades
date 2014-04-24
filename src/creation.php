@@ -49,31 +49,36 @@ function CreationTables (){
 function CreateConfigFile(){
 	// Rami Adrien création du fichier confdb.inc.php
 	$fichierconfdb = fopen(_DB_CONFIG_FILE_,"w");
-	fwrite($fichierconfdb, "<?php \n");
-	fwrite($fichierconfdb, "// SERVEUR SQL");
-	fwrite($fichierconfdb, "\n");
-	fwrite($fichierconfdb, '$sql_serveur="');
-	fwrite($fichierconfdb, $_POST['sqlserver']);
-	fwrite($fichierconfdb, "\";\n");
-	fwrite($fichierconfdb, "// LOGIN SQL");
-	fwrite($fichierconfdb, "\n");
-	fwrite($fichierconfdb, '$sql_user="');
-	fwrite($fichierconfdb,$_POST['utilisateursql']);
-	fwrite($fichierconfdb, "\";\n");
-	fwrite($fichierconfdb, "// MOT DE PASSE SQL");
-	fwrite($fichierconfdb, "\n");
-	fwrite($fichierconfdb, '$sql_passwd="');
-	fwrite($fichierconfdb, $_POST['motdepassesql']);
-	fwrite($fichierconfdb, "\";\n");
-	fwrite($fichierconfdb, "// NOM DE LA BASE DE DONNEES");
-	fwrite($fichierconfdb, "\n");
-	fwrite($fichierconfdb, '$sql_bdd="');
-	fwrite($fichierconfdb,$_POST['nomdelabasesql']);
-	fwrite($fichierconfdb, "\";\n");
-	fwrite($fichierconfdb, '$sql_prefix=""');
-	fwrite($fichierconfdb, ";\n");
-	fwrite($fichierconfdb, "?>");
-	fclose($fichierconfdb);
+	if(!$fichierconfdb){
+		return false;
+	}else{
+		fwrite($fichierconfdb, "<?php \n");
+		fwrite($fichierconfdb, "// SERVEUR SQL");
+		fwrite($fichierconfdb, "\n");
+		fwrite($fichierconfdb, '$sql_serveur="');
+		fwrite($fichierconfdb, $_POST['sqlserver']);
+		fwrite($fichierconfdb, "\";\n");
+		fwrite($fichierconfdb, "// LOGIN SQL");
+		fwrite($fichierconfdb, "\n");
+		fwrite($fichierconfdb, '$sql_user="');
+		fwrite($fichierconfdb,$_POST['utilisateursql']);
+		fwrite($fichierconfdb, "\";\n");
+		fwrite($fichierconfdb, "// MOT DE PASSE SQL");
+		fwrite($fichierconfdb, "\n");
+		fwrite($fichierconfdb, '$sql_passwd="');
+		fwrite($fichierconfdb, $_POST['motdepassesql']);
+		fwrite($fichierconfdb, "\";\n");
+		fwrite($fichierconfdb, "// NOM DE LA BASE DE DONNEES");
+		fwrite($fichierconfdb, "\n");
+		fwrite($fichierconfdb, '$sql_bdd="');
+		fwrite($fichierconfdb,$_POST['nomdelabasesql']);
+		fwrite($fichierconfdb, "\";\n");
+		fwrite($fichierconfdb, '$sql_prefix=""');
+		fwrite($fichierconfdb, ";\n");
+		fwrite($fichierconfdb, "?>");
+		fclose($fichierconfdb);
+		return true;
+	}
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -132,10 +137,20 @@ if(empty($_POST['sqlserver'])==false){
 
 	<?php
 		//create the config file
-		CreateConfigFile()
+		if(CreateConfigFile()):
 	?>
-	<p>Fichier de configuration créer avec succès</p>
-	<a href="creation.php?etape=3">Installation d'ADES</a>
+		<p>Fichier de configuration créé avec succès</p>
+		<a href="creation.php?etape=3">Installation d'ADES</a>
+	<?php else: ?>
+		<p>Le fichier de configuration n'a pas pu être écrit.</p>
+		<p>
+			Veuillez vérifier que l'utilisateur système
+				<b><?php echo posix_getpwuid(posix_geteuid())["name"];?></b>
+			dispose des droits suffisants pour écrire le fichier
+				<b><?php echo join(DIRECTORY_SEPARATOR, array(DIRNAME(__FILE__),_DB_CONFIG_FILE_));?></b>
+		</p>
+		<p>Le système a renvoyé l'erreur suivante: <?php echo error_get_last()["message"] ?></p>
+	<?php endif; ?>
 
 <?php elseif($etape==3):?>
 
