@@ -72,6 +72,20 @@ EOF;
 		return true;
 	}
 }
+
+function ConfigIsValid(){
+	$host=$_POST["sqlserver"];
+	$user=$_POST["utilisateursql"];
+	$pwd=$_POST["motdepassesql"];
+	$db=$_POST["nomdelabasesql"];
+	$conn=mysql_connect($host,$user,$pwd);
+	if(!$conn)
+		return false;
+	$valid=mysql_select_db($db,$conn);
+	mysql_close($conn);
+	error_log("valid? ".$valid);
+	return $valid;
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -115,14 +129,30 @@ if(empty($_POST['sqlserver'])==false){
 
 	<p><a href="creation.php?etape=1">Oui, je sais ce que je fais</a></p>
 
-<?php elseif($etape==1):?>
+<?php elseif($etape==1 || $etape==2 && !ConfigIsValid()):?>
 
 	<form name="form" method="post" action="creation.php">
-		<p><label>Serveur Sql :</label><input name="sqlserver" id="sqlserver" size="30" maxlength="50" type="text"></p>
-		<p><label>Utilisateur :</label><input name="utilisateursql" id="utilisateur" size="30" maxlength="50" type="text"></p>
-		<p><label>Mot de Passe :</label><input name="motdepassesql" id="motdepasse" size="30" maxlength="50" type="password"></p>
-		<p><label>Nom de la Base de données :</label><input name="nomdelabasesql" id="nomdelabase" size="30" maxlength="50" type="text"></p>
+		<p>
+			<label>Serveur Sql :</label>
+			<input value="<?php echo htmlspecialchars($_POST["sqlserver"]);?>" name="sqlserver" id="sqlserver" size="30" maxlength="50" type="text">
+		</p>
+		<p>
+			<label>Utilisateur :</label>
+			<input value="<?php echo htmlspecialchars($_POST["utilisateursql"]);?>" name="utilisateursql" id="utilisateur" size="30" maxlength="50" type="text">
+		</p>
+		<p>
+			<label>Mot de Passe :</label>
+			<input value="<?php echo htmlspecialchars($_POST["motdepassesql"]);?>" name="motdepassesql" id="motdepasse" size="30" maxlength="50" type="password">
+		</p>
+		<p>
+			<label>Nom de la Base de données :</label>
+			<input value="<?php echo htmlspecialchars($_POST["nomdelabasesql"]);?>" name="nomdelabasesql" id="nomdelabase" size="30" maxlength="50" type="text">
+		</p>
 		<input name="Submit" value="Enregistrer" type="submit">
+		<?php if($etape==2):?>
+		<p>Le connexion à la base de données a échoué.</p>
+		<p>Le système a renvoyé l'erreur: <?php echo mysql_error()?></p>
+		<?php endif; ?>
 	</form>
 
 <?php elseif($etape==2):?>
