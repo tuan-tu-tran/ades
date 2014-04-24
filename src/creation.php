@@ -155,7 +155,9 @@ if(empty($_POST['sqlserver'])==false){
 
 	<?php
 		//create the tables 
-		if(file_exists(_DB_CONFIG_FILE_)){
+		if(!file_exists(_DB_CONFIG_FILE_)){
+			redirect("creation.php");
+		}else{
 			//Si le fichier existe on l'inclut dans le programme et l'interface se charge pour l'ajout des tables
 			include(_DB_CONFIG_FILE_);
 			$lienDB = mysql_connect($sql_serveur, $sql_user, $sql_passwd) or die(mysql_error());
