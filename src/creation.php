@@ -29,6 +29,25 @@ include ("inc/fonctions.inc.php");
 include ("config/constantes.inc.php");
 Normalisation();
 // On inclut plus automatiquement le fichier de configuration on l'inclut uniquement si il existe ce qui permet de s'adapter au processus de création du fichier
+
+function CreationTables (){
+	$commandes = file("./creation.sql");
+	$uneCommande = "";
+	$nbEtoiles = 0;
+	foreach ($commandes as $uneLigne){
+		// supprimer les commentaires dans le fichier .sql
+		if (substr($uneCommande, 0, 2) == "--")
+			$uneCommande = "";
+		$uneCommande .= trim($uneLigne);
+		$longueur = strlen($uneCommande);
+		$dernier = substr($uneCommande, $longueur-1, 1);
+		if ($dernier == ";"){
+			$resultat = mysql_query($uneCommande);
+			$nb = mysql_affected_rows ();
+			$uneCommande = "";
+		}
+	}
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -36,29 +55,6 @@ Normalisation();
   <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
   <title>Initialisation de la base de données ADES</title>
   <link media="screen" rel="stylesheet" href="config/screen.css" type="text/css">
-<?php
-function CreationTables ()
-{
-$commandes = file("./creation.sql");
-$uneCommande = "";
-$nbEtoiles = 0;
-foreach ($commandes as $uneLigne)
-	{
-	// supprimer les commentaires dans le fichier .sql
-	if (substr($uneCommande, 0, 2) == "--")
-		$uneCommande = "";
-	$uneCommande .= trim($uneLigne);
-	$longueur = strlen($uneCommande);
-	$dernier = substr($uneCommande, $longueur-1, 1);
-	if ($dernier == ";")
-		{
-		$resultat = mysql_query($uneCommande);
-		$nb = mysql_affected_rows ();
-		$uneCommande = "";
-		}
-	}
-}
-?>
 </head>
 <body>
 <div id="texte">
