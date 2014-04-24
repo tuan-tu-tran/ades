@@ -17,8 +17,13 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
+require("inc/init.inc.php");
+if(!file_exists(_DB_CONFIG_FILE_)){
+	error_log("no config file found");
+	redirect("creation.php");
+}
+
 require ("inc/prive.inc.php");
-require ("inc/fonctions.inc.php");
 require ("config/constantes.inc.php");
 require ("config/confbd.inc.php");
 //Rami Adrien
