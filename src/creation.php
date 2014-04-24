@@ -52,30 +52,22 @@ function CreateConfigFile(){
 	if(!$fichierconfdb){
 		return false;
 	}else{
-		fwrite($fichierconfdb, "<?php \n");
-		fwrite($fichierconfdb, "// SERVEUR SQL");
-		fwrite($fichierconfdb, "\n");
-		fwrite($fichierconfdb, '$sql_serveur="');
-		fwrite($fichierconfdb, $_POST['sqlserver']);
-		fwrite($fichierconfdb, "\";\n");
-		fwrite($fichierconfdb, "// LOGIN SQL");
-		fwrite($fichierconfdb, "\n");
-		fwrite($fichierconfdb, '$sql_user="');
-		fwrite($fichierconfdb,$_POST['utilisateursql']);
-		fwrite($fichierconfdb, "\";\n");
-		fwrite($fichierconfdb, "// MOT DE PASSE SQL");
-		fwrite($fichierconfdb, "\n");
-		fwrite($fichierconfdb, '$sql_passwd="');
-		fwrite($fichierconfdb, $_POST['motdepassesql']);
-		fwrite($fichierconfdb, "\";\n");
-		fwrite($fichierconfdb, "// NOM DE LA BASE DE DONNEES");
-		fwrite($fichierconfdb, "\n");
-		fwrite($fichierconfdb, '$sql_bdd="');
-		fwrite($fichierconfdb,$_POST['nomdelabasesql']);
-		fwrite($fichierconfdb, "\";\n");
-		fwrite($fichierconfdb, '$sql_prefix=""');
-		fwrite($fichierconfdb, ";\n");
-		fwrite($fichierconfdb, "?>");
+		$format=<<<EOF
+// SERVEUR SQL
+\$sql_serveur=%s;
+// LOGIN SQL
+\$sql_user=%s;
+// MOT DE PASSE SQL
+\$sql_passwd=%s;
+// NOM DE LA BASE DE DONNEES
+\$sql_bdd=%s;
+EOF;
+		fprintf($fichierconfdb, "<?php\n".$format."?>\n"
+			, var_export($_POST["sqlserver"], true)
+			, var_export($_POST["utilisateursql"], true)
+			, var_export($_POST["motdepassesql"], true)
+			, var_export($_POST["nomdelabasesql"], true)
+		);
 		fclose($fichierconfdb);
 		return true;
 	}
