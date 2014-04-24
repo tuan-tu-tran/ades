@@ -142,6 +142,7 @@ if(empty($_POST['sqlserver'])==false){
 		<p>Fichier de configuration créé avec succès</p>
 		<a href="creation.php?etape=3">Installation d'ADES</a>
 	<?php else: ?>
+		<form name="form" method="post">
 		<p>Le fichier de configuration n'a pas pu être écrit.</p>
 		<p>
 			Veuillez vérifier que l'utilisateur système
@@ -150,6 +151,12 @@ if(empty($_POST['sqlserver'])==false){
 				<b><?php echo join(DIRECTORY_SEPARATOR, array(DIRNAME(__FILE__),_DB_CONFIG_FILE_));?></b>
 		</p>
 		<p>Le système a renvoyé l'erreur suivante: <?php echo error_get_last()["message"] ?></p>
+		<input name="sqlserver" type="hidden" value="<?php echo htmlspecialchars($_POST["sqlserver"])?>" />
+		<input name="utilisateursql" type="hidden" value="<?php echo htmlspecialchars($_POST["utilisateursql"])?>" />
+		<input name="motdepassesql" type="hidden" value="<?php echo htmlspecialchars($_POST["motdepassesql"])?>" />
+		<input name="nomdelabasesql" type="hidden" value="<?php echo htmlspecialchars($_POST["nomdelabasesql"])?>" />
+		<input name="Submit" value="Réessayer" type="submit">
+		</form>
 	<?php endif; ?>
 
 <?php elseif($etape==3):?>
