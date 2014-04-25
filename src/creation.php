@@ -111,6 +111,10 @@ if (
 if(empty($_POST['sqlserver'])==false){
 	$etape= 2;
 }
+
+if( ( $etape==1 || $etape==2 ) && file_exists(_DB_CONFIG_FILE_) ){
+	$etape=4;
+}
 ?>
 <?php if($etape==0):?>
 
@@ -210,6 +214,10 @@ if(empty($_POST['sqlserver'])==false){
 		<p><?php echo htmlspecialchars($error_command);?></p>
 		<p>Le système a renvoyé l'erreur: <?php echo Db::GetInstance()->error()?></p>
 	<?php endif;?>
+<?php elseif($etape==4):?>
+	<p>Le fichier de configuration de la connexion à la base de données existe déjà. Pour reconfigurer la connexion, veuillez d'abord l'effacer.</p>
+	<p><a href="creation.php?etape=1">Réessayer de configurer la connexion à la base de données</a></p>
+	<p><a href="creation.php?etape=3">Passer à l'étape de création des tables</a></p>
 <?php endif; ?>
 </div>
 </body>
