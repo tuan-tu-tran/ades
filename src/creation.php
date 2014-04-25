@@ -89,6 +89,7 @@ function ConfigIsValid(){
   <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
   <title>Initialisation de la base de données ADES</title>
   <link media="screen" rel="stylesheet" href="config/screen.css" type="text/css">
+<style type="text/css">a:hover{text-decoration:underline}</style>
 </head>
 <body>
 <div id="texte">
