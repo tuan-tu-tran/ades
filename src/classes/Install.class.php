@@ -23,7 +23,6 @@ class Install{
 	const ACTION_CONFIG_DB="configure";
 	const ACTION_SUBMIT_DB_CONFIG="write_db_config";
 	const ACTION_CREATE_TABLES="create_tables";
-	const ACTION_FORBID_OVERWRITE="forbid_overwrite";
 
 	const VIEW_INFO=0;
 	const VIEW_DB_CONFIG_FORM=1;
@@ -34,31 +33,27 @@ class Install{
 	const VIEW_TABLES_NOT_CREATED=6;
 	const VIEW_OVERWRITE_FORBIDDEN=7;
 
-
-	public $view;
-	public $host;
-	public $username;
-	public $pwd;
-	public $dbname;
-
 	public function parseRequest(){
 		//get the action
 		$etape = isset($_GET['etape'])?$_GET['etape']:self::ACTION_INFO;
-		$all_actions=array(self::ACTION_INFO, self::ACTION_CONFIG_DB, self::ACTION_SUBMIT_DB_CONFIG, self::ACTION_CREATE_TABLES, self::ACTION_FORBID_OVERWRITE);
-		if(!in_array($etape, $all_actions)) $etape=self::ACTION_INFO;
 
-		if( ( $etape==self::ACTION_CONFIG_DB || $etape==self::ACTION_SUBMIT_DB_CONFIG ) && file_exists(_DB_CONFIG_FILE_) ){
-			$etape=self::ACTION_FORBID_OVERWRITE;
-		}
-		if($etape==self::ACTION_INFO){
-			//show info;
+		switch($etape){
+		case self::ACTION_INFO:
 			$this->view=self::VIEW_INFO;
+			break;
 
-		}else if($etape==self::ACTION_CONFIG_DB){
+		case self::ACTION_CONFIG_DB:
+			if(file_exists(_DB_CONFIG_FILE_))
+				$this->view=self::VIEW_OVERWRITE_FORBIDDEN;
+			else
 			//show config form
 			$this->view=self::VIEW_DB_CONFIG_FORM;
+			break;
 
-		}else if($etape==self::ACTION_SUBMIT_DB_CONFIG){
+		case self::ACTION_SUBMIT_DB_CONFIG:
+			if(file_exists(_DB_CONFIG_FILE_))
+				$this->view=self::VIEW_OVERWRITE_FORBIDDEN;
+			else
 			if($this->ConfigIsValid()){
 				if($this->WriteDbConfig()){
 					//show config file successfully written
@@ -74,8 +69,9 @@ class Install{
 				//show config form + error + repopulate
 				$this->view=self::VIEW_INVALID_CONFIG_SUBMITTED;
 			}
+			break;
 
-		}else if($etape==self::ACTION_CREATE_TABLES){
+		case self::ACTION_CREATE_TABLES:
 			if($this->CreateTables()){
 				//show tables created
 				$this->view=self::VIEW_TABLES_CREATED;
@@ -83,12 +79,11 @@ class Install{
 				//show creation failure
 				$this->view=self::VIEW_TABLES_NOT_CREATED;
 			}
+			break;
+		default:
+			$this->view=self::VIEW_INFO;
 
-		}else if($etape==self::ACTION_FORBID_OVERWRITE){
-			//show overwrite is forbidden
-			$this->view=self::VIEW_OVERWRITE_FORBIDDEN;
-
-		}else throw new Exception("unhandled action: ".$etape);
+		}
 	}
 
 	private function ConfigIsValid(){
