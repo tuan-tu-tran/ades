@@ -24,8 +24,10 @@
  * be safely included at the begining of any controller
  */
 
-define('_DB_CONFIG_FILE_','config/confbd.inc.php');
+if(!defined("_INIT_INCLUDED_")){
+	define("_INIT_INCLUDED_","");
+	define('_DB_CONFIG_FILE_','config/confbd.inc.php');
 
-require("inc/fonctions.inc.php");
+	require("inc/fonctions.inc.php");
 
-?>
+}
