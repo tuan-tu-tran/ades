@@ -177,7 +177,7 @@ $install->parseRequest();
 <?php elseif($install->view==Install::VIEW_SCHOOL_CONFIG_WRITTEN):?>
 
 	<p>Le fichier de configuration de l'école a été écrit avec succès.</p>
-	<p><a href="index.php">Terminer l'installation</a></p>
+	<p>L'installation d'ADES est terminée: <a href="index.php">On y va</a></p>
 
 <?php else: ?>
 	<?php throw new Exception("unhandled view: ".$install->view);?>
