@@ -62,7 +62,7 @@ function CreateConfigFile(){
 // NOM DE LA BASE DE DONNEES
 \$sql_bdd=%s;
 EOF;
-		fprintf($fichierconfdb, "<?php\n".$format."?>\n"
+		fprintf($fichierconfdb, "<?php\n".$format."\n"
 			, var_export($_POST["sqlserver"], true)
 			, var_export($_POST["utilisateursql"], true)
 			, var_export($_POST["motdepassesql"], true)
