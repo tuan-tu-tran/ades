@@ -64,10 +64,7 @@ class Install{
 						$this->view=self::VIEW_FILE_WRITTEN;
 					}else{
 						//show file could not be written + error
-						$this->error=error_get_last()["message"];
-						$this->system_user=posix_getpwuid(posix_geteuid())["name"];
-						$this->config_filename=_DB_CONFIG_FILE_;
-						$this->view=self::VIEW_FILE_NOT_WRITTEN;
+						$this->ShowWriteError($fname, $this->GetDbConfigSubmitUrl());
 					}
 				}else{
 					//show config form + error + repopulate
@@ -161,6 +158,14 @@ EOF;
 			fclose($fichierconfdb);
 			return true;
 		}
+	}
+
+	private function ShowWriteError($fname, $resubmitAction){
+		$this->error=error_get_last()["message"];
+		$this->system_user=posix_getpwuid(posix_geteuid())["name"];
+		$this->config_filename=$fname;
+		$this->resubmitAction=$resubmitAction;
+		$this->view=self::VIEW_FILE_NOT_WRITTEN;
 	}
 
 	private function GetLink($action, $text){ echo "<a href='".$this->GetUrl($action)."'>".$text."</a>"; }

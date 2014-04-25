@@ -100,7 +100,7 @@ $install->parseRequest();
 
 <?php elseif($install->view==Install::VIEW_FILE_NOT_WRITTEN):?>
 
-		<form name="form" method="post">
+		<form name="form" method="post" action="<?php echo $install->resubmitAction;?>">
 		<p>Le fichier de configuration n'a pas pu être écrit.</p>
 		<p>
 			Veuillez vérifier que l'utilisateur système
@@ -109,10 +109,9 @@ $install->parseRequest();
 				<b><?php echo $install->config_filename;?></b>
 		</p>
 		<p>Le système a renvoyé l'erreur suivante: <?php echo $install->error ?></p>
-		<input name="sqlserver" type="hidden" value="<?php echo htmlspecialchars($install->host)?>" />
-		<input name="utilisateursql" type="hidden" value="<?php echo htmlspecialchars($install->username)?>" />
-		<input name="motdepassesql" type="hidden" value="<?php echo htmlspecialchars($install->pwd)?>" />
-		<input name="nomdelabasesql" type="hidden" value="<?php echo htmlspecialchars($install->dbname)?>" />
+		<?php foreach($_POST as $key=>$value):?>
+			<input name="<?php echo $key;?>" type="hidden" value="<?php echo htmlspecialchars($value)?>" />
+		<?php endforeach;?>
 		<input name="Submit" value="Réessayer" type="submit">
 		</form>
 
