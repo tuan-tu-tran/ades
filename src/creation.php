@@ -98,6 +98,13 @@ function ConfigIsValid(){
  *
  */
 $etape = isset($_GET['etape'])?$_GET['etape']:0;
+if (
+	$etape!=0
+	&& $etape!=1
+	&& $etape!=2
+	&& $etape!=3
+)
+	$etape=0;
 // Détection pour savoir si l'on se trouve à l'étape de la création du fichier de configuration
 if(empty($_POST['sqlserver'])==false){
 	$etape= 2;
