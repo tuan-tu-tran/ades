@@ -163,8 +163,9 @@ EOF;
 		}
 	}
 
-	private function GetLink($action, $text){ echo "<a href='creation.php?action=".$action."'>".$text."</a>"; }
+	private function GetLink($action, $text){ echo "<a href='".$this->GetUrl($action)."'>".$text."</a>"; }
+	private function GetUrl($action){ return "creation.php?action=".$action; }
 	public function GetDbConfigLink($text){ $this->GetLink(self::ACTION_CONFIG_DB, $text);}
 	public function GetCreateTableLink($text){ $this->GetLink(self::ACTION_CREATE_TABLES, $text);}
-	public function GetDbConfigSubmitUrl(){return "creation.php?action=".self::ACTION_SUBMIT_DB_CONFIG;}
+	public function GetDbConfigSubmitUrl(){return $this->GetUrl(self::ACTION_SUBMIT_DB_CONFIG);}
 }
