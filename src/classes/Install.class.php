@@ -35,9 +35,9 @@ class Install{
 
 	public function parseRequest(){
 		//get the action
-		$etape = isset($_GET['etape'])?$_GET['etape']:self::ACTION_INFO;
+		$action = isset($_GET['action'])?$_GET['action']:self::ACTION_INFO;
 
-		switch($etape){
+		switch($action){
 			case self::ACTION_INFO:
 				$this->view=self::VIEW_INFO;
 				break;
@@ -155,8 +155,8 @@ EOF;
 		}
 	}
 
-	private function GetLink($action, $text){ echo "<a href='creation.php?etape=".$action."'>".$text."</a>"; }
+	private function GetLink($action, $text){ echo "<a href='creation.php?action=".$action."'>".$text."</a>"; }
 	public function GetDbConfigLink($text){ $this->GetLink(self::ACTION_CONFIG_DB, $text);}
 	public function GetCreateTableLink($text){ $this->GetLink(self::ACTION_CREATE_TABLES, $text);}
-	public function GetDbConfigSubmitUrl(){return "creation.php?etape=".self::ACTION_SUBMIT_DB_CONFIG;}
+	public function GetDbConfigSubmitUrl(){return "creation.php?action=".self::ACTION_SUBMIT_DB_CONFIG;}
 }
