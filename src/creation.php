@@ -201,16 +201,13 @@ if(empty($_POST['sqlserver'])==false){
 
 	<?php if(!file_exists(_DB_CONFIG_FILE_)) redirect("creation.php"); ?>
 
-	<?php
-		$error_command=NULL;
-		if(CreationTables($error_command)): ?>
+	<?php $error_command=NULL;
+	if(CreationTables($error_command)): ?>
 		<p>Login et mot de passe: admin</p>
 		<p>L'installation d'ADES est terminée: <a href="index.php">On y va</a></p>
 	<?php else:?>
 		<p>Une erreur s'est produite lors de la creation des tables, à cause de la commande:</p>
-		<p>
-		<?php echo htmlspecialchars($error_command);?>
-		</p>
+		<p><?php echo htmlspecialchars($error_command);?></p>
 		<p>Le système a renvoyé l'erreur: <?php echo Db::GetInstance()->error()?></p>
 	<?php endif;?>
 <?php endif; ?>
