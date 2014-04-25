@@ -77,14 +77,8 @@ function ConfigIsValid(){
 	$host=$_POST["sqlserver"];
 	$user=$_POST["utilisateursql"];
 	$pwd=$_POST["motdepassesql"];
-	$db=$_POST["nomdelabasesql"];
-	$conn=mysql_connect($host,$user,$pwd);
-	if(!$conn)
-		return false;
-	$valid=mysql_select_db($db,$conn);
-	mysql_close($conn);
-	error_log("valid? ".$valid);
-	return $valid;
+	$dbname=$_POST["nomdelabasesql"];
+	return Db::GetInstance($host, $user, $pwd, $dbname)->connect();
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -151,7 +145,7 @@ if(empty($_POST['sqlserver'])==false){
 		<input name="Submit" value="Enregistrer" type="submit">
 		<?php if($etape==2):?>
 		<p>Le connexion à la base de données a échoué.</p>
-		<p>Le système a renvoyé l'erreur: <?php echo mysql_error()?></p>
+		<p>Le système a renvoyé l'erreur: <?php echo Db::GetInstance()->error()?></p>
 		<?php endif; ?>
 	</form>
 
