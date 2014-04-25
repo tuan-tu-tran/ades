@@ -18,6 +18,8 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 session_start();
-if (!isset($_SESSION["identification"]["user"]))
+if (!isset($_SESSION["identification"]["user"])){
 	header("Location: accueil.php");
+	exit;
+}
 ?>
