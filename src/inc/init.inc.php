@@ -26,8 +26,9 @@
 
 if(!defined("_INIT_INCLUDED_")){
 	define("_INIT_INCLUDED_","");
-	define('_DB_CONFIG_FILE_',realpath(DIRNAME(__FILE__)."/../config").DIRECTORY_SEPARATOR.'confbd.inc.php');
-	define('_SCHOOL_CONFIG_FILE_','config/constantes.inc.php');
+	define("_CONFIG_FOLDER_FULL_PATH_",realpath(DIRNAME(__FILE__)."/../config").DIRECTORY_SEPARATOR);
+	define('_DB_CONFIG_FILE_',_CONFIG_FOLDER_FULL_PATH_.'confbd.inc.php');
+	define('_SCHOOL_CONFIG_FILE_',_CONFIG_FOLDER_FULL_PATH_.'constantes.inc.php');
 	define("_CLASS_DIR_",DIRNAME(__FILE__)."/../classes");
 
 	require("inc/fonctions.inc.php");
