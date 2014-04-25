@@ -213,6 +213,9 @@ if( ( $etape==1 || $etape==2 ) && file_exists(_DB_CONFIG_FILE_) ){
 		<p>Une erreur s'est produite lors de la creation des tables, à cause de la commande:</p>
 		<p><?php echo htmlspecialchars($error_command);?></p>
 		<p>Le système a renvoyé l'erreur: <?php echo Db::GetInstance()->error()?></p>
+		<p><a href="creation.php?etape=3">Réessayer de créer les tables</a></p>
+		<p><a href="creation.php?etape=1">Reconfigurer la connexion (vous devez d'abord supprimer le fichier existant)</a></p>
+		<p><a href="index.php">Terminer l'installation</a></p>
 	<?php endif;?>
 <?php elseif($etape==4):?>
 	<p>Le fichier de configuration de la connexion à la base de données existe déjà. Pour reconfigurer la connexion, veuillez d'abord l'effacer.</p>
