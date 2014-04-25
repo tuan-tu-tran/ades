@@ -139,6 +139,7 @@ class Install{
 			return false;
 		}else{
 			$format=<<<EOF
+<?php
 // SERVEUR SQL
 \$sql_serveur=%s;
 // LOGIN SQL
@@ -147,8 +148,11 @@ class Install{
 \$sql_passwd=%s;
 // NOM DE LA BASE DE DONNEES
 \$sql_bdd=%s;
+
+\$sql_prefix="";
+
 EOF;
-			fprintf($fichierconfdb, "<?php\n".$format."\n"
+			fprintf($fichierconfdb, $format
 				, var_export($_POST["sqlserver"], true)
 				, var_export($_POST["utilisateursql"], true)
 				, var_export($_POST["motdepassesql"], true)
