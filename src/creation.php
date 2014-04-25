@@ -138,7 +138,40 @@ $install->parseRequest();
 	<p><?php $install->GetCreateTableLink("Passer à l'étape de création des tables");?></p>
 	<p><a href="index.php">Terminer l'installation</a></p>
 
-<?php endif; ?>
+<?php elseif($install->view==Install::VIEW_SCHOOL_CONFIG_FORM || $install->view==Install::VIEW_BAD_SCHOOL_CONFIG):?>
+
+	<form action="<?php echo $install->GetSchoolConfigSubmitUrl();?>" method="POST">
+		<p>
+			<label>Nom de l'école :</label>
+			<input value="<?echo htmlspecialchars($install->schoolname)?>" name="schoolname" size="30" maxlength="50" type="text">
+		</p>
+		<p>
+			<label>Titre :</label>
+			<input value="<?echo htmlspecialchars($install->title)?>" name="title" size="30" maxlength="50" type="text">
+		</p>
+
+		<input name="Submit" value="Enregistrer" type="submit">
+
+		<?php if($install->view==Install::VIEW_BAD_SCHOOL_CONFIG):?>
+			<p>Veuillez remplir tous les champs</p>
+		<?php endif;?>
+	</form>
+
+<?php elseif($install->view==Install::VIEW_OVERWRITE_SCHOOL_FORBIDDEN):?>
+
+	<p>Le fichier de configuration de l'école existe déjà.</p>
+	<p>Pour reconfigurer l'école, veuillez utiliser <a href="confignomecole.php">l'interface d'adminstration</a>.</p>
+	<p><a href="index.php">Terminer l'installation</a></p>
+
+<?php elseif($install->view==Install::VIEW_SCHOOL_CONFIG_WRITTEN):?>
+
+	<p>Le fichier de configuration de l'école a été écrit avec succès.</p>
+	<p><a href="index.php">Terminer l'installation</a></p>
+
+<?php else: ?>
+	<?php throw new Exception("unhandled view: ".$install->view);?>
+<?php endif;?>
+
 </div>
 </body>
 </html>
