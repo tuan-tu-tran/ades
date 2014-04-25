@@ -27,10 +27,9 @@
  */
 require("inc/init.inc.php");
 Normalisation();
-function CreationTables (){
+function CreationTables (&$error_command){
 	$commandes = file("./creation.sql");
 	$uneCommande = "";
-	$nbEtoiles = 0;
 	foreach ($commandes as $uneLigne){
 		// supprimer les commentaires dans le fichier .sql
 		if (substr($uneCommande, 0, 2) == "--")
@@ -39,11 +38,14 @@ function CreationTables (){
 		$longueur = strlen($uneCommande);
 		$dernier = substr($uneCommande, $longueur-1, 1);
 		if ($dernier == ";"){
-			$resultat = mysql_query($uneCommande);
-			$nb = mysql_affected_rows ();
+			if(!Db::GetInstance()->execute($uneCommande)){
+				$error_command=$uneCommande;
+				return false;
+			}
 			$uneCommande = "";
 		}
 	}
+	return true;
 }
 
 function CreateConfigFile(){
@@ -197,21 +199,20 @@ if(empty($_POST['sqlserver'])==false){
 
 <?php elseif($etape==3):?>
 
+	<?php if(!file_exists(_DB_CONFIG_FILE_)) redirect("creation.php"); ?>
+
 	<?php
-		//create the tables 
-		if(!file_exists(_DB_CONFIG_FILE_)){
-			redirect("creation.php");
-		}else{
-			//Si le fichier existe on l'inclut dans le programme et l'interface se charge pour l'ajout des tables
-			include(_DB_CONFIG_FILE_);
-			$lienDB = mysql_connect($sql_serveur, $sql_user, $sql_passwd) or die(mysql_error());
-			mysql_select_db($sql_bdd);
-			CreationTables();
-			mysql_close ($lienDB);
-		}
-	?>
+		$error_command=NULL;
+		if(CreationTables($error_command)): ?>
 		<p>Login et mot de passe: admin</p>
 		<p>L'installation d'ADES est terminée: <a href="index.php">On y va</a></p>
+	<?php else:?>
+		<p>Une erreur s'est produite lors de la creation des tables, à cause de la commande:</p>
+		<p>
+		<?php echo htmlspecialchars($error_command);?>
+		</p>
+		<p>Le système a renvoyé l'erreur: <?php echo Db::GetInstance()->error()?></p>
+	<?php endif;?>
 <?php endif; ?>
 </div>
 </body>

@@ -62,6 +62,14 @@ class Db{
 		return $this->conn!=NULL;
 	}
 
+	public function execute($query){
+		if($this->connect()){
+			$this->conn->query($query);
+			return !$this->conn->errno;
+		}
+		return false;
+	}
+
 	public function error(){
 		if($this->connect_error!=NULL) return $this->connect_error;
 		if($this->conn!=NULL && $this->conn->errno) return $this->conn->error;
