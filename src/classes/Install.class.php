@@ -70,7 +70,7 @@ class Install{
 						$this->view=self::VIEW_FILE_WRITTEN;
 					}else{
 						//show file could not be written + error
-						$this->ShowWriteError($fname, $this->GetDbConfigSubmitUrl());
+						$this->ShowWriteError(_DB_CONFIG_FILE_, $this->GetDbConfigSubmitUrl());
 					}
 				}else{
 					//show config form + error + repopulate
