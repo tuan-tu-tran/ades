@@ -38,51 +38,50 @@ class Install{
 		$etape = isset($_GET['etape'])?$_GET['etape']:self::ACTION_INFO;
 
 		switch($etape){
-		case self::ACTION_INFO:
-			$this->view=self::VIEW_INFO;
-			break;
+			case self::ACTION_INFO:
+				$this->view=self::VIEW_INFO;
+				break;
 
-		case self::ACTION_CONFIG_DB:
-			if(file_exists(_DB_CONFIG_FILE_))
-				$this->view=self::VIEW_OVERWRITE_FORBIDDEN;
-			else
-			//show config form
-			$this->view=self::VIEW_DB_CONFIG_FORM;
-			break;
-
-		case self::ACTION_SUBMIT_DB_CONFIG:
-			if(file_exists(_DB_CONFIG_FILE_))
-				$this->view=self::VIEW_OVERWRITE_FORBIDDEN;
-			else
-			if($this->ConfigIsValid()){
-				if($this->WriteDbConfig()){
-					//show config file successfully written
-					$this->view=self::VIEW_FILE_WRITTEN;
-				}else{
-					//show file could not be written + error
-					$this->error=error_get_last()["message"];
-					$this->system_user=posix_getpwuid(posix_geteuid())["name"];
-					$this->config_filename=_DB_CONFIG_FILE_;
-					$this->view=self::VIEW_FILE_NOT_WRITTEN;
+			case self::ACTION_CONFIG_DB:
+				if(file_exists(_DB_CONFIG_FILE_))
+					$this->view=self::VIEW_OVERWRITE_FORBIDDEN;
+				else{
+					//show config form
+					$this->view=self::VIEW_DB_CONFIG_FORM;
 				}
-			}else{
-				//show config form + error + repopulate
-				$this->view=self::VIEW_INVALID_CONFIG_SUBMITTED;
-			}
-			break;
+				break;
 
-		case self::ACTION_CREATE_TABLES:
-			if($this->CreateTables()){
-				//show tables created
-				$this->view=self::VIEW_TABLES_CREATED;
-			}else{
-				//show creation failure
-				$this->view=self::VIEW_TABLES_NOT_CREATED;
-			}
-			break;
-		default:
-			$this->view=self::VIEW_INFO;
+			case self::ACTION_SUBMIT_DB_CONFIG:
+				if(file_exists(_DB_CONFIG_FILE_))
+					$this->view=self::VIEW_OVERWRITE_FORBIDDEN;
+				else if($this->ConfigIsValid()){
+					if($this->WriteDbConfig()){
+						//show config file successfully written
+						$this->view=self::VIEW_FILE_WRITTEN;
+					}else{
+						//show file could not be written + error
+						$this->error=error_get_last()["message"];
+						$this->system_user=posix_getpwuid(posix_geteuid())["name"];
+						$this->config_filename=_DB_CONFIG_FILE_;
+						$this->view=self::VIEW_FILE_NOT_WRITTEN;
+					}
+				}else{
+					//show config form + error + repopulate
+					$this->view=self::VIEW_INVALID_CONFIG_SUBMITTED;
+				}
+				break;
 
+			case self::ACTION_CREATE_TABLES:
+				if($this->CreateTables()){
+					//show tables created
+					$this->view=self::VIEW_TABLES_CREATED;
+				}else{
+					//show creation failure
+					$this->view=self::VIEW_TABLES_NOT_CREATED;
+				}
+				break;
+			default:
+				$this->view=self::VIEW_INFO;
 		}
 	}
 
