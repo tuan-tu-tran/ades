@@ -131,23 +131,36 @@ if(empty($_POST['sqlserver'])==false){
 	<p><a href="creation.php?etape=1">Oui, je sais ce que je fais</a></p>
 
 <?php elseif($etape==1 || $etape==2 && !ConfigIsValid()):?>
+	<?php
+		if($etape==2){
+			$sqlserver = htmlspecialchars($_POST["sqlserver"]);
+			$utilisateursql = htmlspecialchars($_POST["utilisateursql"]);
+			$motdepassesql = htmlspecialchars($_POST["motdepassesql"]);
+			$nomdelabasesql = htmlspecialchars($_POST["nomdelabasesql"]);
+		}else{
+			$sqlserver = "";
+			$utilisateursql = "";
+			$motdepassesql = "";
+			$nomdelabasesql = "";
+		}
+	?>
 
 	<form name="form" method="post" action="creation.php">
 		<p>
 			<label>Serveur Sql :</label>
-			<input value="<?php echo htmlspecialchars($_POST["sqlserver"]);?>" name="sqlserver" id="sqlserver" size="30" maxlength="50" type="text">
+			<input value="<?echo $sqlserver?>" name="sqlserver" id="sqlserver" size="30" maxlength="50" type="text">
 		</p>
 		<p>
 			<label>Utilisateur :</label>
-			<input value="<?php echo htmlspecialchars($_POST["utilisateursql"]);?>" name="utilisateursql" id="utilisateur" size="30" maxlength="50" type="text">
+			<input value="<?echo $utilisateursql?>" name="utilisateursql" id="utilisateur" size="30" maxlength="50" type="text">
 		</p>
 		<p>
 			<label>Mot de Passe :</label>
-			<input value="<?php echo htmlspecialchars($_POST["motdepassesql"]);?>" name="motdepassesql" id="motdepasse" size="30" maxlength="50" type="password">
+			<input value="<?echo $motdepassesql?>" name="motdepassesql" id="motdepasse" size="30" maxlength="50" type="password">
 		</p>
 		<p>
 			<label>Nom de la Base de données :</label>
-			<input value="<?php echo htmlspecialchars($_POST["nomdelabasesql"]);?>" name="nomdelabasesql" id="nomdelabase" size="30" maxlength="50" type="text">
+			<input value="<?echo $nomdelabasesql?>" name="nomdelabasesql" id="nomdelabase" size="30" maxlength="50" type="text">
 		</p>
 		<input name="Submit" value="Enregistrer" type="submit">
 		<?php if($etape==2):?>
