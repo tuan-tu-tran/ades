@@ -27,61 +27,8 @@
  */
 require("inc/init.inc.php");
 Normalisation();
-function CreationTables (&$error_command){
-	$commandes = file("./creation.sql");
-	$uneCommande = "";
-	foreach ($commandes as $uneLigne){
-		// supprimer les commentaires dans le fichier .sql
-		if (substr($uneCommande, 0, 2) == "--")
-			$uneCommande = "";
-		$uneCommande .= trim($uneLigne);
-		$longueur = strlen($uneCommande);
-		$dernier = substr($uneCommande, $longueur-1, 1);
-		if ($dernier == ";"){
-			if(!Db::GetInstance()->execute($uneCommande)){
-				$error_command=$uneCommande;
-				return false;
-			}
-			$uneCommande = "";
-		}
-	}
-	return true;
-}
-
-function CreateConfigFile(){
-	// Rami Adrien création du fichier confdb.inc.php
-	$fichierconfdb = fopen(_DB_CONFIG_FILE_,"w");
-	if(!$fichierconfdb){
-		return false;
-	}else{
-		$format=<<<EOF
-// SERVEUR SQL
-\$sql_serveur=%s;
-// LOGIN SQL
-\$sql_user=%s;
-// MOT DE PASSE SQL
-\$sql_passwd=%s;
-// NOM DE LA BASE DE DONNEES
-\$sql_bdd=%s;
-EOF;
-		fprintf($fichierconfdb, "<?php\n".$format."\n"
-			, var_export($_POST["sqlserver"], true)
-			, var_export($_POST["utilisateursql"], true)
-			, var_export($_POST["motdepassesql"], true)
-			, var_export($_POST["nomdelabasesql"], true)
-		);
-		fclose($fichierconfdb);
-		return true;
-	}
-}
-
-function ConfigIsValid(){
-	$host=$_POST["sqlserver"];
-	$user=$_POST["utilisateursql"];
-	$pwd=$_POST["motdepassesql"];
-	$dbname=$_POST["nomdelabasesql"];
-	return Db::GetInstance($host, $user, $pwd, $dbname)->connect();
-}
+$install=new Install;
+$install->parseRequest();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -94,30 +41,7 @@ function ConfigIsValid(){
 <body>
 <div id="texte">
 <h2>Installation d'ADES</h2>
-<?php
-/* Rami Adrien: Installation automatique:
- * J'ai rajouté dans le ce fichier une étape en plus à savoir la création du fichier de 
- * configuration
- *
- */
-$etape = isset($_GET['etape'])?$_GET['etape']:0;
-if (
-	$etape!=0
-	&& $etape!=1
-	&& $etape!=2
-	&& $etape!=3
-)
-	$etape=0;
-// Détection pour savoir si l'on se trouve à l'étape de la création du fichier de configuration
-if(empty($_POST['sqlserver'])==false){
-	$etape= 2;
-}
-
-if( ( $etape==1 || $etape==2 ) && file_exists(_DB_CONFIG_FILE_) ){
-	$etape=4;
-}
-?>
-<?php if($etape==0):?>
+<?php if($install->view==Install::VIEW_INFO):?>
 
 	<p>Cet utilitaire va:</p>
 	<ul>
@@ -135,93 +59,83 @@ if( ( $etape==1 || $etape==2 ) && file_exists(_DB_CONFIG_FILE_) ){
 
 	<p><big>ETES VOUS SÛR(E) DE VOULOIR POURSUIVRE?</big></p>
 
-	<p><a href="creation.php?etape=1">Oui, je sais ce que je fais</a></p>
+	<p><?php $install->GetDbConfigLink("Oui, je sais ce que je fais");?></p>
 
-<?php elseif($etape==1 || $etape==2 && !ConfigIsValid()):?>
-	<?php
-		if($etape==2){
-			$sqlserver = htmlspecialchars($_POST["sqlserver"]);
-			$utilisateursql = htmlspecialchars($_POST["utilisateursql"]);
-			$motdepassesql = htmlspecialchars($_POST["motdepassesql"]);
-			$nomdelabasesql = htmlspecialchars($_POST["nomdelabasesql"]);
-		}else{
-			$sqlserver = "";
-			$utilisateursql = "";
-			$motdepassesql = "";
-			$nomdelabasesql = "";
-		}
-	?>
+<?php elseif($install->view==Install::VIEW_DB_CONFIG_FORM || $install->view==Install::VIEW_INVALID_CONFIG_SUBMITTED): ?>
 
-	<form name="form" method="post" action="creation.php">
+		<form name="form" method="post" action="<?php echo $install->GetDbConfigSubmitUrl()?>">
 		<p>
 			<label>Serveur Sql :</label>
-			<input value="<?echo $sqlserver?>" name="sqlserver" id="sqlserver" size="30" maxlength="50" type="text">
+			<input value="<?echo htmlspecialchars($install->host)?>" name="sqlserver" id="sqlserver" size="30" maxlength="50" type="text">
 		</p>
 		<p>
 			<label>Utilisateur :</label>
-			<input value="<?echo $utilisateursql?>" name="utilisateursql" id="utilisateur" size="30" maxlength="50" type="text">
+			<input value="<?echo htmlspecialchars($install->username)?>" name="utilisateursql" id="utilisateur" size="30" maxlength="50" type="text">
 		</p>
 		<p>
 			<label>Mot de Passe :</label>
-			<input value="<?echo $motdepassesql?>" name="motdepassesql" id="motdepasse" size="30" maxlength="50" type="password">
+			<input value="<?echo htmlspecialchars($install->pwd)?>" name="motdepassesql" id="motdepasse" size="30" maxlength="50" type="password">
 		</p>
 		<p>
 			<label>Nom de la Base de données :</label>
-			<input value="<?echo $nomdelabasesql?>" name="nomdelabasesql" id="nomdelabase" size="30" maxlength="50" type="text">
+			<input value="<?echo htmlspecialchars($install->dbname)?>" name="nomdelabasesql" id="nomdelabase" size="30" maxlength="50" type="text">
 		</p>
+
 		<input name="Submit" value="Enregistrer" type="submit">
-		<?php if($etape==2):?>
+
+		<?php if($install->view==Install::VIEW_INVALID_CONFIG_SUBMITTED):?>
+			<?php if($install->missing_fields):?>
+				<p>Veuillez remplir complètement le formulaire</p>
+			<?php else: ?>
 		<p>Le connexion à la base de données a échoué.</p>
-		<p>Le système a renvoyé l'erreur: <?php echo Db::GetInstance()->error()?></p>
+		<p>Le système a renvoyé l'erreur: <?php echo $install->error?></p>
+			<?php endif; ?>
 		<?php endif; ?>
 	</form>
 
-<?php elseif($etape==2):?>
+<?php elseif($install->view==Install::VIEW_FILE_WRITTEN):?>
 
-	<?php
-		//create the config file
-		if(CreateConfigFile()):
-	?>
 		<p>Fichier de configuration créé avec succès</p>
-		<a href="creation.php?etape=3">Installation d'ADES</a>
-	<?php else: ?>
+		<?php $install->GetCreateTableLink("Créer les tables de données")?>
+
+<?php elseif($install->view==Install::VIEW_FILE_NOT_WRITTEN):?>
+
 		<form name="form" method="post">
 		<p>Le fichier de configuration n'a pas pu être écrit.</p>
 		<p>
 			Veuillez vérifier que l'utilisateur système
-				<b><?php echo posix_getpwuid(posix_geteuid())["name"];?></b>
+				<b><?php echo $install->system_user;?></b>
 			dispose des droits suffisants pour écrire le fichier
-				<b><?php echo join(DIRECTORY_SEPARATOR, array(DIRNAME(__FILE__),_DB_CONFIG_FILE_));?></b>
+				<b><?php echo $install->config_filename;?></b>
 		</p>
-		<p>Le système a renvoyé l'erreur suivante: <?php echo error_get_last()["message"] ?></p>
-		<input name="sqlserver" type="hidden" value="<?php echo htmlspecialchars($_POST["sqlserver"])?>" />
-		<input name="utilisateursql" type="hidden" value="<?php echo htmlspecialchars($_POST["utilisateursql"])?>" />
-		<input name="motdepassesql" type="hidden" value="<?php echo htmlspecialchars($_POST["motdepassesql"])?>" />
-		<input name="nomdelabasesql" type="hidden" value="<?php echo htmlspecialchars($_POST["nomdelabasesql"])?>" />
+		<p>Le système a renvoyé l'erreur suivante: <?php echo $install->error ?></p>
+		<input name="sqlserver" type="hidden" value="<?php echo htmlspecialchars($install->host)?>" />
+		<input name="utilisateursql" type="hidden" value="<?php echo htmlspecialchars($install->username)?>" />
+		<input name="motdepassesql" type="hidden" value="<?php echo htmlspecialchars($install->pwd)?>" />
+		<input name="nomdelabasesql" type="hidden" value="<?php echo htmlspecialchars($install->dbname)?>" />
 		<input name="Submit" value="Réessayer" type="submit">
 		</form>
-	<?php endif; ?>
 
-<?php elseif($etape==3):?>
+<?php elseif($install->view==Install::VIEW_TABLES_CREATED):?>
 
-	<?php if(!file_exists(_DB_CONFIG_FILE_)) redirect("creation.php"); ?>
-
-	<?php $error_command=NULL;
-	if(CreationTables($error_command)): ?>
 		<p>Login et mot de passe: admin</p>
 		<p>L'installation d'ADES est terminée: <a href="index.php">On y va</a></p>
-	<?php else:?>
+
+<?php elseif($install->view==Install::VIEW_TABLES_NOT_CREATED):?>
+
 		<p>Une erreur s'est produite lors de la creation des tables, à cause de la commande:</p>
-		<p><?php echo htmlspecialchars($error_command);?></p>
-		<p>Le système a renvoyé l'erreur: <?php echo Db::GetInstance()->error()?></p>
-		<p><a href="creation.php?etape=3">Réessayer de créer les tables</a></p>
-		<p><a href="creation.php?etape=1">Reconfigurer la connexion (vous devez d'abord supprimer le fichier existant)</a></p>
+		<p><?php echo htmlspecialchars($install->error_command);?></p>
+		<p>Le système a renvoyé l'erreur: <?php echo $install->error?></p>
+		<p><?php $install->GetCreateTableLink("Réessayer de créer les tables");?></p>
+		<p><?php $install->GetDbConfigLink("Reconfigurer la connexion (vous devez d'abord supprimer le fichier existant)");?></p>
 		<p><a href="index.php">Terminer l'installation</a></p>
-	<?php endif;?>
-<?php elseif($etape==4):?>
+
+<?php elseif($install->view===Install::VIEW_OVERWRITE_FORBIDDEN):?>
+
 	<p>Le fichier de configuration de la connexion à la base de données existe déjà. Pour reconfigurer la connexion, veuillez d'abord l'effacer.</p>
-	<p><a href="creation.php?etape=1">Réessayer de configurer la connexion à la base de données</a></p>
-	<p><a href="creation.php?etape=3">Passer à l'étape de création des tables</a></p>
+	<p><?php $install->GetDbConfigLink("Réessayer de configurer la connexion à la base de données");?></p>
+	<p><?php $install->GetCreateTableLink("Passer à l'étape de création des tables");?></p>
+
 <?php endif; ?>
 </div>
 </body>
