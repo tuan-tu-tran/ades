@@ -47,6 +47,10 @@ class Install{
 					$this->view=self::VIEW_OVERWRITE_FORBIDDEN;
 				else{
 					//show config form
+					$this->host=NULL;
+					$this->username=NULL;
+					$this->pwd=NULL;
+					$this->dbname=NULL;
 					$this->view=self::VIEW_DB_CONFIG_FORM;
 				}
 				break;
