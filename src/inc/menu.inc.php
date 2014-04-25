@@ -26,18 +26,18 @@
 <img src="images/printer.gif" title="Imprimer cette page" alt="Impression"
 border="0" class="inv" style="float:right; cursor: pointer;" onclick="javascript:print()">
 <a href="index.php">
-<img src="images/retour.gif" title="retour ï¿½ l'index" alt="Retour ï¿½ l'index"
+<img src="images/retour.gif" title="retour à l'index" alt="Retour à l'index"
 border="0" class="inv" style="float: right">
 </a>
 <a href="#">
-<img src="images/prec.gif" border="0" title="Page prï¿½cï¿½dente" alt="Page prï¿½cï¿½dente"
+<img src="images/prec.gif" border="0" title="Page précédente" alt="Page précédente"
  height="32" width="32" onclick="javascript:history.go(-1)" style="float: right" class="inv">
 </a>
 
 <?php
 if (!isset($_SESSION["identification"]["user"]))
 	{
-	// fin immï¿½diate du menu
+	// fin immédiate du menu
 	return false;
 	}
 ?>
@@ -60,7 +60,7 @@ if (!isset($_SESSION["identification"]["user"]))
 		</li>
 		<li><a href="#">
 		<img src="images/eleve.png" class="icone" alt=".">
-		El&eacute;ves</a>
+		Elèves</a>
 			<ul>
 			<li>
 			<a href="parclasse.php" title="Recherche d'un &eacute;l&eagrave;ve par classe">
@@ -91,7 +91,7 @@ if (!isset($_SESSION["identification"]["user"]))
 		<li><a href="#"><img class="icone" src="images/retenue.png" alt=".">Retenues</a>
 			<ul>
 			<li>
-			<a href="listeretenues.php" title="Liste des ï¿½lï¿½ves en retenue 
+			<a href="listeretenues.php" title="Liste des élèves en retenue 
 				(par date)">
 				<img src="images/listes.png" alt="." class="icone">Listes</a>
 			</li>
