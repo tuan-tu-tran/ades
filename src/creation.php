@@ -118,6 +118,7 @@ $install->parseRequest();
 
 <?php elseif($install->view==Install::VIEW_TABLES_CREATED):?>
 
+		<p>Les tables ont été correctement créées dans la base de données.</p>
 		<p>Login et mot de passe: admin</p>
 		<p>L'installation d'ADES est terminée: <a href="index.php">On y va</a></p>
 
@@ -127,14 +128,16 @@ $install->parseRequest();
 		<p><?php echo htmlspecialchars($install->error_command);?></p>
 		<p>Le système a renvoyé l'erreur: <?php echo $install->error?></p>
 		<p><?php $install->GetCreateTableLink("Réessayer de créer les tables");?></p>
-		<p><?php $install->GetDbConfigLink("Reconfigurer la connexion (vous devez d'abord supprimer le fichier existant)");?></p>
+		<p><?php $install->GetDbConfigLink("Reconfigurer la connexion (vous devez d'abord supprimer le fichier de configuration existant)");?></p>
 		<p><a href="index.php">Terminer l'installation</a></p>
 
 <?php elseif($install->view===Install::VIEW_OVERWRITE_FORBIDDEN):?>
 
-	<p>Le fichier de configuration de la connexion à la base de données existe déjà. Pour reconfigurer la connexion, veuillez d'abord l'effacer.</p>
+	<p>Le fichier de configuration de la connexion à la base de données existe déjà.</p>
+	<p>Pour reconfigurer la connexion, veuillez d'abord l'effacer.</p>
 	<p><?php $install->GetDbConfigLink("Réessayer de configurer la connexion à la base de données");?></p>
 	<p><?php $install->GetCreateTableLink("Passer à l'étape de création des tables");?></p>
+	<p><a href="index.php">Terminer l'installation</a></p>
 
 <?php endif; ?>
 </div>
