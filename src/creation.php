@@ -34,9 +34,12 @@ $install->parseRequest();
 <html>
 <head>
   <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
-  <title>Initialisation de la base de données ADES</title>
+  <title>Installation d'ADES</title>
   <link media="screen" rel="stylesheet" href="config/screen.css" type="text/css">
-<style type="text/css">a:hover{text-decoration:underline}</style>
+<style type="text/css">
+	a:hover{text-decoration:underline;}
+	label{width:10em;}
+</style>
 </head>
 <body>
 <div id="texte">
