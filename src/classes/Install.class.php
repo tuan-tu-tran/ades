@@ -20,7 +20,7 @@
 
 class Install{
 	const ACTION_INFO="info";
-	const ACTION_CONFIG_DB="configure";
+	const ACTION_CONFIG_DB="configure_db";
 	const ACTION_SUBMIT_DB_CONFIG="write_db_config";
 	const ACTION_CREATE_TABLES="create_tables";
 
