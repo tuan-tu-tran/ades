@@ -148,7 +148,7 @@ if(isset($_SESSION['identification']['nom']) || isset($_SESSION['identification'
 $texte = "Nous sommes le <strong>$date</strong> à <strong>$heure</strong>.<br />\n";
 $texte .= "Votre adresse IP: <strong>$ip</strong>";
 if($hostname!=$ip){
-	$texte .= " <strong>$hostname</strong>";
+	$texte .= " (<strong>$hostname</strong>)";
 }
 $texte.=".<br />\n";
 $texte .= "Vous êtes <strong>$who</strong>.";
