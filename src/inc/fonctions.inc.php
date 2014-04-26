@@ -139,12 +139,19 @@ $ip = $_SERVER['REMOTE_ADDR'];
 $hostname = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 $date = date("d-m-Y");
 $heure = date("H:i");
-$nom = isset($_SESSION['identification']['nom'])?$_SESSION['identification']['nom']:"Non identifié.";
-$prenom = isset($_SESSION['identification']['prenom'])?$_SESSION['identification']['prenom']:"Non identifié.";
-$texte = "Nous sommes le <strong>$date</strong> à <strong>$heure</strong><br />\n";
-$texte .= "Votre adresse IP: <strong>$ip</strong>\n";
-$texte .= "<strong>$hostname</strong><br />\n";
-$texte .= "Vous êtes <strong>$prenom $nom</strong>";
+if(isset($_SESSION['identification']['nom']) || isset($_SESSION['identification']['prenom'])){
+	$who = isset($_SESSION['identification']['nom'])?$_SESSION['identification']['nom']:"";
+	$who .= isset($_SESSION['identification']['prenom'])?$_SESSION['identification']['prenom']:"";
+}else{
+	$who="Non identifié";
+}
+$texte = "Nous sommes le <strong>$date</strong> à <strong>$heure</strong>.<br />\n";
+$texte .= "Votre adresse IP: <strong>$ip</strong>";
+if($hostname!=$ip){
+	$texte .= " <strong>$hostname</strong>";
+}
+$texte.=".<br />\n";
+$texte .= "Vous êtes <strong>$who</strong>.";
 return $texte;
 }
 
