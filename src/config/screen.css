@@ -341,6 +341,7 @@ fieldset {
 
 .icone {
     border: none;
+    vertical-align:middle;
   }
 
 .invEcran {
