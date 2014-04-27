@@ -141,6 +141,7 @@ $date = date("d-m-Y");
 $heure = date("H:i");
 if(isset($_SESSION['identification']['nom']) || isset($_SESSION['identification']['prenom'])){
 	$who = isset($_SESSION['identification']['nom'])?$_SESSION['identification']['nom']:"";
+	$who.=" ";
 	$who .= isset($_SESSION['identification']['prenom'])?$_SESSION['identification']['prenom']:"";
 }else{
 	$who="Non identifié";
