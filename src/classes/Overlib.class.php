@@ -19,7 +19,7 @@
 */
 class Overlib{
 	public static function Render($text){
-		$hint = htmlspecialchars(json_encode($text));
+		$hint = htmlspecialchars(json_encode(utf8_encode($text)));
 		echo " onmouseover=\"return overlib($hint);\" onmouseout=\"return nd();\"";
 	}
 }
