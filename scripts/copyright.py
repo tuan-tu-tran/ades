@@ -72,6 +72,9 @@ for fname in sys.argv[1:]:
 		with open(fname) as fh:
 			content=fh.read()
 		if copyright not in content:
+			if "copyright" in content.lower():
+				print "file already contains copyright:",fname
+				continue
 			copyright_content=copyrighter_by_ext[ext](content)
 			with open(fname,"w") as fh:
 				fh.write(copyright_content)
