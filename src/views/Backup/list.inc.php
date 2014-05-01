@@ -31,8 +31,8 @@
 	</script>
 <?php View::EndBlock()?>
 
-
 <?php View::Embed("header.inc.php")?>
+
 <h2>Sauvegarde de la base de données</h2>
 
 <fieldset class="notice">
