@@ -33,6 +33,7 @@ if(!defined("_INIT_INCLUDED_")){
 	define("_VIEWS_FOLDER",DIRNAME(__FILE__)."/../views");
 
 	require("inc/fonctions.inc.php");
+	@include_once(_SCHOOL_CONFIG_FILE_);
 
 	set_include_path(_CLASS_DIR_);
 	spl_autoload_register(function($classname){
