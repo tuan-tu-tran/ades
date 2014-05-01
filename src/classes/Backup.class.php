@@ -97,23 +97,13 @@ class Backup{
 	}
 
 	private function backupAction(){
-		$inoutdesc=array(
-			0=>array("pipe","r"),
-			1=>array("pipe","w"),
-			2=>array("pipe","w"),
-		);
 		$db=Db::GetInstance();
 		$host=$db->host;
 		$username=$db->username;
 		$pwd=$db->pwd;
 		$dbname=$db->dbname;
-		if($proc=proc_open("mysqldump --host=$host --user=$username --password=$pwd $dbname",$inoutdesc, $pipes)){
-			fclose($pipes[0]);
-			$out=stream_get_contents($pipes[1]);
-			fclose($pipes[1]);
-			$err=stream_get_contents($pipes[2]);
-			fclose($pipes[2]);
-			$retval=proc_close($proc);
+		$cmd="mysqldump --host=$host --user=$username --password=$pwd $dbname";
+		if(Process::Execute($cmd, NULL, $out, $err, $retval)){
 			$this->dump_launched=true;
 			if($retval==0){
 				$filename=date('Ymd-His').".sql";
