@@ -43,6 +43,7 @@
 	</div>
 </fieldset>
 
+<?php if(count($backup_files)>0):?>
 <h3>Liste de dernières sauvegardes disponibles</h3>
 
 <table width="50%" border="1" cellpadding="2" style="margin:auto">
@@ -65,4 +66,5 @@
 		</tr>
 	<?php endforeach;?>
 </table>
+<?php endif;?>
 <?php View::Embed("footer.inc.php")?>
