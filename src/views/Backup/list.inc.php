@@ -21,15 +21,15 @@
 
 <h2>Sauvegarde de la base de données</h2>
 
-<fieldset id="cadreGauche" style="float:none;margin-left:auto;margin-right:auto">
+<fieldset class="notice">
 	<legend>Dernière sauvegarde</legend>
 	<div class="impt">
 		<?php if(count($backup_files)==0):?>
 			<p>Aucune sauvegarde effectuée.</p>
 		<?php else:?>
 			<p>
-				La dernière sauvegarde<br/>
-				<?php echo $last_backup?><br/>
+				La dernière sauvegarde
+				<?php echo $last_backup?>
 				a été effectuée le <?php echo $last_backup_time->format("d/m/Y à H\hi")?>
 			</p>
 			<p>Il y a
