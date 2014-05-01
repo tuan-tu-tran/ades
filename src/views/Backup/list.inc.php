@@ -37,7 +37,7 @@
 
 <fieldset class="notice">
 	<legend>Dernière sauvegarde</legend>
-	<div class="impt">
+	<div class="<?php echo (count($backup_files)==0 || $last_backup_since->days>0)?"impt":""?> ">
 		<?php if(count($backup_files)==0):?>
 			<p>Aucune sauvegarde effectuée.</p>
 		<?php else:?>
