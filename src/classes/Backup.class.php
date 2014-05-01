@@ -25,6 +25,9 @@ class Backup{
 		User::CheckAccess("admin");
 		$action=isset($_GET["action"])?$_GET["action"]:NULL;
 		switch($action){
+			case "create":
+				$this->backupAction();
+				break;
 			default:
 				$this->listAction();
 		}
@@ -55,6 +58,9 @@ class Backup{
 			$diff=$now->diff($this->last_backup_time);
 			$this->last_backup_since=$diff;
 		}
+
+		$this->backup=FlashBag::Pop("backup");
+
 		$this->View("list.inc.php");
 	}
 
@@ -77,18 +83,21 @@ class Backup{
 			fclose($pipes[2]);
 			$retval=proc_close($proc);
 			if($retval==0){
-				$this->View("success.inc.php");
+				$this->filename="blabla.sql";
+				$this->failed=false;
+				//TODO: write try to write the content to the file
 			}
 			else{
+				$this->failed=true;
 				$this->dump_launched=true;
 				$this->error=$err;
-				$this->View("error.inc.php");
 			}
 		}
 		else{
+			$this->failed=true;
 			$this->dump_launched=false;
-			$this->success=false;
-			$this->View("error.inc.php");
 		}
+		FlashBag::Set("backup", $this);
+		Tools::Redirect("sauver.php");
 	}
 }

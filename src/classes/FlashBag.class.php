@@ -17,15 +17,33 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-?><?php View::Embed("header.inc.php")?>
 
-<p>La sauvegarde a échoué</p>
+class FlashBag{
+	const SESSION_KEY="ADES.flash";
+	private static $bag=NULL;
 
-<?php if($dump_launched):?>
-	<p>Le système a renvoyé l'erreur:</p>
-	<p><?php echo htmlspecialchars($error);?></p>
-<?php else:?>
-	<p>L'utilitaire de sauvegarde n'a pas pu être exécuté</p>
-<?php endif;?>
+	private static function &GetInstance(){
+		if(self::$bag === NULL){
+			if(!isset($_SESSION[self::SESSION_KEY])){
+				$_SESSION[self::SESSION_KEY]=array();
+			}
+			self::$bag=&$_SESSION[self::SESSION_KEY];
+		}
+		return self::$bag;
+	}
 
-<?php View::Embed("footer.inc.php")?>
+	public static function Pop($key, $default=NULL){
+		$bag=&self::GetInstance();
+		if(isset($bag[$key])){
+			$value=$bag[$key];
+			unset($bag[$key]);
+		}else{
+			$value=$default;
+		}
+		return $value;
+	}
+
+	public static function Set($key, $value){
+		self::GetInstance()[$key]=$value;
+	}
+}

@@ -46,9 +46,12 @@ a {
 
 
 #cadreGauche {
-    border: 2px solid blue;
     width: 44%;
     float: left;
+}
+
+#cadreGauche , .notice {
+    border: 2px solid blue;
     background-color: #dddddd;
     -moz-border-radius-topleft: 20px;
     -moz-border-radius-topright: 20px;

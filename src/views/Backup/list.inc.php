@@ -45,6 +45,27 @@
 	</div>
 </fieldset>
 
+<?php if($backup):?>
+	<?php if($backup->failed):?>
+		<fieldset class="notice">
+			<legend>Erreur</legend>
+			<p class="impt">La sauvegarde a échoué!</p>
+
+			<?php if($backup->dump_launched):?>
+				<p>Le système a renvoyé l'erreur:</p>
+				<p><?php echo htmlspecialchars($backup->error);?></p>
+			<?php else:?>
+				<p>L'utilitaire de sauvegarde n'a pas pu être exécuté</p>
+			<?php endif;?>
+		</fieldset>
+	<?php else:?>
+		<p>Une nouvelle sauvegarde a été effectuée</p>
+	<?php endif;?>
+<?php endif;?>
+
+<form method="POST" action="?action=create" style="border:none">
+<input type="submit" value="Créer une nouvelle sauvegarde"/>
+</form>
 <?php if(count($backup_files)>0):?>
 <h3>Liste de dernières sauvegardes disponibles</h3>
 
