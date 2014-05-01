@@ -38,16 +38,19 @@ along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 
+import re
 def php(content):
-	if content.startswith("<?php\n"):
-		content=content[6:]
+	m=re.match("^<\?php *\n", content)
+	if m!=None:
+		content=content[len(m.group(0)):]
+		new_content=m.group(0)
 		close_php=False
 	else:
+		new_content="<?php\n"
 		close_php=True
-	new_content="""<?php
-/*
-"""+copyright+"""
-"""+full_copyright+"""*/
+	new_content+="""/**
+ * """+copyright+"""
+"""+"".join([" * "+l+"\n" for l in full_copyright.splitlines()])+"""*/
 """
 	if close_php:
 		new_content+="?>"
