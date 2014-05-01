@@ -21,15 +21,26 @@
 
 <fieldset id="cadreGauche" style="float:none;margin-left:auto;margin-right:auto">
 	<legend>Sécurité</legend>
-	<p class="impt">
+	<div class="impt">
 		<?php if(count($backup_files)==0):?>
-			Aucune sauvegarde effectuée.
+			<p>Aucune sauvegarde effectuée.</p>
 		<?php else:?>
-			La dernière sauvegarde
-			<?php echo $last_backup?>
-			a été effectuée le <?php echo $last_backup_time->format("d/m/Y à H\hi")?>
+			<p>
+				La dernière sauvegarde
+				<?php echo $last_backup?>
+				a été effectuée le <?php echo $last_backup_time->format("d/m/Y à H\hi")?>
+			</p>
+			<p>Il y a
+			<?php if($last_backup_since->days > 0):?>
+				<?php echo $last_backup_since->days." jour".($last_backup_since->days>1?"s":"")."."?>
+			<?php elseif($last_backup_since->h > 0):?>
+				<?php echo $last_backup_since->h?> heure(s).
+			<?php else:?>
+				moins d'une heure.
+			<?php endif;?>
+			</p>
 		<?php endif;?>
-	</p>
+	</div>
 </fieldset>
 
 <h3>Liste de dernières sauvegardes disponibles</h3>
