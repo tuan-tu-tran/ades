@@ -38,6 +38,11 @@ along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 
+star_commented_copyright="""/**
+ * """+copyright+"""
+"""+"".join([" * "+l+"\n" for l in full_copyright.splitlines()])+"""*/
+"""
+
 import re
 def php(content):
 	m=re.match("^<\?php *\n", content)
@@ -48,20 +53,20 @@ def php(content):
 	else:
 		new_content="<?php\n"
 		close_php=True
-	new_content+="""/**
- * """+copyright+"""
-"""+"".join([" * "+l+"\n" for l in full_copyright.splitlines()])+"""*/
-"""
+	new_content+=star_commented_copyright
 	if close_php:
 		new_content+="?>"
 	new_content+=content
 	return new_content
+def css(content):
+	return star_commented_copyright+content
 
 
 import sys
 
 copyrighter_by_ext={
 	"php":php,
+	"css":css,
 }
 for fname in sys.argv[1:]:
 	try:
