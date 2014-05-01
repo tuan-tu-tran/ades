@@ -119,6 +119,7 @@
 			<td style="text-align:center">
 				<a href="?action=delete&amp;file=<?php echo $file["name"]?>"
 					<?php Overlib::Render('Cliquer pour supprimer cette sauvegarde.')?>
+					onclick="return confirm('Êtes vous sûr de vouloir effacer cette sauvegarde?\nCette action est IRREVERSIBLE!');"
 				><img style="width:16px;height:16px;" border="0" alt="X" src="images/suppr.png"></a></td>
 		</tr>
 	<?php endforeach;?>
