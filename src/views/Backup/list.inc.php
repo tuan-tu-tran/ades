@@ -47,13 +47,13 @@
 			<p>
 				La dernière sauvegarde
 				<?php echo $last_backup?>
-				a été effectuée le <?php echo $last_backup_time->format("d/m/Y à H\hi")?>
+				a été effectuée le <?php echo $last_backup_time->format("d/m/Y à H\hi")?>.
 			</p>
 			<p>Il y a
 			<?php if($last_backup_since->days > 0):?>
 				<?php echo $last_backup_since->days." jour".($last_backup_since->days>1?"s":"")."."?>
 			<?php elseif($last_backup_since->h > 0):?>
-				<?php echo $last_backup_since->h?> heure(s).
+				<?php echo $last_backup_since->h." heure".($last_backup_since->h>1?"s":"")."."?>
 			<?php else:?>
 				moins d'une heure.
 			<?php endif;?>
@@ -114,12 +114,11 @@
 			<td>
 				<a href="<?php echo $file["path"]?>"
 					target="_blank"
-					<?php Overlib::Render('Clic du bouton droit et Enregister la cible sous...')?>
+					<?php Overlib::Render('Cliquer pour télécharger cette sauvegarde')?>
 				><?php echo $file["name"]?></a></td>
 			<td style="text-align:center">
 				<a href="?action=delete&amp;file=<?php echo $file["name"]?>"
-					title="Supprimer la sauvegarde <?php echo $file["name"]?>"
-					<?php Overlib::Render('Cliquer pour supprimer la sauvegarde.')?>
+					<?php Overlib::Render('Cliquer pour supprimer cette sauvegarde.')?>
 				><img style="width:16px;height:16px;" border="0" alt="X" src="images/suppr.png"></a></td>
 		</tr>
 	<?php endforeach;?>
