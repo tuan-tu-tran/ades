@@ -123,8 +123,8 @@
 <?php if(count($backup_files)>0):?>
 <h3>Liste de dernières sauvegardes disponibles</h3>
 
-<table width="50%" border="1" cellpadding="2" style="margin:auto">
-	<tr>
+<table border="1" cellpadding="2" style="margin:auto;margin-top:1em;">
+	<tr style="background-color:orangered">
 		<td>Fichiers de sauvegarde</td>
 		<td style="text-align:center">Date</td>
 		<td style="text-align:center">Taille</td>
