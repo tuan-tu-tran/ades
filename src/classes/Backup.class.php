@@ -82,14 +82,20 @@ class Backup{
 			$err=stream_get_contents($pipes[2]);
 			fclose($pipes[2]);
 			$retval=proc_close($proc);
+			$this->dump_launched=true;
 			if($retval==0){
-				$this->filename="blabla.sql";
-				$this->failed=false;
-				//TODO: write try to write the content to the file
+				$filename=date('Ymd-His').".sql";
+				$fullpath = self::root."/".$filename;
+				if(file_put_contents($fullpath, $out)){
+					$this->filename=$filename;
+					$this->failed=false;
+				}else{
+					$this->failed=true;
+					$this->error=error_get_last()["message"];
+				}
 			}
 			else{
 				$this->failed=true;
-				$this->dump_launched=true;
 				$this->error=$err;
 			}
 		}
