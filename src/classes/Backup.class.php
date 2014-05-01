@@ -64,10 +64,17 @@ class Backup{
 		$list=Path::ListDir(Backup::root, self::regex );
 		rsort($list);
 		$files=array();
+		$now=new DateTime();
 		foreach($list as $file){
+			$path=self::root."/".$file;
+			$info=new SplFileInfo($path);
+			$mtime=new DateTime("@".$info->getMTime());
+			$mtime->setTimezone($now->getTimezone());
 			$files[]=array(
-				"path"=>self::root."/".$file,
-				"name"=>$file
+				"path"=>$path,
+				"name"=>$file,
+				"time"=>$mtime,
+				"size"=>$info->getSize(),
 			);
 		}
 		$this->backup_files=$files;

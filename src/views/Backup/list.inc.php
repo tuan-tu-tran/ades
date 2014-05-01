@@ -107,6 +107,8 @@
 <table width="50%" border="1" cellpadding="2" style="margin:auto">
 	<tr>
 		<td>Fichiers de sauvegarde</td>
+		<td style="text-align:center">Date</td>
+		<td style="text-align:center">Taille</td>
 		<td style="text-align:center">Effacer</td>
 	</tr>
 	<?php foreach($backup_files as $file):?>
@@ -116,6 +118,8 @@
 					target="_blank"
 					<?php Overlib::Render('Cliquer pour télécharger cette sauvegarde')?>
 				><?php echo $file["name"]?></a></td>
+			<td style="text-align:center"><?php echo $file["time"]->format("d/m/Y à H\hi")?></td>
+			<td style="text-align:right"><?php ViewHelper::FileSize($file["size"])?></td>
 			<td style="text-align:center">
 				<a href="?action=delete&amp;file=<?php echo $file["name"]?>"
 					<?php Overlib::Render('Cliquer pour supprimer cette sauvegarde.')?>
