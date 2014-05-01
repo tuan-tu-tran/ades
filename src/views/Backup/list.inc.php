@@ -29,6 +29,9 @@
 			});
 		});
 	</script>
+	<style type="text/css">
+		tr.backup:hover{background-color:yellow}
+	</style>
 <?php View::EndBlock()?>
 
 <?php View::Embed("header.inc.php")?>
@@ -107,7 +110,7 @@
 		<td style="text-align:center">Effacer</td>
 	</tr>
 	<?php foreach($backup_files as $file):?>
-		<tr>
+		<tr class="backup">
 			<td>
 				<a href="<?php echo $file["path"]?>"
 					target="_blank"
