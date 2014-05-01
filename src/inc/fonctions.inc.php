@@ -93,46 +93,6 @@ echo "</script>\n";
 echo "<p class=\"avertissement\">$message</p>\n";
 }
 
-function tableauSauvegardes ($fichier='')
-{
-// on arrive éventuellement avec un nom de fichier à effacer
-if (isset($fichier))
-	if (file_exists("sauvegarde/$fichier"))
-		@unlink ("sauvegarde/$fichier");
-
-$liste_rep = listeFichiers ("./sauvegarde");
-if (count($liste_rep) == 0)
-	return ("Aucun fichier de sauvegarde.<br />\n<br />\n");
-
-$olib1 = overlib("Clic du bouton droit et Enregister la cible sous...");
-$olib2 = overlib("Cliquer pour supprimer la sauvegarde.");
-
-$i = 0;
-$tableau = "<p class=\"impt\">La sauvegarde est à votre disposition.</p>\n";
-$tableau .= "<h3>Liste des dernières sauvegardes disponibles</h3>\n";
-$tableau .= "<table width=\"50%\" border=\"1\" cellpadding=\"2\" style=\"margin:auto\">\n";
-$tableau .= "<tr>\n\t<td>Fichiers de sauvegarde</td>\n";
-$tableau .= "\t<td style=\"text-align:center\">Effacer</td>\n</tr>\n";
-
-foreach ($liste_rep as $unFichier)
-	{
-	$tableau .= "<tr>\n\t<td>\n<a href=\"./sauvegarde/##UNFICHIER##\" target=\"_blank\" ";
-	$tableau .= "##OLIB1##>##UNFICHIER##</a></td>\n";
-	$tableau .= "\t<td style=\"text-align:center\">";
-	$tableau .= "<a href=\"{$_SERVER['PHP_SELF']}?mode=suppr&amp;fichier=##UNFICHIER##\" ";
-	$tableau .= "title=\"Supprimer la sauvegarde ##UNFICHIER##\" ##OLIB2##>";
-	$tableau .= "<img style=\"width:16px;height:16px;\" border=\"0\" alt=\"X\" ";
-	$tableau .= "src=\"images/suppr.png\"></a></td>\n";
-	$tableau .= "</tr>\n";
-	
-	$tableau = str_replace ("##OLIB1##", $olib1, $tableau);
-	$tableau = str_replace ("##OLIB2##", $olib2, $tableau);
-	$tableau = str_replace ("##UNFICHIER##", $unFichier, $tableau);
-	}
-$tableau .= "</table>";
-return $tableau;
-}
-
 function quiEstLa ()
 {
 $ip = $_SERVER['REMOTE_ADDR'];
@@ -168,26 +128,6 @@ if ($tri == 1)
 	else rsort ($files);
 return $files;
 } */
-
-function listeFichiers ($repertoire)
-{
-$liste1 = scandir ($repertoire,0);
-foreach ($liste1 as $fichier)
-	if (($fichier != '.') && ($fichier !='..') && ($fichier != 'index.php'))
-		$liste2[] = $fichier;
-return $liste2;
-}
-
-function dernierEnregistrement ($repertoire)
-{
-$liste = listeFichiers ($repertoire);
-if ($liste <> Null)
-	{
-	rsort ($liste);
-	return $liste[0];
-	}
-	else return False;
-}
 
 function selectChampFormulaire ($champ)
 {
