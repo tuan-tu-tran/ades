@@ -17,8 +17,22 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-?><?php View::Embed("header.inc.php")?>
+?>
 
+<?php View::StartBlock("post_head")?>
+	<?php Html::Script("js/jquery-1.11.0.min.js")?>
+	<script type="text/javascript">
+		$(function(){
+			$("div#notice").click(function(){
+				$(this).slideUp();
+				nd();
+			});
+		});
+	</script>
+<?php View::EndBlock()?>
+
+
+<?php View::Embed("header.inc.php")?>
 <h2>Sauvegarde de la base de données</h2>
 
 <fieldset class="notice">
@@ -45,6 +59,9 @@
 	</div>
 </fieldset>
 
+<div id="notice" style="cursor:pointer"
+	<?php Overlib::Render("Cliquer pour fermer ce message")?>
+>
 <?php if($backup):?>
 	<?php if($backup->failed):?>
 		<fieldset class="notice">
@@ -76,6 +93,7 @@
 		<p class="success">La sauvegarde <?php echo $delete->filename?> a été effacée.</p>
 	<?php endif;?>
 <?php endif;?>
+</div>
 
 <form method="POST" action="?action=create" style="border:none;padding:0">
 <input type="submit" value="Créer une nouvelle sauvegarde"/>

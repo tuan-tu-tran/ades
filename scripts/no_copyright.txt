@@ -3,3 +3,4 @@
 # lines beginning with a # are ignored
 
 no_copyright\.txt$
+jquery-.*\.js$
