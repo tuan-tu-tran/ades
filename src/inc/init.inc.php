@@ -41,4 +41,6 @@ if(!defined("_INIT_INCLUDED_")){
 			include($classname.".class.php");
 		}
 	});
+
+	session_start();
 }
