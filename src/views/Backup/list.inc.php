@@ -55,15 +55,15 @@
 				<p>Le système a renvoyé l'erreur:</p>
 				<p><?php echo htmlspecialchars($backup->error);?></p>
 			<?php else:?>
-				<p>L'utilitaire de sauvegarde n'a pas pu être exécuté</p>
+				<p>L'utilitaire de sauvegarde n'a pas pu être exécuté.</p>
 			<?php endif;?>
 		</fieldset>
 	<?php else:?>
-		<p>Une nouvelle sauvegarde a été effectuée</p>
+		<p class="success">Une nouvelle sauvegarde a été effectuée dans le fichier <?php echo $backup->filename;?></p>
 	<?php endif;?>
 <?php endif;?>
 
-<form method="POST" action="?action=create" style="border:none">
+<form method="POST" action="?action=create" style="border:none;padding:0">
 <input type="submit" value="Créer une nouvelle sauvegarde"/>
 </form>
 <?php if(count($backup_files)>0):?>

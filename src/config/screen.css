@@ -163,8 +163,13 @@ input, select, textarea {
   }
 
 
+.success {
+    color: green;
+  }
 .impt {
     color: Red;
+  }
+.impt, .success {
     font-size: larger;
     font-weight: bolder;
   }
