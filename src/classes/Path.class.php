@@ -18,12 +18,18 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 class Path{
-	public static function ListDir($path, $exclude=array("index.php")){
+	public static function ListDir($path, $regex_match=NULL, $exclude=array("index.php")){
 		$liste1 = scandir($path,0);
 		$liste2=array();
-		foreach ($liste1 as $fichier)
-			if (($fichier != '.') && ($fichier !='..') && !in_array($fichier, $exclude))
-				$liste2[] = $fichier;
+		foreach ($liste1 as $fichier){
+			if (($fichier != '.') && ($fichier !='..')){
+				if(!$regex_match || preg_match($regex_match, $fichier)){
+					if(!in_array($fichier, $exclude)){
+						$liste2[] = $fichier;
+					}
+				}
+			}
+		}
 		return $liste2;
 	}
 }

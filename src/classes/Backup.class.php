@@ -38,7 +38,8 @@ class Backup{
 	}
 
 	private function listAction(){
-		$list=Path::ListDir(Backup::root);
+		$list=Path::ListDir(Backup::root, "/^\d{8}-\d{6}\.sql$/");
+		rsort($list);
 		$files=array();
 		foreach($list as $file){
 			$files[]=array(
@@ -48,7 +49,6 @@ class Backup{
 		}
 		$this->backup_files=$files;
 
-		rsort($list);
 		if(count($list)>0){
 			$this->last_backup=$list[0];
 			$utc_backup_time = new DateTime("@".filemtime(Backup::root."/".$this->last_backup));

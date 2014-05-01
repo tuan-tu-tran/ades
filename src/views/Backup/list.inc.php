@@ -28,8 +28,8 @@
 			<p>Aucune sauvegarde effectuée.</p>
 		<?php else:?>
 			<p>
-				La dernière sauvegarde
-				<?php echo $last_backup?>
+				La dernière sauvegarde<br/>
+				<?php echo $last_backup?><br/>
 				a été effectuée le <?php echo $last_backup_time->format("d/m/Y à H\hi")?>
 			</p>
 			<p>Il y a
