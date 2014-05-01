@@ -19,8 +19,10 @@
 */
 ?><?php View::Embed("header.inc.php")?>
 
+<h2>Sauvegarde de la base de données</h2>
+
 <fieldset id="cadreGauche" style="float:none;margin-left:auto;margin-right:auto">
-	<legend>Sécurité</legend>
+	<legend>Dernière sauvegarde</legend>
 	<div class="impt">
 		<?php if(count($backup_files)==0):?>
 			<p>Aucune sauvegarde effectuée.</p>
