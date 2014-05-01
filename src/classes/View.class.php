@@ -39,4 +39,32 @@ class View{
 			require($template);
 		}else throw new Exception("template not found '$template'");
 	}
+
+	private static $current_block=NULL;
+	private static $slots=array();
+
+	public static function StartBlock($block_name){
+		if(!$block_name){
+			throw new Exception("cannot start an block with no name");
+		}
+		if(self::$current_block){
+			$current_block=self::$current_block;
+			throw new Exception("cannot start a new block '$block_name' because already in a block '$current_block'");
+		}
+		self::$current_block=$block_name;
+		ob_start();
+	}
+
+	public static function EndBlock(){
+		if(!self::$current_block){
+			throw new Exception("no block to end");
+		}
+		self::$slots[self::$current_block]=ob_get_contents();
+		ob_end_clean();
+	}
+
+	public static function Block($name){
+		if(isset(self::$slots[$name]))
+			echo self::$slots[$name];
+	}
 }
