@@ -58,7 +58,7 @@ def php(content):
 		new_content+="?>"
 	new_content+=content
 	return new_content
-def css(content):
+def css_or_js(content):
 	return star_commented_copyright+content
 
 
@@ -66,7 +66,8 @@ import sys
 
 copyrighter_by_ext={
 	"php":php,
-	"css":css,
+	"css":css_or_js,
+	"js":css_or_js,
 }
 for fname in sys.argv[1:]:
 	try:
