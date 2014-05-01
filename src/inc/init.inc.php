@@ -30,6 +30,7 @@ if(!defined("_INIT_INCLUDED_")){
 	define('_DB_CONFIG_FILE_',_CONFIG_FOLDER_FULL_PATH_.'confbd.inc.php');
 	define('_SCHOOL_CONFIG_FILE_',_CONFIG_FOLDER_FULL_PATH_.'constantes.inc.php');
 	define("_CLASS_DIR_",DIRNAME(__FILE__)."/../classes");
+	define("_VIEWS_FOLDER",DIRNAME(__FILE__)."/../views");
 
 	require("inc/fonctions.inc.php");
 
