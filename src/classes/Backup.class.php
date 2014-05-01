@@ -34,8 +34,45 @@ class Backup{
 					$this->deleteAction($_GET["file"]);
 					break;
 				}
+			case "restore":
+				if(isset($_GET["file"])){
+					$this->restoreAction($_GET["file"]);
+					break;
+				}
 			default:
 				$this->listAction();
+		}
+	}
+	private function restoreAction($filename){
+		if(preg_match(self::regex, $filename)){
+			$this->filename=$filename;
+			if($input=file_get_contents(self::root."/".$filename)){
+				$this->input_read=true;
+				$db=Db::GetInstance();
+				$host=$db->host;
+				$username=$db->username;
+				$pwd=$db->pwd;
+				$dbname=$db->dbname;
+				$cmd="mysql --host=$host --user=$username --password=$pwd --database=$dbname";
+				if(Process::Execute($cmd,$input, $out,$err,$retval)){
+					$this->failed=$retval!=0;
+					$this->launched=true;
+					if($this->failed){
+						$this->error=$err;
+					}
+				}else{
+					$this->failed=true;
+					$this->launched=false;
+				}
+			}else{
+				$this->failed=true;
+				$this->input_read=false;
+				$this->error=Tools::GetLastError();
+			}
+			FlashBag::Set("restore",$this);
+			Tools::Redirect("sauver.php");
+		}else{
+			Tools::Redirect("sauver.php");
 		}
 	}
 	private function deleteAction($filename){
@@ -92,6 +129,8 @@ class Backup{
 		$this->backup=FlashBag::Pop("backup");
 
 		$this->delete=FlashBag::Pop("delete");
+
+		$this->restore=FlashBag::Pop("restore");
 
 		$this->View("list.inc.php");
 	}

@@ -96,6 +96,25 @@
 		<p class="success">La sauvegarde <?php echo $delete->filename?> a été effacée.</p>
 	<?php endif;?>
 <?php endif;?>
+
+<?php if($restore):?>
+	<?php if($restore->failed):?>
+		<fieldset class="notice">
+			<legend>Erreur</legend>
+			<p class="impt">La sauvegarde <?php echo $restore->filename?> n'a pas pu être restaurée!</p>
+
+			<?php if(!$restore->input_read || $restore->launched):?>
+				<p>Le système a renvoyé l'erreur:</p>
+				<p><?php echo htmlspecialchars($restore->error);?></p>
+			<?php else:?>
+				<p>L'utilitaire de restauration n'a pas pu être exécuté.</p>
+			<?php endif;?>
+		</fieldset>
+	<?php else:?>
+		<p class="success">Les données de la sauvegarde <?php echo $restore->filename?> ont été restaurées.</p>
+	<?php endif;?>
+<?php endif;?>
+
 </div>
 
 <form method="POST" action="?action=create" style="border:none;padding:0">
@@ -110,6 +129,7 @@
 		<td style="text-align:center">Date</td>
 		<td style="text-align:center">Taille</td>
 		<td style="text-align:center">Effacer</td>
+		<td style="text-align:center">Restaurer</td>
 	</tr>
 	<?php foreach($backup_files as $file):?>
 		<tr class="backup">
@@ -125,6 +145,11 @@
 					<?php Overlib::Render('Cliquer pour supprimer cette sauvegarde.')?>
 					onclick="return confirm('Êtes vous sûr de vouloir effacer cette sauvegarde?\nCette action est IRREVERSIBLE!');"
 				><img style="width:16px;height:16px;" border="0" alt="X" src="images/suppr.png"></a></td>
+			<td style="text-align:center">
+				<a href="?action=restore&amp;file=<?php echo $file["name"]?>"
+					<?php Overlib::Render('Cliquer pour restaurer cette sauvegarde.')?>
+					onclick="return confirm('Êtes vous sûr de vouloir restaurer cette sauvegarde?\nCette action est IRREVERSIBLE!');"
+				><img style="width:16px;height:16px;" border="0" alt="restore" src="images/restore.png"></a></td>
 		</tr>
 	<?php endforeach;?>
 </table>
