@@ -20,6 +20,7 @@
 
 class Backup{
 	const root="sauvegarde";
+	const regex="/^\d{8}-\d{6}\.sql$/";
 	public function parseRequest(){
 		User::CheckIfLogged();
 		User::CheckAccess("admin");
@@ -28,17 +29,39 @@ class Backup{
 			case "create":
 				$this->backupAction();
 				break;
+			case "delete":
+				if(isset($_GET["file"])){
+					$this->deleteAction($_GET["file"]);
+					break;
+				}
 			default:
 				$this->listAction();
 		}
 	}
+	private function deleteAction($filename){
+		if(preg_match(self::regex, $filename)){
+			if(unlink(self::root."/".$filename)){
+				$this->failed=false;
+			}else{
+				$this->failed=true;
+				$this->error=Tools::GetLastError();
+			}
+			$this->filename=$filename;
+			FlashBag::Set("delete",$this);
+			Tools::Redirect("sauver.php");
+		}else{
+			Tools::Redirect("sauver.php");
+		}
+
+	}
+
 	private function View($template,$params=NULL){
 		if($params==NULL) $params = $this;
 		View::Render("Backup/$template", $params);
 	}
 
 	private function listAction(){
-		$list=Path::ListDir(Backup::root, "/^\d{8}-\d{6}\.sql$/");
+		$list=Path::ListDir(Backup::root, self::regex );
 		rsort($list);
 		$files=array();
 		foreach($list as $file){
@@ -60,6 +83,8 @@ class Backup{
 		}
 
 		$this->backup=FlashBag::Pop("backup");
+
+		$this->delete=FlashBag::Pop("delete");
 
 		$this->View("list.inc.php");
 	}

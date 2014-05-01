@@ -63,6 +63,20 @@
 	<?php endif;?>
 <?php endif;?>
 
+<?php if($delete):?>
+	<?php if($delete->failed):?>
+		<fieldset class="notice">
+			<legend>Erreur</legend>
+			<p class="impt">La sauvegarde <?php echo $delete->filename?> n'a pas pu être effacée!</p>
+
+			<p>Le système a renvoyé l'erreur:</p>
+			<p><?php echo htmlspecialchars($delete->error);?></p>
+		</fieldset>
+	<?php else:?>
+		<p class="success">La sauvegarde <?php echo $delete->filename?> a été effacée.</p>
+	<?php endif;?>
+<?php endif;?>
+
 <form method="POST" action="?action=create" style="border:none;padding:0">
 <input type="submit" value="Créer une nouvelle sauvegarde"/>
 </form>
