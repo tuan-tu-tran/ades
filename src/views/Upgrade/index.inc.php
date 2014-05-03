@@ -18,8 +18,10 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
  */
 ?>
-<?php View::StartBlock("content");?>
-<h2>Mise à jour de la base de données</h2>
+<?php View::FillBlock("title", "Mise à jour de la base de données ADES");?>
+
+<?php View::StartBlock("body");?>
+<h1>Mise à jour de la base de données</h1>
 
 <?php if($fromVersion == $toVersion):?>
 	<p>La base de données a déjà la version
@@ -35,4 +37,4 @@
 
 <?php View::EndBlock();?>
 
-<?php View::Embed("layout.inc.php")?>
+<?php View::Embed("base.inc.php")?>
