@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Copyright (c) 2014 Educ-Action
  * 
@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-include("inc/init.inc.php");
-$o=new Backup();
-$o->parseRequest();
+
+class Html{
+	public static function Script($source){
+		echo "<script type='text/javascript' src='$source'></script>";
+	}
+}

@@ -31,6 +31,7 @@
 <!--[if IE]>
 <link href="css/facelist_ie.css" rel="stylesheet" type="text/css" />
 <![endif]-->
+<?php View::Block("post_head");?>
 </head>
 <body>
 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>

@@ -45,4 +45,8 @@ class Tools{
 		}
 	}
 
+	public static function GetLastError(){
+		return error_get_last()["message"];
+	}
+
 }

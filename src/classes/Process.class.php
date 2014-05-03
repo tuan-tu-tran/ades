@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Copyright (c) 2014 Educ-Action
  * 
@@ -17,6 +17,28 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-include("inc/init.inc.php");
-$o=new Backup();
-$o->parseRequest();
+
+class Process{
+	public static function Execute($cmd, $in, &$out, &$err, &$retval){
+		$inoutdesc=array(
+			0=>array("pipe","r"),
+			1=>array("pipe","w"),
+			2=>array("pipe","w"),
+		);
+		if($proc=proc_open($cmd,$inoutdesc, $pipes)){
+			if($in){
+				fwrite($pipes[0], $in);
+			}
+			fclose($pipes[0]);
+			$out=stream_get_contents($pipes[1]);
+			fclose($pipes[1]);
+			$err=stream_get_contents($pipes[2]);
+			fclose($pipes[2]);
+			$retval=proc_close($proc);
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+}

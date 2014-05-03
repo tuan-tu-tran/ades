@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Copyright (c) 2014 Educ-Action
  * 
@@ -17,6 +17,19 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-include("inc/init.inc.php");
-$o=new Backup();
-$o->parseRequest();
+class Path{
+	public static function ListDir($path, $regex_match=NULL, $exclude=array("index.php")){
+		$liste1 = scandir($path,0);
+		$liste2=array();
+		foreach ($liste1 as $fichier){
+			if (($fichier != '.') && ($fichier !='..')){
+				if(!$regex_match || preg_match($regex_match, $fichier)){
+					if(!in_array($fichier, $exclude)){
+						$liste2[] = $fichier;
+					}
+				}
+			}
+		}
+		return $liste2;
+	}
+}

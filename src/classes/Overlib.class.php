@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Copyright (c) 2014 Educ-Action
  * 
@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-include("inc/init.inc.php");
-$o=new Backup();
-$o->parseRequest();
+class Overlib{
+	public static function Render($text){
+		$hint = htmlspecialchars(json_encode(utf8_encode($text)));
+		echo " onmouseover=\"return overlib($hint);\" onmouseout=\"return nd();\"";
+	}
+}

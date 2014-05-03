@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Copyright (c) 2014 Educ-Action
  * 
@@ -17,6 +17,19 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-include("inc/init.inc.php");
-$o=new Backup();
-$o->parseRequest();
+class ViewHelper{
+	const GB=1073741824; //1024*1024*1024
+	const MB=1048576; //1024*1024
+	const KB=1024;
+	public static function FileSize($size,$dec=0,$byte="o"){
+		if($size>=self::GB){
+			echo sprintf("%.".$dec."f G%s", $size/self::GB, $byte);
+		}else if($size>=self::MB){
+			echo sprintf("%.".$dec."f M%s", $size/self::MB, $byte);
+		}else if($size>=self::KB){
+			echo sprintf("%.".$dec."f K%s", $size/self::KB, $byte);
+		}else{
+			echo sprintf("%d %s", $size, $byte);
+		}
+	}
+}

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Copyright (c) 2014 Educ-Action
  * 
@@ -17,6 +17,33 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-include("inc/init.inc.php");
-$o=new Backup();
-$o->parseRequest();
+
+class FlashBag{
+	const SESSION_KEY="ADES.flash";
+	private static $bag=NULL;
+
+	private static function &GetInstance(){
+		if(self::$bag === NULL){
+			if(!isset($_SESSION[self::SESSION_KEY])){
+				$_SESSION[self::SESSION_KEY]=array();
+			}
+			self::$bag=&$_SESSION[self::SESSION_KEY];
+		}
+		return self::$bag;
+	}
+
+	public static function Pop($key, $default=NULL){
+		$bag=&self::GetInstance();
+		if(isset($bag[$key])){
+			$value=$bag[$key];
+			unset($bag[$key]);
+		}else{
+			$value=$default;
+		}
+		return $value;
+	}
+
+	public static function Set($key, $value){
+		self::GetInstance()[$key]=$value;
+	}
+}

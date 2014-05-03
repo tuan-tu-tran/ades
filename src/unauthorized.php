@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Copyright (c) 2014 Educ-Action
  * 
@@ -17,6 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-include("inc/init.inc.php");
-$o=new Backup();
-$o->parseRequest();
+require("inc/init.inc.php");
+User::CheckIfLogged();
+View::Embed("header.inc.php");
+?>
+<p>Vous n'êtes pas autorisé à accéder à cette page.</p>
+<?php
+View::Embed("footer.inc.php");

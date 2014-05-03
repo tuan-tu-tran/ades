@@ -19,10 +19,10 @@
 */
 
 class Db{
-	private $host;
-	private $user;
-	private $pwd;
-	private $dbname;
+	public $host;
+	public $user;
+	public $pwd;
+	public $dbname;
 	private $conn;
 	private $connect_error;
 	private static $instance;
