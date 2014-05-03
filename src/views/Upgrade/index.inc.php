@@ -27,12 +27,20 @@
 	<p>La base de données a déjà la version
 	<?php echo $fromVersion?>
 	et n'a pas besoin d'être mise à jour.</p>
-<?php else:?>
+<?php elseif($fromBeforeTo):?>
 	<p>La base de données doit être mise à jour de la version
 	<?php echo $fromVersion?>
 	à la version
 	<?php echo $toVersion?>
 	</p>
+<?php else:?>
+	<div class="impt avertissement">
+		<p>La version du code
+		est anterieure à celle de la base de données:
+		<?php echo $toVersion?> &lt;
+		<?php echo $fromVersion?>
+		</p>
+	</div>
 <?php endif;?>
 
 <?php View::EndBlock();?>

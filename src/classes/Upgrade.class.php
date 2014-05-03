@@ -26,7 +26,18 @@ class Upgrade{
 	private function ShowVersionAction(){
 		$this->fromVersion = self::GetDbVersion();
 		$this->toVersion = self::Version;
+		$this->fromBeforeTo = self::CompareVersions($this->fromVersion, $this->toVersion)==-1;
 		View::Render("Upgrade/index.inc.php", $this);
+	}
+
+	private static function CompareVersions($x,$y){
+		list($majx,$minx)=explode(".",$x);
+		list($majy,$miny)=explode(".",$y);
+		if($majx<$majy) return -1;
+		else if($majx>$majy) return 1;
+		else if($minx<$miny) return -1;
+		else if($minx>$miny) return 1;
+		else return 0;
 	}
 
 	private static function GetDbVersion(){
