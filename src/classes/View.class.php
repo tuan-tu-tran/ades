@@ -61,6 +61,7 @@ class View{
 		}
 		self::$slots[self::$current_block]=ob_get_contents();
 		ob_end_clean();
+		self::$current_block=NULL;
 	}
 
 	public static function Block($name){
