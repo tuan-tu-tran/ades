@@ -34,9 +34,12 @@ $install->parseRequest();
 <html>
 <head>
   <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
-  <title>Initialisation de la base de données ADES</title>
+  <title>Installation d'ADES</title>
   <link media="screen" rel="stylesheet" href="config/screen.css" type="text/css">
-<style type="text/css">a:hover{text-decoration:underline}</style>
+<style type="text/css">
+	a:hover{text-decoration:underline;}
+	label{width:10em;}
+</style>
 </head>
 <body>
 <div id="texte">
@@ -100,7 +103,7 @@ $install->parseRequest();
 
 <?php elseif($install->view==Install::VIEW_FILE_NOT_WRITTEN):?>
 
-		<form name="form" method="post">
+		<form name="form" method="post" action="<?php echo $install->resubmitAction;?>">
 		<p>Le fichier de configuration n'a pas pu être écrit.</p>
 		<p>
 			Veuillez vérifier que l'utilisateur système
@@ -109,10 +112,9 @@ $install->parseRequest();
 				<b><?php echo $install->config_filename;?></b>
 		</p>
 		<p>Le système a renvoyé l'erreur suivante: <?php echo $install->error ?></p>
-		<input name="sqlserver" type="hidden" value="<?php echo htmlspecialchars($install->host)?>" />
-		<input name="utilisateursql" type="hidden" value="<?php echo htmlspecialchars($install->username)?>" />
-		<input name="motdepassesql" type="hidden" value="<?php echo htmlspecialchars($install->pwd)?>" />
-		<input name="nomdelabasesql" type="hidden" value="<?php echo htmlspecialchars($install->dbname)?>" />
+		<?php foreach($_POST as $key=>$value):?>
+			<input name="<?php echo $key;?>" type="hidden" value="<?php echo htmlspecialchars($value)?>" />
+		<?php endforeach;?>
 		<input name="Submit" value="Réessayer" type="submit">
 		</form>
 
@@ -120,7 +122,11 @@ $install->parseRequest();
 
 		<p>Les tables ont été correctement créées dans la base de données.</p>
 		<p>Login et mot de passe: admin</p>
-		<p>L'installation d'ADES est terminée: <a href="index.php">On y va</a></p>
+		<?php if($install->CanConfigureSchool()):?>
+			<p><?php $install->GetSchoolConfigLink("Configurer le nom de l'école et le titre principal");?></p>
+		<?php else:?>
+			<p>L'installation d'ADES est terminée: <a href="index.php">On y va</a></p>
+		<?php endif;?>
 
 <?php elseif($install->view==Install::VIEW_TABLES_NOT_CREATED):?>
 
@@ -129,7 +135,11 @@ $install->parseRequest();
 		<p>Le système a renvoyé l'erreur: <?php echo $install->error?></p>
 		<p><?php $install->GetCreateTableLink("Réessayer de créer les tables");?></p>
 		<p><?php $install->GetDbConfigLink("Reconfigurer la connexion (vous devez d'abord supprimer le fichier de configuration existant)");?></p>
-		<p><a href="index.php">Terminer l'installation</a></p>
+		<?php if($install->CanConfigureSchool()):?>
+			<p><?php $install->GetSchoolConfigLink("Passer à l'étape suivante: configurer le nom de l'école et le titre principal");?></p>
+		<?php else:?>
+			<p><a href="index.php">Terminer l'installation</a></p>
+		<?php endif;?>
 
 <?php elseif($install->view===Install::VIEW_OVERWRITE_FORBIDDEN):?>
 
@@ -137,9 +147,45 @@ $install->parseRequest();
 	<p>Pour reconfigurer la connexion, veuillez d'abord l'effacer.</p>
 	<p><?php $install->GetDbConfigLink("Réessayer de configurer la connexion à la base de données");?></p>
 	<p><?php $install->GetCreateTableLink("Passer à l'étape de création des tables");?></p>
+	<?php if ($install->CanConfigureSchool()):?>
+		<p><?php $install->GetSchoolConfigLink("Passer à l'étape de configuration du nom de l'école");?></p>
+	<?php endif;?>
 	<p><a href="index.php">Terminer l'installation</a></p>
 
-<?php endif; ?>
+<?php elseif($install->view==Install::VIEW_SCHOOL_CONFIG_FORM || $install->view==Install::VIEW_BAD_SCHOOL_CONFIG):?>
+
+	<form action="<?php echo $install->GetSchoolConfigSubmitUrl();?>" method="POST">
+		<p>
+			<label>Nom de l'école :</label>
+			<input value="<?echo htmlspecialchars($install->schoolname)?>" name="schoolname" size="30" maxlength="50" type="text">
+		</p>
+		<p>
+			<label>Titre :</label>
+			<input value="<?echo htmlspecialchars($install->title)?>" name="title" size="30" maxlength="50" type="text">
+		</p>
+
+		<input name="Submit" value="Enregistrer" type="submit">
+
+		<?php if($install->view==Install::VIEW_BAD_SCHOOL_CONFIG):?>
+			<p>Veuillez remplir tous les champs</p>
+		<?php endif;?>
+	</form>
+
+<?php elseif($install->view==Install::VIEW_OVERWRITE_SCHOOL_FORBIDDEN):?>
+
+	<p>Le fichier de configuration de l'école existe déjà.</p>
+	<p>Pour reconfigurer l'école, veuillez utiliser <a href="confignomecole.php">l'interface d'adminstration</a>.</p>
+	<p><a href="index.php">Terminer l'installation</a></p>
+
+<?php elseif($install->view==Install::VIEW_SCHOOL_CONFIG_WRITTEN):?>
+
+	<p>Le fichier de configuration de l'école a été écrit avec succès.</p>
+	<p>L'installation d'ADES est terminée: <a href="index.php">On y va</a></p>
+
+<?php else: ?>
+	<?php throw new Exception("unhandled view: ".$install->view);?>
+<?php endif;?>
+
 </div>
 </body>
 </html>

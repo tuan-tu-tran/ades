@@ -23,6 +23,8 @@ class Install{
 	const ACTION_CONFIG_DB="configure_db";
 	const ACTION_SUBMIT_DB_CONFIG="write_db_config";
 	const ACTION_CREATE_TABLES="create_tables";
+	const ACTION_CONFIG_SCHOOL="configure_school";
+	const ACTION_SUBMIT_SCHOOL_CONFIG="write_school_config";
 
 	const VIEW_INFO=0;
 	const VIEW_DB_CONFIG_FORM=1;
@@ -32,6 +34,10 @@ class Install{
 	const VIEW_TABLES_CREATED=5;
 	const VIEW_TABLES_NOT_CREATED=6;
 	const VIEW_OVERWRITE_FORBIDDEN=7;
+	const VIEW_SCHOOL_CONFIG_FORM=8;
+	const VIEW_OVERWRITE_SCHOOL_FORBIDDEN=9;
+	const VIEW_SCHOOL_CONFIG_WRITTEN=10;
+	const VIEW_BAD_SCHOOL_CONFIG=11;
 
 	public function parseRequest(){
 		//get the action
@@ -64,10 +70,7 @@ class Install{
 						$this->view=self::VIEW_FILE_WRITTEN;
 					}else{
 						//show file could not be written + error
-						$this->error=error_get_last()["message"];
-						$this->system_user=posix_getpwuid(posix_geteuid())["name"];
-						$this->config_filename=_DB_CONFIG_FILE_;
-						$this->view=self::VIEW_FILE_NOT_WRITTEN;
+						$this->ShowWriteError(_DB_CONFIG_FILE_, $this->GetDbConfigSubmitUrl());
 					}
 				}else{
 					//show config form + error + repopulate
@@ -84,11 +87,60 @@ class Install{
 					$this->view=self::VIEW_TABLES_NOT_CREATED;
 				}
 				break;
+
+			case self::ACTION_CONFIG_SCHOOL:
+				if(file_exists(_SCHOOL_CONFIG_FILE_))
+					$this->view=self::VIEW_OVERWRITE_SCHOOL_FORBIDDEN;
+				else
+					$this->schoolname = NULL;
+					$this->title = NULL;
+					$this->view=self::VIEW_SCHOOL_CONFIG_FORM;
+				break;
+
+			case self::ACTION_SUBMIT_SCHOOL_CONFIG:
+				if(file_exists(_SCHOOL_CONFIG_FILE_)){
+					$this->view=self::VIEW_OVERWRITE_SCHOOL_FORBIDDEN;
+
+				}else if(!$this->SchoolConfigIsValid()){
+					$this->view=self::VIEW_BAD_SCHOOL_CONFIG;
+
+				}else if($this->WriteSchoolConfig()){
+					$this->view=self::VIEW_SCHOOL_CONFIG_WRITTEN;
+
+				}else{
+					$this->ShowWriteError(_SCHOOL_CONFIG_FILE_, $this->GetSchoolConfigSubmitUrl());
+				}
+				break;
 			default:
 				$this->view=self::VIEW_INFO;
 		}
 	}
 
+	private function SchoolConfigIsValid(){
+		$this->schoolname = $_POST["schoolname"];
+		$this->title = $_POST["title"];
+		return $this->schoolname!=NULL && $this->title!=NULL;
+	}
+
+	private function WriteSchoolConfig(){
+		$format=<<<EOF
+<?php
+define("ECOLE",%s);
+define("TITRE",%s);
+
+EOF;
+		$file=fopen(_SCHOOL_CONFIG_FILE_,"wt");
+		if($file){
+			fprintf($file, $format
+				, var_export($this->schoolname, true)
+				, var_export($this->title, true)
+			);
+			fclose($file);
+			return true;
+		}else{
+			return false;
+		}
+	}
 	private function ConfigIsValid(){
 		$this->host=$_POST["sqlserver"];
 		$this->username=$_POST["utilisateursql"];
@@ -163,8 +215,20 @@ EOF;
 		}
 	}
 
-	private function GetLink($action, $text){ echo "<a href='creation.php?action=".$action."'>".$text."</a>"; }
+	private function ShowWriteError($fname, $resubmitAction){
+		$this->error=error_get_last()["message"];
+		$this->system_user=posix_getpwuid(posix_geteuid())["name"];
+		$this->config_filename=$fname;
+		$this->resubmitAction=$resubmitAction;
+		$this->view=self::VIEW_FILE_NOT_WRITTEN;
+	}
+
+	private function GetLink($action, $text){ echo "<a href='".$this->GetUrl($action)."'>".$text."</a>"; }
+	private function GetUrl($action){ return "creation.php?action=".$action; }
 	public function GetDbConfigLink($text){ $this->GetLink(self::ACTION_CONFIG_DB, $text);}
 	public function GetCreateTableLink($text){ $this->GetLink(self::ACTION_CREATE_TABLES, $text);}
-	public function GetDbConfigSubmitUrl(){return "creation.php?action=".self::ACTION_SUBMIT_DB_CONFIG;}
+	public function GetSchoolConfigLink($text){ $this->GetLink(self::ACTION_CONFIG_SCHOOL, $text);} 
+	public function GetDbConfigSubmitUrl(){return $this->GetUrl(self::ACTION_SUBMIT_DB_CONFIG);}
+	public function GetSchoolConfigSubmitUrl(){return $this->GetUrl(self::ACTION_SUBMIT_SCHOOL_CONFIG);}
+	public function CanConfigureSchool(){ return !file_exists(_SCHOOL_CONFIG_FILE_); }
 }
