@@ -19,8 +19,9 @@
 */
 require("inc/init.inc.php");
 User::CheckIfLogged();
-View::Embed("header.inc.php");
+View::StartBlock("content");
 ?>
 <p>Vous n'êtes pas autorisé à accéder à cette page.</p>
 <?php
-View::Embed("footer.inc.php");
+View::EndBlock();
+View::Embed("layout.inc.php");

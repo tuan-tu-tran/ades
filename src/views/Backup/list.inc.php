@@ -34,7 +34,7 @@
 	</style>
 <?php View::EndBlock()?>
 
-<?php View::Embed("header.inc.php")?>
+<?php View::StartBlock("content")?>
 
 <h2>Sauvegarde de la base de données</h2>
 
@@ -154,4 +154,7 @@
 	<?php endforeach;?>
 </table>
 <?php endif;?>
-<?php View::Embed("footer.inc.php")?>
+
+<?php View::EndBlock()?>
+
+<?php View::Embed("layout.inc.php")?>

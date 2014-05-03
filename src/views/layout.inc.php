@@ -17,7 +17,28 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-?></div>
+?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title><?php echo ECOLE ?></title>
+  <link media="screen" rel="stylesheet" href="config/screen.css" type="text/css">
+  <link media="print" rel="stylesheet" href="config/print.css" type="text/css">
+  <link rel="stylesheet" href="config/menu.css" type="text/css" media="screen">
+  <script language="javascript" type="text/javascript" src="inc/fonctions.js"></script>
+  <script type="text/javascript" type="text/javascript" src="ADESMemo.js"></script>
+  <script type="text/javascript" src="inc/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
+<!--[if IE]>
+<link href="css/facelist_ie.css" rel="stylesheet" type="text/css" />
+<![endif]-->
+<?php View::Block("post_head");?>
+</head>
+<body>
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<?php require ("menu.inc.php"); ?>
+<div id="texte">
+<?php View::Block("content");?>
+</div>
 <div id="popup"></div>
 <div class="inv" style="background-color: ##ffca00; height:4em;">
 <!-- non visible à l'impression -->
