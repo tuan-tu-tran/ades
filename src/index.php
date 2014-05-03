@@ -119,10 +119,14 @@ echo $ADESmemo->send_todo_info();
 </fieldset>
 <fieldset id="cadreDroit">
 <legend>Anniversaires</legend>
+<?php if($anniversaires!=NULL):?>
 <h3>Joyeux Anniversaire &agrave;</h3>
 <?php 
 echo($anniversaires);
 ?>
+<?php else:?>
+<p>Pas d'anniversaire aujourd'hui.</p>
+<?endif;?>
 </fieldset>
 </div>
 <div id="pied"><?php require ("inc/notice.inc.php"); ?></div>
