@@ -349,4 +349,12 @@ $menu = str_replace ("##ICONE##", $icone, $menu);
 return $menu;
 }
 
+/**
+ * Redirect to a location using header php function
+ * then exit
+ */
+function redirect($location){
+	header("Location: $location");
+	exit;
+}
 ?>
