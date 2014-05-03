@@ -24,10 +24,39 @@ class Upgrade{
 		$this->ShowVersionAction();
 	}
 	private function ShowVersionAction(){
+		$this->GetVersions();
+		View::Render("Upgrade/index.inc.php", $this);
+	}
+
+	private function GetVersions(){
 		$this->fromVersion = self::GetDbVersion();
 		$this->toVersion = self::Version;
 		$this->fromBeforeTo = self::CompareVersions($this->fromVersion, $this->toVersion)==-1;
-		View::Render("Upgrade/index.inc.php", $this);
+		if($this->fromBeforeTo){
+			$upgradeScripts=Path::ListDir(self::UpgradeFolder(), "/^to\d+\.\d+\.sql$/");
+			usort($upgradeScripts, function ($x,$y){
+				$vx=self::GetScriptVersion($x);
+				$vy=self::GetScriptVersion($y);
+				return self::CompareVersions($vx,$vy);
+			});
+			$scriptsToExecute=array();
+			foreach($upgradeScripts as $script){
+				$scriptVersion=self::GetScriptVersion($script);
+				if(
+					self::CompareVersions($scriptVersion, $this->fromVersion)>0
+					&& 
+					self::CompareVersions($scriptVersion, $this->toVersion)<=0
+				){
+					$scriptsToExecute[]=$script;
+				}
+			}
+			$this->upgradeScripts=$upgradeScripts;
+			$this->scriptsToExecute=$scriptsToExecute;
+		}
+	}
+
+	private static function UpgradeFolder(){
+		return DIRNAME(__FILE__)."/../upgrade/";
 	}
 
 	private static function CompareVersions($x,$y){
@@ -54,5 +83,9 @@ class Upgrade{
 	}
 	public static function UpgradeDb(){
 		var_dump($db_version);
+	}
+
+	private static function GetScriptVersion($script){
+		return str_replace("to","",str_replace(".sql","",$script));
 	}
 }

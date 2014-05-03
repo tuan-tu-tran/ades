@@ -24,15 +24,37 @@
 <h1>Mise à jour de la base de données</h1>
 
 <?php if($fromVersion == $toVersion):?>
-	<p>La base de données a déjà la version
+	<p class="avertissement">La base de données a déjà la version
 	<?php echo $fromVersion?>
 	et n'a pas besoin d'être mise à jour.</p>
+	<p style="text-align:center"><a href="index.php">Retour à la page d'accueil</a></p>
 <?php elseif($fromBeforeTo):?>
 	<p>La base de données doit être mise à jour de la version
 	<?php echo $fromVersion?>
-	à la version
+	vers la version
 	<?php echo $toVersion?>
 	</p>
+
+	<?php if(count($scriptsToExecute)>0):?>
+		<p>Les scripts de mise à jours suivant seront exécutés:</p>
+		<ul>
+		<?php foreach($scriptsToExecute as $script):?>
+			<li><?php echo $script?></li>
+		<?php endforeach;?>
+		</ul>
+	<?php else:?>
+		<p class="impt">Aucun script de mise à jour ne sera exécuté!</p>
+		<p class="impt">ATTENTION, CECI N'EST PAS NORMAL!</p>
+	<?php endif;?>
+
+	<?php if(count($upgradeScripts)>0):?>
+		<p>Scripts de mise à jour disponibles:</p>
+		<ul>
+		<?php foreach($upgradeScripts as $script):?>
+			<li><?php echo $script?></li>
+		<?php endforeach;?>
+		</ul>
+	<?php endif?>
 <?php else:?>
 	<div class="impt avertissement">
 		<p>La version du code
