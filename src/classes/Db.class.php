@@ -63,11 +63,25 @@ class Db{
 	}
 
 	public function execute($query){
+		return $this->private_execute($query, $result);
+	}
+
+	private function private_execute($query, &$result){
 		if($this->connect()){
-			$this->conn->query($query);
+			$result=$this->conn->query($query);
 			return !$this->conn->errno;
 		}
 		return false;
+
+	}
+
+	public function scalar($query){
+		if($this->private_execute($query,$result)){
+			if ($result->num_rows>0)
+				return $result->fetch_row()[0];
+			else
+				return NULL;
+		}else throw new DbException($this->error());
 	}
 
 	public function error(){

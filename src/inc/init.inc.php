@@ -30,8 +30,10 @@ if(!defined("_INIT_INCLUDED_")){
 	define('_DB_CONFIG_FILE_',_CONFIG_FOLDER_FULL_PATH_.'confbd.inc.php');
 	define('_SCHOOL_CONFIG_FILE_',_CONFIG_FOLDER_FULL_PATH_.'constantes.inc.php');
 	define("_CLASS_DIR_",DIRNAME(__FILE__)."/../classes");
+	define("_VIEWS_FOLDER",DIRNAME(__FILE__)."/../views");
 
 	require("inc/fonctions.inc.php");
+	@include_once(_SCHOOL_CONFIG_FILE_);
 
 	set_include_path(_CLASS_DIR_);
 	spl_autoload_register(function($classname){
@@ -39,4 +41,6 @@ if(!defined("_INIT_INCLUDED_")){
 			include($classname.".class.php");
 		}
 	});
+
+	session_start();
 }
