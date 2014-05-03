@@ -55,12 +55,26 @@ switch ($mode)
 
 	$handle = fopen("./eleves.csv", "r");
 	$ligne = 1;
+	$bad_lines=array();
+	$errors=array();
+	$inserts=0;
 	while (($data = fgetcsv($handle, 5000, ",","\"")) !== FALSE) 
 		{
 		$num = count($data);
 		if ($ligne == 1)
 			{
 			// sur la première ligne, on trouve les intitulés des colonnes
+				//bug #10: the csv line may contain an extra 12th empty field
+				if($num==12 && $data[11]==NULL){
+					$pop_last=true;
+					unset($data[11]);
+				}else if($num==11){
+					$pop_last=false;
+				}else{
+					mysql_close($lienDB);
+					exit("Le fichier csv contient $num champs au lieu de 11 ( ou 12 avec un dernier champ vide");
+				}
+			$num = count($data);
 			$debutsql = "INSERT INTO ades_eleves (";
 			for ($i=0; $i < $num; $i++) 
 				{
@@ -71,6 +85,14 @@ switch ($mode)
 			}
 			else
 			{
+				//bug #10: pop the last item if needed
+				if($pop_last && count($data)==12){
+					unset($data[11]);
+				}else{
+					$bad_lines[]="La ligne $ligne du fichier contient ".count($data)." champs au lieu de ".($pop_last?12:11)."<br/>\n";
+					continue;
+				}
+				$num = count($data);
 			// sur les lignes suivantes, on trouve les infos à introduire dans la BD
 			$sql = $debutsql;
 			for ($i=0; $i < $num; $i++) 
@@ -81,9 +103,12 @@ switch ($mode)
 			mysql_query($sql);
 			if (mysql_error()) 
 				{ 
-				echo mysql_error() ."<br>\n";  
+				$errors[]=mysql_error() ."<br>\n";  
 				$erreur = true;
 				}
+			else{
+				$inserts++;
+			}
 			}
 			$ligne++;
 			// echo "$sql <br />";
@@ -91,15 +116,26 @@ switch ($mode)
 		}
 		fclose($handle);
 		mysql_close ($lienDB);
-        if ($erreur == false)
+        if ($erreur == false && count($bad_lines)==0)
 			{
 			$texte = "L'importation des données semble s'être bien passée.";
 			redir ("index.php","",$texte, 5000);
             }
 			else 
 			{
-			$texte = "Il s'est produit une erreur durant l'importation.";
-			redir ("index.php","",$texte, 10000);
+			echo "<p class='avertissement'>Il s'est produit une erreur durant l'importation.</p>";
+			echo "<p>Le fichier comporte ".($ligne-2)." enregistrements</p>";
+			echo "<p>$inserts enregistrements ont été importés.</p>";
+			echo "<p>".count($bad_lines)." lignes ont été ignorées car elles ne comportent pas le nombre attendu de champs</p>";
+			echo "<p>".count($errors)." erreurs se sont produites avec la base de données</p>";
+			if(count($bad_lines)){
+				echo "<h3>Lignes ignorées</h3>";
+				echo implode("",$bad_lines);
+			}
+			if($errors){
+				echo "<h3>Erreurs db</h3>";
+				echo implode("",$errors);
+			}
 			}
  break;
  case 'Envoyer':
@@ -119,18 +155,57 @@ switch ($mode)
         echo "</div>\n";
 
 	// tableau de prévisualisation
+	ob_start();
 	echo "<table border=\"1\" cellpadding=\"1\" cellspacing=\"1\">\n";
 	$handle = fopen("./eleves.csv", "r");
+	$line=1;
+	$non_fixable=0;
+	$ok_rows="";
+	$not_ok_rows="";
 	while (($data = fgetcsv($handle, 5000, ",","\"")) !== FALSE) 
 		{
 		$num = count($data);
-		echo "<tr>\n";
+		if($line==1){
+			$pop_last=$num==12 && $data[11]==NULL;
+			$headers_count=$num;
+		}
+		if($pop_last && $num==12 || $num==11){
+			//ok
+			$ok=true;
+		}else{
+			$non_fixable++;
+			$ok=false;
+		}
+		ob_start();
+		echo "<tr ".($ok?"":"style='background-color:red'").">\n";
+		echo "<td>$line</td>";
 		for ($i=0; $i < $num; $i++) 
 			echo "<td>".$data[$i] . "</td>\n";
 		echo "</tr>\n";
+		$table_row=ob_get_contents();
+		ob_end_clean();
+		if($ok) $ok_rows.=$table_row;
+		else $not_ok_rows.=$table_row;
+		$line++;
 		}
 	fclose($handle);
+	echo $not_ok_rows;
+	echo $ok_rows;
 	echo "</table>\n";
+	$table=ob_get_contents();
+	ob_end_clean();
+
+	if($headers_count==11){
+		//all good
+	}else if($headers_count==12 && $pop_last){
+		echo "<p><strong>Un 12ème champs vide a été détecté dans le fichier csv. Il sera ignoré lors de l'importation</strong></p>";
+	}else{
+		echo "<p><strong>ATTENTION!!! le fichier importé contient $headers_count champs au lieu de 11</strong></p>";
+	}
+	if($non_fixable){
+		echo "<p><strong>$non_fixable enregistrements ne pourront pas êtres importés</strong></p>";
+	}
+	echo $table;
 	break;
  default:
 	echo "<form method=\"post\" action=\"{$_SERVER['PHP_SELF']}\" ";
