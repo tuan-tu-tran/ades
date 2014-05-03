@@ -80,7 +80,7 @@ include_once ("ADESsql.class.php");
 			$this->resulthtml.="<input value=\"Supprimer\" type=\"button\" onClick='SupprimerMemo();'></br></br>";
 			
 		}else{
-			$this->resulthtml="Aucun m&eacute;mo";
+			$this->resulthtml="<p>Aucun m&eacute;mo</p>";
 		}
 		
 		// On r�cup�re les diff�rentes donn�es du todo
