@@ -19,20 +19,20 @@
 */
 ?><div id="popup"></div>
 <div class="inv" style="background-color: ##ffca00; height:3em;">
-<!-- non visible ï¿½ l'impression -->
+<!-- non visible à l'impression -->
 	<div style="float:left; width: 80px;">
 	<a href="index.php">
-	<img src="images/retour.gif" alt="retour Ã  l'index"
-		title="retour ï¿½ l'index" border="0">
+	<img src="images/retour.gif" alt="retour à l'index"
+		title="retour à l'index" border="0">
 	</a>
 	<a href="javascript:history.go(-1)">
-	<img src="images/prec.gif" alt="page prï¿½cï¿½dente" title="page prï¿½cï¿½dente" border="0">
+	<img src="images/prec.gif" alt="page précédente" title="page précédente" border="0">
 	</a>
 </div>
 
 <div style="float: right;">
 <span class="micro">
-L'accï¿½s ï¿½ cette page est rï¿½servï¿½.
+L'accès à cette page est réservé.
 <?php echo quiEstLa(); ?>
 </span>
 </div>
