@@ -43,6 +43,10 @@ if(file_exists("config/confbd.inc.php")){
   <script language="javascript" type="text/javascript" src="inc/fonctions.js">
 </script>
 <script type="text/javascript" src="inc/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
+	<style type="text/css">
+		#cadreDroit strong{padding:0;}
+		#cadreDroit p{padding-left:0;}
+	</style>
 </head>
 <body>
 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>

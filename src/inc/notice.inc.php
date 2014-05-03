@@ -17,10 +17,11 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-?><div id="popup"></div>
-<div class="inv" style="background-color: ##ffca00; height:3em;">
+?>
+<div id="popup"></div>
+<div class="inv" style="background-color: ##ffca00; height:4em;">
 <!-- non visible à l'impression -->
-	<div style="float:left; width: 80px;">
+	<div style="width: 80px;display:inline-block; vertical-align:top;margin-top:2em;margin-left:10px">
 	<a href="index.php">
 	<img src="images/retour.gif" alt="retour à l'index"
 		title="retour à l'index" border="0">
@@ -30,21 +31,23 @@
 	</a>
 </div>
 
-<div style="float: right;">
+<div style="float: right;margin-right:5px">
 <span class="micro">
-L'accès à cette page est réservé.
+L'accès à cette page est réservé.<br/>
 <?php echo quiEstLa(); ?>
 </span>
 </div>
+<div style="display:inline-block;vertical-align:top;margin-top:2em;">
 <?php 
 $version = date ("Ymd", filemtime("./version"));
-echo "<i>ADES Version: $version</i>   ";
+echo "<i style='vertical-align:middle'>ADES Version: $version</i>   ";
 ?>
 <a href="http://validator.w3.org/check?uri=referer"><img
- style="border: 0px solid ; width: 80px; height: 15px;"
+ style="border: 0px solid ; width: 80px; height: 15px;vertical-align:middle"
  src="images/html.png" alt="Valid HTML 4.01 Transitional"></a> <a
  href="http://jigsaw.w3.org/css-validator/"><img
- style="border: 0px solid ; width: 80px; height: 15px;"
+ style="border: 0px solid ; width: 80px; height: 15px;vertical-align:middle"
  src="images/css.png" alt="Valid CSS"></a>
  <a href="credits.php">A propos</a>
+</div>
  </div>
