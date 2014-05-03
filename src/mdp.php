@@ -128,7 +128,7 @@ default:
 	echo "<p><label for= \"nouveau1\">Mot de passe :</label>";
 	echo "<input name=\"nouveau1\" type=\"password\" id=\"nouveau1\" ";
 	echo "size=\"12\" maxlength=\"12\"></p>\n";
-	echo "<p><label for=\"nouveau2\">Confirmation :<label>";
+	echo "<p><label for=\"nouveau2\">Confirmation :</label>";
 	echo "<input name=\"nouveau2\" type=\"password\" id=\"nouveau2\" ";
 	echo "size=\"12\" maxlength=\"12\"></p>\n";	
 
