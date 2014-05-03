@@ -26,9 +26,9 @@ class View{
 				if(!is_array($parameters)) $parameters=get_object_vars($parameters);
 				extract($parameters);
 			}
-			//ob_start();
 			require($template);
-			//echo ob_end_clean();
+			if(self::$current_block)
+				throw new Exception("block ".self::$current_block." was still open after rendering template $template");
 		}else throw new Exception("template not found '$template'");
 
 	}
@@ -37,6 +37,8 @@ class View{
 		$template=_VIEWS_FOLDER."/$template";
 		if(file_exists($template)){
 			require($template);
+			if(self::$current_block)
+				throw new Exception("block ".self::$current_block." was still open after embedding template $template");
 		}else throw new Exception("template not found '$template'");
 	}
 
