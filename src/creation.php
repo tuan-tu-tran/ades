@@ -25,10 +25,63 @@
  * Tout le processus de configuration d'ADES est automatisé
  * Au lancement de l'application ADES détecte si ADES est configuré
  */
-include ("inc/fonctions.inc.php");
-include ("config/constantes.inc.php");
+require("inc/init.inc.php");
 Normalisation();
-// On inclut plus automatiquement le fichier de configuration on l'inclut uniquement si il existe ce qui permet de s'adapter au processus de création du fichier
+function CreationTables (&$error_command){
+	$commandes = file("./creation.sql");
+	$uneCommande = "";
+	foreach ($commandes as $uneLigne){
+		// supprimer les commentaires dans le fichier .sql
+		if (substr($uneCommande, 0, 2) == "--")
+			$uneCommande = "";
+		$uneCommande .= trim($uneLigne);
+		$longueur = strlen($uneCommande);
+		$dernier = substr($uneCommande, $longueur-1, 1);
+		if ($dernier == ";"){
+			if(!Db::GetInstance()->execute($uneCommande)){
+				$error_command=$uneCommande;
+				return false;
+			}
+			$uneCommande = "";
+		}
+	}
+	return true;
+}
+
+function CreateConfigFile(){
+	// Rami Adrien création du fichier confdb.inc.php
+	$fichierconfdb = fopen(_DB_CONFIG_FILE_,"w");
+	if(!$fichierconfdb){
+		return false;
+	}else{
+		$format=<<<EOF
+// SERVEUR SQL
+\$sql_serveur=%s;
+// LOGIN SQL
+\$sql_user=%s;
+// MOT DE PASSE SQL
+\$sql_passwd=%s;
+// NOM DE LA BASE DE DONNEES
+\$sql_bdd=%s;
+EOF;
+		fprintf($fichierconfdb, "<?php\n".$format."\n"
+			, var_export($_POST["sqlserver"], true)
+			, var_export($_POST["utilisateursql"], true)
+			, var_export($_POST["motdepassesql"], true)
+			, var_export($_POST["nomdelabasesql"], true)
+		);
+		fclose($fichierconfdb);
+		return true;
+	}
+}
+
+function ConfigIsValid(){
+	$host=$_POST["sqlserver"];
+	$user=$_POST["utilisateursql"];
+	$pwd=$_POST["motdepassesql"];
+	$dbname=$_POST["nomdelabasesql"];
+	return Db::GetInstance($host, $user, $pwd, $dbname)->connect();
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -36,29 +89,7 @@ Normalisation();
   <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
   <title>Initialisation de la base de données ADES</title>
   <link media="screen" rel="stylesheet" href="config/screen.css" type="text/css">
-<?php
-function CreationTables ()
-{
-$commandes = file("./creation.sql");
-$uneCommande = "";
-$nbEtoiles = 0;
-foreach ($commandes as $uneLigne)
-	{
-	// supprimer les commentaires dans le fichier .sql
-	if (substr($uneCommande, 0, 2) == "--")
-		$uneCommande = "";
-	$uneCommande .= trim($uneLigne);
-	$longueur = strlen($uneCommande);
-	$dernier = substr($uneCommande, $longueur-1, 1);
-	if ($dernier == ";")
-		{
-		$resultat = mysql_query($uneCommande);
-		$nb = mysql_affected_rows ();
-		$uneCommande = "";
-		}
-	}
-}
-?>
+<style type="text/css">a:hover{text-decoration:underline}</style>
 </head>
 <body>
 <div id="texte">
@@ -70,87 +101,128 @@ foreach ($commandes as $uneLigne)
  *
  */
 $etape = isset($_GET['etape'])?$_GET['etape']:0;
+if (
+	$etape!=0
+	&& $etape!=1
+	&& $etape!=2
+	&& $etape!=3
+)
+	$etape=0;
 // Détection pour savoir si l'on se trouve à l'étape de la création du fichier de configuration
 if(empty($_POST['sqlserver'])==false){
-$etape= 2;
+	$etape= 2;
 }
-switch ($etape)
-	{
-	case 0: 
-		echo("<p>Cet utilitaire va:</p>\n");
-		echo("<ul>\n<li>+ créer votre fichier de configuration</li>\n");
-		echo("<li>+ créer les tables de la base de données</li>\n");
-		echo("</ul>\n");
-		echo("Avant de commencer veuillez préparer les informations suivantes:</p>\n");
-		echo("<ul>\n<li>+ votre serveur sql</li>\n");
-		echo("<li>+ l'utilisateur sql</li>\n");
-		echo("<li>+ le mot de passe</li>\n");
-		echo("<li>+ le nom de la base de données</li>\n");
-		echo("</ul>\n");
-		echo("<p><big>ETES VOUS SÛR(E) DE VOULOIR POURSUIVRE?</big></p>\n");
-		$etape++;
-		echo ("<p><a href=\"creation.php?etape=$etape\">Oui, je sais ce que je fais</a></p>\n");
-		break;
-	case 1: 
-		echo("<form name=\"form\" method=\"post\" action=\"creation.php\">");
-		echo("<p><label>Serveur Sql :</label><input name=\"sqlserver\" id=\"sqlserver\" size=\"30\" maxlength=\"50\" type=\"text\"></p>");
-		echo("<p><label>Utilisateur :</label><input name=\"utilisateursql\" id=\"utilisateur\" size=\"30\" maxlength=\"50\" type=\"text\"></p>");
-		echo("<p><label>Mot de Passe :</label><input name=\"motdepassesql\" id=\"motdepasse\" size=\"30\" maxlength=\"50\" type=\"password\"></p>");
-		echo("<p><label>Nom de la Base de données :</label><input name=\"nomdelabasesql\" id=\"nomdelabase\" size=\"30\" maxlength=\"50\" type=\"text\"></p>");
-		echo("<input name=\"Submit\" value=\"Enregistrer\" type=\"submit\">");
-		$etape++;
-		break;
-	case 2:
-		// Rami Adrien création du fichier confdb.inc.php
-		$fichierconfdb = fopen("config/confbd.inc.php","w");
-		fwrite($fichierconfdb, "<?php \n");
-		fwrite($fichierconfdb, "// SERVEUR SQL");
-		fwrite($fichierconfdb, "\n");
-		fwrite($fichierconfdb, '$sql_serveur="');
-		fwrite($fichierconfdb, $_POST['sqlserver']);
-		fwrite($fichierconfdb, "\";\n");
-		fwrite($fichierconfdb, "// LOGIN SQL");
-		fwrite($fichierconfdb, "\n");
-		fwrite($fichierconfdb, '$sql_user="');
-		fwrite($fichierconfdb,$_POST['utilisateursql']);
-		fwrite($fichierconfdb, "\";\n");
-		fwrite($fichierconfdb, "// MOT DE PASSE SQL");
-		fwrite($fichierconfdb, "\n");
-		fwrite($fichierconfdb, '$sql_passwd="');
-		fwrite($fichierconfdb, $_POST['motdepassesql']);
-		fwrite($fichierconfdb, "\";\n");
-		fwrite($fichierconfdb, "// NOM DE LA BASE DE DONNEES");
-		fwrite($fichierconfdb, "\n");
-		fwrite($fichierconfdb, '$sql_bdd="');
-		fwrite($fichierconfdb,$_POST['nomdelabasesql']);
-		fwrite($fichierconfdb, "\";\n");
-		fwrite($fichierconfdb, '$sql_prefix=""');
-		fwrite($fichierconfdb, ";\n");
-		fwrite($fichierconfdb, "?>");
-		fclose($fichierconfdb);
-		$etape++;
-		echo("Fichier de configuration créer avec succès<br>");
-		echo("<a href=\"creation.php?etape=$etape\">Installation d'ADES</a>\n");
-		break;
-	case 3: ;
-		if(file_exists("config/confbd.inc.php")){
-			//Si le fichier existe on l'inclut dans le programme et l'interface se charge pour l'ajout des tables
-			include ("config/confbd.inc.php");
-			$lienDB = mysql_connect($sql_serveur, $sql_user, $sql_passwd) or die(mysql_error());
-			mysql_select_db($sql_bdd);
-			creationTables ($sql_bdd);
-		}
-		echo("<p>Login et mot de passe: admin</p>");
-		echo("<p>L'installation d'ADES est terminé: <a href=\"index.php\">On y va</a></p>");
-		$etape++;
-		if(file_exists("config/confbd.inc.php")){
-			mysql_close ($lienDB);
-		}
-		break;
-	default: echo("L'installation d'ADES est un succès");
-	}
 
+if( ( $etape==1 || $etape==2 ) && file_exists(_DB_CONFIG_FILE_) ){
+	$etape=4;
+}
 ?>
+<?php if($etape==0):?>
+
+	<p>Cet utilitaire va:</p>
+	<ul>
+		<li>+ créer votre fichier de configuration</li>
+		<li>+ créer les tables de la base de données</li>
+	</ul>
+
+	<p>Avant de commencer veuillez préparer les informations suivantes:</p>
+	<ul>
+		<li>+ votre serveur sql</li>
+		<li>+ l'utilisateur sql</li>
+		<li>+ le mot de passe</li>
+		<li>+ le nom de la base de données</li>
+	</ul>
+
+	<p><big>ETES VOUS SÛR(E) DE VOULOIR POURSUIVRE?</big></p>
+
+	<p><a href="creation.php?etape=1">Oui, je sais ce que je fais</a></p>
+
+<?php elseif($etape==1 || $etape==2 && !ConfigIsValid()):?>
+	<?php
+		if($etape==2){
+			$sqlserver = htmlspecialchars($_POST["sqlserver"]);
+			$utilisateursql = htmlspecialchars($_POST["utilisateursql"]);
+			$motdepassesql = htmlspecialchars($_POST["motdepassesql"]);
+			$nomdelabasesql = htmlspecialchars($_POST["nomdelabasesql"]);
+		}else{
+			$sqlserver = "";
+			$utilisateursql = "";
+			$motdepassesql = "";
+			$nomdelabasesql = "";
+		}
+	?>
+
+	<form name="form" method="post" action="creation.php">
+		<p>
+			<label>Serveur Sql :</label>
+			<input value="<?echo $sqlserver?>" name="sqlserver" id="sqlserver" size="30" maxlength="50" type="text">
+		</p>
+		<p>
+			<label>Utilisateur :</label>
+			<input value="<?echo $utilisateursql?>" name="utilisateursql" id="utilisateur" size="30" maxlength="50" type="text">
+		</p>
+		<p>
+			<label>Mot de Passe :</label>
+			<input value="<?echo $motdepassesql?>" name="motdepassesql" id="motdepasse" size="30" maxlength="50" type="password">
+		</p>
+		<p>
+			<label>Nom de la Base de données :</label>
+			<input value="<?echo $nomdelabasesql?>" name="nomdelabasesql" id="nomdelabase" size="30" maxlength="50" type="text">
+		</p>
+		<input name="Submit" value="Enregistrer" type="submit">
+		<?php if($etape==2):?>
+		<p>Le connexion à la base de données a échoué.</p>
+		<p>Le système a renvoyé l'erreur: <?php echo Db::GetInstance()->error()?></p>
+		<?php endif; ?>
+	</form>
+
+<?php elseif($etape==2):?>
+
+	<?php
+		//create the config file
+		if(CreateConfigFile()):
+	?>
+		<p>Fichier de configuration créé avec succès</p>
+		<a href="creation.php?etape=3">Installation d'ADES</a>
+	<?php else: ?>
+		<form name="form" method="post">
+		<p>Le fichier de configuration n'a pas pu être écrit.</p>
+		<p>
+			Veuillez vérifier que l'utilisateur système
+				<b><?php echo posix_getpwuid(posix_geteuid())["name"];?></b>
+			dispose des droits suffisants pour écrire le fichier
+				<b><?php echo join(DIRECTORY_SEPARATOR, array(DIRNAME(__FILE__),_DB_CONFIG_FILE_));?></b>
+		</p>
+		<p>Le système a renvoyé l'erreur suivante: <?php echo error_get_last()["message"] ?></p>
+		<input name="sqlserver" type="hidden" value="<?php echo htmlspecialchars($_POST["sqlserver"])?>" />
+		<input name="utilisateursql" type="hidden" value="<?php echo htmlspecialchars($_POST["utilisateursql"])?>" />
+		<input name="motdepassesql" type="hidden" value="<?php echo htmlspecialchars($_POST["motdepassesql"])?>" />
+		<input name="nomdelabasesql" type="hidden" value="<?php echo htmlspecialchars($_POST["nomdelabasesql"])?>" />
+		<input name="Submit" value="Réessayer" type="submit">
+		</form>
+	<?php endif; ?>
+
+<?php elseif($etape==3):?>
+
+	<?php if(!file_exists(_DB_CONFIG_FILE_)) redirect("creation.php"); ?>
+
+	<?php $error_command=NULL;
+	if(CreationTables($error_command)): ?>
+		<p>Login et mot de passe: admin</p>
+		<p>L'installation d'ADES est terminée: <a href="index.php">On y va</a></p>
+	<?php else:?>
+		<p>Une erreur s'est produite lors de la creation des tables, à cause de la commande:</p>
+		<p><?php echo htmlspecialchars($error_command);?></p>
+		<p>Le système a renvoyé l'erreur: <?php echo Db::GetInstance()->error()?></p>
+		<p><a href="creation.php?etape=3">Réessayer de créer les tables</a></p>
+		<p><a href="creation.php?etape=1">Reconfigurer la connexion (vous devez d'abord supprimer le fichier existant)</a></p>
+		<p><a href="index.php">Terminer l'installation</a></p>
+	<?php endif;?>
+<?php elseif($etape==4):?>
+	<p>Le fichier de configuration de la connexion à la base de données existe déjà. Pour reconfigurer la connexion, veuillez d'abord l'effacer.</p>
+	<p><a href="creation.php?etape=1">Réessayer de configurer la connexion à la base de données</a></p>
+	<p><a href="creation.php?etape=3">Passer à l'étape de création des tables</a></p>
+<?php endif; ?>
 </div>
 </body>
 </html>

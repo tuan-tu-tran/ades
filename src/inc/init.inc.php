@@ -24,8 +24,17 @@
  * be safely included at the begining of any controller
  */
 
-define('_DB_CONFIG_FILE_','config/confbd.inc.php');
+if(!defined("_INIT_INCLUDED_")){
+	define("_INIT_INCLUDED_","");
+	define('_DB_CONFIG_FILE_','config/confbd.inc.php');
+	define("_CLASS_DIR_",DIRNAME(__FILE__)."/../classes");
 
-require("inc/fonctions.inc.php");
+	require("inc/fonctions.inc.php");
 
-?>
+	set_include_path(_CLASS_DIR_);
+	spl_autoload_register(function($classname){
+		if(!class_exists($classname)){
+			include($classname.".class.php");
+		}
+	});
+}
