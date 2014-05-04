@@ -106,10 +106,8 @@ class Upgrade{
 					break;
 				}else{
 					$this->executedScripts[]=$script;
+					Config::SetDbVersion(self::GetScriptVersion($script));
 				}
-			}
-			if(!$failed && count($this->executedScripts)>0){
-				Config::SetDbVersion($this->toVersion);
 			}
 			FlashBag::Set("upgrade_result",$this);
 			Tools::Redirect("upgrade.php?action=result");
