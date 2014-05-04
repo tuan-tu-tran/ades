@@ -29,6 +29,7 @@
 	et n'a pas besoin d'être mise à jour.</p>
 	<p style="text-align:center"><a href="index.php">Retour à la page d'accueil</a></p>
 <?php elseif($fromBeforeTo):?>
+	<form method="POST" class="no_border">
 	<p>La base de données doit être mise à jour de la version
 	<?php echo $fromVersion?>
 	vers la version
@@ -55,6 +56,11 @@
 		<?php endforeach;?>
 		</ul>
 	<?php endif?>
+			
+	<?php if(count($scriptsToExecute)>0):?>
+		<input type="submit" value="Mettre à jour"/>
+	<?php endif;?>
+	</form>
 <?php else:?>
 	<div class="impt avertissement">
 		<p>La version du code

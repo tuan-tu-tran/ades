@@ -28,5 +28,36 @@ class Config{
 				self::$config[$row["con_key"]]=$row["con_value"];
 			}
 		}
+		return Tools::TryGet(self::$config, $key, $default);
+	}
+
+	public static function Set($key, $value){
+		$query=
+			"INSERT INTO ades_config(con_key, con_value) "
+			." VALUES ('%s', '%s') "
+			." ON DUPLICATE KEY SET "
+			." con_value = '%s' "
+		;
+		$query=sprintf($query
+			, mysqli_real_escape_string($key)
+			, mysqli_real_escape_string($value)
+			, mysqli_real_escape_string($value)
+		);
+		if(Db::GetInstance()->execute($query)){
+			if(self::$config){
+				self::$config[$key]=$value;
+			}
+			return true;
+		}else{
+			throw new Exception("could not set config value '$key' to '$value' : ".(Db::GetInstance()->error()));
+		}
+	}
+
+	public static function SetDbVersion($version){
+		return self::Set("db_version",$version);
+	}
+
+	public static function GetDbVersion(){
+		return self::Get("db_version");
 	}
 }

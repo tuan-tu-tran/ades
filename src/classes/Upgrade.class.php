@@ -21,7 +21,12 @@
 class Upgrade{
 	const Version="0.0";
 	public function parseRequest(){
-		$this->ShowVersionAction();
+		$action=isset($_GET["action"])?$_GET["action"]:NULL;
+		if (strtoupper($_SERVER["REQUEST_METHOD"])=="POST" || $action=="upgrade"){
+			$this->UpgradeDbAction();
+		}else{
+			$this->ShowVersionAction();
+		}
 	}
 	private function ShowVersionAction(){
 		$this->GetVersions();
@@ -74,15 +79,43 @@ class Upgrade{
 		if(!Db::GetInstance()->scalar("SHOW TABLES LIKE 'ades_config'")){
 			$db_version="0.0";
 		}else{
-			$db_version=Config::Get("db_version");
+			$db_version=Config::GetDbVersion();
 			if(!$db_version){
 				throw new Exception("could not determine db version: table ades_config exists but no value for db_version");
 			}
 		};
 		return $db_version;
 	}
-	public static function UpgradeDb(){
-		var_dump($db_version);
+
+	private function UpgradeDbAction(){
+		$this->GetVersions();
+		if($this->fromBeforeTo){
+			$this->executedScripts=array();
+			$failed=false;
+			foreach($this->scriptsToExecute as $script){
+				$content=file_get_contents(self::UpgradeFolder().$script);
+				if($content===FALSE){
+					$this->failedScript=$script;
+					$this->failedScriptError=Tools::GetLastError();
+					$failed=true;
+					break;
+				}elseif(!Utils::MySqlScript($content, $err,$launched)){
+					$this->failedScript = $script;
+					$this->failedScriptError=$err;
+					$failed=true;
+					break;
+				}else{
+					$this->executedScripts[]=$script;
+				}
+			}
+			if(!$failed && count($this->executedScripts)>0){
+				Config::SetDbVersion($this->toVersion);
+			}
+			FlashBag::Set("upgrade_result",$this);
+			Tools::Redirect("upgrade.php?action=result");
+		}else{
+			Tools::Redirect("upgrade.php");
+		}
 	}
 
 	private static function GetScriptVersion($script){

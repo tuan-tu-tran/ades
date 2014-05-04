@@ -49,4 +49,8 @@ class Tools{
 		return error_get_last()["message"];
 	}
 
+	public static function TryGet(&$array, $key, $default=NULL){
+		return isset($array[$key])?$array[$key]:$default;
+	}
+
 }
