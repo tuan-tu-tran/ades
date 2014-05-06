@@ -24,10 +24,24 @@ class Upgrade{
 		$action=isset($_GET["action"])?$_GET["action"]:NULL;
 		if (strtoupper($_SERVER["REQUEST_METHOD"])=="POST" || $action=="upgrade"){
 			$this->UpgradeDbAction();
+		}elseif($action=="result"){
+			$this->ResultAction();
 		}else{
 			$this->ShowVersionAction();
 		}
 	}
+
+	private function ResultAction(){
+		$result=FlashBag::Pop("upgrade_result");
+		if($result){
+			$this->result=$result;
+			$this->currentVersion = self::GetDbVersion();
+			View::Render("Upgrade/result.inc.php", $this);
+		}else{
+			Tools::Redirect("upgrade.php");
+		}
+	}
+
 	private function ShowVersionAction(){
 		$this->GetVersions();
 		View::Render("Upgrade/index.inc.php", $this);
