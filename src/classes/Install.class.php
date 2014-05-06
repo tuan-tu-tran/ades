@@ -231,4 +231,11 @@ EOF;
 	public function GetDbConfigSubmitUrl(){return $this->GetUrl(self::ACTION_SUBMIT_DB_CONFIG);}
 	public function GetSchoolConfigSubmitUrl(){return $this->GetUrl(self::ACTION_SUBMIT_SCHOOL_CONFIG);}
 	public function CanConfigureSchool(){ return !file_exists(_SCHOOL_CONFIG_FILE_); }
+
+	public static function CheckIfNeeded(){
+		if(!file_exists(_DB_CONFIG_FILE_)){
+			error_log("no config file found");
+			Tools::Redirect("creation.php");
+		}
+	}
 }

@@ -136,4 +136,10 @@ class Upgrade{
 	private static function GetScriptVersion($script){
 		return str_replace("to","",str_replace(".sql","",$script));
 	}
+
+	public static function CheckIfNeeded(){
+		if(self::GetDbVersion()!=self::Version){
+			Tools::Redirect("upgrade.php");
+		}
+	}
 }

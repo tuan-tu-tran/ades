@@ -17,13 +17,15 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-require ("inc/fonctions.inc.php");
-require ("config/constantes.inc.php");
+require("inc/init.inc.php");
+
 /*Rami Adrien: Processus d'installation automatique
  * On test si le fichier confdb.inc.php existe
  * Si il n'existe pas on lance le processus d'installation d'ADES avec le fichier creation.php
  * Si il existe on laisse le programme se lancé normalement
  */
+Install::CheckIfNeeded();
+Upgrade::CheckIfNeeded();
 if(file_exists("config/confbd.inc.php")){
 	//Si le fichier existe on l'inclut dans le programme et l'interface se charge. Sinon...
 	include ("config/confbd.inc.php");

@@ -18,10 +18,8 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 require("inc/init.inc.php");
-if(!file_exists(_DB_CONFIG_FILE_)){
-	error_log("no config file found");
-	redirect("creation.php");
-}
+Install::CheckIfNeeded();
+Upgrade::CheckIfNeeded();
 
 require ("inc/prive.inc.php");
 require ("config/constantes.inc.php");
