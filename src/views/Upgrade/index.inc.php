@@ -55,6 +55,8 @@
 			<li><?php echo $script?></li>
 		<?php endforeach;?>
 		</ul>
+	<?php else:?>
+		<p class="impt">Aucun script de mise à jour disponible.</p>
 	<?php endif?>
 			
 	<?php if(count($scriptsToExecute)>0):?>
