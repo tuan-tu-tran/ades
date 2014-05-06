@@ -72,7 +72,12 @@ class Db{
 			return !$this->conn->errno;
 		}
 		return false;
+	}
 
+	public function query($query){
+		if($this->private_execute($query,$result)){
+			return $result->fetch_all(MYSQLI_BOTH);
+		}else throw new DbException($this->error());
 	}
 
 	public function scalar($query){
@@ -100,5 +105,13 @@ class Db{
 			}
 		}
 		return Db::$instance;
+	}
+
+	public function escape_string($s){
+		if($this->connect()){
+			return $this->conn->escape_string($s);
+		}else{
+			throw new DbException("could not connect to escape string '$s' : ".($this->error()));
+		}
 	}
 }

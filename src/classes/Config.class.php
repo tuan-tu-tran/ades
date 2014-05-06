@@ -32,18 +32,19 @@ class Config{
 	}
 
 	public static function Set($key, $value){
+		$db=Db::GetInstance();
 		$query=
 			"INSERT INTO ades_config(con_key, con_value) "
 			." VALUES ('%s', '%s') "
-			." ON DUPLICATE KEY SET "
+			." ON DUPLICATE KEY UPDATE "
 			." con_value = '%s' "
 		;
 		$query=sprintf($query
-			, mysqli_real_escape_string($key)
-			, mysqli_real_escape_string($value)
-			, mysqli_real_escape_string($value)
+			, $db->escape_string($key)
+			, $db->escape_string($value)
+			, $db->escape_string($value)
 		);
-		if(Db::GetInstance()->execute($query)){
+		if($db->execute($query)){
 			if(self::$config){
 				self::$config[$key]=$value;
 			}
