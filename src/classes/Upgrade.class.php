@@ -22,6 +22,9 @@ class Upgrade{
 	const Version="0.0";
 	public function parseRequest(){
 		$action=isset($_GET["action"])?$_GET["action"]:NULL;
+		if(self::GetDbVersion() == self::Version && $action!="result"){
+			Tools::Redirect("index.php");
+		}
 		if (strtoupper($_SERVER["REQUEST_METHOD"])=="POST" || $action=="upgrade"){
 			$this->UpgradeDbAction();
 		}elseif($action=="result"){
