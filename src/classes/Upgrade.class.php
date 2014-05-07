@@ -19,7 +19,8 @@
 */
 
 class Upgrade{
-	const Version="0.0";
+	const Version="1.0";
+
 	public function parseRequest(){
 		$action=isset($_GET["action"])?$_GET["action"]:NULL;
 		if($action!="result" && !self::Required()){
