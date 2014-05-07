@@ -22,7 +22,7 @@ class Upgrade{
 	const Version="0.0";
 	public function parseRequest(){
 		$action=isset($_GET["action"])?$_GET["action"]:NULL;
-		if(self::GetDbVersion() == self::Version && $action!="result"){
+		if($action!="result" && !self::Required()){
 			Tools::Redirect("index.php");
 		}
 		if (strtoupper($_SERVER["REQUEST_METHOD"])=="POST" || $action=="upgrade"){
@@ -105,6 +105,15 @@ class Upgrade{
 	}
 
 	private function UpgradeDbAction(){
+		if($this->UpgradeDb() || $this->fromBeforeTo){
+			FlashBag::Set("upgrade_result",$this);
+			Tools::Redirect("upgrade.php?action=result");
+		}else{
+			Tools::Redirect("upgrade.php");
+		}
+	}
+
+	public function UpgradeDb(){
 		$this->GetVersions();
 		if($this->fromBeforeTo){
 			$this->executedScripts=array();
@@ -126,10 +135,9 @@ class Upgrade{
 					Config::SetDbVersion(self::GetScriptVersion($script));
 				}
 			}
-			FlashBag::Set("upgrade_result",$this);
-			Tools::Redirect("upgrade.php?action=result");
+			return !$failed;
 		}else{
-			Tools::Redirect("upgrade.php");
+			return FALSE;
 		}
 	}
 
@@ -137,8 +145,12 @@ class Upgrade{
 		return str_replace("to","",str_replace(".sql","",$script));
 	}
 
+	public static function Required(){
+		return self::GetDbVersion()!=self::Version;
+	}
+
 	public static function CheckIfNeeded(){
-		if(self::GetDbVersion()!=self::Version){
+		if(self::Required()){
 			Tools::Redirect("upgrade.php");
 		}
 	}
