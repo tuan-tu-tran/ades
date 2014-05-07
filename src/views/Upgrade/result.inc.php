@@ -20,10 +20,24 @@
 ?>
 <?php View::FillBlock("title", "Mise à jour de la base de données ADES");?>
 
+<?php View::StartBlock("post_head")?>
+	<style type="text/css">
+		div{padding-left:5px;}
+	</style>
+<?php View::EndBlock()?>
+
 <?php View::StartBlock("body");?>
 <h1>Mise à jour de la base de données</h1>
 
-<div style="padding-left:5px;">
+<div style="font-weight:bold; text-align:center; font-size:1.5em">
+	<?php if($currentVersion==$result->toVersion):?>
+		<p style="color:green">La mise à jour s'est bien passée</p>
+	<?php else:?>
+		<p style="color:red">La mise à jour a échoué.</p>
+	<?php endif?>
+</div>
+
+<div>
 	<p>Version de base: <?php echo $result->fromVersion?></p>
 	<p>Version cible: <?php echo $result->toVersion?></p>
 	<p>Version actuelle: <?php echo $currentVersion?></p>
@@ -49,6 +63,10 @@
 		<p><?php echo htmlspecialchars($result->failedScriptError)?></p>
 	<?php endif?>
 </div>
+
+<?php if($currentVersion==$result->toVersion):?>
+	<p style="font-weight:bold; text-align:center"><a href="index.php">Retour à la page d'accueil d'ADES</a></p>
+<?php endif?>
 
 <?php View::EndBlock();?>
 
