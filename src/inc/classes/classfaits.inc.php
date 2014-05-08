@@ -19,12 +19,12 @@
 */
 require ("inc/classes/classlisteretenues.inc.php");
 
-// cette classe gï¿½re les faits disciplinaires
-// la table $listeRubriques contient les diffï¿½rentes caractï¿½ristiques du fait:
+// cette classe gère les faits disciplinaires
+// la table $listeRubriques contient les différentes caractéristiques du fait:
 // idfait, idorigine, ideleve, type, date, prof, sanction,...
 // cette liste contient des mentions fixes et obligatoires (idfait, ideleve,...)
-// et des mentions caractï¿½ristiques du fait courant (idretenue, sanction,...)
-// La liste des mentions est gï¿½rï¿½e par l'objet typeFait (classtypefait.inc.php)
+// et des mentions caractéristiques du fait courant (idretenue, sanction,...)
+// La liste des mentions est gérée par l'objet typeFait (classtypefait.inc.php)
 
 class fait {
 var $listeRubriques = array();
@@ -47,19 +47,19 @@ if ($idfait ==-1)
 	}
 	else
 	{
-	// c'est un fait ï¿½ relire dans la BD
+	// c'est un fait à relire dans la BD
 	$this->lirefait($idfait);
-	// on a besoin de connaï¿½tre le type de fait pour dï¿½terminer le type ï¿½ventuel de retenue
+	// on a besoin de connaître le type de fait pour déterminer le type éventuel de retenue
 	$type = $this->getRubrique('type');	
 	}
 
-// dï¿½terminer le type de retenue correspondant, si le cas est ï¿½chï¿½ant
-// possible uniquement si l'on connaï¿½t dï¿½jï¿½ le type du fait
+// déterminer le type de retenue correspondant, si le cas est échéant
+// possible uniquement si l'on connaît déjà le type du fait
 if ($type > 0)
 	{
 	$typeFait = new prototypeFait();
 	$typeDeRetenue = $typeFait->typeRetenueFaitId($type);
-	// si c'est une retenue, on retient ï¿½ quel type elle appartient
+	// si c'est une retenue, on retient à quel type elle appartient
 	if ($typeDeRetenue > 0)
 		$this->setRubrique('typeDeRetenue', $typeDeRetenue);
 	}
@@ -77,7 +77,7 @@ $sql = "SELECT * FROM ades_faits WHERE idfait='$idFait'";
 $resultat = mysql_query ($sql);
 
 $this->listeRubriques = mysql_fetch_assoc($resultat);
-// ï¿½ toutes fins utiles, se souvenir du "idretenue" ï¿½ventuel
+// à toutes fins utiles, se souvenir du "idretenue" éventuel
 $this->ancienidRetenue = $this->getRubrique('idretenue');
 return true;
 }
@@ -87,7 +87,7 @@ return true;
 function setRubrique ($rubrique, $donnee)
 {
 $this->listeRubriques[$rubrique] = $donnee;
-// marquer le fait comme modifiï¿½ ce jour
+// marquer le fait comme modifié ce jour
 $this->listeRubriques['dermodif'] = date("Y-m-d");
 return true;
 }
@@ -107,25 +107,25 @@ require ("config/confbd.inc.php");
 $lienDB = mysql_connect($sql_serveur, $sql_user, $sql_passwd);
 mysql_select_db ($sql_bdd);
 
-// si le fait est en ï¿½dition (dans ce cas, il possï¿½de un 'idfait' significatif
+// si le fait est en édition (dans ce cas, il possède un 'idfait' significatif
 $idfait = $this->getRubrique('idfait');
 $ideleve = $this->getRubrique('ideleve');
 
-// $idfait = -1 s'il s'agit d'un nouveau fait (pas encore identifiï¿½ dans la BD)
+// $idfait = -1 s'il s'agit d'un nouveau fait (pas encore identifié dans la BD)
 if (!($idfait == -1))
 	{
-	// C'est un fait existant; nous sommes dans le cas de l'ï¿½dition
-	// marquer le fait comme supprimï¿½ dans la BD;
-	// il sera rï¿½enregistrï¿½ avec un nouveau "idfait"
+	// C'est un fait existant; nous sommes dans le cas de l'édition
+	// marquer le fait comme supprimé dans la BD;
+	// il sera réenregistré avec un nouveau "idfait"
 	$sql = "UPDATE ades_faits SET supprime = 'O' WHERE idfait ='$idfait'";
 	// echo "$sql >br />";
 	$resultat = mysql_query($sql);
-	// indiquer le 'idorigine' comme ï¿½tant 'idfait' de maniï¿½re ï¿½ pouvoir
-	// retrouver le prï¿½cï¿½dent enregistrement du fait dans la BD
+	// indiquer le 'idorigine' comme étant 'idfait' de manière à pouvoir
+	// retrouver le précédent enregistrement du fait dans la BD
 	$this->setRubrique('idorigine', $this->getRubrique('idfait'));
 	}
-// puis enregistrer un nouveau fait possï¿½dant idorigine identique
-// et marquï¿½ comme modifiï¿½ par l'utilisateur actuel
+// puis enregistrer un nouveau fait possédant idorigine identique
+// et marqué comme modifié par l'utilisateur actuel
 $this->setRubrique('qui', $_SESSION["identification"]["idedu"]);
 $sql = $this->formeSQL();
 
@@ -136,12 +136,12 @@ $idretenue = $this->getRubrique('idretenue');
 if (isset($idretenue)) $this->ajusterRetenues();
 
 mysql_close($lienDB);
-redir ("ficheel.php", "mode=voir&ideleve=$ideleve", "Enregistrement effectuï¿½");
+redir ("ficheel.php", "mode=voir&ideleve=$ideleve", "Enregistrement effectué");
 return $resultat;
 }
 
 //------------------------------------------------------------------------------------
-// formeSQL sert ï¿½ former la requï¿½te SQL qui permet l'enregistrement
+// formeSQL sert à former la requête SQL qui permet l'enregistrement
 function formeSQL()
 {
 $sql = "INSERT INTO ades_faits SET ";
@@ -150,7 +150,7 @@ $i = 0;
 foreach ($this->listeRubriques as $key=>$value)
 	{
 	$i++;
-	// le champ "idfait" est auto-incrï¿½mentï¿½ dans la BD.
+	// le champ "idfait" est auto-incrémenté dans la BD.
 	// il ne faut donc pas en tenir compte
 	if ($key != 'idfait')
 		{
@@ -167,7 +167,7 @@ function confirmeSuppression ($ideleve)
 $id_TypeFait = $this->getRubrique('type');
 $idfait = $this->getRubrique('idfait');
 
-// recherche des caractï¿½ristiques des rubriques ï¿½ faire figurer dans le formulaire
+// recherche des caractéristiques des rubriques à faire figurer dans le formulaire
 $prototypeFaits = new prototypeFait();
 $faitATraiter = $prototypeFaits->descriptionFaitId($id_TypeFait);
 
@@ -184,7 +184,7 @@ $form .= "<form name=\"form1\" method=\"post\" action=\"{$_SERVER[PHP_SELF]}\">\
 
 foreach ($descriptionChamps as $unChamp)
 	{
-	// pour le champ en cours, recherche de ses caractï¿½ristiques
+	// pour le champ en cours, recherche de ses caractéristiques
 	foreach ($unChamp as $key => $value)
 		$key = $value;
 	// $typeDate, $label figurent dans les valeurs de $key
@@ -193,7 +193,7 @@ foreach ($descriptionChamps as $unChamp)
 		$valeur = sh_date_sql_php($valeur);
 	$form .= "<p><span class=\"label\">$label :</span>$valeur</p>\n";
 	}
-// s'il s'agit d'une retenue, on prï¿½sente ses caractï¿½ristiques principales
+// s'il s'agit d'une retenue, on présente ses caractéristiques principales
 $idretenue = $this->listeRubriques['idretenue'];
 if ($idretenue > 0)
 	{
@@ -221,7 +221,7 @@ return $form;
 }
 
 //------------------------------------------------------------------------------------
-// marquer le fait $idfait comme supprimï¿½ dans la BD
+// marquer le fait $idfait comme supprimé dans la BD
 function supprimer($ideleve)
 {
 $idfait = $this->getRubrique('idfait');
@@ -232,11 +232,11 @@ $sql = "UPDATE ades_faits SET supprime = 'O' WHERE idfait ='$idfait'";
 // echo "$sql <br />";
 $resultat = mysql_query($sql);
 
-// ajuster les inscriptions aux diffï¿½rentes retenues
-// mï¿½thode barbare et brutale pour ï¿½viter les chipotages
+// ajuster les inscriptions aux différentes retenues
+// méthode barbare et brutale pour éviter les chipotages
 $this->ajusterRetenues();
 
-redir ("ficheel.php", "mode=voir&ideleve=$ideleve", "Suppression du fait effectuï¿½e");
+redir ("ficheel.php", "mode=voir&ideleve=$ideleve", "Suppression du fait effectuée");
 return resultat;
 }
 
@@ -271,7 +271,7 @@ function formulaire ($ideleve)
 $contexte = 'formulaire';
 // quel est le type du fait?
 $type = $this->getRubrique('type');
-// recherche des caractï¿½ristiques des rubriques ï¿½ faire figurer dans le formulaire
+// recherche des caractéristiques des rubriques à faire figurer dans le formulaire
 $listeTypeFaits = new prototypeFait();
 $faitATraiter = $listeTypeFaits->descriptionFaitId($type);
 
@@ -286,25 +286,25 @@ $form .= "<form name=\"form1\" method=\"post\" action=\"{$_SERVER[PHP_SELF]}\"";
 $form .= " onsubmit=\"return(verifForm(this))\">\n";
 
 // recherche de la liste de description de chaque champ
-// qui doit apparaï¿½tre dans le formulaire
+// qui doit apparaître dans le formulaire
 $descriptionChamps = $listeTypeFaits->detailDesChampsPourContexte($type,"formulaire");
 
 foreach ($descriptionChamps as $unChamp)
 	{
-	// on vï¿½rifie si le champ doit ï¿½tre affichï¿½e dans le $contexte
-	// les $contexte(s) sont prï¿½cisï¿½s dans le fichier .ini de la description des champs
+	// on vérifie si le champ doit être affichée dans le $contexte
+	// les $contexte(s) sont précisés dans le fichier .ini de la description des champs
 	if (ereg($contexte, $unChamp['contextes']))
 		{
-		// pour le champ en cours, recherche de ses caractï¿½ristiques
+		// pour le champ en cours, recherche de ses caractéristiques
 		foreach ($unChamp as $key => $value)
 			$$key = $value;
 		if ($javascriptEvent != "")
 			$javascript = "$javascriptEvent=\"$javascriptCommand\"";
 			else $javascript ="";
-		// la variable $champ fait partie des caractï¿½ristiques obligatoire (provenant de $$key)
+		// la variable $champ fait partie des caractéristiques obligatoire (provenant de $$key)
 		$valeur = $this->getRubrique($champ);
 
-		// la variable $typeChamp fait partie des caractï¿½ristiques obligatoires (provenant de $$key)
+		// la variable $typeChamp fait partie des caractéristiques obligatoires (provenant de $$key)
 		switch ($typeChamp)
 			{
 			case 'text':
@@ -333,21 +333,21 @@ foreach ($descriptionChamps as $unChamp)
 			case 'select':
 			$form .= "\t<p><label for=\"$champ\">$label </label>\n";
 			$form .= "\t<select name=\"$champ\" id=\"champ\">\n";
-			// la liste des options est est ï¿½ prï¿½parer sï¿½parï¿½ment et ï¿½ insï¿½rer ï¿½ la place
+			// la liste des options est est à préparer séparément et à insérer à la place
 			// du motif ##options##
 			$form .= "\t##options##\n";
 			$form .= "\t</select>\n";
 
-			// prï¿½paration des options s'il s'agit d'un champ "Date de retenue",
+			// préparation des options s'il s'agit d'un champ "Date de retenue",
 			if ($typeDateRetenue)
 				{
 				// on recherche la liste des dates de retenues pour ce type, dans la BD
 				$listeRetenues = new listesDeRetenues();
-				// le type de retenue est dï¿½terminï¿½ dans le constructeur
+				// le type de retenue est déterminé dans le constructeur
 				$typeDeRetenue = $this->getRubrique('typeDeRetenue');
 				$listeOptions = $listeRetenues->listeOptions($typeDeRetenue, $valeur, true);
 
-				// prï¿½voir le cas oï¿½ aucune date de retenue n'est dï¿½finie
+				// prévoir le cas où aucune date de retenue n'est définie
 				if (strlen($listeOptions) == 0)
 					{
 					redir ("ficheel.php", "mode=voir&ideleve=$ideleve",
@@ -369,21 +369,21 @@ if ($focus != '')
 return $form;
 }
 
-// ajustement du nombre d'inscrits ï¿½ chaque retenue avec le contenu de la table des
-// faits (ades_faits). Le nombre d'inscrits est comptï¿½ dans ades_faits et mis ï¿½ jour
+// ajustement du nombre d'inscrits à chaque retenue avec le contenu de la table des
+// faits (ades_faits). Le nombre d'inscrits est compté dans ades_faits et mis à jour
 // dans ades_retenues
-// Mï¿½thode bï¿½te et brutale, mais qui fonctionne tout en suffisamment lï¿½gï¿½re
-// maximum deux requï¿½tes de mise ï¿½ jour sur la BD aprï¿½s une modification de retenues
+// Méthode bête et brutale, mais qui fonctionne tout en suffisamment légère
+// maximum deux requêtes de mise à jour sur la BD après une modification de retenues
 
 // ---------------------------------------------------------------------//
 // ---------------------------------------------------------------------//
-// ne remet pas ï¿½ zï¿½ro les retenues qui n'ont plus aucun inscrit!!      //
+// ne remet pas à zéro les retenues qui n'ont plus aucun inscrit!!      //
 // ---------------------------------------------------------------------//
 // ---------------------------------------------------------------------//
 
 function ajusterRetenues ()
 {
-// la requï¿½te suivante peut ï¿½tre simplifiï¿½e pour l'usage prï¿½sent
+// la requête suivante peut être simplifiée pour l'usage présent
 $sql = "SELECT ades_faits.idretenue, COUNT(*) as occupationReelle, places, ";
 $sql .= "occupation, ades_retenues.ladate as dateRetenue, heure, local, duree ";
 $sql .= "FROM ades_faits ";
@@ -393,9 +393,9 @@ $sql .= "GROUP BY ades_faits.idretenue";
 // echo $sql;
 
 $resultat = mysql_query($sql);
-// on dispose de la liste des retenues avec leurs occupations rï¿½elles recalculï¿½es
+// on dispose de la liste des retenues avec leurs occupations réelles recalculées
 // sur la base des inscriptions dans la table des faits. On peut donc ajuster les nombres
-// d'inscrits indiquï¿½s dans la table des retenues
+// d'inscrits indiqués dans la table des retenues
 while ($uneRetenue = mysql_fetch_assoc($resultat))
 	{
 	$occupationReelle = $uneRetenue['occupationReelle'];
