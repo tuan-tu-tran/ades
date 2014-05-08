@@ -130,8 +130,12 @@ $install->parseRequest();
 
 <?php elseif($install->view==Install::VIEW_TABLES_NOT_CREATED):?>
 
+	<?php if(isset($install->error_command)):?>
 		<p>Une erreur s'est produite lors de la creation des tables, à cause de la commande:</p>
 		<p><?php echo htmlspecialchars($install->error_command);?></p>
+	<?php else:?>
+		<p>Une erreur s'est produite lors de l'exécution du script: <?php echo $install->failedScript?></p>
+	<?php endif;?>
 		<p>Le système a renvoyé l'erreur: <?php echo $install->error?></p>
 		<p><?php $install->GetCreateTableLink("Réessayer de créer les tables");?></p>
 		<p><?php $install->GetDbConfigLink("Reconfigurer la connexion (vous devez d'abord supprimer le fichier de configuration existant)");?></p>

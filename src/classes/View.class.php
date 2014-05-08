@@ -19,6 +19,10 @@
 */
 
 class View{
+	const REPLACE="replace";
+	const PREPEND="prepend";
+	const APPEND="append";
+
 	public static function Render($template, $parameters=NULL){
 		$template=_VIEWS_FOLDER."/$template";
 		if(file_exists($template)){
@@ -57,17 +61,39 @@ class View{
 		ob_start();
 	}
 
-	public static function EndBlock(){
+	public static function EndBlock($mode=self::REPLACE){
 		if(!self::$current_block){
 			throw new Exception("no block to end");
 		}
-		self::$slots[self::$current_block]=ob_get_contents();
+		$contents=ob_get_contents();
 		ob_end_clean();
+		if(isset(self::$slots[self::$current_block]))
+			$current=self::$slots[self::$current_block];
+		else
+			$current="";
+		switch($mode){
+			case self::REPLACE:
+				$newContent=$contents;
+				break;
+			case self::PREPEND:
+				$newContent=$contents.$current;
+				break;
+			case self::APPEND:
+				$newContent=$current.$contents;
+				break;
+			default:
+				throw new Exception("mode received : $mode");
+		}
+		self::$slots[self::$current_block]=$newContent;
 		self::$current_block=NULL;
 	}
 
 	public static function Block($name){
 		if(isset(self::$slots[$name]))
 			echo self::$slots[$name];
+	}
+
+	public static function FillBlock($name, $value){
+		self::$slots[$name]=$value;
 	}
 }

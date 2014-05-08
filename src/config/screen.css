@@ -146,6 +146,10 @@ form {
     padding: 15px;
   }
 
+form.no_border{
+	border:none;
+}
+
 
 input, select, textarea {
     border-right: 1px solid Gray;

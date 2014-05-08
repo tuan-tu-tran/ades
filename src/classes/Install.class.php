@@ -165,6 +165,7 @@ EOF;
 	private function CreateTables(){
 		$commandes = file("./creation.sql");
 		$uneCommande = "";
+		$error=false;
 		foreach ($commandes as $uneLigne){
 			// supprimer les commentaires dans le fichier .sql
 			if (substr($uneCommande, 0, 2) == "--")
@@ -176,12 +177,24 @@ EOF;
 				if(!Db::GetInstance()->execute($uneCommande)){
 					$this->error_command=$uneCommande;
 					$this->error=Db::GetInstance()->error();
-					return false;
+					$error=true;
+					break;
 				}
 				$uneCommande = "";
 			}
 		}
-		return true;
+		if(!$error && Upgrade::Required()){
+			$upgrade=new Upgrade();
+			if(!$upgrade->UpgradeDb()){
+				if(!$upgrade->fromBeforeTo){
+					throw new Exception("Upgrade during install failed because trying to upgrade from ".$upgrade->fromVersion." to ".$upgrade->toVersion);
+				}
+				$this->failedScript=$upgrade->failedScript;
+				$this->error=$upgrade->failedScriptError;
+				$error=true;
+			}
+		}
+		return !$error;
 	}
 
 	function WriteDbConfig(){
@@ -231,4 +244,11 @@ EOF;
 	public function GetDbConfigSubmitUrl(){return $this->GetUrl(self::ACTION_SUBMIT_DB_CONFIG);}
 	public function GetSchoolConfigSubmitUrl(){return $this->GetUrl(self::ACTION_SUBMIT_SCHOOL_CONFIG);}
 	public function CanConfigureSchool(){ return !file_exists(_SCHOOL_CONFIG_FILE_); }
+
+	public static function CheckIfNeeded(){
+		if(!file_exists(_DB_CONFIG_FILE_)){
+			error_log("no config file found");
+			Tools::Redirect("creation.php");
+		}
+	}
 }

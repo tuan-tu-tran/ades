@@ -5,3 +5,4 @@
 no_copyright\.txt$
 jquery-.*\.js$
 .*\.png$
+upgrade[/\\].*\.sql$
