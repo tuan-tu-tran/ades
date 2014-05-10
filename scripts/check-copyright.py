@@ -22,9 +22,12 @@ copyright="Copyright (c) 2014 Educ-Action"
 import sys
 import optparse
 import re
+import os
 
 parser=optparse.OptionParser(description="check that the given files on the command line (or from stdin separated by newlines if none given on the command line) contain a copyright notice")
 parser.add_option("-x","--exclude",metavar="FILE",default="scripts/no_copyright.txt",help="the file that defines files that must not contain copyright notice", dest="exclude")
+parser.add_option("-l","--list", default=False, help="show only files that require a copyright", dest="quiet", action="store_true")
+parser.add_option("-v","--verbose", default=False, help="also show files that do not require a copyright", dest="verbose", action="store_true")
 options,args=parser.parse_args()
 retval=0
 if len(args)==0:
@@ -34,12 +37,28 @@ else:
 with open(options.exclude) as fh:
 	regexes=[ l.strip() for l in fh if not l.startswith("#") and l.strip()!="" ]
 
+added=True
+all_files=[]+file_list
+files_added=file_list
+while len(files_added)>0:
+	files_added=[]
+	for f in file_list:
+		if os.path.isdir(f):
+			for ls in os.listdir(f):
+				files_added.append(os.path.join(f,ls))
+	file_list=files_added
+	all_files+=files_added
+
+file_list=all_files
 for f in file_list:
 	f=f.strip()
 	keep_going=True
+	if os.path.isdir(f):
+		continue
 	for rx in regexes:
 		if re.search(rx,f):
-			print "no copyright required for",f
+			if options.verbose:
+				print "no copyright required for",f
 			keep_going=False
 			break
 	if not keep_going:
@@ -47,6 +66,9 @@ for f in file_list:
 	with open(f) as fh:
 		content=fh.read()
 	if copyright not in content:
-		print "no copyright in",f
+		if options.quiet:
+			print f
+		else:
+			print "no copyright in",f
 		retval=1
 sys.exit(retval)
