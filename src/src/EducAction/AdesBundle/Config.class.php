@@ -18,6 +18,8 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+namespace EducAction\AdesBundle;
+
 class Config{
 	private static $config=NULL;
 	public static function Get($key, $default=NULL){

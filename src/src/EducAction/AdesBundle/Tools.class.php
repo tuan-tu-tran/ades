@@ -18,6 +18,8 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+namespace EducAction\AdesBundle;
+
 class Tools{
 	public static function Redirect($location){
 		header("Location: ".$location);

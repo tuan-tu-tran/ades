@@ -18,7 +18,12 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+namespace EducAction\AdesBundle;
+
+use mysqli;
+
 class Db{
+	public static function ConfigFile(){ return DIRNAME(__FILE__)."/../../../web/config/confbd.inc.php"; }
 	public $host;
 	public $user;
 	public $pwd;
@@ -98,7 +103,7 @@ class Db{
 	public static function GetInstance($host=NULL, $user=NULL, $pwd=NULL, $dbname=NULL){
 		if(Db::$instance == NULL){
 			if($host==NULL){
-				require(_DB_CONFIG_FILE_);
+				require(self::ConfigFile());
 				Db::$instance=new Db($sql_serveur, $sql_user, $sql_passwd, $sql_bdd);
 			}else{
 				Db::$instance=new Db($host,$user,$pwd,$dbname);

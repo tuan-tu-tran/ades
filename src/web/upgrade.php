@@ -17,6 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-require("inc/init.inc.php");
-$o=new Upgrade;
+require("../vendor/autoload.php");
+$o=new EducAction\AdesBundle\Controller\Upgrade;
 $o->parseRequest();

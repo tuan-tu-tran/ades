@@ -17,9 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-require("inc/init.inc.php");
-Install::CheckIfNeeded();
-Upgrade::CheckIfNeeded();
+require("../vendor/autoload.php");
+EducAction\AdesBundle\Install::CheckIfNeeded();
+EducAction\AdesBundle\Upgrade::CheckIfNeeded();
 
 require ("inc/prive.inc.php");
 require ("config/constantes.inc.php");

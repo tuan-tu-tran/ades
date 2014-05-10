@@ -18,6 +18,10 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+namespace EducAction\AdesBundle\Controller;
+
+use EducAction\AdesBundle;
+
 class Install{
 	const ACTION_INFO="info";
 	const ACTION_CONFIG_DB="configure_db";

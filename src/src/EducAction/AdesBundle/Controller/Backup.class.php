@@ -18,6 +18,10 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+namespace EducAction\AdesBundle\Controller;
+
+use EducAction\AdesBundle;
+
 class Backup{
 	const root="sauvegarde";
 	const regex="/^\d{8}-\d{6}\.sql$/";

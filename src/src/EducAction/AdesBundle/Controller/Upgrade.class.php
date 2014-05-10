@@ -18,6 +18,12 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+namespace EducAction\AdesBundle\Controller;
+
+use EducAction\AdesBundle\Db;
+use EducAction\AdesBundle\Config;
+use EducAction\AdesBundle\Tools;
+
 class Upgrade{
 	const Version="1.0";
 
