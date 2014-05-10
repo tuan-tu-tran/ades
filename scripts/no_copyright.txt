@@ -4,5 +4,13 @@
 
 no_copyright\.txt$
 jquery-.*\.js$
-.*\.png$
+.*\.(png|jpg|jpeg|gif)$
 upgrade[/\\].*\.sql$
+^src/web/inc/overlib
+^src/web/fpdf
+^src/vendor
+^src/web/config/.*\.ini$
+^src/web/inc/ADESmemo.class.php
+creation.sql
+gpl.txt
+src/web/version
