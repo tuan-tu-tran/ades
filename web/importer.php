@@ -43,6 +43,7 @@ require ("inc/menu.inc.php");
 <div id="texte">
 <h2>Importation d'un fichier CSV</h2>
 <?php
+const csvFile = "../local/eleves.csv";
 $mode = isset($_POST['mode']) ? $_POST['mode'] : Null;
 
 switch ($mode)
@@ -53,7 +54,7 @@ switch ($mode)
 	$lienDB = mysql_connect($sql_serveur, $sql_user, $sql_passwd);
 	mysql_select_db ($sql_bdd);
 
-	$handle = fopen("./eleves.csv", "r");
+	$handle = fopen(csvFile, "r");
 	$ligne = 1;
 	$bad_lines=array();
 	$errors=array();
@@ -141,7 +142,7 @@ switch ($mode)
  case 'Envoyer':
 	// recopie du fichier sous un nom définitif
 	$nomTemporaire = $_FILES['fichierCSV']['tmp_name'];
-	if( !move_uploaded_file($nomTemporaire, "./eleves.csv") )
+	if( !move_uploaded_file($nomTemporaire, csvFile) )
 		exit("Impossible de copier le fichier.");
 	
 		echo "<div style=\"text-align: center\">\n";
@@ -157,7 +158,7 @@ switch ($mode)
 	// tableau de prévisualisation
 	ob_start();
 	echo "<table border=\"1\" cellpadding=\"1\" cellspacing=\"1\">\n";
-	$handle = fopen("./eleves.csv", "r");
+	$handle = fopen(csvFile, "r");
 	$line=1;
 	$non_fixable=0;
 	$ok_rows="";
