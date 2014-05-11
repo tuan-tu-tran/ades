@@ -1,6 +1,4 @@
-src/eleves.csv
-src/logs.csv
-src/sauvegarde/*.sql
-src/config/confbd.inc.php
-src/config/constantes.inc.php
+local/*
+web/config/confbd.inc.php
+web/config/constantes.inc.php
 

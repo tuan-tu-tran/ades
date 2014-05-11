@@ -2,7 +2,17 @@
 # that are not must not contain a copyright notice
 # lines beginning with a # are ignored
 
-no_copyright\.txt$
+^scripts/no_copyright\.txt$
 jquery-.*\.js$
-.*\.png$
-upgrade[/\\].*\.sql$
+.*\.(png|jpg|jpeg|gif)$
+^src/EducAction/AdesBundle/Resources/sql_scripts/to\d+\.\d+\.sql$
+^src/EducAction/AdesBundle/Resources/sql_scripts/creation.sql$
+^web/inc/overlib
+^web/fpdf
+^vendor
+^web/config/.*\.ini$
+^web/inc/ADESmemo.class.php
+^web/version
+^web/gpl.txt
+^local/README.txt$
+.gitkeep$

@@ -24,4 +24,4 @@
 #
 # To enable this hook, copy it (or link) to .git/hooks/pre-commit
 
-git diff --cached --name-only --diff-filter=A|./scripts/check-copyright.py
+git diff --cached --name-only --diff-filter=A|./scripts/check-copyright.py --author="`git config user.name`"
