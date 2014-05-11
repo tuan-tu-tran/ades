@@ -62,10 +62,10 @@ if (!empty($qui) && !empty($mdp))
 
 			// écriture dans le fichier des logs
 			$texte = "$date;$heure;$nom;$ip;$hostname";
-			$handle =fopen("logs.csv","a+");
+			$handle =fopen("../local/logs.csv","a+");
 			if (fwrite($handle, $texte."\n")) die();
 			fclose ($handle);
-			$contents = file_get_contents("logs.csv");
+			$contents = file_get_contents("../local/logs.csv");
 			write ($contents);
 		
 			// décommenter les lignes suivantes pour provoquer l'envoi d'un mail
