@@ -89,7 +89,7 @@ class Upgrade{
 	}
 
 	private static function UpgradeFolder(){
-		return DIRNAME(__FILE__)."/../upgrade/";
+		return DIRNAME(__FILE__)."/../../../../web/upgrade/";
 	}
 
 	private static function CompareVersions($x,$y){
