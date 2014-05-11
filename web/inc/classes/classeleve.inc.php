@@ -43,7 +43,7 @@ function lireEleve ($ideleve)
 require ("config/confbd.inc.php");
 $lienDB = mysql_connect($sql_serveur, $sql_user, $sql_passwd);
 mysql_select_db ($sql_bdd);
-$sql = "SELECT * FROM ades_eleves WHERE ideleve=$ideleve";
+$sql = sprintf("SELECT * FROM ades_eleves WHERE ideleve=%d",$ideleve);
 $resultat = mysql_query ($sql);
 $eleve = mysql_fetch_assoc($resultat);
 mysql_close ($lienDB);
