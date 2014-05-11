@@ -52,7 +52,8 @@ $tree=array(
 <ul class="menu_facts">
 <?php foreach($tree as $label=>$value):?><li>
         <?php if (is_array($value)):?>
-            <div><?php echo Html::Encode($label)?></div>
+            <div class="top_label with_children"><?php echo Html::Encode($label)?></div>
+            <div class="filler"></div>
             <ul>
                 <?php foreach($value as $sublabel => $url):?>
                     <li>
@@ -62,7 +63,7 @@ $tree=array(
                 <?php endforeach?>
             </ul>
         <?php elseif (is_string($value)):?>
-            <div class="item">
+            <div class="item top_label">
                 <?php echo Html::Encode($label)?>
                 <a href="<?php echo Html::Encode($value)?>"></a>
             </div>
