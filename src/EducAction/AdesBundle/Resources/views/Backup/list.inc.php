@@ -149,7 +149,7 @@ use EducAction\AdesBundle\ViewHelper;
 		<td style="text-align:center">Date</td>
 		<td style="text-align:center">Version</td>
 		<td style="text-align:center">Taille</td>
-		<td style="text-align:center">Remarque</td>
+		<td style="text-align:center">Commentaire</td>
 		<td style="text-align:center">Effacer</td>
 		<td style="text-align:center">Restaurer</td>
 	</tr>
