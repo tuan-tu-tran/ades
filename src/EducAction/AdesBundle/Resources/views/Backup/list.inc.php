@@ -135,7 +135,7 @@ use EducAction\AdesBundle\ViewHelper;
 
 <form method="POST" action="?action=create" style="border:none;padding:0">
 <input type="submit" value="Créer une nouvelle sauvegarde"/>
-<input id="backup_create_comment" style="background-color:white;color:black" type="text" value="Ajouter un commentaire (optionnel)" name="backup_create_comment" size="40"
+<input id="backup_create_comment" type="text" value="Ajouter un commentaire (optionnel)" name="backup_create_comment" size="40"
     <?php Overlib::Render("Si vous le désirez, vous pouvez ajouter un commentaire qui sera lié à la sauvegarde")?>
 />
 <input id="backup_create_comment_set" type="hidden" value="" name="backup_create_comment_set"/>
