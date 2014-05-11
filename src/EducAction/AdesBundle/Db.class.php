@@ -66,11 +66,40 @@ class Db{
 		return $this->conn!=NULL;
 	}
 
-	public function execute($query){
-		return $this->private_execute($query, $result);
+    /**
+     * Execute a query that returns no result (DbException thrown in case of error)
+     */
+    public function execute($query)
+    {
+        $this->private_execute_or_throw($query, $result);
 	}
 
-	private function private_execute($query, &$result){
+    /**
+     * Execute a query without result and return whether succesfully done.
+     */
+    public function TryExecute($query, &$error=NULL)
+    {
+        if (!$this->private_safe_execute($query, $result)) {
+            $error=$this->error();
+            return FALSE;
+        }
+        return TRUE;
+    }
+
+    /**
+     * Execute a query and throw an exception in case of error.
+     */
+    private function private_execute_or_throw($query, &$result)
+    {
+        if (!$this->private_safe_execute($query, $result)) {
+            throw new DbException($this->error());
+        }
+    }
+
+    /**
+     * Execute a query and return if done + the resut
+     */
+	private function private_safe_execute($query, &$result){
 		if($this->connect()){
 			$result=$this->conn->query($query);
 			return !$this->conn->errno;
@@ -79,18 +108,39 @@ class Db{
 	}
 
 	public function query($query){
-		if($this->private_execute($query,$result)){
-			return $result->fetch_all(MYSQLI_BOTH);
-		}else throw new DbException($this->error());
+        $this->private_execute_or_throw($query,$result);
+        return self::GetDataTableFromResultInstance($result);
 	}
+    
+    /**
+     * Execute a query and return if succesfully done.
+     * If executed, $result is assigned the query result.
+     * Otherwise, $error is assigned the last error.
+     */
+    public function TryQuery($query, &$result, &$error=NULL)
+    {
+        if ($this->private_safe_execute($query, $result)) {
+            $result=self::GetDataTableFromResultInstance($result);
+            return TRUE;
+        } else {
+            $result=NULL;
+            $error = $this->error();
+            return FALSE;
+        }
+    }
+
+    private static function GetDataTableFromResultInstance($result)
+    {
+        return $result->fetch_all(MYSQLI_BOTH);
+    }
 
 	public function scalar($query){
-		if($this->private_execute($query,$result)){
-			if ($result->num_rows>0)
-				return $result->fetch_row()[0];
-			else
-				return NULL;
-		}else throw new DbException($this->error());
+        $this->private_execute_or_throw($query,$result);
+        if ($result->num_rows>0) {
+            return $result->fetch_row()[0];
+        } else {
+            return NULL;
+        }
 	}
 
 	public function error(){

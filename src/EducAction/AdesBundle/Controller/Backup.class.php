@@ -65,6 +65,24 @@ class Backup{
 			$this->filename=$filename;
 			if($input=file_get_contents(self::BackupFolder()."/".$filename)){
 				$this->input_read=true;
+                //drop all the tables first
+                $db=Db::GetInstance();
+                if ($db->TryQuery("SHOW TABLES", $result, $this->error)) {
+                    $dropped=TRUE;
+                    foreach($result as $row){
+                        $tableName=$row[0];
+                        if (!$db->TryExecute("DROP TABLE $tableName", $this->error)) {
+                            $dropped=FALSE;
+                            break;
+                        }
+                    }
+                } else {
+                    $dropped=FALSE;
+                };
+                if (!$dropped) {
+                    $this->failed=TRUE;
+                    $this->launched=TRUE;
+                }else
 				if(Utils::MySqlScript($input, $err,$launched)){
 					$this->failed=false;
 					$this->launched=true;

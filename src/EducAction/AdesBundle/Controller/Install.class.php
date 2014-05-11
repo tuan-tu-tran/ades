@@ -183,7 +183,7 @@ EOF;
 			$longueur = strlen($uneCommande);
 			$dernier = substr($uneCommande, $longueur-1, 1);
 			if ($dernier == ";"){
-				if(!Db::GetInstance()->execute($uneCommande)){
+				if(!Db::GetInstance()->TryExecute($uneCommande)){
 					$this->error_command=$uneCommande;
 					$this->error=Db::GetInstance()->error();
 					$error=true;

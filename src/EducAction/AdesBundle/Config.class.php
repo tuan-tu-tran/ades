@@ -46,18 +46,14 @@ class Config{
 			, $db->escape_string($value)
 			, $db->escape_string($value)
 		);
-		if($db->execute($query)){
-			if(self::$config){
-				self::$config[$key]=$value;
-			}
-			return true;
-		}else{
-			throw new Exception("could not set config value '$key' to '$value' : ".(Db::GetInstance()->error()));
-		}
+        $db->execute($query);
+        if(self::$config){
+            self::$config[$key]=$value;
+        }
 	}
 
 	public static function SetDbVersion($version){
-		return self::Set("db_version",$version);
+		self::Set("db_version",$version);
 	}
 
 	public static function GetDbVersion(){
