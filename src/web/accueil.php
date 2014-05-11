@@ -17,22 +17,17 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-require("inc/init.inc.php");
+require "inc/init.inc.php";
 
 /*Rami Adrien: Processus d'installation automatique
  * On test si le fichier confdb.inc.php existe
  * Si il n'existe pas on lance le processus d'installation d'ADES avec le fichier creation.php
  * Si il existe on laisse le programme se lancé normalement
  */
-Install::CheckIfNeeded();
-Upgrade::CheckIfNeeded();
-if(file_exists("config/confbd.inc.php")){
-	//Si le fichier existe on l'inclut dans le programme et l'interface se charge. Sinon...
-	include ("config/confbd.inc.php");
-}else{
-	//...On renvoi vers le fichier d'installation
-	header('Location: creation.php');
-	};
+EducAction\AdesBundle\Controller\Install::CheckIfNeeded();
+EducAction\AdesBundle\Controller\Upgrade::CheckIfNeeded();
+require_once "config/constantes.inc.php";
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>

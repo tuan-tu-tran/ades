@@ -26,8 +26,10 @@
  * Au lancement de l'application ADES détecte si ADES est configuré
  */
 require("inc/init.inc.php");
+use EducAction\AdesBundle\Controller\Install;
+
 Normalisation();
-$install=new Install;
+$install=new EducAction\AdesBundle\Controller\Install;
 $install->parseRequest();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

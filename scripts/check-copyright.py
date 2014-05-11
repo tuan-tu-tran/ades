@@ -28,7 +28,11 @@ parser=optparse.OptionParser(description="check that the given files on the comm
 parser.add_option("-x","--exclude",metavar="FILE",default="scripts/no_copyright.txt",help="the file that defines files that must not contain copyright notice", dest="exclude")
 parser.add_option("-l","--list", default=False, help="show only files that require a copyright", dest="quiet", action="store_true")
 parser.add_option("-v","--verbose", default=False, help="also show files that do not require a copyright", dest="verbose", action="store_true")
+parser.add_option("--author", default=None, help="Use git config user.name as copyright holder", dest="author", action="store")
 options,args=parser.parse_args()
+author=None
+if options.author:
+	author="Copyright (c) 2014 %s"%options.author
 retval=0
 if len(args)==0:
 	file_list=sys.stdin.readlines()
@@ -65,7 +69,7 @@ for f in file_list:
 		continue
 	with open(f) as fh:
 		content=fh.read()
-	if copyright not in content:
+	if copyright not in content and (author==None or author not in content):
 		if options.quiet:
 			print f
 		else:

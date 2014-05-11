@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2014 Educ-Action
+ * Copyright (c) 2014 Tuan-Tu TRAN
  * 
  * This file is part of ADES.
  * 
@@ -17,15 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-require "inc/init.inc.php";
-
-use EducAction\AdesBundle\User;
-use EducAction\AdesBundle\View;
-
-User::CheckIfLogged();
-View::StartBlock("content");
-?>
-<p>Vous n'êtes pas autorisé à accéder à cette page.</p>
-<?php
-View::EndBlock();
-View::Embed("layout.inc.php");
+require "../vendor/autoload.php";
+include_once "fonctions.inc.php";
+session_start();

@@ -17,11 +17,11 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-require("../vendor/autoload.php");
-EducAction\AdesBundle\Install::CheckIfNeeded();
-EducAction\AdesBundle\Upgrade::CheckIfNeeded();
+require "inc/init.inc.php";
+EducAction\AdesBundle\Controller\Install::CheckIfNeeded();
+EducAction\AdesBundle\Controller\Upgrade::CheckIfNeeded();
+EducAction\AdesBundle\User::CheckIfLogged();
 
-require ("inc/prive.inc.php");
 require ("config/constantes.inc.php");
 require ("config/confbd.inc.php");
 //Rami Adrien
