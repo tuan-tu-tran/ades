@@ -50,8 +50,7 @@ $tree=array(
 
 <?php View::StartBlock("content")?>
 <ul class="menu_facts">
-<?php foreach($tree as $label=>$value):?>
-    <li>
+<?php foreach($tree as $label=>$value):?><li>
         <?php if (is_array($value)):?>
             <div><?php echo Html::Encode($label)?></div>
             <ul>
@@ -70,8 +69,7 @@ $tree=array(
         <?php else:?>
             <?php throw new Exception("value of label '$label' must be string or array. Got '".gettype($value)."' instead (".var_export($value, true).")");?>
         <?php endif?>
-    </li>
-<?php endforeach?>
+    </li><?php endforeach?>
 </ul>
 <?php View::EndBlock()?>
 
