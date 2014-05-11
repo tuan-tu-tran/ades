@@ -14,3 +14,4 @@ jquery-.*\.js$
 ^web/version
 ^web/creation.sql
 ^web/gpl.txt
+^local/README.txt$
