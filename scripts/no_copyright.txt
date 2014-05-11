@@ -5,7 +5,7 @@
 ^scripts/no_copyright\.txt$
 jquery-.*\.js$
 .*\.(png|jpg|jpeg|gif)$
-^web/upgrade[/\\].*\.sql$
+^src/EducAction/AdesBundle/Resources/upgrade_scripts/to\d+\.\d+\.sql$
 ^web/inc/overlib
 ^web/fpdf
 ^vendor
