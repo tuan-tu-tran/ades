@@ -18,6 +18,9 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
+namespace EducAction\AdesBundle;
+
 class Utils{
 	public static function MySqlScript($scriptContent, &$err, &$launched){
 		$db=Db::GetInstance();

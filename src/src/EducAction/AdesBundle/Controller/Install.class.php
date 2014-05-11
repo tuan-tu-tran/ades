@@ -21,6 +21,10 @@
 namespace EducAction\AdesBundle\Controller;
 
 use EducAction\AdesBundle;
+use EducAction\AdesBundle\Db;
+use EducAction\AdesBundle\Path;
+use EducAction\AdesBundle\Config;
+use EducAction\AdesBundle\Tools;
 
 class Install{
 	const ACTION_INFO="info";

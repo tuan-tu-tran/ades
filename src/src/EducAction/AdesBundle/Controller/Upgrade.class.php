@@ -23,6 +23,10 @@ namespace EducAction\AdesBundle\Controller;
 use EducAction\AdesBundle\Db;
 use EducAction\AdesBundle\Config;
 use EducAction\AdesBundle\Tools;
+use EducAction\AdesBundle\Path;
+use EducAction\AdesBundle\FlashBag;
+use EducAction\AdesBundle\View;
+use EducAction\AdesBundle\Utils;
 
 class Upgrade{
 	const Version="1.0";

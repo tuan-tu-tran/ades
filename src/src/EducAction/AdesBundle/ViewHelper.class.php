@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+namespace EducAction\AdesBundle;
+
 class ViewHelper{
 	const GB=1073741824; //1024*1024*1024
 	const MB=1048576; //1024*1024

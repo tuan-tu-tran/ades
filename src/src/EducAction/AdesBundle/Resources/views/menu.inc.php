@@ -17,7 +17,12 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-?><!--[if lt IE 7]>
+?>
+<?php
+use EducAction\AdesBundle\User;
+use EducAction\AdesBundle\MiniMail;
+?>
+<!--[if lt IE 7]>
 <script type="text/javascript" src="inc/ieHover.js"></script>
 <![endif]--><!-- <body onload="IEpatchLiHover('navlist');"> -->
 <img src="images/ades.png" alt="Administration de la Discipline dans les Etablissements Scolaires" 

@@ -17,6 +17,11 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+use EducAction\AdesBundle\View;
+use EducAction\AdesBundle\Html;
+use EducAction\AdesBundle\Overlib;
+use EducAction\AdesBundle\ViewHelper;
 ?>
 
 <?php View::StartBlock("post_head")?>

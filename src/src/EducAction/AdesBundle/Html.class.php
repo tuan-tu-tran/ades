@@ -18,6 +18,8 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+namespace EducAction\AdesBundle;
+
 class Html{
 	public static function Script($source){
 		echo "<script type='text/javascript' src='$source'></script>";

@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+namespace EducAction\AdesBundle;
+
 class Path{
 	public static function ListDir($path, $regex_match=NULL, $exclude=array("index.php")){
 		$liste1 = scandir($path,0);

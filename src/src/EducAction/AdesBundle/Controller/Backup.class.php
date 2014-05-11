@@ -20,7 +20,16 @@
 
 namespace EducAction\AdesBundle\Controller;
 
-use EducAction\AdesBundle;
+use EducAction\AdesBundle\User;
+use EducAction\AdesBundle\Path;
+use EducAction\AdesBundle\FlashBag;
+use EducAction\AdesBundle\View;
+use EducAction\AdesBundle\Db;
+use EducAction\AdesBundle\Process;
+use EducAction\AdesBundle\Tools;
+use EducAction\AdesBundle\Utils;
+use \DateTime;
+use \SplFileInfo;
 
 class Backup{
 	const root="sauvegarde";

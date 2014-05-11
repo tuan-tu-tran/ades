@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+namespace EducAction\AdesBundle;
+
 class MiniMail{
 	public static function UnreadMailCount(){
 		if(!User::IsLogged()) throw new Exception("user is not logged");

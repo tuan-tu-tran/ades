@@ -18,6 +18,10 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+namespace EducAction\AdesBundle;
+
+use Exception;
+
 class View{
 	const REPLACE="replace";
 	const PREPEND="prepend";

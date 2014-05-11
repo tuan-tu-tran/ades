@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+namespace EducAction\AdesBundle;
+
 class Overlib{
 	public static function Render($text){
 		$hint = htmlspecialchars(json_encode(utf8_encode($text)));

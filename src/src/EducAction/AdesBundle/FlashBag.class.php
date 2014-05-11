@@ -18,6 +18,8 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+namespace EducAction\AdesBundle;
+
 class FlashBag{
 	const SESSION_KEY="ADES.flash";
 	private static $bag=NULL;

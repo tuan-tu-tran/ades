@@ -18,6 +18,9 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
  */
 ?>
+
+<?php use EducAction\AdesBundle\View;?>
+
 <?php View::FillBlock("title", "Mise à jour de la base de données ADES");?>
 
 <?php View::StartBlock("post_head")?>

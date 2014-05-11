@@ -18,6 +18,8 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+namespace EducAction\AdesBundle;
+
 class User{
 	public static function IsLogged(){
 		return isset($_SESSION["identification"]["user"]);
