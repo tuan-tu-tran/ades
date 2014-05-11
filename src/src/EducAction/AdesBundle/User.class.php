@@ -45,7 +45,7 @@ class User{
 	}
 
 	public static function CheckAccess(){
-		if(!call_user_func_array(array("\\User","HasAccess"), func_get_args()))
+		if(!call_user_func_array(array("EducAction\\AdesBundle\\User","HasAccess"), func_get_args()))
 			Tools::Redirect("unauthorized.php");
 	}
 
