@@ -106,7 +106,9 @@ class Backup{
 	}
 	private function deleteAction($filename){
 		if(preg_match(self::regex, $filename)){
-			if(unlink(self::BackupFolder()."/".$filename)){
+            $fullname=self::BackupFolder()."/".$filename;
+            $infoname=self::GetInfoFilename($fullname);
+			if(unlink($fullname) && unlink($infoname)){
 				$this->failed=false;
 			}else{
 				$this->failed=true;
