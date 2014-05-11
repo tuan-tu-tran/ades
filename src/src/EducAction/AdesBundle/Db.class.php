@@ -23,7 +23,6 @@ namespace EducAction\AdesBundle;
 use mysqli;
 
 class Db{
-	public static function ConfigFile(){ return DIRNAME(__FILE__)."/../../../web/config/confbd.inc.php"; }
 	public $host;
 	public $user;
 	public $pwd;
@@ -103,7 +102,11 @@ class Db{
 	public static function GetInstance($host=NULL, $user=NULL, $pwd=NULL, $dbname=NULL){
 		if(Db::$instance == NULL){
 			if($host==NULL){
-				require(self::ConfigFile());
+				$configFile = Config::DbConfigFile();
+				if(!file_exists($configFile)){
+					throw new \Exception("db config file does not exist: $configFile");
+				}
+				require $configFile;
 				Db::$instance=new Db($sql_serveur, $sql_user, $sql_passwd, $sql_bdd);
 			}else{
 				Db::$instance=new Db($host,$user,$pwd,$dbname);

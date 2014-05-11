@@ -63,4 +63,14 @@ class Config{
 	public static function GetDbVersion(){
 		return self::Get("db_version");
 	}
+
+	public static function SchoolConfigFile()
+	{
+		return DIRNAME(__FILE__)."/../../../web/config/constantes.inc.php";
+	}
+
+	public static function DbConfigFile()
+	{
+		return DIRNAME(__FILE__)."/../../../web/config/confbd.inc.php";
+	}
 }

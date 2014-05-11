@@ -57,7 +57,7 @@ class Install{
 				break;
 
 			case self::ACTION_CONFIG_DB:
-				if(file_exists(_DB_CONFIG_FILE_))
+				if(file_exists(Config::DbConfigFile()))
 					$this->view=self::VIEW_OVERWRITE_FORBIDDEN;
 				else{
 					//show config form
@@ -70,7 +70,7 @@ class Install{
 				break;
 
 			case self::ACTION_SUBMIT_DB_CONFIG:
-				if(file_exists(_DB_CONFIG_FILE_))
+				if(file_exists(Config::DbConfigFile()))
 					$this->view=self::VIEW_OVERWRITE_FORBIDDEN;
 				else if($this->ConfigIsValid()){
 					if($this->WriteDbConfig()){
@@ -78,7 +78,7 @@ class Install{
 						$this->view=self::VIEW_FILE_WRITTEN;
 					}else{
 						//show file could not be written + error
-						$this->ShowWriteError(_DB_CONFIG_FILE_, $this->GetDbConfigSubmitUrl());
+						$this->ShowWriteError(Config::DbConfigFile(), $this->GetDbConfigSubmitUrl());
 					}
 				}else{
 					//show config form + error + repopulate
@@ -97,7 +97,7 @@ class Install{
 				break;
 
 			case self::ACTION_CONFIG_SCHOOL:
-				if(file_exists(_SCHOOL_CONFIG_FILE_))
+				if(file_exists(Config::SchoolConfigFile()))
 					$this->view=self::VIEW_OVERWRITE_SCHOOL_FORBIDDEN;
 				else
 					$this->schoolname = NULL;
@@ -106,7 +106,7 @@ class Install{
 				break;
 
 			case self::ACTION_SUBMIT_SCHOOL_CONFIG:
-				if(file_exists(_SCHOOL_CONFIG_FILE_)){
+				if(file_exists(Config::SchoolConfigFile())){
 					$this->view=self::VIEW_OVERWRITE_SCHOOL_FORBIDDEN;
 
 				}else if(!$this->SchoolConfigIsValid()){
@@ -116,7 +116,7 @@ class Install{
 					$this->view=self::VIEW_SCHOOL_CONFIG_WRITTEN;
 
 				}else{
-					$this->ShowWriteError(_SCHOOL_CONFIG_FILE_, $this->GetSchoolConfigSubmitUrl());
+					$this->ShowWriteError(Config::SchoolConfigFile(), $this->GetSchoolConfigSubmitUrl());
 				}
 				break;
 			default:
@@ -137,7 +137,7 @@ define("ECOLE",%s);
 define("TITRE",%s);
 
 EOF;
-		$file=fopen(_SCHOOL_CONFIG_FILE_,"wt");
+		$file=fopen(Config::SchoolConfigFile(),"wt");
 		if($file){
 			fprintf($file, $format
 				, var_export($this->schoolname, true)
@@ -207,7 +207,7 @@ EOF;
 
 	function WriteDbConfig(){
 		// Rami Adrien création du fichier confdb.inc.php
-		$fichierconfdb = fopen(_DB_CONFIG_FILE_,"wt");
+		$fichierconfdb = fopen(Config::DbConfigFile(),"wt");
 		if(!$fichierconfdb){
 			return false;
 		}else{
@@ -251,10 +251,11 @@ EOF;
 	public function GetSchoolConfigLink($text){ $this->GetLink(self::ACTION_CONFIG_SCHOOL, $text);} 
 	public function GetDbConfigSubmitUrl(){return $this->GetUrl(self::ACTION_SUBMIT_DB_CONFIG);}
 	public function GetSchoolConfigSubmitUrl(){return $this->GetUrl(self::ACTION_SUBMIT_SCHOOL_CONFIG);}
-	public function CanConfigureSchool(){ return !file_exists(_SCHOOL_CONFIG_FILE_); }
+	public function CanConfigureSchool(){ return !file_exists(Config::SchoolConfigFile()); }
 
-	public static function CheckIfNeeded(){
-		if(!file_exists(_DB_CONFIG_FILE_)){
+	public static function CheckIfNeeded()
+	{
+		if(!file_exists(Config::DbConfigFile()) || !file_exists(Config::SchoolConfigFile())){
 			error_log("no config file found");
 			Tools::Redirect("creation.php");
 		}
