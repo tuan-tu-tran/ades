@@ -1,0 +1,1 @@
+ALTER TABLE `ades_faits` MODIFY COLUMN `motif` TEXT DEFAULT NULL;
