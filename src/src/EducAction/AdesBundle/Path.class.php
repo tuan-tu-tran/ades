@@ -22,6 +22,9 @@ namespace EducAction\AdesBundle;
 
 class Path{
 	public static function ListDir($path, $regex_match=NULL, $exclude=array("index.php")){
+		if(!file_exists($path)){
+			throw new \Exception("path does not exist: $path");
+		}
 		$liste1 = scandir($path,0);
 		$liste2=array();
 		foreach ($liste1 as $fichier){
