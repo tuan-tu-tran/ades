@@ -116,7 +116,7 @@ switch ($mode)
 		}
 		fclose($handle);
 		mysql_close ($lienDB);
-        if ($erreur == false && count($bad_lines)==0)
+        if ((!isset($erreur) || $erreur == false) && count($bad_lines)==0)
 			{
 			$texte = "L'importation des données semble s'être bien passée.";
 			redir ("index.php","",$texte, 5000);
