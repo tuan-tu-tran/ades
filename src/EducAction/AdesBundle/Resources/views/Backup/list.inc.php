@@ -172,7 +172,7 @@ use EducAction\AdesBundle\ViewHelper;
                 <?php echo $file["version"]?>
             </td>
 			<td style="text-align:right"><?php ViewHelper::FileSize($file["size"])?></td>
-            <td><?php echo htmlspecialchars($file["comment"])?></td>
+            <td><?php echo Html::Encode($file["comment"])?></td>
 			<td style="text-align:center">
 				<a href="?action=delete&amp;file=<?php echo $file["name"]?>"
 					<?php Overlib::Render('Cliquer pour supprimer cette sauvegarde.')?>
