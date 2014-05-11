@@ -89,7 +89,7 @@ class Upgrade{
 	}
 
 	private static function UpgradeFolder(){
-		return DIRNAME(__FILE__)."/../Resources/upgrade_scripts/";
+		return DIRNAME(__FILE__)."/../Resources/sql_scripts/";
 	}
 
 	private static function CompareVersions($x,$y){
