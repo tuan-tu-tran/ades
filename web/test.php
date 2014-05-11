@@ -21,33 +21,58 @@ require "inc/init.inc.php";
 
 use EducAction\AdesBundle\View;
 use EducAction\AdesBundle\Html;
+
+$tree=array(
+    "Entretiens"=>array(
+        "Entretiens individuels"=>"javascript:console.log('1')",
+        "Entretiens téléphoniques"=>"javascript:console.log('2')",
+    ),
+    "Retenues"=>array(
+        "Retenues disciplinaires"=>"javascript:console.log('3')",
+        "Retenues téléphoniques"=>"javascript:console.log('4')",
+    ),
+    "Félicitations"=>"javascript:console.log('5')",
+);
+
 ?>
 
 <?php View::StartBlock("post_head")?>
     <?php Html::Css("css/menu_facts.css")?>
+    <?php Html::Script("js/jquery-1.11.0.min.js")?>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("ul.menu_facts > li > ul > li, ul.menu_facts > li > div.item").click(function(){
+                $(this).find("a").each(function(){this.click();});
+            });
+        });
+    </script>
 <?php View::EndBlock()?>
+
 <?php View::StartBlock("content")?>
-<div>
 <ul class="menu_facts">
+<?php foreach($tree as $label=>$value):?>
     <li>
-        <div>Entretiens</div>
-        <ul>
-            <li>Entretiens indidivuels</li>
-            <li>Entretiens téléphoniques</li>
-        </ul>
+        <?php if (is_array($value)):?>
+            <div><?php echo Html::Encode($label)?></div>
+            <ul>
+                <?php foreach($value as $sublabel => $url):?>
+                    <li>
+                        <?php echo Html::Encode($sublabel)?>
+                        <a href="<?php echo Html::Encode($url)?>"></a>
+                    </li>
+                <?php endforeach?>
+            </ul>
+        <?php elseif (is_string($value)):?>
+            <div class="item">
+                <?php echo Html::Encode($label)?>
+                <a href="<?php echo Html::Encode($value)?>"></a>
+            </div>
+        <?php else:?>
+            <?php throw new Exception("value of label '$label' must be string or array. Got '".gettype($value)."' instead (".var_export($value, true).")");?>
+        <?php endif?>
     </li>
-    <li>
-        <div>Retenues</div>
-        <ul>
-            <li>Retenues disciplinaires</li>
-            <li>Retenues de travail</li>
-        </ul>
-    </li>
-    <li>
-        <div class="item">Félicitations</div>
-    </li>
+<?php endforeach?>
 </ul>
-</div>
 <?php View::EndBlock()?>
 
 <?php View::Embed("layout.inc.php")?>
