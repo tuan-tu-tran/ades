@@ -256,7 +256,6 @@ EOF;
 	public static function CheckIfNeeded()
 	{
 		if(!file_exists(Config::DbConfigFile()) || !file_exists(Config::SchoolConfigFile())){
-			error_log("no config file found");
 			Tools::Redirect("creation.php");
 		}
 	}
