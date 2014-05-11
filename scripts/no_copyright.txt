@@ -2,15 +2,15 @@
 # that are not must not contain a copyright notice
 # lines beginning with a # are ignored
 
-no_copyright\.txt$
+^scripts/no_copyright\.txt$
 jquery-.*\.js$
 .*\.(png|jpg|jpeg|gif)$
-upgrade[/\\].*\.sql$
-^src/web/inc/overlib
-^src/web/fpdf
-^src/vendor
-^src/web/config/.*\.ini$
-^src/web/inc/ADESmemo.class.php
-creation.sql
-gpl.txt
-src/web/version
+^web/upgrade[/\\].*\.sql$
+^web/inc/overlib
+^web/fpdf
+^vendor
+^web/config/.*\.ini$
+^web/inc/ADESmemo.class.php
+^web/version
+^web/creation.sql
+^web/gpl.txt
