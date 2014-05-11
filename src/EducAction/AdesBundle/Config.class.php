@@ -57,7 +57,16 @@ class Config{
 	}
 
 	public static function GetDbVersion(){
-		return self::Get("db_version");
+		//get the version from db
+		if(!Db::GetInstance()->scalar("SHOW TABLES LIKE 'ades_config'")){
+			$db_version="0.0";
+		}else{
+			$db_version=self::Get("db_version");
+			if(!$db_version){
+				throw new Exception("could not determine db version: table ades_config exists but no value for db_version");
+			}
+		};
+		return $db_version;
 	}
 
 	public static function SchoolConfigFile()

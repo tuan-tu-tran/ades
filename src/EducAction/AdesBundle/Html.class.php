@@ -24,4 +24,15 @@ class Html{
 	public static function Script($source){
 		echo "<script type='text/javascript' src='$source'></script>";
 	}
+
+    /**
+     * A short hand to call htmlspecialchars with custom default values:
+     * * ENT_QUOTES|ENT_HTML401
+     * * ISO8859-1
+     * * double_encode = TRUE
+     */
+    public static function Encode($string, $flags = ENT_QUOTES, $encoding="ISO8859-1", $double_encode=TRUE)
+    {
+        return htmlspecialchars($string, $flags, $encoding, $double_encode);
+    }
 }

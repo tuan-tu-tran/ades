@@ -28,6 +28,7 @@ use EducAction\AdesBundle\Db;
 use EducAction\AdesBundle\Process;
 use EducAction\AdesBundle\Tools;
 use EducAction\AdesBundle\Utils;
+use EducAction\AdesBundle\Config;
 use \DateTime;
 use \SplFileInfo;
 
@@ -105,7 +106,9 @@ class Backup{
 	}
 	private function deleteAction($filename){
 		if(preg_match(self::regex, $filename)){
-			if(unlink(self::BackupFolder()."/".$filename)){
+            $fullname=self::BackupFolder()."/".$filename;
+            $infoname=self::GetInfoFilename($fullname);
+			if(unlink($fullname) && unlink($infoname)){
 				$this->failed=false;
 			}else{
 				$this->failed=true;
@@ -135,11 +138,15 @@ class Backup{
 			$info=new SplFileInfo($path);
 			$mtime=new DateTime("@".$info->getMTime());
 			$mtime->setTimezone($now->getTimezone());
+            $backupInfo=unserialize(file_get_contents(self::GetInfoFilename($path)));
 			$files[]=array(
 				"download_link"=>"?action=download&file=$file",
 				"name"=>$file,
 				"time"=>$mtime,
 				"size"=>$info->getSize(),
+                "version"=>$backupInfo["version"],
+                "is_current_version"=>$backupInfo["version"]==Upgrade::Version,
+                "comment"=>$backupInfo["comment"],
 			);
 		}
 		$this->backup_files=$files;
@@ -164,6 +171,7 @@ class Backup{
 	}
 
 	private function backupAction(){
+        $comment=$_POST["backup_create_comment_set"]?$_POST["backup_create_comment"]:"";
 		$db=Db::GetInstance();
 		$host=$db->host;
 		$username=$db->username;
@@ -175,7 +183,13 @@ class Backup{
 			if($retval==0){
 				$filename=date('Ymd-His').".sql";
 				$fullpath = self::BackupFolder()."/".$filename;
-				if(file_put_contents($fullpath, $out)){
+                $fullInfoPath=self::GetInfoFilename($fullpath);
+                $info=array(
+                    "filename"=>$filename,
+                    "version"=>Config::GetDbVersion(),
+                    "comment"=>$comment,
+                );
+				if(file_put_contents($fullpath, $out) && file_put_contents($fullInfoPath, serialize($info))){
 					$this->filename=$filename;
 					$this->failed=false;
 				}else{
@@ -195,6 +209,11 @@ class Backup{
 		FlashBag::Set("backup", $this);
 		Tools::Redirect("sauver.php");
 	}
+
+    private static function GetInfoFilename($sqlFilename)
+    {
+        return substr_replace($sqlFilename,"txt", -3);
+    }
 
 	private static function BackupFolder()
 	{

@@ -32,10 +32,21 @@ use EducAction\AdesBundle\ViewHelper;
 				$(this).slideUp();
 				nd();
 			});
+            $("input#backup_create_comment")
+                .click(function(){
+                    if($("input#backup_create_comment_set").val()==""){
+                        $(this).select();
+                    }
+                })
+                .change(function(){
+                    $("input#backup_create_comment_set").val(1);
+                })
+            ;
 		});
 	</script>
 	<style type="text/css">
 		tr.backup:hover{background-color:yellow}
+        table#backup_table td{padding:5px;}
 	</style>
 <?php View::EndBlock()?>
 
@@ -124,15 +135,21 @@ use EducAction\AdesBundle\ViewHelper;
 
 <form method="POST" action="?action=create" style="border:none;padding:0">
 <input type="submit" value="Créer une nouvelle sauvegarde"/>
+<input id="backup_create_comment" type="text" value="Ajouter un commentaire (optionnel)" name="backup_create_comment" size="40"
+    <?php Overlib::Render("Si vous le désirez, vous pouvez ajouter un commentaire qui sera lié à la sauvegarde")?>
+/>
+<input id="backup_create_comment_set" type="hidden" value="" name="backup_create_comment_set"/>
 </form>
 <?php if(count($backup_files)>0):?>
 <h3>Liste de dernières sauvegardes disponibles</h3>
 
-<table border="1" cellpadding="2" style="margin:auto;margin-top:1em;">
+<table border="1" cellpadding="2" style="margin:auto;margin-top:1em;" id="backup_table">
 	<tr style="background-color:orangered">
 		<td>Fichiers de sauvegarde</td>
 		<td style="text-align:center">Date</td>
+		<td style="text-align:center">Version</td>
 		<td style="text-align:center">Taille</td>
+		<td style="text-align:center">Commentaire</td>
 		<td style="text-align:center">Effacer</td>
 		<td style="text-align:center">Restaurer</td>
 	</tr>
@@ -144,7 +161,18 @@ use EducAction\AdesBundle\ViewHelper;
 					<?php Overlib::Render('Cliquer pour télécharger cette sauvegarde')?>
 				><?php echo $file["name"]?></a></td>
 			<td style="text-align:center"><?php echo $file["time"]->format("d/m/Y à H\hi")?></td>
+            <td
+                <?php if ($file["is_current_version"]) :?>
+                    style="text-align:right;"
+                <?php else: ?>
+                    style="text-align:right;background-color:lightsalmon"
+                    <?php Overlib::Render("Une restauration de cette sauvegarde nécessitera une mise à jour de la base de données"); ?>
+                <?php endif ?>
+            >
+                <?php echo $file["version"]?>
+            </td>
 			<td style="text-align:right"><?php ViewHelper::FileSize($file["size"])?></td>
+            <td><?php echo Html::Encode($file["comment"])?></td>
 			<td style="text-align:center">
 				<a href="?action=delete&amp;file=<?php echo $file["name"]?>"
 					<?php Overlib::Render('Cliquer pour supprimer cette sauvegarde.')?>
@@ -152,8 +180,17 @@ use EducAction\AdesBundle\ViewHelper;
 				><img style="width:16px;height:16px;" border="0" alt="X" src="images/suppr.png"></a></td>
 			<td style="text-align:center">
 				<a href="?action=restore&amp;file=<?php echo $file["name"]?>"
-					<?php Overlib::Render('Cliquer pour restaurer cette sauvegarde.')?>
-					onclick="return confirm('Êtes vous sûr de vouloir restaurer cette sauvegarde?\nCette action est IRREVERSIBLE!');"
+                    <?php
+                        $overlibText = 'Cliquer pour restaurer cette sauvegarde.';
+                        $confirmText="Êtes vous sûr de vouloir restaurer cette sauvegarde?\n\nCette action est IRREVERSIBLE!";
+                        if (!$file["is_current_version"]) {
+                            $overlibText.="<br/>ATTENTION! Une mise à jour de la base de données sera nécessaire.";
+                            $confirmText.= "\n\nDe plus, une mise à jour de la base de données sera nécessaire après la restauration.";
+                        }
+                        $confirmText=htmlspecialchars(json_encode(utf8_encode($confirmText)));
+                        Overlib::Render($overlibText);
+                    ?>
+                    onclick="return confirm(<?php echo $confirmText?>);"
 				><img style="width:16px;height:16px;" border="0" alt="restore" src="images/restore.png"></a></td>
 		</tr>
 	<?php endforeach;?>

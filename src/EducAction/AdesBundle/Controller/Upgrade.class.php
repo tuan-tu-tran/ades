@@ -49,7 +49,7 @@ class Upgrade{
 		$result=FlashBag::Pop("upgrade_result");
 		if($result){
 			$this->result=$result;
-			$this->currentVersion = self::GetDbVersion();
+			$this->currentVersion = Config::GetDbVersion();
 			View::Render("Upgrade/result.inc.php", $this);
 		}else{
 			Tools::Redirect("upgrade.php");
@@ -62,7 +62,7 @@ class Upgrade{
 	}
 
 	private function GetVersions(){
-		$this->fromVersion = self::GetDbVersion();
+		$this->fromVersion = Config::GetDbVersion();
 		$this->toVersion = self::Version;
 		$this->fromBeforeTo = self::CompareVersions($this->fromVersion, $this->toVersion)==-1;
 		if($this->fromBeforeTo){
@@ -100,19 +100,6 @@ class Upgrade{
 		else if($minx<$miny) return -1;
 		else if($minx>$miny) return 1;
 		else return 0;
-	}
-
-	private static function GetDbVersion(){
-		//get the version from db
-		if(!Db::GetInstance()->scalar("SHOW TABLES LIKE 'ades_config'")){
-			$db_version="0.0";
-		}else{
-			$db_version=Config::GetDbVersion();
-			if(!$db_version){
-				throw new Exception("could not determine db version: table ades_config exists but no value for db_version");
-			}
-		};
-		return $db_version;
 	}
 
 	private function UpgradeDbAction(){
@@ -157,7 +144,7 @@ class Upgrade{
 	}
 
 	public static function Required(){
-		return self::GetDbVersion()!=self::Version;
+		return Config::GetDbVersion()!=self::Version;
 	}
 
 	public static function CheckIfNeeded(){
