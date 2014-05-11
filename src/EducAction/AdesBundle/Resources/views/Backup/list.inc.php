@@ -132,6 +132,7 @@ use EducAction\AdesBundle\ViewHelper;
 	<tr style="background-color:orangered">
 		<td>Fichiers de sauvegarde</td>
 		<td style="text-align:center">Date</td>
+		<td style="text-align:center">Version</td>
 		<td style="text-align:center">Taille</td>
 		<td style="text-align:center">Effacer</td>
 		<td style="text-align:center">Restaurer</td>
@@ -144,6 +145,16 @@ use EducAction\AdesBundle\ViewHelper;
 					<?php Overlib::Render('Cliquer pour télécharger cette sauvegarde')?>
 				><?php echo $file["name"]?></a></td>
 			<td style="text-align:center"><?php echo $file["time"]->format("d/m/Y à H\hi")?></td>
+            <td
+                <?php if ($file["is_current_version"]) :?>
+                    style="text-align:right;"
+                <?php else: ?>
+                    style="text-align:right;background-color:lightsalmon"
+                    <?php Overlib::Render("Une restauration de cette sauvegarde nécessitera une mise à jour de la base de données"); ?>
+                <?php endif ?>
+            >
+                <?php echo $file["version"]?>
+            </td>
 			<td style="text-align:right"><?php ViewHelper::FileSize($file["size"])?></td>
 			<td style="text-align:center">
 				<a href="?action=delete&amp;file=<?php echo $file["name"]?>"
@@ -152,8 +163,17 @@ use EducAction\AdesBundle\ViewHelper;
 				><img style="width:16px;height:16px;" border="0" alt="X" src="images/suppr.png"></a></td>
 			<td style="text-align:center">
 				<a href="?action=restore&amp;file=<?php echo $file["name"]?>"
-					<?php Overlib::Render('Cliquer pour restaurer cette sauvegarde.')?>
-					onclick="return confirm('Êtes vous sûr de vouloir restaurer cette sauvegarde?\nCette action est IRREVERSIBLE!');"
+                    <?php
+                        $overlibText = 'Cliquer pour restaurer cette sauvegarde.';
+                        $confirmText="Êtes vous sûr de vouloir restaurer cette sauvegarde?\n\nCette action est IRREVERSIBLE!";
+                        if (!$file["is_current_version"]) {
+                            $overlibText.="<br/>ATTENTION! Une mise à jour de la base de données sera nécessaire.";
+                            $confirmText.= "\n\nDe plus, une mise à jour de la base de données sera nécessaire après la restauration.";
+                        }
+                        $confirmText=htmlspecialchars(json_encode(utf8_encode($confirmText)));
+                        Overlib::Render($overlibText);
+                    ?>
+                    onclick="return confirm(<?php echo $confirmText?>);"
 				><img style="width:16px;height:16px;" border="0" alt="restore" src="images/restore.png"></a></td>
 		</tr>
 	<?php endforeach;?>

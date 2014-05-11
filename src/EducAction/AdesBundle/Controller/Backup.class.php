@@ -28,6 +28,7 @@ use EducAction\AdesBundle\Db;
 use EducAction\AdesBundle\Process;
 use EducAction\AdesBundle\Tools;
 use EducAction\AdesBundle\Utils;
+use EducAction\AdesBundle\Config;
 use \DateTime;
 use \SplFileInfo;
 
@@ -135,11 +136,14 @@ class Backup{
 			$info=new SplFileInfo($path);
 			$mtime=new DateTime("@".$info->getMTime());
 			$mtime->setTimezone($now->getTimezone());
+            $backupInfo=unserialize(file_get_contents(self::GetInfoFilename($path)));
 			$files[]=array(
 				"download_link"=>"?action=download&file=$file",
 				"name"=>$file,
 				"time"=>$mtime,
 				"size"=>$info->getSize(),
+                "version"=>$backupInfo["version"],
+                "is_current_version"=>$backupInfo["version"]==Upgrade::Version,
 			);
 		}
 		$this->backup_files=$files;
@@ -175,7 +179,12 @@ class Backup{
 			if($retval==0){
 				$filename=date('Ymd-His').".sql";
 				$fullpath = self::BackupFolder()."/".$filename;
-				if(file_put_contents($fullpath, $out)){
+                $fullInfoPath=self::GetInfoFilename($fullpath);
+                $info=array(
+                    "filename"=>$filename,
+                    "version"=>Config::GetDbVersion(),
+                );
+				if(file_put_contents($fullpath, $out) && file_put_contents($fullInfoPath, serialize($info))){
 					$this->filename=$filename;
 					$this->failed=false;
 				}else{
@@ -195,6 +204,11 @@ class Backup{
 		FlashBag::Set("backup", $this);
 		Tools::Redirect("sauver.php");
 	}
+
+    private static function GetInfoFilename($sqlFilename)
+    {
+        return substr_replace($sqlFilename,"txt", -3);
+    }
 
 	private static function BackupFolder()
 	{
