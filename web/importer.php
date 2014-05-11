@@ -111,8 +111,6 @@ Normalisation();
                             }
                         }
                         $ligne++;
-                        // echo "$sql <br />";
-                        mysql_query($sql);
                     }
                     fclose($handle);
                     mysql_close ($lienDB);
