@@ -152,14 +152,15 @@ function redirection (adresse)
 window.location = adresse;
 }
 
-function textLimit(champ, maxlen) {
-if (champ.value.length > maxlen)
-	{
-	champ.value = champ.value.substring(0, maxlen);
-	champ.style.color = "red";
+function textLimit(champ, maxlen)
+{
+	if (champ.value.length >= maxlen) {
+		champ.style.color = "red";
+		champ.value=champ.value.substr(0,maxlen);
+		event.preventDefault();
+	} else {
+		champ.style.color = "";
 	}
-	else
-	champ.style.color = "";
 }function completer (classe)
 {
 var zone = document.getElementById('formClasse');

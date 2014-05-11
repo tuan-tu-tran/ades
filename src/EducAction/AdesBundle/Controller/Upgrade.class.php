@@ -29,7 +29,7 @@ use EducAction\AdesBundle\View;
 use EducAction\AdesBundle\Utils;
 
 class Upgrade{
-	const Version="1.0";
+	const Version="1.1";
 
 	public function parseRequest(){
 		$action=isset($_GET["action"])?$_GET["action"]:NULL;
