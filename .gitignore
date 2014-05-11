@@ -1,6 +1,5 @@
 local/*
 web/eleves.csv
-web/sauvegarde/*.sql
 web/config/confbd.inc.php
 web/config/constantes.inc.php
 

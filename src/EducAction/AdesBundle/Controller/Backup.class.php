@@ -32,7 +32,6 @@ use \DateTime;
 use \SplFileInfo;
 
 class Backup{
-	const root="sauvegarde";
 	const regex="/^\d{8}-\d{6}\.sql$/";
 	public function parseRequest(){
 		User::CheckIfLogged();
@@ -59,7 +58,7 @@ class Backup{
 	private function restoreAction($filename){
 		if(preg_match(self::regex, $filename)){
 			$this->filename=$filename;
-			if($input=file_get_contents(self::root."/".$filename)){
+			if($input=file_get_contents(self::BackupFolder()."/".$filename)){
 				$this->input_read=true;
 				if(Utils::MySqlScript($input, $err,$launched)){
 					$this->failed=false;
@@ -83,7 +82,7 @@ class Backup{
 	}
 	private function deleteAction($filename){
 		if(preg_match(self::regex, $filename)){
-			if(unlink(self::root."/".$filename)){
+			if(unlink(self::BackupFolder()."/".$filename)){
 				$this->failed=false;
 			}else{
 				$this->failed=true;
@@ -104,12 +103,12 @@ class Backup{
 	}
 
 	private function listAction(){
-		$list=Path::ListDir(Backup::root, self::regex );
+		$list=Path::ListDir(self::BackupFolder(), self::regex );
 		rsort($list);
 		$files=array();
 		$now=new DateTime();
 		foreach($list as $file){
-			$path=self::root."/".$file;
+			$path=self::BackupFolder()."/".$file;
 			$info=new SplFileInfo($path);
 			$mtime=new DateTime("@".$info->getMTime());
 			$mtime->setTimezone($now->getTimezone());
@@ -124,7 +123,7 @@ class Backup{
 
 		if(count($list)>0){
 			$this->last_backup=$list[0];
-			$utc_backup_time = new DateTime("@".filemtime(Backup::root."/".$this->last_backup));
+			$utc_backup_time = new DateTime("@".filemtime(self::BackupFolder()."/".$this->last_backup));
 			$now=new DateTime();
 			$utc_backup_time->setTimezone($now->getTimezone());
 			$this->last_backup_time=$utc_backup_time;
@@ -152,7 +151,7 @@ class Backup{
 			$this->dump_launched=true;
 			if($retval==0){
 				$filename=date('Ymd-His').".sql";
-				$fullpath = self::root."/".$filename;
+				$fullpath = self::BackupFolder()."/".$filename;
 				if(file_put_contents($fullpath, $out)){
 					$this->filename=$filename;
 					$this->failed=false;
@@ -172,5 +171,10 @@ class Backup{
 		}
 		FlashBag::Set("backup", $this);
 		Tools::Redirect("sauver.php");
+	}
+
+	private static function BackupFolder()
+	{
+		return DIRNAME(__FILE__)."/../../../../local/db_backup";
 	}
 }
