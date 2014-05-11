@@ -25,6 +25,10 @@ class Html{
 		echo "<script type='text/javascript' src='$source'></script>";
 	}
 
+	public static function Css($href){
+		echo "<link rel='stylesheet' href='$href' type='text/css' />";
+	}
+
     /**
      * A short hand to call htmlspecialchars with custom default values:
      * * ENT_QUOTES|ENT_HTML401
