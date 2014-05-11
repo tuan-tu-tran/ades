@@ -171,7 +171,8 @@ EOF;
 	}
 
 	private function CreateTables(){
-		$commandes = file("./creation.sql");
+		$path=DIRNAME(__FILE__)."/../Resources/sql_scripts/creation.sql";
+		$commandes = file($path);
 		$uneCommande = "";
 		$error=false;
 		foreach ($commandes as $uneLigne){

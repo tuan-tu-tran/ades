@@ -6,13 +6,13 @@
 jquery-.*\.js$
 .*\.(png|jpg|jpeg|gif)$
 ^src/EducAction/AdesBundle/Resources/upgrade_scripts/to\d+\.\d+\.sql$
+^src/EducAction/AdesBundle/Resources/sql_scripts/creation.sql$
 ^web/inc/overlib
 ^web/fpdf
 ^vendor
 ^web/config/.*\.ini$
 ^web/inc/ADESmemo.class.php
 ^web/version
-^web/creation.sql
 ^web/gpl.txt
 ^local/README.txt$
 .gitkeep$
