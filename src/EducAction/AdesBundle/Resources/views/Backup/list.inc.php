@@ -139,7 +139,7 @@ use EducAction\AdesBundle\ViewHelper;
 	<?php foreach($backup_files as $file):?>
 		<tr class="backup">
 			<td>
-				<a href="<?php echo $file["path"]?>"
+				<a href="<?php echo $file["download_link"]?>"
 					target="_blank"
 					<?php Overlib::Render('Cliquer pour télécharger cette sauvegarde')?>
 				><?php echo $file["name"]?></a></td>

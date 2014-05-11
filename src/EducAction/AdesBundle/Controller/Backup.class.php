@@ -51,6 +51,11 @@ class Backup{
 					$this->restoreAction($_GET["file"]);
 					break;
 				}
+			case "download":
+				if(isset($_GET["file"])){
+					$this->downloadAction($_GET["file"]);
+					break;
+				}
 			default:
 				$this->listAction();
 		}
@@ -113,7 +118,7 @@ class Backup{
 			$mtime=new DateTime("@".$info->getMTime());
 			$mtime->setTimezone($now->getTimezone());
 			$files[]=array(
-				"path"=>$path,
+				"download_link"=>"?action=download&file=$file",
 				"name"=>$file,
 				"time"=>$mtime,
 				"size"=>$info->getSize(),
@@ -176,5 +181,19 @@ class Backup{
 	private static function BackupFolder()
 	{
 		return DIRNAME(__FILE__)."/../../../../local/db_backup";
+	}
+
+	private function downloadAction($filename)
+	{
+		if(preg_match(self::regex, $filename)){
+			$path=self::BackupFolder()."/$filename";
+			if(file_exists($path)){
+				$content=file_get_contents($path);
+				if($content!==FALSE){
+					header("Content-Type: application/x-sql");
+					echo $content;
+				}
+			}
+		}
 	}
 }
