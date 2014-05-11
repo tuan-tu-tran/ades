@@ -20,6 +20,7 @@
 
 use EducAction\AdesBundle\View;
 
+require_once DIRNAME(__FILE__)."/../../../../../web/config/constantes.inc.php";
 ?>
 <?php View::FillBlock("title",ECOLE);?>
 
