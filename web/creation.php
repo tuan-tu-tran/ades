@@ -27,6 +27,7 @@
  */
 require("inc/init.inc.php");
 use EducAction\AdesBundle\Controller\Install;
+use EducAction\AdesBundle\Html;
 
 Normalisation();
 $install=new EducAction\AdesBundle\Controller\Install;
@@ -71,19 +72,19 @@ $install->parseRequest();
 		<form name="form" method="post" action="<?php echo $install->GetDbConfigSubmitUrl()?>">
 		<p>
 			<label>Serveur Sql :</label>
-			<input value="<?echo htmlspecialchars($install->host)?>" name="sqlserver" id="sqlserver" size="30" maxlength="50" type="text">
+			<input value="<?echo Html::Encode($install->host)?>" name="sqlserver" id="sqlserver" size="30" maxlength="50" type="text">
 		</p>
 		<p>
 			<label>Utilisateur :</label>
-			<input value="<?echo htmlspecialchars($install->username)?>" name="utilisateursql" id="utilisateur" size="30" maxlength="50" type="text">
+			<input value="<?echo Html::Encode($install->username)?>" name="utilisateursql" id="utilisateur" size="30" maxlength="50" type="text">
 		</p>
 		<p>
 			<label>Mot de Passe :</label>
-			<input value="<?echo htmlspecialchars($install->pwd)?>" name="motdepassesql" id="motdepasse" size="30" maxlength="50" type="password">
+			<input value="<?echo Html::Encode($install->pwd)?>" name="motdepassesql" id="motdepasse" size="30" maxlength="50" type="password">
 		</p>
 		<p>
 			<label>Nom de la Base de données :</label>
-			<input value="<?echo htmlspecialchars($install->dbname)?>" name="nomdelabasesql" id="nomdelabase" size="30" maxlength="50" type="text">
+			<input value="<?echo Html::Encode($install->dbname)?>" name="nomdelabasesql" id="nomdelabase" size="30" maxlength="50" type="text">
 		</p>
 
 		<input name="Submit" value="Enregistrer" type="submit">
@@ -115,7 +116,7 @@ $install->parseRequest();
 		</p>
 		<p>Le système a renvoyé l'erreur suivante: <?php echo $install->error ?></p>
 		<?php foreach($_POST as $key=>$value):?>
-			<input name="<?php echo $key;?>" type="hidden" value="<?php echo htmlspecialchars($value)?>" />
+			<input name="<?php echo $key;?>" type="hidden" value="<?php echo Html::Encode($value)?>" />
 		<?php endforeach;?>
 		<input name="Submit" value="Réessayer" type="submit">
 		</form>
@@ -134,7 +135,7 @@ $install->parseRequest();
 
 	<?php if(isset($install->error_command)):?>
 		<p>Une erreur s'est produite lors de la creation des tables, à cause de la commande:</p>
-		<p><?php echo htmlspecialchars($install->error_command);?></p>
+		<p><?php echo Html::Encode($install->error_command);?></p>
 	<?php else:?>
 		<p>Une erreur s'est produite lors de l'exécution du script: <?php echo $install->failedScript?></p>
 	<?php endif;?>
@@ -163,11 +164,11 @@ $install->parseRequest();
 	<form action="<?php echo $install->GetSchoolConfigSubmitUrl();?>" method="POST">
 		<p>
 			<label>Nom de l'école :</label>
-			<input value="<?echo htmlspecialchars($install->schoolname)?>" name="schoolname" size="30" maxlength="50" type="text">
+			<input value="<?echo Html::Encode($install->schoolname)?>" name="schoolname" size="30" maxlength="50" type="text">
 		</p>
 		<p>
 			<label>Titre :</label>
-			<input value="<?echo htmlspecialchars($install->title)?>" name="title" size="30" maxlength="50" type="text">
+			<input value="<?echo Html::Encode($install->title)?>" name="title" size="30" maxlength="50" type="text">
 		</p>
 
 		<input name="Submit" value="Enregistrer" type="submit">
