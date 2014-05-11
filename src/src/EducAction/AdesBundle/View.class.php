@@ -28,7 +28,7 @@ class View{
 	const APPEND="append";
 
 	public static function Render($template, $parameters=NULL){
-		$template=_VIEWS_FOLDER."/$template";
+		$template=self::GetTemplateFile($template);
 		if(file_exists($template)){
 			if($parameters!=NULL){
 				if(!is_array($parameters)) $parameters=get_object_vars($parameters);
@@ -42,12 +42,17 @@ class View{
 	}
 
 	public static function Embed($template){
-		$template=_VIEWS_FOLDER."/$template";
+		$template=self::GetTemplateFile($template);
 		if(file_exists($template)){
 			require($template);
 			if(self::$current_block)
 				throw new Exception("block ".self::$current_block." was still open after embedding template $template");
 		}else throw new Exception("template not found '$template'");
+	}
+
+	private static function GetTemplateFile($template)
+	{
+		return DIRNAME(__FILE__)."/Resources/views/$template";
 	}
 
 	private static $current_block=NULL;
