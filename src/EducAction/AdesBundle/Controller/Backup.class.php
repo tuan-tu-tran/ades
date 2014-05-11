@@ -144,6 +144,7 @@ class Backup{
 				"size"=>$info->getSize(),
                 "version"=>$backupInfo["version"],
                 "is_current_version"=>$backupInfo["version"]==Upgrade::Version,
+                "comment"=>$backupInfo["comment"],
 			);
 		}
 		$this->backup_files=$files;
@@ -168,6 +169,7 @@ class Backup{
 	}
 
 	private function backupAction(){
+        $comment=$_POST["backup_create_comment_set"]?$_POST["backup_create_comment"]:"";
 		$db=Db::GetInstance();
 		$host=$db->host;
 		$username=$db->username;
@@ -183,6 +185,7 @@ class Backup{
                 $info=array(
                     "filename"=>$filename,
                     "version"=>Config::GetDbVersion(),
+                    "comment"=>$comment,
                 );
 				if(file_put_contents($fullpath, $out) && file_put_contents($fullInfoPath, serialize($info))){
 					$this->filename=$filename;

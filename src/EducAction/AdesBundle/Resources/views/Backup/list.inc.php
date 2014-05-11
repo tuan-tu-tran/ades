@@ -32,6 +32,16 @@ use EducAction\AdesBundle\ViewHelper;
 				$(this).slideUp();
 				nd();
 			});
+            $("input#backup_create_comment")
+                .click(function(){
+                    if($("input#backup_create_comment_set").val()==""){
+                        $(this).select();
+                    }
+                })
+                .change(function(){
+                    $("input#backup_create_comment_set").val(1);
+                })
+            ;
 		});
 	</script>
 	<style type="text/css">
@@ -124,6 +134,10 @@ use EducAction\AdesBundle\ViewHelper;
 
 <form method="POST" action="?action=create" style="border:none;padding:0">
 <input type="submit" value="Créer une nouvelle sauvegarde"/>
+<input id="backup_create_comment" style="background-color:white;color:black" type="text" value="Ajouter un commentaire (optionnel)" name="backup_create_comment" size="40"
+    <?php Overlib::Render("Si vous le désirez, vous pouvez ajouter un commentaire qui sera lié à la sauvegarde")?>
+/>
+<input id="backup_create_comment_set" type="hidden" value="" name="backup_create_comment_set"/>
 </form>
 <?php if(count($backup_files)>0):?>
 <h3>Liste de dernières sauvegardes disponibles</h3>
@@ -134,6 +148,7 @@ use EducAction\AdesBundle\ViewHelper;
 		<td style="text-align:center">Date</td>
 		<td style="text-align:center">Version</td>
 		<td style="text-align:center">Taille</td>
+		<td style="text-align:center">Remarque</td>
 		<td style="text-align:center">Effacer</td>
 		<td style="text-align:center">Restaurer</td>
 	</tr>
@@ -156,6 +171,7 @@ use EducAction\AdesBundle\ViewHelper;
                 <?php echo $file["version"]?>
             </td>
 			<td style="text-align:right"><?php ViewHelper::FileSize($file["size"])?></td>
+            <td><?php echo htmlspecialchars($file["comment"])?></td>
 			<td style="text-align:center">
 				<a href="?action=delete&amp;file=<?php echo $file["name"]?>"
 					<?php Overlib::Render('Cliquer pour supprimer cette sauvegarde.')?>
