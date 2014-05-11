@@ -46,6 +46,7 @@ use EducAction\AdesBundle\ViewHelper;
 	</script>
 	<style type="text/css">
 		tr.backup:hover{background-color:yellow}
+        table#backup_table td{padding:5px;}
 	</style>
 <?php View::EndBlock()?>
 
@@ -142,7 +143,7 @@ use EducAction\AdesBundle\ViewHelper;
 <?php if(count($backup_files)>0):?>
 <h3>Liste de dernières sauvegardes disponibles</h3>
 
-<table border="1" cellpadding="2" style="margin:auto;margin-top:1em;">
+<table border="1" cellpadding="2" style="margin:auto;margin-top:1em;" id="backup_table">
 	<tr style="background-color:orangered">
 		<td>Fichiers de sauvegarde</td>
 		<td style="text-align:center">Date</td>
