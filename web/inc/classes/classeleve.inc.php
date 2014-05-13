@@ -394,7 +394,7 @@ class eleve
             }
             $javascript = "onclick=\"cacher('tableau',$id_TypeFait)\"";
             $titreOnglet = $prototypeFait->titreFaitId($id_TypeFait);
-            $onglets .= "<li $id $css $classe $javascript><a href='javascript:void(0)'>$titreOnglet</a></li>\n";
+            $onglets .= "<li $id $classe $javascript><a href='javascript:void(0)'>$titreOnglet</a></li>\n";
         }
         $onglets = "<ul class=\"ongletsDisc\">\n".$onglets."</ul>\n";
         return $onglets;
