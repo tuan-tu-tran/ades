@@ -35,8 +35,6 @@ class View{
 				extract($parameters);
 			}
 			require($template);
-			if(self::$current_block)
-				throw new Exception("block ".self::$current_block." was still open after rendering template $template");
 		}else throw new Exception("template not found '$template'");
 
 	}

@@ -20,58 +20,131 @@
 require "inc/init.inc.php";
 
 use EducAction\AdesBundle\View;
-use EducAction\AdesBundle\Html;
+
 
 $tree=array(
     "Entretiens"=>array(
         "Entretiens individuels"=>"javascript:console.log('1')",
         "Entretiens téléphoniques"=>"javascript:console.log('2')",
     ),
-    "Retenues"=>array(
-        "Retenues disciplinaires"=>"javascript:console.log('3')",
-        "Retenues téléphoniques"=>"javascript:console.log('4')",
+    "Retenues1"=>array(
+        "Retenues1 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues2 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues3 téléphoniques"=>"javascript:console.log('4')",
+        "Retenues4 téléphoniques"=>"javascript:console.log('4')",
+    ),
+    "Retenues2"=>array(
+        "Retenues1 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues2 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues3 téléphoniques"=>"javascript:console.log('4')",
+        "Retenues4 téléphoniques"=>"javascript:console.log('4')",
+    ),
+    /*
+    "Retenues3"=>array(
+        "Retenues1 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues2 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues3 téléphoniques"=>"javascript:console.log('4')",
+        "Retenues4 téléphoniques"=>"javascript:console.log('4')",
+    ),
+    "Retenues4"=>array(
+        "Retenues1 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues2 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues3 téléphoniques"=>"javascript:console.log('4')",
+        "Retenues4 téléphoniques"=>"javascript:console.log('4')",
+    ),
+    "Retenues17"=>array(
+        "Retenues1 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues2 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues3 téléphoniques"=>"javascript:console.log('4')",
+        "Retenues4 téléphoniques"=>"javascript:console.log('4')",
+    ),
+    "Retenues16"=>array(
+        "Retenues1 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues2 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues3 téléphoniques"=>"javascript:console.log('4')",
+        "Retenues4 téléphoniques"=>"javascript:console.log('4')",
+    ),
+    "Retenues15"=>array(
+        "Retenues1 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues2 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues3 téléphoniques"=>"javascript:console.log('4')",
+        "Retenues4 téléphoniques"=>"javascript:console.log('4')",
+    ),
+    "Retenues14"=>array(
+        "Retenues1 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues2 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues3 téléphoniques"=>"javascript:console.log('4')",
+        "Retenues4 téléphoniques"=>"javascript:console.log('4')",
+    ),
+    "Retenues13"=>array(
+        "Retenues1 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues2 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues3 téléphoniques"=>"javascript:console.log('4')",
+        "Retenues4 téléphoniques"=>"javascript:console.log('4')",
+    ),
+    "Retenues12"=>array(
+        "Retenues1 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues2 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues3 téléphoniques"=>"javascript:console.log('4')",
+        "Retenues4 téléphoniques"=>"javascript:console.log('4')",
+    ),
+    "Retenues11"=>array(
+        "Retenues1 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues2 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues3 téléphoniques"=>"javascript:console.log('4')",
+        "Retenues4 téléphoniques"=>"javascript:console.log('4')",
+    ),
+    "Retenues10"=>array(
+        "Retenues1 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues2 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues3 téléphoniques"=>"javascript:console.log('4')",
+        "Retenues4 téléphoniques"=>"javascript:console.log('4')",
+    ),
+    "Retenues9"=>array(
+        "Retenues1 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues2 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues3 téléphoniques"=>"javascript:console.log('4')",
+        "Retenues4 téléphoniques"=>"javascript:console.log('4')",
+    ),
+    "Retenues8"=>array(
+        "Retenues1 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues2 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues3 téléphoniques"=>"javascript:console.log('4')",
+        "Retenues4 téléphoniques"=>"javascript:console.log('4')",
+    ),
+    "Retenues7"=>array(
+        "Retenues1 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues2 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues3 téléphoniques"=>"javascript:console.log('4')",
+        "Retenues4 téléphoniques"=>"javascript:console.log('4')",
+    ),
+     */
+    "Retenues6"=>array(
+        "Retenues1 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues2 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues3 téléphoniques"=>"javascript:console.log('4')",
+        "Retenues4 téléphoniques"=>"javascript:console.log('4')",
+    ),
+    "Retenues5"=>array(
+        "Retenues1 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues2 disciplinaires"=>"javascript:console.log('3')",
+        "Retenues3 téléphoniques"=>"javascript:console.log('4')",
+        "Retenues4 téléphoniques"=>"javascript:console.log('4')",
     ),
     "Félicitations"=>"javascript:console.log('5')",
 );
 
+$menu=new EducAction\AdesBundle\Menu;
+$menu->SetTree($tree);
+
 ?>
 
 <?php View::StartBlock("post_head")?>
-    <?php Html::Css("css/menu_facts.css")?>
-    <?php Html::Script("js/jquery-1.11.0.min.js")?>
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $("ul.menu_facts > li > ul > li, ul.menu_facts > li > div.item").click(function(){
-                $(this).find("a").each(function(){this.click();});
-            });
-        });
-    </script>
+<?php $menu->RenderHead();?>
 <?php View::EndBlock()?>
 
 <?php View::StartBlock("content")?>
-<ul class="menu_facts">
-<?php foreach($tree as $label=>$value):?><li>
-        <?php if (is_array($value)):?>
-            <div class="top_label with_children"><?php echo Html::Encode($label)?></div>
-            <div class="filler"></div>
-            <ul>
-                <?php foreach($value as $sublabel => $url):?>
-                    <li>
-                        <?php echo Html::Encode($sublabel)?>
-                        <a href="<?php echo Html::Encode($url)?>"></a>
-                    </li>
-                <?php endforeach?>
-            </ul>
-        <?php elseif (is_string($value)):?>
-            <div class="item top_label">
-                <?php echo Html::Encode($label)?>
-                <a href="<?php echo Html::Encode($value)?>"></a>
-            </div>
-        <?php else:?>
-            <?php throw new Exception("value of label '$label' must be string or array. Got '".gettype($value)."' instead (".var_export($value, true).")");?>
-        <?php endif?>
-    </li><?php endforeach?>
-</ul>
+<?php $menu->RenderBody();?>
 <?php View::EndBlock()?>
 
 <?php View::Embed("layout.inc.php")?>
