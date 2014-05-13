@@ -17,12 +17,17 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-include ("inc/prive.inc.php");
+require "inc/init.inc.php";
+EducAction\AdesBundle\User::CheckIfLogged();
 include ("inc/classes/classeleve.inc.php");
-include ("inc/fonctions.inc.php");
 require ("inc/funcdate.inc.php");
 include ("config/constantes.inc.php");
 Normalisation();
+
+$editPossible = (utilisateurParmi ("educ", "admin"));
+if ($editPossible) {
+    $menuFacts=new EducAction\AdesBundle\Menu();
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -35,6 +40,10 @@ Normalisation();
   <script language="javascript" type="text/javascript" src="inc/fonctions.js"></script>
   <script language="javascript" type="text/javascript" src="inc/onglets.js"></script>
   <script type="text/javascript" src="inc/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
+  <?php if ($editPossible):?>
+        <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+        <?php $menuFacts->RenderHead(); ?>
+  <?php endif ?>
 </head>
 <body>
 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
@@ -53,10 +62,12 @@ switch ($mode)
 	{
 	case 'voir':
 		$eleve = new eleve($ideleve);
-		$editPossible = (utilisateurParmi ("educ", "admin"));
 			
 		// inclure le menu horizontal
-		if ($editPossible) echo $eleve->menuhorz();
+        if ($editPossible) {
+            $eleve->menuhorz($menuFacts);
+            $menuFacts->RenderBody();
+        }
 		// indiquer les références de l'élève: nom, prénom et classe
 		echo $eleve->NomPrClasse ($editPossible);
 		// présentation de la fiche abrégée pour impression; invisible à l'écran

@@ -269,21 +269,47 @@ class eleve
     }
 
     // menu horizontal
-    function menuhorz ()
+    function menuhorz ($menu)
     {
         $ideleve = $this->ideleve();
         $prototypeFaits = new prototypeFait();
         $listeTitres = $prototypeFaits->tableauTitresFaits();
-        $menu = "<table class=\"inv menuhorz\" border=\"0\">\n<tr>\n<td>\n";
 
+        //read the facts menu composition: key is group name, value is comma separated fact ids
+        $groupsConfigFile=DIRNAME(__FILE__)."/../../../local/menu_facts.ini";
+        if (file_exists($groupsConfigFile)) {
+            $groups=parse_ini_file($groupsConfigFile, FALSE);
+        } else {
+            $groups=array();
+        }
+        $groupByFactId=array();
+        foreach ($groups as $groupName=>$facts) {
+            foreach (explode(",",$facts) as $factId) {
+                $factId=trim($factId);
+                $groupByFactId[$factId]=$groupName;
+            }
+        }
+
+        //build the tree
+        $tree=array();
         foreach ($listeTitres as $unTitre) {
             $id = $unTitre['id_TypeFait'];
             $intitule = $unTitre['titreFait'];
-            $menu .= "<li><a href=\"fait.php?mode=nouveau&amp;ideleve=$ideleve&amp;type=$id\" ";
-            $menu .= "title=\"Nouveau $intitule\">$intitule</a></li>\n";
+            $link = "fait.php?mode=nouveau&ideleve=$ideleve&type=$id";
+            if (isset($groupByFactId[$id])) {
+                //fact is in a group
+                $groupName=$groupByFactId[$id];
+                if (!isset($tree[$groupName])) {
+                    $tree[$groupName]=array();
+                }
+                $tree[$groupName][$intitule]=$link;
+            } else {
+                //fact is no in any group
+                $tree[$intitule]=$link;
+            }
         }
-        $menu .= "</td>\n</tr>\n</table>\n";
-        return $menu;
+
+        $menu->SetTree($tree);
     }
 
     function enregistrerFormulaire ($post,$champs)
