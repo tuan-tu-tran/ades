@@ -39,13 +39,8 @@ class View{
 
 	}
 
-	public static function Embed($template){
-		$template=self::GetTemplateFile($template);
-		if(file_exists($template)){
-			require($template);
-			if(self::$current_block)
-				throw new Exception("block ".self::$current_block." was still open after embedding template $template");
-		}else throw new Exception("template not found '$template'");
+	public static function Embed($template, $parameters=NULL){
+        self::Render($template);
 	}
 
 	private static function GetTemplateFile($template)
