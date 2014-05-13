@@ -17,7 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
+require_once DIRNAME(__FILE__)."/../../../vendor/autoload.php";
 require ("inc/classes/classDescriptionFait.inc.php");
+
+use EducAction\AdesBundle\Tools;
 
 class eleve
 {
@@ -268,8 +271,25 @@ class eleve
         return $texte;
     }
 
+    private static function AddGroupToMenuTree(&$tree, $groupName, $facts, &$factInfoById, &$errors)
+    {
+        $array=array();
+        foreach (explode(",",$facts) as $factId) {
+            $factId=trim($factId);
+            if ($factInfo=Tools::TryGet($factInfoById, $factId, NULL)) {
+                $array[$factInfo["title"]]=$factInfo["link"];
+                unset($factInfoById[$factId]);
+            } else {
+                $errors[]="Le groupe '$groupName' contient un identifiant de fait non reconnu '$factId'.";
+            }
+        }
+        if ($array) {
+            $tree[$groupName] = $array;
+        }
+    }
+
     // menu horizontal
-    function menuhorz ($menu)
+    function menuhorz ($menu, &$errors)
     {
         $ideleve = $this->ideleve();
         $prototypeFaits = new prototypeFait();
@@ -278,35 +298,51 @@ class eleve
         //read the facts menu composition: key is group name, value is comma separated fact ids
         $groupsConfigFile=DIRNAME(__FILE__)."/../../../local/menu_facts.ini";
         if (file_exists($groupsConfigFile)) {
-            $groups=parse_ini_file($groupsConfigFile, FALSE);
+            $menuConfig=parse_ini_file($groupsConfigFile, TRUE);
         } else {
-            $groups=array();
+            $menuConfig=array();
+            $order=array();
         }
-        $groupByFactId=array();
-        foreach ($groups as $groupName=>$facts) {
-            foreach (explode(",",$facts) as $factId) {
-                $factId=trim($factId);
-                $groupByFactId[$factId]=$groupName;
+        $groups=Tools::TryGet($menuConfig,"composition", array());
+        $styleConfig=Tools::TryGet($menuConfig,"style", array());
+        $order=Tools::TryGet($styleConfig, "order", array());
+        if ($order) {
+            $order=explode(",",$order);
+        }
+
+        $factInfoById=array();
+        foreach ($listeTitres as $unTitre) {
+            $id = $unTitre['id_TypeFait'];
+            $title = $unTitre['titreFait'];
+            $link = "fait.php?mode=nouveau&ideleve=$ideleve&type=$id";
+            $factInfoById[$id]=array(
+                "title"=>$title,
+                "link"=>$link,
+            );
+        }
+
+        $tree=array();
+        $errors=[];
+        foreach($order as $item){
+            $item=trim($item);
+            if (isset($groups[$item])) {
+                self::AddGroupToMenuTree($tree, $item, $groups[$item], $factInfoById, $errors);
+                unset($groups[$item]);
+            } elseif (isset($factInfoById[$item])) {
+                $factInfo=$factInfoById[$item];
+                $tree[$factInfo["title"]]=$factInfo["link"];
+                unset($factInfoById[$item]);
+            } else {
+                $errors[]="L'ordre contient une valeur non-reconnue: '$item'.";
             }
         }
 
-        //build the tree
-        $tree=array();
-        foreach ($listeTitres as $unTitre) {
-            $id = $unTitre['id_TypeFait'];
-            $intitule = $unTitre['titreFait'];
-            $link = "fait.php?mode=nouveau&ideleve=$ideleve&type=$id";
-            if (isset($groupByFactId[$id])) {
-                //fact is in a group
-                $groupName=$groupByFactId[$id];
-                if (!isset($tree[$groupName])) {
-                    $tree[$groupName]=array();
-                }
-                $tree[$groupName][$intitule]=$link;
-            } else {
-                //fact is no in any group
-                $tree[$intitule]=$link;
-            }
+        foreach($groups as $groupName=>$facts) {
+            self::AddGroupToMenuTree($tree, $groupName, $facts, $factInfoById, $errors);
+        }
+
+        foreach($factInfoById as $id=>$factInfo) {
+            $tree[$factInfo["title"]]=$factInfo["link"];
         }
 
         $menu->SetTree($tree);

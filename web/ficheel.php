@@ -65,7 +65,17 @@ switch ($mode)
 			
 		// inclure le menu horizontal
         if ($editPossible) {
-            $eleve->menuhorz($menuFacts);
+            $eleve->menuhorz($menuFacts,$errors);
+            if ($errors) {
+                echo "<div>\n";
+                echo "<p>Le fichier de configuration des groups de faits /local/menu_facts.ini contient des erreurs:</p>\n";
+                echo "<ul>\n";
+                foreach($errors as $e) {
+                    echo "<li>- ".EducAction\AdesBundle\Html::Encode($e)."</li>\n";
+                }
+                echo "</ul>\n";
+                echo "</div>\n";
+            }
             $menuFacts->RenderBody();
         }
 		// indiquer les références de l'élève: nom, prénom et classe
