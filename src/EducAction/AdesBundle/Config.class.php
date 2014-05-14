@@ -30,7 +30,7 @@ class Config{
 				self::$config[$row["con_key"]]=$row["con_value"];
 			}
 		}
-		return Tools::TryGet(self::$config, $key, $default);
+		return Tools::GetDefault(self::$config, $key, $default);
 	}
 
 	public static function Set($key, $value){

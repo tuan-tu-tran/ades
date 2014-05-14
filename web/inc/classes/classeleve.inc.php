@@ -276,7 +276,7 @@ class eleve
         $array=array();
         foreach (explode(",",$facts) as $factId) {
             $factId=trim($factId);
-            if ($factInfo=Tools::TryGet($factInfoById, $factId, NULL)) {
+            if ($factInfo=Tools::GetDefault($factInfoById, $factId, NULL)) {
                 $array[$factInfo["title"]]=$factInfo["link"];
                 unset($factInfoById[$factId]);
             } else {
@@ -303,9 +303,9 @@ class eleve
             $menuConfig=array();
             $order=array();
         }
-        $groups=Tools::TryGet($menuConfig,"composition", array());
-        $styleConfig=Tools::TryGet($menuConfig,"style", array());
-        $order=Tools::TryGet($styleConfig, "order", array());
+        $groups=Tools::GetDefault($menuConfig,"composition", array());
+        $styleConfig=Tools::GetDefault($menuConfig,"style", array());
+        $order=Tools::GetDefault($styleConfig, "order", array());
         if ($order) {
             $order=explode(",",$order);
         }
