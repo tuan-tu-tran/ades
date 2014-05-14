@@ -1,4 +1,4 @@
-CREATE TABLE  `ades`.`ades_config` (
+CREATE TABLE  `ades_config` (
   `con_id` int(11) NOT NULL AUTO_INCREMENT,
   `con_key` varchar(45) NOT NULL,
   `con_value` varchar(45) NOT NULL,
