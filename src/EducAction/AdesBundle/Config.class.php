@@ -78,4 +78,9 @@ class Config{
 	{
 		return DIRNAME(__FILE__)."/../../../web/config/confbd.inc.php";
 	}
+
+    public static function LocalFile($file)
+    {
+		return DIRNAME(__FILE__)."/../../../local/$file";
+    }
 }
