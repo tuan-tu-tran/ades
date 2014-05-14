@@ -27,13 +27,19 @@ class View{
 	const PREPEND="prepend";
 	const APPEND="append";
 
-	public static function Render($template, $parameters=NULL){
+	public static function Render($template){
 		$template=self::GetTemplateFile($template);
 		if(file_exists($template)){
-			if($parameters!=NULL){
-				if(!is_array($parameters)) $parameters=get_object_vars($parameters);
-				extract($parameters);
-			}
+            $i=0;
+            foreach (func_get_args() as $parameters) {
+                if ($i>0 && $parameters) {
+                    if (!is_array($parameters)) {
+                        $parameters=get_object_vars($parameters);
+                    }
+                    extract($parameters);
+                }
+                ++$i;
+            }
 			require($template);
 		}else throw new Exception("template not found '$template'");
 
