@@ -55,4 +55,14 @@ class Tools{
 		return isset($array[$key])?$array[$key]:$default;
 	}
 
+    public static function TryGet(&$array, $key, &$value)
+    {
+        if (isset($array[$key])) {
+            $value=$array[$key];
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+
 }
