@@ -24,9 +24,12 @@ require ("inc/funcdate.inc.php");
 include ("config/constantes.inc.php");
 Normalisation();
 
+$mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : Null;
+$ideleve = isset($_GET['ideleve']) ? $_GET['ideleve'] : Null;
+$page = isset($_GET['page']) ? $_GET['page'] : Null;
 $editPossible = (utilisateurParmi ("educ", "admin"));
-if ($editPossible) {
-    $menuFacts=new EducAction\AdesBundle\Menu();
+if ($editPossible && $mode=="voir") {
+    $menuFacts=EducAction\AdesBundle\Controller\StudentFile::CreateMenu($ideleve, $menuErrors);
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -55,9 +58,6 @@ require ("inc/menu.inc.php");
 ?>
 <div id="texte">
 <?php 
-$mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : Null;
-$ideleve = isset($_GET['ideleve']) ? $_GET['ideleve'] : Null;
-$page = isset($_GET['page']) ? $_GET['page'] : Null;
 switch ($mode)
 	{
 	case 'voir':
@@ -65,12 +65,11 @@ switch ($mode)
 			
 		// inclure le menu horizontal
         if ($editPossible) {
-            $eleve->menuhorz($menuFacts,$errors);
-            if ($errors) {
+            if ($menuErrors) {
                 echo "<div>\n";
                 echo "<p>Le fichier de configuration des groups de faits /local/menu_facts.ini contient des erreurs:</p>\n";
                 echo "<ul>\n";
-                foreach($errors as $e) {
+                foreach($menuErrors as $e) {
                     echo "<li>- ".EducAction\AdesBundle\Html::Encode($e)."</li>\n";
                 }
                 echo "</ul>\n";
