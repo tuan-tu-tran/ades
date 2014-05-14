@@ -16,34 +16,10 @@
  * 
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-namespace EducAction\AdesBundle;
-
-class Menu
-{
-    private $tree=array();
-    public $horizontalSpacing = "0px";
-
-    public function __construct($id)
-    {
-        $this->id=$id;
+*/
+?>
+<style type="text/css">
+    ul#<?php echo $id ?> > li {
+        margin-right: <?php echo $horizontalSpacing;?>;
     }
-
-    public function SetTree($tree)
-    {
-        $this->tree=$tree;
-    }
-
-    public function RenderBody()
-    {
-        View::Render("Menu/menu.inc.php", array("tree"=>$this->tree), $this);
-    }
-
-    public function RenderHead($return=FALSE)
-    {
-        Html::Css("css/menu.css");
-        Html::Script("js/menu.js");
-        View::Render("Menu/style.css.php", $this);
-    }
-}
+</style>

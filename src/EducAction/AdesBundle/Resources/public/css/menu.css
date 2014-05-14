@@ -24,10 +24,6 @@ ul.menu_facts {
 
 ul.menu_facts > li{
   display:inline-block;
-  /*
-  margin-right:5px;
-  margin-bottom:5px;
-  */
 }
 
 ul.menu_facts > li > div.top_label{
