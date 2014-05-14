@@ -16,3 +16,4 @@ jquery-.*\.js$
 ^web/gpl.txt
 ^local/README.txt$
 .gitkeep$
+^doc/config_examples

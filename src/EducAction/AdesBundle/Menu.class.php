@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2014 Educ-Action
+ * Copyright (c) 2014 Tuan-Tu TRAN
  * 
  * This file is part of ADES.
  * 
@@ -16,27 +16,34 @@
  * 
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 namespace EducAction\AdesBundle;
 
-class Html{
-	public static function Script($source){
-		echo "<script type='text/javascript' src='$source'></script>";
-	}
+class Menu
+{
+    private $tree=array();
+    public $horizontalSpacing = "0px";
 
-	public static function Css($href){
-		echo "<link rel='stylesheet' href='$href' type='text/css' />";
-	}
-
-    /**
-     * A short hand to call htmlspecialchars with custom default values:
-     * * ENT_QUOTES|ENT_HTML401
-     * * ISO8859-1
-     * * double_encode = TRUE
-     */
-    public static function Encode($string, $flags = ENT_QUOTES, $encoding="ISO8859-1", $double_encode=TRUE)
+    public function __construct($id)
     {
-        return htmlspecialchars($string, $flags, $encoding, $double_encode);
+        $this->id=$id;
+    }
+
+    public function SetTree($tree)
+    {
+        $this->tree=$tree;
+    }
+
+    public function RenderBody()
+    {
+        View::Render("Menu/menu.inc.php", array("tree"=>$this->tree), $this);
+    }
+
+    public function RenderHead($return=FALSE)
+    {
+        Html::Css("css/menu.css");
+        Html::Script("js/menu.js");
+        View::Render("Menu/style.css.php", $this);
     }
 }

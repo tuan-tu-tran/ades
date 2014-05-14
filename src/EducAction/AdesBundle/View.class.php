@@ -27,27 +27,26 @@ class View{
 	const PREPEND="prepend";
 	const APPEND="append";
 
-	public static function Render($template, $parameters=NULL){
+	public static function Render($template){
 		$template=self::GetTemplateFile($template);
 		if(file_exists($template)){
-			if($parameters!=NULL){
-				if(!is_array($parameters)) $parameters=get_object_vars($parameters);
-				extract($parameters);
-			}
+            $i=0;
+            foreach (func_get_args() as $parameters) {
+                if ($i>0 && $parameters) {
+                    if (!is_array($parameters)) {
+                        $parameters=get_object_vars($parameters);
+                    }
+                    extract($parameters);
+                }
+                ++$i;
+            }
 			require($template);
-			if(self::$current_block)
-				throw new Exception("block ".self::$current_block." was still open after rendering template $template");
 		}else throw new Exception("template not found '$template'");
 
 	}
 
-	public static function Embed($template){
-		$template=self::GetTemplateFile($template);
-		if(file_exists($template)){
-			require($template);
-			if(self::$current_block)
-				throw new Exception("block ".self::$current_block." was still open after embedding template $template");
-		}else throw new Exception("template not found '$template'");
+	public static function Embed($template, $parameters=NULL){
+        self::Render($template);
 	}
 
 	private static function GetTemplateFile($template)

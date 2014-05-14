@@ -51,8 +51,18 @@ class Tools{
 		return error_get_last()["message"];
 	}
 
-	public static function TryGet(&$array, $key, $default=NULL){
+	public static function GetDefault(&$array, $key, $default=NULL){
 		return isset($array[$key])?$array[$key]:$default;
 	}
+
+    public static function TryGet(&$array, $key, &$value)
+    {
+        if (isset($array[$key])) {
+            $value=$array[$key];
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
 
 }

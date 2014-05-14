@@ -1,0 +1,95 @@
+/**
+ * Copyright (c) 2014 Tuan-Tu TRAN
+ * 
+ * This file is part of ADES.
+ * 
+ * ADES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * ADES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+ul.menu_facts {
+  margin-left:1em;
+  padding:0px;
+}
+
+ul.menu_facts > li{
+  display:inline-block;
+}
+
+ul.menu_facts > li > div.top_label{
+  border: 1px solid blue;
+  color: white;
+  background-color: #0033FF;
+  padding:5px;
+}
+
+ul.menu_facts > li > div.top_label.with_children{
+  cursor:default;
+}
+
+ul.menu_facts > li:hover > div.top_label.with_children{
+  border: 1px solid gray;
+  background-color: #0099FF;
+  color:white;
+  border-bottom:none;
+}
+
+ul.menu_facts > li > div.filler{
+  height:3px;
+  border-left:1px solid gray;
+  border-right:1px solid gray;
+  background-color: #0099FF;
+  position:absolute;
+  display:none;
+}
+
+ul.menu_facts > li:hover > div.filler{
+  display:block;
+}
+
+ul.menu_facts > li > ul{
+  padding:0px;
+  padding-top:3px;
+  display:none;
+  position:absolute;
+}
+
+ul.menu_facts > li:hover > ul{
+  display:block;
+}
+
+ul.menu_facts > li > ul > li{
+  padding:3px;
+  padding-left:10px;
+  padding-right:10px;
+  border:1px solid gray;
+  cursor:pointer;
+  background-color: #0099FF;
+  color:white;
+}
+
+ul.menu_facts > li > div.item{
+  cursor:pointer;
+  color: #ffffff;
+  background-color: #6699ff;
+}
+
+ul.menu_facts > li > ul > li:hover, ul.menu_facts .item:hover {
+    background-color: #ffff99;
+    color:black;
+}
+
+ul.menu_facts > li > ul > li:active, ul.menu_facts .item:active {
+  color: white;
+  background-color:black;
+}

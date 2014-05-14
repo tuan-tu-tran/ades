@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2014 Educ-Action
+ * Copyright (c) 2014 Tuan-Tu TRAN
  * 
  * This file is part of ADES.
  * 
@@ -16,27 +16,35 @@
  * 
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 namespace EducAction\AdesBundle;
 
-class Html{
-	public static function Script($source){
-		echo "<script type='text/javascript' src='$source'></script>";
-	}
-
-	public static function Css($href){
-		echo "<link rel='stylesheet' href='$href' type='text/css' />";
-	}
-
-    /**
-     * A short hand to call htmlspecialchars with custom default values:
-     * * ENT_QUOTES|ENT_HTML401
-     * * ISO8859-1
-     * * double_encode = TRUE
-     */
-    public static function Encode($string, $flags = ENT_QUOTES, $encoding="ISO8859-1", $double_encode=TRUE)
+class ClassLoader
+{
+    private $root;
+    private $mapping;
+    public function __construct($root, $array)
     {
-        return htmlspecialchars($string, $flags, $encoding, $double_encode);
+        $this->root = $root;
+        $this->mapping=$array;
+    }
+    
+    public function loadClass($classname)
+    {
+        if (Tools::TryGet($this->mapping, $classname, $file)) {
+            $file=$this->root."/$file";
+            if (!file_exists($file)) {
+                throw new Exception("could not load class $classname : file $file does not exist");
+            }
+
+            require $file;
+        }
+    }
+
+    public function Register()
+    {
+        spl_autoload_register(array($this,"loadClass"));
     }
 }
+

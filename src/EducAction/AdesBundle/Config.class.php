@@ -30,7 +30,7 @@ class Config{
 				self::$config[$row["con_key"]]=$row["con_value"];
 			}
 		}
-		return Tools::TryGet(self::$config, $key, $default);
+		return Tools::GetDefault(self::$config, $key, $default);
 	}
 
 	public static function Set($key, $value){
@@ -78,4 +78,9 @@ class Config{
 	{
 		return DIRNAME(__FILE__)."/../../../web/config/confbd.inc.php";
 	}
+
+    public static function LocalFile($file)
+    {
+		return DIRNAME(__FILE__)."/../../../local/$file";
+    }
 }
