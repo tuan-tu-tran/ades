@@ -21,27 +21,15 @@
 
 namespace EducAction\AdesBundle;
 
+use Symfony\Component\Process\Process as SymfonyProcess;
+
 class Process{
 	public static function Execute($cmd, $in, &$out, &$err, &$retval){
-		$inoutdesc=array(
-			0=>array("pipe","r"),
-			1=>array("pipe","w"),
-			2=>array("pipe","w"),
-		);
-		if($proc=proc_open($cmd,$inoutdesc, $pipes)){
-			if($in){
-				fwrite($pipes[0], $in);
-			}
-			fclose($pipes[0]);
-			$out=stream_get_contents($pipes[1]);
-			fclose($pipes[1]);
-			$err=stream_get_contents($pipes[2]);
-			fclose($pipes[2]);
-			$retval=proc_close($proc);
-			return true;
-		}
-		else{
-			return false;
-		}
+        $process=new SymfonyProcess($cmd);
+        $process->setStdin($in);
+        $retval=$process->run();
+        $out=$process->getOutput();
+        $err=$process->getErrorOutput();
+        return $process->isSuccessful();
 	}
 }
