@@ -131,7 +131,14 @@ class Db{
 
     private static function GetDataTableFromResultInstance($result)
     {
-        return $result->fetch_all(MYSQLI_BOTH);
+        if (method_exists($result,"fetch_all")) {
+            $res = $result->fetch_all(MYSQLI_BOTH);
+        } else {
+            for ($res = array(); $tmp = $result->fetch_array(MYSQLI_BOTH);) {
+                $res[] = $tmp;
+            }
+        }
+        return $res;
     }
 
 	public function scalar($query){
