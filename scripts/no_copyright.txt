@@ -18,3 +18,4 @@ jquery-.*\.js$
 .gitkeep$
 ^doc/config_examples
 .htaccess$
+^composer\.(lock|json)$
