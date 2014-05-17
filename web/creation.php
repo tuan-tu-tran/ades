@@ -102,7 +102,22 @@ $install->parseRequest();
 <?php elseif($install->view==Install::VIEW_FILE_WRITTEN):?>
 
 		<p>Fichier de configuration créé avec succès</p>
-		<?php $install->GetCreateTableLink("Créer les tables de données")?>
+        <?php if (!$install->tables) :?>
+            <p><?php $install->GetCreateTableLink("Créer les tables de données")?></p>
+        <?php else: ?>
+            <p class="impt">ATTENTION! Des tables existent déjà dans la db</p>
+            <ul>
+                <?php foreach ($install->tables as $table) :?>
+                    <li>- <?php echo $table?></li>
+                <?php endforeach;?>
+            </ul>
+            <p><?php $install->GetCreateTableLink("Créer les tables de données quand même")?></p>
+            <?php if($install->CanConfigureSchool()):?>
+                <p><?php $install->GetSchoolConfigLink("Configurer le nom de l'école et le titre principal");?></p>
+            <?php else:?>
+                <p><a href="index.php">Terminer l'installation</a></p>
+            <?php endif;?>
+        <?php endif ?>
 
 <?php elseif($install->view==Install::VIEW_FILE_NOT_WRITTEN):?>
 

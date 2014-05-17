@@ -74,6 +74,12 @@ class Install{
 					$this->view=self::VIEW_OVERWRITE_FORBIDDEN;
 				else if($this->ConfigIsValid()){
 					if($this->WriteDbConfig()){
+                        //test if there already are tables in the db:
+                        $result=Db::GetInstance()->query("SHOW TABLES");
+                        $this->tables=array();
+                        foreach ($result as $row) {
+                            $this->tables[] = $row[0];
+                        }
 						//show config file successfully written
 						$this->view=self::VIEW_FILE_WRITTEN;
 					}else{
