@@ -20,11 +20,11 @@
 
 namespace EducAction\AdesBundle\Controller;
 
-use EducAction\AdesBundle;
 use EducAction\AdesBundle\Db;
 use EducAction\AdesBundle\Path;
 use EducAction\AdesBundle\Config;
 use EducAction\AdesBundle\Tools;
+use EducAction\AdesBundle\View;
 
 class Install{
 	const ACTION_INFO="info";
@@ -53,7 +53,7 @@ class Install{
 
 		switch($action){
 			case self::ACTION_INFO:
-				$this->view=self::VIEW_INFO;
+                $this->indexAction();
 				break;
 
 			case self::ACTION_CONFIG_DB:
@@ -129,6 +129,18 @@ class Install{
 				$this->view=self::VIEW_INFO;
 		}
 	}
+
+    private function Render($view)
+    {
+        View::Render("Install/$view", array("install"=>$this));
+        exit;
+    }
+
+    private function indexAction()
+    {
+        $this->Render("index.inc.php");
+        $this->view=self::VIEW_INFO;
+    }
 
 	private function SchoolConfigIsValid(){
 		$this->schoolname = $_POST["schoolname"];

@@ -48,25 +48,6 @@ $install->parseRequest();
 <div id="texte">
 <h2>Installation d'ADES</h2>
 <?php if($install->view==Install::VIEW_INFO):?>
-
-	<p>Cet utilitaire va:</p>
-	<ul>
-		<li>+ créer votre fichier de configuration</li>
-		<li>+ créer les tables de la base de données</li>
-	</ul>
-
-	<p>Avant de commencer veuillez préparer les informations suivantes:</p>
-	<ul>
-		<li>+ votre serveur sql</li>
-		<li>+ l'utilisateur sql</li>
-		<li>+ le mot de passe</li>
-		<li>+ le nom de la base de données</li>
-	</ul>
-
-	<p><big>ETES VOUS SÛR(E) DE VOULOIR POURSUIVRE?</big></p>
-
-	<p><?php $install->GetDbConfigLink("Oui, je sais ce que je fais");?></p>
-
 <?php elseif($install->view==Install::VIEW_DB_CONFIG_FORM || $install->view==Install::VIEW_INVALID_CONFIG_SUBMITTED): ?>
 
 		<form name="form" method="post" action="<?php echo $install->GetDbConfigSubmitUrl()?>">
