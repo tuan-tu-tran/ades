@@ -57,16 +57,7 @@ class Install{
 				break;
 
 			case self::ACTION_CONFIG_DB:
-				if(file_exists(Config::DbConfigFile()))
-					$this->view=self::VIEW_OVERWRITE_FORBIDDEN;
-				else{
-					//show config form
-					$this->host=NULL;
-					$this->username=NULL;
-					$this->pwd=NULL;
-					$this->dbname=NULL;
-					$this->view=self::VIEW_DB_CONFIG_FORM;
-				}
+                $this->configureDbAction();
 				break;
 
 			case self::ACTION_SUBMIT_DB_CONFIG:
@@ -140,6 +131,20 @@ class Install{
     {
         $this->Render("index.inc.php");
         $this->view=self::VIEW_INFO;
+    }
+
+    private function configureDbAction()
+    {
+        if(file_exists(Config::DbConfigFile())) {
+            $this->Render("overwrite_forbidden.inc.php");
+        } else {
+            //show config form
+            $this->host=NULL;
+            $this->username=NULL;
+            $this->pwd=NULL;
+            $this->dbname=NULL;
+            $this->Render("db_config_form.inc.php");
+        }
     }
 
 	private function SchoolConfigIsValid(){
