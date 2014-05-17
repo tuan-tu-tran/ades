@@ -48,6 +48,17 @@ $archive="archive.zip";
 if (file_exists($archive)) {
     rm(".", array("./local","./$archive")) or error("could not empty current folder ");
     
+    $config_files=array(
+        "web/config/confbd.inc.php",
+        "web/config/constantes.inc.php",
+    );
+    foreach ($config_files as $file) {
+        $dst="local/".basename($filename);
+        if (file_exists($file) && !file_exists($dst)) {
+            rename($file, $dst) or error("could not move $file to local");
+        }
+    }
+
     if ($renamed_local=file_exists("local")) {
         rename("local","local_bkp") or error("could not rename local to local_bkp");
     }
