@@ -53,7 +53,7 @@ if (file_exists($archive)) {
         "web/config/constantes.inc.php",
     );
     foreach ($config_files as $file) {
-        $dst="local/".basename($filename);
+        $dst="local/".basename($file);
         if (file_exists($file) && !file_exists($dst)) {
             rename($file, $dst) or error("could not move $file to local");
         }
