@@ -27,7 +27,6 @@ use EducAction\AdesBundle\Tools;
 use EducAction\AdesBundle\View;
 
 class Install{
-	const ACTION_INFO="info";
 	const ACTION_CONFIG_DB="configure_db";
 	const ACTION_SUBMIT_DB_CONFIG="write_db_config";
 	const ACTION_CREATE_TABLES="create_tables";
@@ -49,13 +48,9 @@ class Install{
 
 	public function parseRequest(){
 		//get the action
-		$action = isset($_GET['action'])?$_GET['action']:self::ACTION_INFO;
+		$action = Tool::Get($_GET,"action");
 
 		switch($action){
-			case self::ACTION_INFO:
-                $this->indexAction();
-				break;
-
 			case self::ACTION_CONFIG_DB:
                 $this->configureDbAction();
 				break;
@@ -117,7 +112,8 @@ class Install{
 				}
 				break;
 			default:
-				$this->view=self::VIEW_INFO;
+                $this->indexAction();
+                break;
 		}
 	}
 
