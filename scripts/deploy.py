@@ -49,6 +49,7 @@ import optparse
 import ConfigParser
 import logging
 import sys
+import urllib2
 logging.basicConfig(format="%(message)s", level=logging.INFO)
 logger=logging.getLogger()
 
@@ -243,9 +244,13 @@ def deploy(config_file, archive, option):
 		if config.has_option(section, "url"):
 			logger.info("")
 			url=config.get(section, "url").rstrip("/")+"/extract.php"
-			logger.info("wget %s", url)
-			if os.system("wget %s -O-" %url)!=0:
-				logger.error("error: it seems we could not call the extract script at %s", url)
+			logger.info("calling extract script at %s", url)
+			try:
+				resp=urllib2.urlopen(url)
+				logger.info(resp.read())
+			except:
+				t,e,tb=sys.exc_info()
+				logger.error("error while opening %s : %s", url, e)
 				sys.exit(1)
 		sys.exit(0)
 
