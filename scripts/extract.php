@@ -24,12 +24,12 @@ function error($msg)
     die("error: $msg: ".error_get_last()["message"]);
 }
 
-function rm($path, $except)
+function rm($path, $except=NULL)
 {
     if(is_dir($path)) {
         $ls=scandir($path);
         foreach($ls as $subpath) {
-            if($subpath!="." && $subpath!=".." && !in_array("$path/$subpath", $except)){
+            if($subpath!="." && $subpath!=".." && (!$except || !in_array("$path/$subpath", $except)) ){
                 rm($path."/".$subpath, $except) or error("could not remove $path/$subpath");
             }
         }
