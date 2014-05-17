@@ -21,7 +21,7 @@ header("Content-type: text/plain");
 
 function error($msg)
 {
-    die("$msg: ".error_get_last()["message"]);
+    die("error: $msg: ".error_get_last()["message"]);
 }
 
 function rm($path, $except)
@@ -61,5 +61,5 @@ if (file_exists($archive)) {
     rm($archive) or error("could not delete $archive");
     echo "archive extracted";
 }else{
-    die("no archive");
+    die("error: no archive");
 }
