@@ -130,7 +130,6 @@ class Install{
                     $this->tables[] = $row[0];
                 }
                 //show config file successfully written
-                $this->view=self::VIEW_FILE_WRITTEN;
                 $this->Render("db_config_written.inc.php");
             }else{
                 //show file could not be written + error
