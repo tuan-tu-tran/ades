@@ -48,7 +48,7 @@ class Install{
 
 	public function parseRequest(){
 		//get the action
-		$action = Tool::Get($_GET,"action");
+		$action = Tools::GetDefault($_GET,"action");
 
 		switch($action){
 			case self::ACTION_CONFIG_DB:
