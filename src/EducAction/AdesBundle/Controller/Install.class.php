@@ -28,7 +28,6 @@ use EducAction\AdesBundle\View;
 
 class Install{
 	const ACTION_CONFIG_DB="configure_db";
-	const ACTION_SUBMIT_DB_CONFIG="write_db_config";
 	const ACTION_CREATE_TABLES="create_tables";
 	const ACTION_CONFIG_SCHOOL="configure_school";
 	const ACTION_SUBMIT_SCHOOL_CONFIG="write_school_config";
@@ -52,11 +51,11 @@ class Install{
 
 		switch($action){
 			case self::ACTION_CONFIG_DB:
-                $this->configureDbAction();
-				break;
-
-			case self::ACTION_SUBMIT_DB_CONFIG:
-                $this->submitDbConfigAction();
+                if (Tools::IsPost()) {
+                    $this->submitDbConfigAction();
+                } else {
+                    $this->configureDbAction();
+                }
 				break;
 
 			case self::ACTION_CREATE_TABLES:
@@ -275,7 +274,7 @@ EOF;
 	public function GetDbConfigLink($text){ $this->GetLink(self::ACTION_CONFIG_DB, $text);}
 	public function GetCreateTableLink($text){ $this->GetLink(self::ACTION_CREATE_TABLES, $text);}
 	public function GetSchoolConfigLink($text){ $this->GetLink(self::ACTION_CONFIG_SCHOOL, $text);} 
-	public function GetDbConfigSubmitUrl(){return $this->GetUrl(self::ACTION_SUBMIT_DB_CONFIG);}
+	public function GetDbConfigSubmitUrl(){return $this->GetUrl(self::ACTION_CONFIG_DB);}
 	public function GetSchoolConfigSubmitUrl(){return $this->GetUrl(self::ACTION_SUBMIT_SCHOOL_CONFIG);}
 	public function CanConfigureSchool(){ return !file_exists(Config::SchoolConfigFile()); }
 
