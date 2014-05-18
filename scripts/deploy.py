@@ -79,6 +79,10 @@ def main():
 			help="The path to the extract script. Default is scripts/extract.php (no effect wih -a or -c).",
 			dest="extract", default=None)
 
+	parser.add_option("","--extract-only",
+			help="Upload only the extract script, not the archive (assuming it's already on the server). This fails if an existing archive filename is given (no effect with -a or -c).",
+			action="store_true", dest="upload_extract_only")
+
 	parser.add_option("-k","--keep",
 			help="Keep the created archive after upload. Default behavior is to delete the archive after the upload if it was created (no effect with -a or -c)",
 			dest="keep", action="store_true")
@@ -114,6 +118,8 @@ def main():
 				archive=None
 			elif len(args)==2:
 				archive=args[1]
+			if archive!=None and option.upload_extract_only:
+				parser.error("--extract-only is incompatible with an archive name '%s'"%archive)
 			deploy(config_file, archive, option)
 
 def create_config(path, sections, option):
@@ -185,9 +191,12 @@ def deploy(config_file, archive, option):
 			sys.exit(1)
 
 		if archive==None:
-			archive_created=True
-			archive="archive.zip"
-			create_archive(archive, option)
+			if not option.upload_extract_only:
+				archive_created=True
+				archive="archive.zip"
+				create_archive(archive, option)
+			else:
+				archive_created=False
 		else:
 			archive_created=False
 			if not os.path.exists(archive):
@@ -214,9 +223,13 @@ def deploy(config_file, archive, option):
 			logger.info("ftp: cd %s", path)
 			ftp.cwd(path)
 
-			logger.info("ftp: upload %s to archive.zip",archive)
-			with open(archive,"rb") as fh:
-				ftp.storbinary("STOR archive.zip", fh)
+			if not option.upload_extract_only:
+				logger.info("ftp: upload %s to archive.zip",archive)
+				with open(archive,"rb") as fh:
+					ftp.storbinary("STOR archive.zip", fh)
+			else:
+				#TODO : test if the archive exists on server
+				logger.info("ftp: skip upload to archive.zip")
 
 			logger.info("ftp: cd web")
 			ftp.cwd("web")
