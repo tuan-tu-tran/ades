@@ -52,41 +52,8 @@ $install->parseRequest();
 
 <?php elseif($install->view==Install::VIEW_FILE_WRITTEN):?>
 
-		<p>Fichier de configuration créé avec succès</p>
-        <?php if (!$install->tables) :?>
-            <p><?php $install->GetCreateTableLink("Créer les tables de données")?></p>
-        <?php else: ?>
-            <p class="impt">ATTENTION! Des tables existent déjà dans la db</p>
-            <ul>
-                <?php foreach ($install->tables as $table) :?>
-                    <li>- <?php echo $table?></li>
-                <?php endforeach;?>
-            </ul>
-            <p><?php $install->GetCreateTableLink("Créer les tables de données quand même")?></p>
-            <?php if($install->CanConfigureSchool()):?>
-                <p><?php $install->GetSchoolConfigLink("Configurer le nom de l'école et le titre principal");?></p>
-            <?php else:?>
-                <p><a href="index.php">Terminer l'installation</a></p>
-            <?php endif;?>
-        <?php endif ?>
 
 <?php elseif($install->view==Install::VIEW_FILE_NOT_WRITTEN):?>
-
-		<form name="form" method="post" action="<?php echo $install->resubmitAction;?>">
-		<p>Le fichier de configuration n'a pas pu être écrit.</p>
-		<p>
-			Veuillez vérifier que l'utilisateur système
-				<b><?php echo $install->system_user;?></b>
-			dispose des droits suffisants pour écrire le fichier
-				<b><?php echo $install->config_filename;?></b>
-		</p>
-		<p>Le système a renvoyé l'erreur suivante: <?php echo $install->error ?></p>
-		<?php foreach($_POST as $key=>$value):?>
-			<input name="<?php echo $key;?>" type="hidden" value="<?php echo Html::Encode($value)?>" />
-		<?php endforeach;?>
-		<input name="Submit" value="Réessayer" type="submit">
-		</form>
-
 <?php elseif($install->view==Install::VIEW_TABLES_CREATED):?>
 
 		<p>Les tables ont été correctement créées dans la base de données.</p>

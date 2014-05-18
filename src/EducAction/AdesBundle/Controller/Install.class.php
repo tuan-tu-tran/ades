@@ -56,26 +56,7 @@ class Install{
 				break;
 
 			case self::ACTION_SUBMIT_DB_CONFIG:
-				if(file_exists(Config::DbConfigFile()))
-					$this->view=self::VIEW_OVERWRITE_FORBIDDEN;
-				else if($this->ConfigIsValid()){
-					if($this->WriteDbConfig()){
-                        //test if there already are tables in the db:
-                        $result=Db::GetInstance()->query("SHOW TABLES");
-                        $this->tables=array();
-                        foreach ($result as $row) {
-                            $this->tables[] = $row[0];
-                        }
-						//show config file successfully written
-						$this->view=self::VIEW_FILE_WRITTEN;
-					}else{
-						//show file could not be written + error
-						$this->ShowWriteError(Config::DbConfigFile(), $this->GetDbConfigSubmitUrl());
-					}
-				}else{
-					//show config form + error + repopulate
-					$this->view=self::VIEW_INVALID_CONFIG_SUBMITTED;
-				}
+                $this->submitDbConfigAction();
 				break;
 
 			case self::ACTION_CREATE_TABLES:
@@ -143,6 +124,31 @@ class Install{
         }
     }
 
+    private function submitDbConfigAction()
+    {
+        if(file_exists(Config::DbConfigFile())) {
+            $this->Render("overwrite_forbidden.inc.php");
+        } else if($this->ConfigIsValid()){
+            if($this->WriteDbConfig()){
+                //test if there already are tables in the db:
+                $result=Db::GetInstance()->query("SHOW TABLES");
+                $this->tables=array();
+                foreach ($result as $row) {
+                    $this->tables[] = $row[0];
+                }
+                //show config file successfully written
+                $this->view=self::VIEW_FILE_WRITTEN;
+                $this->Render("db_config_written.inc.php");
+            }else{
+                //show file could not be written + error
+                $this->ShowWriteError(Config::DbConfigFile(), $this->GetDbConfigSubmitUrl());
+            }
+        }else{
+            //show config form + error + repopulate
+            $this->Render("db_config_form.inc.php");
+        }
+    }
+
 	private function SchoolConfigIsValid(){
 		$this->schoolname = $_POST["schoolname"];
 		$this->title = $_POST["title"];
@@ -179,7 +185,6 @@ EOF;
 			&& $this->pwd!=NULL
 			&& $this->dbname!=NULL
 		){
-			$this->missing_fields=false;
 			$valid=Db::GetInstance($this->host, $this->username, $this->pwd, $this->dbname)->connect();
 			if(!$valid) $this->error=Db::GetInstance()->error();
 		}else{
@@ -256,12 +261,13 @@ EOF;
 		}
 	}
 
-	private function ShowWriteError($fname, $resubmitAction){
+	private function ShowWriteError($fname, $resubmitAction)
+    {
 		$this->error=error_get_last()["message"];
 		$this->system_user=posix_getpwuid(posix_geteuid())["name"];
 		$this->config_filename=$fname;
 		$this->resubmitAction=$resubmitAction;
-		$this->view=self::VIEW_FILE_NOT_WRITTEN;
+        $this->Render("write_error.inc.php");
 	}
 
 	private function GetLink($action, $text){ echo "<a href='".$this->GetUrl($action)."'>".$text."</a>"; }
