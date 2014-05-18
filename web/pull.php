@@ -24,7 +24,7 @@ use EducAction\AdesBundle\Config;
 
 $url_file=Config::LocalFile("pull_url.txt");
 if (file_exists($url_file)) {
-    $url=file_get_contents($url_file);
+    $url=trim(file_get_contents($url_file));
     if($url) {
         $archive_content=file_get_contents($url);
         if ($archive_content) {
