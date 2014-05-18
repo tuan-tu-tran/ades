@@ -47,7 +47,7 @@ function rm($path, $except=NULL)
 chdir("..") or error("could not change dir to parent");
 $archive="archive.zip";
 if (file_exists($archive)) {
-    rm(".", array("./local","./$archive")) or error("could not empty current folder ");
+    rm(".", array("./local","./$archive","./local_bkp")) or error("could not empty current folder ");
     
     $config_files=array(
         "web/config/confbd.inc.php",
@@ -60,13 +60,16 @@ if (file_exists($archive)) {
         }
     }
 
-    if ($renamed_local=file_exists("local")) {
+    if (file_exists("local")) {
+        if(file_exists("local_bkp")) {
+            die("both local and local_bkp exist!");
+        }
         rename("local","local_bkp") or error("could not rename local to local_bkp");
     }
     $zip=new ZipArchive;
     $zip->open("archive.zip") or error("could not open archve");
     $zip->extractTo(".") or error("could not extract archive");
-    if($renamed_local) {
+    if(file_exists("local_bkp")) {
         rm("local") or error("could not delete local");
         rename("local_bkp","local") or error("could not rename local to local_bkp");
     }
