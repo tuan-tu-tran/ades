@@ -78,15 +78,21 @@ class Install{
 
     private function configureDbAction()
     {
-        if(file_exists(Config::DbConfigFile())) {
+        $configure_db_result=FlashBag::Get("configure_db_result");
+        if(file_exists(Config::DbConfigFile()) && !$configure_db_result) {
             $this->Render("overwrite_forbidden.inc.php");
-        } else {
+        } elseif (!$configure_db_result) {
             //show config form
             $this->host=NULL;
             $this->username=NULL;
             $this->pwd=NULL;
             $this->dbname=NULL;
             $this->Render("db_config_form.inc.php");
+        } elseif (!$configure_db_result->valid_config) {
+            $this->Render("db_config_form.inc.php", $configure_db_result);
+        } else {
+            FlashBag::Clear();
+            $this->Render("db_config_written.inc.php", $configure_db_result);
         }
     }
 
@@ -94,17 +100,11 @@ class Install{
     {
         if(file_exists(Config::DbConfigFile())) {
             $this->Render("overwrite_forbidden.inc.php");
-        } else if($this->ConfigIsValid()){
-            if($this->WriteDbConfig()){
-                //show config file successfully written
-                $this->Render("db_config_written.inc.php");
-            }else{
-                //show file could not be written + error
-                $this->ShowWriteError(Config::DbConfigFile(), $this->GetDbConfigSubmitUrl());
-            }
-        }else{
-            //show config form + error + repopulate
-            $this->Render("db_config_form.inc.php");
+        } else if(!$this->ConfigIsValid() || $this->WriteDbConfig()){
+            FlashBag::Set("configure_db_result", $this);
+            $this->Redirect(self::ACTION_CONFIG_DB);
+        } else {
+            $this->ShowWriteError(Config::DbConfigFile(), $this->GetDbConfigSubmitUrl());
         }
     }
 
@@ -144,12 +144,18 @@ class Install{
 
     private function configureSchoolAction()
     {
-        if(file_exists(Config::SchoolConfigFile())) {
+        $configure_school_result=FlashBag::Get("configure_school_result");
+        if(file_exists(Config::SchoolConfigFile()) && !$configure_school_result) {
             $this->Render("overwrite_school_forbidden.inc.php");
-        } else {
+        } elseif (!$configure_school_result) {
             $this->schoolname = NULL;
             $this->title = NULL;
             $this->Render("school_config_form.inc.php");
+        } elseif (!$configure_school_result->valid_config) {
+            $this->Render("school_config_form.inc.php", $configure_school_result);
+        } else {
+            FlashBag::Clear();
+            $this->Render("school_config_written.inc.php", $configure_school_result);
         }
     }
 
@@ -157,10 +163,9 @@ class Install{
     {
         if(file_exists(Config::SchoolConfigFile())) {
             $this->Render("overwrite_school_forbidden.inc.php");
-        } else if(!$this->SchoolConfigIsValid()) {
-            $this->Render("school_config_form.inc.php");
-        } else if($this->WriteSchoolConfig()) {
-            $this->Render("school_config_written.inc.php");
+        } else if(!$this->SchoolConfigIsValid() || $this->WriteSchoolConfig()) {
+            FlashBag::Set("configure_school_result", $this);
+            $this->Redirect(self::ACTION_CONFIG_SCHOOL);
         } else {
             $this->ShowWriteError(Config::SchoolConfigFile(), $this->GetSchoolConfigSubmitUrl());
         }
@@ -170,11 +175,12 @@ class Install{
 		$this->schoolname = $_POST["schoolname"];
 		$this->title = $_POST["title"];
         if($this->schoolname!=NULL && $this->title!=NULL) {
-            return TRUE;
+            $this->valid_config= TRUE;
         } else {
             $this->missing_fields = TRUE;
-            return FALSE;
+            $this->valid_config= FALSE;
         }
+        return $this->valid_config;
 	}
 
 	private function WriteSchoolConfig(){
@@ -213,6 +219,7 @@ EOF;
 			$valid=false;
 			$this->missing_fields=true;
 		}
+        $this->valid_config=$valid;
 		return $valid;
 	}
 
