@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
+namespace EducAction\AdesBundle\Pull;
 
 header("Content-Type: text/plain");
 ini_set("display_errors",0);
@@ -24,11 +25,38 @@ function output_last_error()
 {
     $last=error_get_last();
     if($last) {
-        echo "last error: ".$last["message"]." in ".$last["file"]." at line ".$last["line"];
+        echo "\n\nlast error: ".$last["message"]." in ".$last["file"]." at line ".$last["line"];
     }
 }
 //so that we get 500 error code but still see the error message
-register_shutdown_function(output_last_error);
+register_shutdown_function("\EducAction\\AdesBundle\\Pull\\output_last_error");
+
+function unroot($archive)
+{
+    $zip=new \ZipArchive;
+    $zip->open($archive);
+    $roots=array();
+    for($i=0; $i<$zip->numFiles; ++$i){
+        $filename=$zip->GetNameIndex($i);
+        $root=explode("/",$filename);
+        $root=$root[0]."/";
+        $roots[$root]=NULL;
+    }
+
+    if (count($roots)==1){
+        $roots=array_keys($roots);
+        $root=$roots[0];
+        for($i=0; $i<$zip->numFiles; ++$i){
+            $filename=$zip->GetNameIndex($i);
+            if($filename == $root){
+                $zip->deleteIndex($i);
+            }else{
+                $zip->renameIndex($i, substr($filename, strlen($root), strlen($filename)-strlen($root)));
+            }
+        }
+    }
+    $zip->close();
+}
 
 require "inc/init.inc.php";
 
@@ -82,11 +110,15 @@ if (!file_exists($pull_config_file)) {
         } elseif (!file_put_contents("../archive.zip", $archive_content)) {
             http_response_code(500);
             echo "could not write archive";
-        } else if (!copy("zip://../archive.zip#scripts/extract.php", "extract.php")) {
-            http_response_code(500);
-            echo "could not extract extract.php from archive";
         } else {
-            require "extract.php";
+            //unroot the archive
+            unroot("../archive.zip");
+            if (!copy("zip://../archive.zip#scripts/extract.php", "extract.php")) {
+                http_response_code(500);
+                echo "could not extract extract.php from archive";
+            } else {
+                require "extract.php";
+            }
         }
     }
 }
