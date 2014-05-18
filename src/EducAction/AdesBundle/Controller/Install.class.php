@@ -279,7 +279,7 @@ EOF;
     {
 		$this->error=error_get_last()["message"];
 		$this->system_user=posix_getpwuid(posix_geteuid())["name"];
-		$this->config_filename=$fname;
+		$this->config_filename=realpath(DIRNAME($fname)).DIRECTORY_SEPARATOR.basename($fname);
 		$this->resubmitAction=$resubmitAction;
         $this->Render("write_error.inc.php");
 	}
