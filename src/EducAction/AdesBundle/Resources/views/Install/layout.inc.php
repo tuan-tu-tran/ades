@@ -22,6 +22,13 @@ use EducAction\AdesBundle\View;
 
 <?php View::FillBlock("title","Installation d'ADES")?>
 
+<?php View::StartBlock("post_head")?>
+    <style type="text/css">
+        a:hover{text-decoration:underline;}
+        label{width:10em;}
+    </style>
+<?php View::EndBlock()?>
+
 <?php View::StartBlock("body")?>
     <div id="texte">
         <h2>Installation d'ADES</h2>
