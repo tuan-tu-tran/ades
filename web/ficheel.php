@@ -43,7 +43,7 @@ if ($editPossible && $mode=="voir") {
   <script language="javascript" type="text/javascript" src="inc/fonctions.js"></script>
   <script language="javascript" type="text/javascript" src="inc/onglets.js"></script>
   <script type="text/javascript" src="inc/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
-  <?php if ($editPossible):?>
+  <?php if (isset($menuFacts)):?>
         <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
         <?php $menuFacts->RenderHead(); ?>
   <?php endif ?>
