@@ -56,30 +56,9 @@ $install->parseRequest();
 <?php elseif($install->view==Install::VIEW_FILE_NOT_WRITTEN):?>
 <?php elseif($install->view==Install::VIEW_TABLES_CREATED):?>
 
-		<p>Les tables ont été correctement créées dans la base de données.</p>
-		<p>Login et mot de passe: admin</p>
-		<?php if($install->CanConfigureSchool()):?>
-			<p><?php $install->GetSchoolConfigLink("Configurer le nom de l'école et le titre principal");?></p>
-		<?php else:?>
-			<p>L'installation d'ADES est terminée: <a href="index.php">On y va</a></p>
-		<?php endif;?>
 
 <?php elseif($install->view==Install::VIEW_TABLES_NOT_CREATED):?>
 
-	<?php if(isset($install->error_command)):?>
-		<p>Une erreur s'est produite lors de la creation des tables, à cause de la commande:</p>
-		<p><?php echo Html::Encode($install->error_command);?></p>
-	<?php else:?>
-		<p>Une erreur s'est produite lors de l'exécution du script: <?php echo $install->failedScript?></p>
-	<?php endif;?>
-		<p>Le système a renvoyé l'erreur: <?php echo $install->error?></p>
-		<p><?php $install->GetCreateTableLink("Réessayer de créer les tables");?></p>
-		<p><?php $install->GetDbConfigLink("Reconfigurer la connexion (vous devez d'abord supprimer le fichier de configuration existant)");?></p>
-		<?php if($install->CanConfigureSchool()):?>
-			<p><?php $install->GetSchoolConfigLink("Passer à l'étape suivante: configurer le nom de l'école et le titre principal");?></p>
-		<?php else:?>
-			<p><a href="index.php">Terminer l'installation</a></p>
-		<?php endif;?>
 
 <?php elseif($install->view===Install::VIEW_OVERWRITE_FORBIDDEN):?>
 

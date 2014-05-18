@@ -59,13 +59,7 @@ class Install{
 				break;
 
 			case self::ACTION_CREATE_TABLES:
-				if($this->CreateTables()){
-					//show tables created
-					$this->view=self::VIEW_TABLES_CREATED;
-				}else{
-					//show creation failure
-					$this->view=self::VIEW_TABLES_NOT_CREATED;
-				}
+                $this->createTablesAction();
 				break;
 
 			case self::ACTION_CONFIG_SCHOOL:
@@ -145,6 +139,15 @@ class Install{
         }else{
             //show config form + error + repopulate
             $this->Render("db_config_form.inc.php");
+        }
+    }
+
+    private function createTablesAction()
+    {
+        if($this->CreateTables()){
+            $this->Render("tables_created.inc.php");
+        }else{
+            $this->Render("tables_creation_failed.inc.php");
         }
     }
 
