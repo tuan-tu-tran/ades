@@ -83,4 +83,9 @@ class Config{
     {
 		return DIRNAME(__FILE__)."/../../../local/$file";
     }
+
+    public static function ConfigFile($file)
+    {
+		return DIRNAME(__FILE__)."/../../../config/$file";
+    }
 }

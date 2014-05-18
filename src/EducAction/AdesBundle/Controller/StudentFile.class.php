@@ -32,7 +32,7 @@ class StudentFile
         $listeTitres = $prototypeFaits->tableauTitresFaits();
 
         //read the facts menu composition: key is group name, value is comma separated fact ids
-        $groupsConfigFile=Config::LocalFile("menu_facts.ini");
+        $groupsConfigFile=Config::ConfigFile("menu_facts.ini");
         if (file_exists($groupsConfigFile)) {
             $menuConfig=parse_ini_file($groupsConfigFile, TRUE);
         } else {
