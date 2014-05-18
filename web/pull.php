@@ -19,6 +19,17 @@
 */
 
 header("Content-Type: text/plain");
+ini_set("display_errors",0);
+function output_last_error()
+{
+    $last=error_get_last();
+    if($last) {
+        echo "last error: ".$last["message"]." in ".$last["file"]." at line ".$last["line"];
+    }
+}
+//so that we get 500 error code but still see the error message
+register_shutdown_function(output_last_error);
+
 require "inc/init.inc.php";
 
 use EducAction\AdesBundle\Config;
@@ -26,22 +37,20 @@ use EducAction\AdesBundle\Tools;
 
 $url_file=Config::LocalFile("pull_url.txt");
 $secret_file=Config::LocalFile("pull_secret.txt");
-if (!file_exists($url_file)) {
+$pull_config_file=Config::LocalFile("pull.ini");
+if (!file_exists($pull_config_file)) {
     http_response_code(500);
-    echo "no pull url file";
-} elseif ( ( $url=file_get_contents($url_file) ) === FALSE ) {
+    echo "no pull config file";
+} elseif ( ( $pull_config=parse_ini_file($pull_config_file) ) === FALSE ) {
     http_response_code(500);
-    echo "could not read pull url: ".Tools::GetLastError();
-} elseif (!$url=trim($url)) {
+    echo "could not read pull config: ".Tools::GetLastError();
+} elseif (!Tools::TryGet($pull_config, "url", $url) || !$url) {
     http_response_code(500);
     echo "no pull url";
-} elseif (!file_exists($secret_file)) {
+} elseif (!Tools::TryGet($pull_config, "ref", $pull_ref) || !$pull_ref) {
     http_response_code(500);
-    echo "no pull secret file";
-} elseif ( ($secret=file_get_contents($secret_file)) === FALSE ) {
-    http_response_code(500);
-    echo "could not read pull secret: ".Tools::GetLastError();
-} elseif (!$secret=trim($secret)) {
+    echo "no pull reference";
+} elseif (!Tools::TryGet($pull_config, "secret", $secret) || !$secret) {
     http_response_code(500);
     echo "no pull secret";
 } elseif (!Tools::TryGet($_SERVER, "HTTP_X_HUB_SIGNATURE", $signatureHeader)) {
@@ -61,16 +70,23 @@ if (!file_exists($url_file)) {
     } elseif ($hmac != $signature) {
         http_response_code(401);
         echo "wrong signature";
+    } elseif (!$json=json_decode($data)){
+    } elseif (!isset($json->ref)) {
+    } elseif ($json->ref!=$pull_ref){
+        echo "ignoring ref: ".$json->ref." : only interested in $pull_ref";
     } else {
-        echo "OK\n";
-        var_dump($data);
-        /*
-            $archive_content=file_get_contents($url);
-            if ($archive_content) {
-                file_put_contents("../archive.zip", $archive_content);
-                copy("zip://../archive.zip#scripts/extract.php", "extract.php");
-                require "extract.php";
-            }
-        */
+        $archive_content=file_get_contents($url);
+        if (!$archive_content) {
+            http_response_code(500);
+            echo "could not get archve at $url";
+        } elseif (!file_put_contents("../archive.zip", $archive_content)) {
+            http_response_code(500);
+            echo "could not write archive";
+        } else if (!copy("zip://../archive.zip#scripts/extract.php", "extract.php")) {
+            http_response_code(500);
+            echo "could not extract extract.php from archive";
+        } else {
+            require "extract.php";
+        }
     }
 }
