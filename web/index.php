@@ -25,11 +25,11 @@ EducAction\AdesBundle\User::CheckIfLogged();
 require ("config/constantes.inc.php");
 require ("config/confbd.inc.php");
 //Rami Adrien
-//Classe qui va permettre la gestion des mï¿½mos de l'utilisateur
+//Classe qui va permettre la gestion des mémos de l'utilisateur
 require ("ADEStodo.class.php");
-//On crï¿½er un objet ADEStodo
+//On créer un objet ADEStodo
 $ADESmemo = new ADEStodo;
-//On se connecte ï¿½ la db
+//On se connecte à la db
 $ADESmemo->connectDB();
 Normalisation();
 ?>
@@ -59,22 +59,22 @@ require ("inc/menu.inc.php");
 <div id="texte">
 <?php
 /*Rami Adrien
- * Les fonctionnalitï¿½s de dï¿½part on ï¿½tï¿½ dï¿½placï¿½ dans respectivement dans:
- * Synthï¿½se (pour dire le nombre d'ï¿½lï¿½ves actuellement traitï¿½
+ * Les fonctionnalités de départ on été déplacé dans respectivement dans:
+ * Synthèse (pour dire le nombre d'élèves actuellement traité
  * Backup, pour dire quelle est le dernier backup
- * La fonction permettant d'afficher les fï¿½tes a ï¿½tï¿½ simplifiï¿½ et n'utilise pas l'option
+ * La fonction permettant d'afficher les fêtes a été simplifié et n'utilise pas l'option
  * du str replace avec le fichier text index.inc.htm
  */
 
-//On rï¿½cupï¿½re la date et l'heure
+//On récupère la date et l'heure
 $date = date("d/m/Y");
 $heure = date("H:i");
 $dateAnniv = date ("d/m");
-//On se connecte ï¿½ la db
+//On se connecte à la db
 //$lienDB = mysql_connect($sql_serveur, $sql_user, $sql_passwd);
 //mysql_select_db ($sql_bdd);
 
-// recherche de toutes les classes et tous les ï¿½lï¿½ves existants dans la base de donnï¿½es
+// recherche de toutes les classes et tous les élèves existants dans la base de données
 $sqlAnniv = "SELECT ideleve, classe, nom, prenom FROM ades_eleves WHERE anniv ='$dateAnniv'";
 
 $Anniv = mysql_query($sqlAnniv);
