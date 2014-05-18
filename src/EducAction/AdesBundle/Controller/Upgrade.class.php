@@ -125,7 +125,7 @@ class Upgrade{
 					break;
 				}elseif(!Utils::MySqlScript($content, $err,$launched)){
 					$this->failedScript = $script;
-					$this->failedScriptError=$err;
+					$this->failedScriptError=$launched?$err:"mysql script not launched";
 					$failed=true;
 					break;
 				}else{

@@ -17,3 +17,5 @@ jquery-.*\.js$
 ^local/README.txt$
 .gitkeep$
 ^doc/config_examples
+.htaccess$
+^composer\.(lock|json)$
