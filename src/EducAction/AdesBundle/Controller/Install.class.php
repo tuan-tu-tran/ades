@@ -25,6 +25,7 @@ use EducAction\AdesBundle\Path;
 use EducAction\AdesBundle\Config;
 use EducAction\AdesBundle\Tools;
 use EducAction\AdesBundle\View;
+use EducAction\AdesBundle\FlashBag;
 
 class Install{
 	const ACTION_CONFIG_DB="configure_db";
@@ -61,9 +62,12 @@ class Install{
 		}
 	}
 
-    private function Render($view)
+    private function Render($view, $params=NULL)
     {
-        View::Render("Install/$view", array("install"=>$this));
+        if ($params == NULL) {
+            $params=$this;
+        }
+        View::Render("Install/$view", array("install"=>$params));
         exit;
     }
 
@@ -106,16 +110,26 @@ class Install{
 
     private function createTablesAction()
     {
-        if (Tools::IsPost() || !$this->GetTables()) {
-            if($this->CreateTables()){
-                $this->Render("tables_created.inc.php");
+        $create_tables_result=FlashBag::Pop("create_tables_result");
+        if (Tools::IsPost() || (!$create_tables_result && !$this->GetTables()) ) {
+            $this->created=$this->CreateTables();
+            FlashBag::Set("create_tables_result", $this);
+            $this->Redirect(self::ACTION_CREATE_TABLES);
+        } elseif ($create_tables_result) {
+            if($create_tables_result->created) {
+                $this->Render("tables_created.inc.php", $create_tables_result);
             }else{
-                $this->Render("tables_creation_failed.inc.php");
+                $this->Render("tables_creation_failed.inc.php", $create_tables_result);
             }
         } else {
             //test if there already are tables in the db:
             $this->Render("create_tables.inc.php");
         }
+    }
+
+    private function Redirect($action)
+    {
+        Tools::Redirect("creation.php?action=$action");
     }
 
     private function GetTables()
