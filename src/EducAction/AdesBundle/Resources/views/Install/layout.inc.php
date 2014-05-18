@@ -27,6 +27,7 @@ use EducAction\AdesBundle\View;
         a:hover{text-decoration:underline;}
         label{width:10em;}
     </style>
+    <?php View::Block("post_head")?>
 <?php View::EndBlock()?>
 
 <?php View::StartBlock("body")?>

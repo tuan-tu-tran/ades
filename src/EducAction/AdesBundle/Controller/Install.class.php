@@ -92,12 +92,6 @@ class Install{
             $this->Render("overwrite_forbidden.inc.php");
         } else if($this->ConfigIsValid()){
             if($this->WriteDbConfig()){
-                //test if there already are tables in the db:
-                $result=Db::GetInstance()->query("SHOW TABLES");
-                $this->tables=array();
-                foreach ($result as $row) {
-                    $this->tables[] = $row[0];
-                }
                 //show config file successfully written
                 $this->Render("db_config_written.inc.php");
             }else{
@@ -112,11 +106,26 @@ class Install{
 
     private function createTablesAction()
     {
-        if($this->CreateTables()){
-            $this->Render("tables_created.inc.php");
-        }else{
-            $this->Render("tables_creation_failed.inc.php");
+        if (Tools::IsPost() || !$this->GetTables()) {
+            if($this->CreateTables()){
+                $this->Render("tables_created.inc.php");
+            }else{
+                $this->Render("tables_creation_failed.inc.php");
+            }
+        } else {
+            //test if there already are tables in the db:
+            $this->Render("create_tables.inc.php");
         }
+    }
+
+    private function GetTables()
+    {
+        $result=Db::GetInstance()->query("SHOW TABLES");
+        $this->tables=array();
+        foreach ($result as $row) {
+            $this->tables[] = $row[0];
+        }
+        return $this->tables;
     }
 
     private function configureSchoolAction()

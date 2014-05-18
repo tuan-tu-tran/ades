@@ -30,13 +30,15 @@ use EducAction\AdesBundle\Html;
 		<p>Une erreur s'est produite lors de l'exécution du script: <?php echo $install->failedScript?></p>
 	<?php endif;?>
 		<p>Le système a renvoyé l'erreur: <?php echo $install->error?></p>
-		<p><?php $install->GetCreateTableLink("Réessayer de créer les tables");?></p>
+		<p><a href="" onclick="document.getElementById('create_table').submit(); return false;">Réessayer de créer les tables</a></p>
 		<p><?php $install->GetDbConfigLink("Reconfigurer la connexion (vous devez d'abord supprimer le fichier de configuration existant)");?></p>
     <?php if($install->CanConfigureSchool()):?>
         <p><?php $install->GetSchoolConfigLink("Passer à l'étape suivante: configurer le nom de l'école et le titre principal");?></p>
     <?php else:?>
         <p><a href="index.php">Terminer l'installation</a></p>
     <?php endif;?>
+    <form id="create_table" action="" method="POST" style="display:none">
+    </form>
 
 <?php View::EndBlock()?>
 
