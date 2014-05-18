@@ -65,4 +65,9 @@ class Tools{
         }
     }
 
+    public static function IsPost()
+    {
+        return strtoupper($_SERVER["REQUEST_METHOD"]) == "POST";
+    }
+
 }

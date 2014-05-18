@@ -48,4 +48,15 @@ class FlashBag{
 	public static function Set($key, $value){
 		self::GetInstance()[$key]=$value;
 	}
+
+    public static function Get($key, $default=NULL)
+    {
+        return Tools::GetDefault(self::GetInstance(), $key, $default);
+    }
+
+    public static function Clear()
+    {
+        self::$bag=array();
+        $_SESSION[self::SESSION_KEY]=&self::$bag;
+    }
 }

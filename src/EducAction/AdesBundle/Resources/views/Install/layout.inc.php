@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (c) 2014 Educ-Action
+ * Copyright (c) 2014 Tuan-Tu TRAN
  * 
  * This file is part of ADES.
  * 
@@ -17,15 +17,24 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-/* Ades : Creation.php version 2
- * Rami Adrien: rami@adrien.be
- * Modification:
- * Supression de la suppression et de la création de la table
- * Création automatique du fichier de configuration
- * Tout le processus de configuration d'ADES est automatisé
- * Au lancement de l'application ADES détecte si ADES est configuré
- */
-require("inc/init.inc.php");
-Normalisation();
-$install=new EducAction\AdesBundle\Controller\Install;
-$install->parseRequest();
+use EducAction\AdesBundle\View;
+?>
+
+<?php View::FillBlock("title","Installation d'ADES")?>
+
+<?php View::StartBlock("post_head")?>
+    <style type="text/css">
+        a:hover{text-decoration:underline;}
+        label{width:10em;}
+    </style>
+    <?php View::Block("post_head")?>
+<?php View::EndBlock()?>
+
+<?php View::StartBlock("body")?>
+    <div id="texte">
+        <h2>Installation d'ADES</h2>
+        <?php View::Block("content")?>
+    </div>
+<?php View::EndBlock()?>
+
+<?php View::Render("base.inc.php")?>

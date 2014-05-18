@@ -20,114 +20,167 @@
 
 namespace EducAction\AdesBundle\Controller;
 
-use EducAction\AdesBundle;
 use EducAction\AdesBundle\Db;
 use EducAction\AdesBundle\Path;
 use EducAction\AdesBundle\Config;
 use EducAction\AdesBundle\Tools;
+use EducAction\AdesBundle\View;
+use EducAction\AdesBundle\FlashBag;
 
 class Install{
-	const ACTION_INFO="info";
 	const ACTION_CONFIG_DB="configure_db";
-	const ACTION_SUBMIT_DB_CONFIG="write_db_config";
 	const ACTION_CREATE_TABLES="create_tables";
 	const ACTION_CONFIG_SCHOOL="configure_school";
-	const ACTION_SUBMIT_SCHOOL_CONFIG="write_school_config";
-
-	const VIEW_INFO=0;
-	const VIEW_DB_CONFIG_FORM=1;
-	const VIEW_FILE_WRITTEN=2;
-	const VIEW_FILE_NOT_WRITTEN=3;
-	const VIEW_INVALID_CONFIG_SUBMITTED=4;
-	const VIEW_TABLES_CREATED=5;
-	const VIEW_TABLES_NOT_CREATED=6;
-	const VIEW_OVERWRITE_FORBIDDEN=7;
-	const VIEW_SCHOOL_CONFIG_FORM=8;
-	const VIEW_OVERWRITE_SCHOOL_FORBIDDEN=9;
-	const VIEW_SCHOOL_CONFIG_WRITTEN=10;
-	const VIEW_BAD_SCHOOL_CONFIG=11;
 
 	public function parseRequest(){
 		//get the action
-		$action = isset($_GET['action'])?$_GET['action']:self::ACTION_INFO;
+		$action = Tools::GetDefault($_GET,"action");
 
 		switch($action){
-			case self::ACTION_INFO:
-				$this->view=self::VIEW_INFO;
-				break;
-
 			case self::ACTION_CONFIG_DB:
-				if(file_exists(Config::DbConfigFile()))
-					$this->view=self::VIEW_OVERWRITE_FORBIDDEN;
-				else{
-					//show config form
-					$this->host=NULL;
-					$this->username=NULL;
-					$this->pwd=NULL;
-					$this->dbname=NULL;
-					$this->view=self::VIEW_DB_CONFIG_FORM;
-				}
-				break;
-
-			case self::ACTION_SUBMIT_DB_CONFIG:
-				if(file_exists(Config::DbConfigFile()))
-					$this->view=self::VIEW_OVERWRITE_FORBIDDEN;
-				else if($this->ConfigIsValid()){
-					if($this->WriteDbConfig()){
-						//show config file successfully written
-						$this->view=self::VIEW_FILE_WRITTEN;
-					}else{
-						//show file could not be written + error
-						$this->ShowWriteError(Config::DbConfigFile(), $this->GetDbConfigSubmitUrl());
-					}
-				}else{
-					//show config form + error + repopulate
-					$this->view=self::VIEW_INVALID_CONFIG_SUBMITTED;
-				}
+                if (Tools::IsPost()) {
+                    $this->submitDbConfigAction();
+                } else {
+                    $this->configureDbAction();
+                }
 				break;
 
 			case self::ACTION_CREATE_TABLES:
-				if($this->CreateTables()){
-					//show tables created
-					$this->view=self::VIEW_TABLES_CREATED;
-				}else{
-					//show creation failure
-					$this->view=self::VIEW_TABLES_NOT_CREATED;
-				}
+                $this->createTablesAction();
 				break;
 
 			case self::ACTION_CONFIG_SCHOOL:
-				if(file_exists(Config::SchoolConfigFile()))
-					$this->view=self::VIEW_OVERWRITE_SCHOOL_FORBIDDEN;
-				else
-					$this->schoolname = NULL;
-					$this->title = NULL;
-					$this->view=self::VIEW_SCHOOL_CONFIG_FORM;
-				break;
-
-			case self::ACTION_SUBMIT_SCHOOL_CONFIG:
-				if(file_exists(Config::SchoolConfigFile())){
-					$this->view=self::VIEW_OVERWRITE_SCHOOL_FORBIDDEN;
-
-				}else if(!$this->SchoolConfigIsValid()){
-					$this->view=self::VIEW_BAD_SCHOOL_CONFIG;
-
-				}else if($this->WriteSchoolConfig()){
-					$this->view=self::VIEW_SCHOOL_CONFIG_WRITTEN;
-
-				}else{
-					$this->ShowWriteError(Config::SchoolConfigFile(), $this->GetSchoolConfigSubmitUrl());
-				}
+                if(Tools::IsPost()) {
+                    $this->submitSchoolConfigAction();
+                } else {
+                    $this->configureSchoolAction();
+                }
 				break;
 			default:
-				$this->view=self::VIEW_INFO;
+                $this->indexAction();
+                break;
 		}
 	}
+
+    private function Render($view, $params=NULL)
+    {
+        if ($params == NULL) {
+            $params=$this;
+        }
+        View::Render("Install/$view", array("install"=>$params));
+        exit;
+    }
+
+    private function indexAction()
+    {
+        $this->Render("index.inc.php");
+    }
+
+    private function configureDbAction()
+    {
+        $configure_db_result=FlashBag::Get("configure_db_result");
+        if(file_exists(Config::DbConfigFile()) && !$configure_db_result) {
+            $this->Render("overwrite_forbidden.inc.php");
+        } elseif (!$configure_db_result) {
+            //show config form
+            $this->host=NULL;
+            $this->username=NULL;
+            $this->pwd=NULL;
+            $this->dbname=NULL;
+            $this->Render("db_config_form.inc.php");
+        } elseif (!$configure_db_result->valid_config) {
+            $this->Render("db_config_form.inc.php", $configure_db_result);
+        } else {
+            FlashBag::Clear();
+            $this->Render("db_config_written.inc.php", $configure_db_result);
+        }
+    }
+
+    private function submitDbConfigAction()
+    {
+        if(file_exists(Config::DbConfigFile())) {
+            $this->Render("overwrite_forbidden.inc.php");
+        } else if(!$this->ConfigIsValid() || $this->WriteDbConfig()){
+            FlashBag::Set("configure_db_result", $this);
+            $this->Redirect(self::ACTION_CONFIG_DB);
+        } else {
+            $this->ShowWriteError(Config::DbConfigFile(), $this->GetDbConfigSubmitUrl());
+        }
+    }
+
+    private function createTablesAction()
+    {
+        $create_tables_result=FlashBag::Pop("create_tables_result");
+        if (Tools::IsPost() || (!$create_tables_result && !$this->GetTables()) ) {
+            $this->created=$this->CreateTables();
+            FlashBag::Set("create_tables_result", $this);
+            $this->Redirect(self::ACTION_CREATE_TABLES);
+        } elseif ($create_tables_result) {
+            if($create_tables_result->created) {
+                $this->Render("tables_created.inc.php", $create_tables_result);
+            }else{
+                $this->Render("tables_creation_failed.inc.php", $create_tables_result);
+            }
+        } else {
+            //test if there already are tables in the db:
+            $this->Render("create_tables.inc.php");
+        }
+    }
+
+    private function Redirect($action)
+    {
+        Tools::Redirect("creation.php?action=$action");
+    }
+
+    private function GetTables()
+    {
+        $result=Db::GetInstance()->query("SHOW TABLES");
+        $this->tables=array();
+        foreach ($result as $row) {
+            $this->tables[] = $row[0];
+        }
+        return $this->tables;
+    }
+
+    private function configureSchoolAction()
+    {
+        $configure_school_result=FlashBag::Get("configure_school_result");
+        if(file_exists(Config::SchoolConfigFile()) && !$configure_school_result) {
+            $this->Render("overwrite_school_forbidden.inc.php");
+        } elseif (!$configure_school_result) {
+            $this->schoolname = NULL;
+            $this->title = NULL;
+            $this->Render("school_config_form.inc.php");
+        } elseif (!$configure_school_result->valid_config) {
+            $this->Render("school_config_form.inc.php", $configure_school_result);
+        } else {
+            FlashBag::Clear();
+            $this->Render("school_config_written.inc.php", $configure_school_result);
+        }
+    }
+
+    private function submitSchoolConfigAction()
+    {
+        if(file_exists(Config::SchoolConfigFile())) {
+            $this->Render("overwrite_school_forbidden.inc.php");
+        } else if(!$this->SchoolConfigIsValid() || $this->WriteSchoolConfig()) {
+            FlashBag::Set("configure_school_result", $this);
+            $this->Redirect(self::ACTION_CONFIG_SCHOOL);
+        } else {
+            $this->ShowWriteError(Config::SchoolConfigFile(), $this->GetSchoolConfigSubmitUrl());
+        }
+    }
 
 	private function SchoolConfigIsValid(){
 		$this->schoolname = $_POST["schoolname"];
 		$this->title = $_POST["title"];
-		return $this->schoolname!=NULL && $this->title!=NULL;
+        if($this->schoolname!=NULL && $this->title!=NULL) {
+            $this->valid_config= TRUE;
+        } else {
+            $this->missing_fields = TRUE;
+            $this->valid_config= FALSE;
+        }
+        return $this->valid_config;
 	}
 
 	private function WriteSchoolConfig(){
@@ -160,13 +213,13 @@ EOF;
 			&& $this->pwd!=NULL
 			&& $this->dbname!=NULL
 		){
-			$this->missing_fields=false;
 			$valid=Db::GetInstance($this->host, $this->username, $this->pwd, $this->dbname)->connect();
 			if(!$valid) $this->error=Db::GetInstance()->error();
 		}else{
 			$valid=false;
 			$this->missing_fields=true;
 		}
+        $this->valid_config=$valid;
 		return $valid;
 	}
 
@@ -237,12 +290,13 @@ EOF;
 		}
 	}
 
-	private function ShowWriteError($fname, $resubmitAction){
+	private function ShowWriteError($fname, $resubmitAction)
+    {
 		$this->error=error_get_last()["message"];
 		$this->system_user=posix_getpwuid(posix_geteuid())["name"];
-		$this->config_filename=$fname;
+		$this->config_filename=realpath(DIRNAME($fname)).DIRECTORY_SEPARATOR.basename($fname);
 		$this->resubmitAction=$resubmitAction;
-		$this->view=self::VIEW_FILE_NOT_WRITTEN;
+        $this->Render("write_error.inc.php");
 	}
 
 	private function GetLink($action, $text){ echo "<a href='".$this->GetUrl($action)."'>".$text."</a>"; }
@@ -250,8 +304,8 @@ EOF;
 	public function GetDbConfigLink($text){ $this->GetLink(self::ACTION_CONFIG_DB, $text);}
 	public function GetCreateTableLink($text){ $this->GetLink(self::ACTION_CREATE_TABLES, $text);}
 	public function GetSchoolConfigLink($text){ $this->GetLink(self::ACTION_CONFIG_SCHOOL, $text);} 
-	public function GetDbConfigSubmitUrl(){return $this->GetUrl(self::ACTION_SUBMIT_DB_CONFIG);}
-	public function GetSchoolConfigSubmitUrl(){return $this->GetUrl(self::ACTION_SUBMIT_SCHOOL_CONFIG);}
+	public function GetDbConfigSubmitUrl(){return $this->GetUrl(self::ACTION_CONFIG_DB);}
+	public function GetSchoolConfigSubmitUrl(){return $this->GetUrl(self::ACTION_CONFIG_SCHOOL);}
 	public function CanConfigureSchool(){ return !file_exists(Config::SchoolConfigFile()); }
 
 	public static function CheckIfNeeded()
