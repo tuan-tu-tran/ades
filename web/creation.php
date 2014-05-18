@@ -26,56 +26,6 @@
  * Au lancement de l'application ADES détecte si ADES est configuré
  */
 require("inc/init.inc.php");
-use EducAction\AdesBundle\Controller\Install;
-use EducAction\AdesBundle\Html;
-
 Normalisation();
 $install=new EducAction\AdesBundle\Controller\Install;
 $install->parseRequest();
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
-  <title>Installation d'ADES</title>
-  <link media="screen" rel="stylesheet" href="config/screen.css" type="text/css">
-<style type="text/css">
-	a:hover{text-decoration:underline;}
-	label{width:10em;}
-</style>
-</head>
-<body>
-<div id="texte">
-<h2>Installation d'ADES</h2>
-<?php if($install->view==Install::VIEW_INFO):?>
-<?php elseif($install->view==Install::VIEW_DB_CONFIG_FORM || $install->view==Install::VIEW_INVALID_CONFIG_SUBMITTED): ?>
-
-<?php elseif($install->view==Install::VIEW_FILE_WRITTEN):?>
-
-
-<?php elseif($install->view==Install::VIEW_FILE_NOT_WRITTEN):?>
-<?php elseif($install->view==Install::VIEW_TABLES_CREATED):?>
-
-
-<?php elseif($install->view==Install::VIEW_TABLES_NOT_CREATED):?>
-
-
-<?php elseif($install->view===Install::VIEW_OVERWRITE_FORBIDDEN):?>
-
-
-<?php elseif($install->view==Install::VIEW_SCHOOL_CONFIG_FORM || $install->view==Install::VIEW_BAD_SCHOOL_CONFIG):?>
-
-
-<?php elseif($install->view==Install::VIEW_OVERWRITE_SCHOOL_FORBIDDEN):?>
-
-
-<?php elseif($install->view==Install::VIEW_SCHOOL_CONFIG_WRITTEN):?>
-
-
-<?php else: ?>
-	<?php throw new Exception("unhandled view: ".$install->view);?>
-<?php endif;?>
-
-</div>
-</body>
-</html>
