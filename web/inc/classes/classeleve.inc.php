@@ -195,7 +195,10 @@ class eleve
 
     function EditeNomPrClasse ()
     {
-        $grille = file_get_contents ("inc/eleve/editeleve.inc.php");
+        ob_start();
+        require "inc/eleve/editeleve.inc.php";
+        $grille = ob_get_contents();
+        ob_end_clean();
         $grille = str_replace ('##LAPAGE##', $_SERVER['PHP_SELF'], $grille);
         $grille = str_replace ('##nom##', isset($this->proprietes['nom']) ? $this->proprietes['nom'] : Null, $grille);
         $grille = str_replace ('##prenom##', isset($this->proprietes['prenom']) ? $this->proprietes['prenom'] : Null, $grille);
