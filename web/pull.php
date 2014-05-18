@@ -29,7 +29,7 @@ if (file_exists($url_file)) {
         $archive_content=file_get_contents($url);
         if ($archive_content) {
             file_put_contents("../archive.zip", $archive_content);
-            copy("zip://archive.zip#scripts/extract.php", "extract.php");
+            copy("zip://../archive.zip#scripts/extract.php", "extract.php");
             require "extract.php";
         }
     }
