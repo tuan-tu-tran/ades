@@ -19,3 +19,4 @@ jquery-.*\.js$
 ^doc/config_examples
 .htaccess$
 ^composer\.(lock|json)$
+^config/
