@@ -31,19 +31,6 @@ class Install{
 	const ACTION_CREATE_TABLES="create_tables";
 	const ACTION_CONFIG_SCHOOL="configure_school";
 
-	const VIEW_INFO=0;
-	const VIEW_DB_CONFIG_FORM=1;
-	const VIEW_FILE_WRITTEN=2;
-	const VIEW_FILE_NOT_WRITTEN=3;
-	const VIEW_INVALID_CONFIG_SUBMITTED=4;
-	const VIEW_TABLES_CREATED=5;
-	const VIEW_TABLES_NOT_CREATED=6;
-	const VIEW_OVERWRITE_FORBIDDEN=7;
-	const VIEW_SCHOOL_CONFIG_FORM=8;
-	const VIEW_OVERWRITE_SCHOOL_FORBIDDEN=9;
-	const VIEW_SCHOOL_CONFIG_WRITTEN=10;
-	const VIEW_BAD_SCHOOL_CONFIG=11;
-
 	public function parseRequest(){
 		//get the action
 		$action = Tools::GetDefault($_GET,"action");
@@ -83,7 +70,6 @@ class Install{
     private function indexAction()
     {
         $this->Render("index.inc.php");
-        $this->view=self::VIEW_INFO;
     }
 
     private function configureDbAction()
