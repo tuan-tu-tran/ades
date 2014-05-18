@@ -63,27 +63,11 @@ class Install{
 				break;
 
 			case self::ACTION_CONFIG_SCHOOL:
-				if(file_exists(Config::SchoolConfigFile()))
-					$this->view=self::VIEW_OVERWRITE_SCHOOL_FORBIDDEN;
-				else
-					$this->schoolname = NULL;
-					$this->title = NULL;
-					$this->view=self::VIEW_SCHOOL_CONFIG_FORM;
+                $this->configureSchoolAction();
 				break;
 
 			case self::ACTION_SUBMIT_SCHOOL_CONFIG:
-				if(file_exists(Config::SchoolConfigFile())){
-					$this->view=self::VIEW_OVERWRITE_SCHOOL_FORBIDDEN;
-
-				}else if(!$this->SchoolConfigIsValid()){
-					$this->view=self::VIEW_BAD_SCHOOL_CONFIG;
-
-				}else if($this->WriteSchoolConfig()){
-					$this->view=self::VIEW_SCHOOL_CONFIG_WRITTEN;
-
-				}else{
-					$this->ShowWriteError(Config::SchoolConfigFile(), $this->GetSchoolConfigSubmitUrl());
-				}
+                $this->submitSchoolConfigAction();
 				break;
 			default:
                 $this->indexAction();
@@ -150,10 +134,39 @@ class Install{
         }
     }
 
+    private function configureSchoolAction()
+    {
+        if(file_exists(Config::SchoolConfigFile())) {
+            $this->Render("overwrite_school_forbidden.inc.php");
+        } else {
+            $this->schoolname = NULL;
+            $this->title = NULL;
+            $this->Render("school_config_form.inc.php");
+        }
+    }
+
+    private function submitSchoolConfigAction()
+    {
+        if(file_exists(Config::SchoolConfigFile())) {
+            $this->Render("overwrite_school_forbidden.inc.php");
+        } else if(!$this->SchoolConfigIsValid()) {
+            $this->Render("school_config_form.inc.php");
+        } else if($this->WriteSchoolConfig()) {
+            $this->Render("school_config_written.inc.php");
+        } else {
+            $this->ShowWriteError(Config::SchoolConfigFile(), $this->GetSchoolConfigSubmitUrl());
+        }
+    }
+
 	private function SchoolConfigIsValid(){
 		$this->schoolname = $_POST["schoolname"];
 		$this->title = $_POST["title"];
-		return $this->schoolname!=NULL && $this->title!=NULL;
+        if($this->schoolname!=NULL && $this->title!=NULL) {
+            return TRUE;
+        } else {
+            $this->missing_fields = TRUE;
+            return FALSE;
+        }
 	}
 
 	private function WriteSchoolConfig(){
