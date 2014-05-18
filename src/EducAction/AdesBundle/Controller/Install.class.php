@@ -30,7 +30,6 @@ class Install{
 	const ACTION_CONFIG_DB="configure_db";
 	const ACTION_CREATE_TABLES="create_tables";
 	const ACTION_CONFIG_SCHOOL="configure_school";
-	const ACTION_SUBMIT_SCHOOL_CONFIG="write_school_config";
 
 	const VIEW_INFO=0;
 	const VIEW_DB_CONFIG_FORM=1;
@@ -63,11 +62,11 @@ class Install{
 				break;
 
 			case self::ACTION_CONFIG_SCHOOL:
-                $this->configureSchoolAction();
-				break;
-
-			case self::ACTION_SUBMIT_SCHOOL_CONFIG:
-                $this->submitSchoolConfigAction();
+                if(Tools::IsPost()) {
+                    $this->submitSchoolConfigAction();
+                } else {
+                    $this->configureSchoolAction();
+                }
 				break;
 			default:
                 $this->indexAction();
@@ -290,7 +289,7 @@ EOF;
 	public function GetCreateTableLink($text){ $this->GetLink(self::ACTION_CREATE_TABLES, $text);}
 	public function GetSchoolConfigLink($text){ $this->GetLink(self::ACTION_CONFIG_SCHOOL, $text);} 
 	public function GetDbConfigSubmitUrl(){return $this->GetUrl(self::ACTION_CONFIG_DB);}
-	public function GetSchoolConfigSubmitUrl(){return $this->GetUrl(self::ACTION_SUBMIT_SCHOOL_CONFIG);}
+	public function GetSchoolConfigSubmitUrl(){return $this->GetUrl(self::ACTION_CONFIG_SCHOOL);}
 	public function CanConfigureSchool(){ return !file_exists(Config::SchoolConfigFile()); }
 
 	public static function CheckIfNeeded()
