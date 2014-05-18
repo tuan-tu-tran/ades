@@ -31,6 +31,7 @@ usage="""
 	%prog [options] CONFIG_INI_FILE [ ARCHIVE_FILE ]
 	%prog [options] -c CONFIG_INI_FILE [ SECTION [ ... ] ]
 	%prog [options] -a [ ARCHIVE_FILE ]
+	%prog [options] CONFIG_INI_FILE -u FILENAME [ ... ]
 """
 
 config_template="""[%s]
@@ -64,11 +65,11 @@ def main():
 			dest="archive", action="store_true")
 
 	parser.add_option("-f","--force",
-			help="Force overwrite of the archive file (or the config file with -c).",
+			help="Force overwrite of the archive file (or the config file with -c). No effect with -u",
 			action="store_true", dest="force")
 
 	parser.add_option("-r","--ref", metavar="<tree-ish>",
-			help="The tree-ish ref to create the archive from (passed to git archive). Default is HEAD (no effect with -c or if ARCHIVE_FILE is given without -a).",
+			help="The tree-ish ref to create the archive from (passed to git archive). Default is HEAD (no effect with -c, -u or if ARCHIVE_FILE is given without -a).",
 			dest="ref", default="HEAD")
 
 	parser.add_option("-s","--section", metavar="SECTION",
@@ -76,7 +77,7 @@ def main():
 			dest="section", default="deploy")
 
 	parser.add_option("-x","--extract-script", metavar="FILENAME",
-			help="The path to the extract script. Default is scripts/extract.php (no effect wih -a or -c).",
+			help="The path to the extract script. Default is scripts/extract.php (no effect wih -a, -u or -c).",
 			dest="extract", default=None)
 
 	parser.add_option("","--extract-only",
@@ -87,10 +88,14 @@ def main():
 			help="Keep the created archive after upload. Default behavior is to delete the archive after the upload if it was created (no effect with -a or -c)",
 			dest="keep", action="store_true")
 
+	parser.add_option("-u","--upload",
+			help="Upload the single file given as argument to the mirroring path on server (no effect with -a or -c)",
+			dest="upload_files", action="append")
+
 	option,args=parser.parse_args()
 
-	if option.create and option.archive:
-		parser.error("options -c and -a are mutually exclusive")
+	if sum(map(bool,[option.create,option.archive, option.upload_files])) > 1:
+		parser.error("options -c, -a and -u are mutually exclusive")
 
 	if option.create:
 		if len(args)==0:
@@ -120,6 +125,11 @@ def main():
 				archive=args[1]
 			if archive!=None and option.upload_extract_only:
 				parser.error("--extract-only is incompatible with an archive name '%s'"%archive)
+			if option.upload_files:
+				if archive!=None:
+					parser.error("--upload is incompatible with an archive name '%s'"%archive)
+				elif option.upload_extract_only:
+					parser.error("--upload and --extract-only are incompatible")
 			deploy(config_file, archive, option)
 
 def create_config(path, sections, option):
@@ -191,7 +201,7 @@ def deploy(config_file, archive, option):
 			sys.exit(1)
 
 		if archive==None:
-			if not option.upload_extract_only:
+			if not option.upload_extract_only and not option.upload_files:
 				archive_created=True
 				archive="archive.zip"
 				create_archive(archive, option)
@@ -223,7 +233,15 @@ def deploy(config_file, archive, option):
 			logger.info("ftp: cd %s", path)
 			ftp.cwd(path)
 
-			if not option.upload_extract_only:
+			if option.upload_files:
+				for fname in option.upload_files:
+					if os.path.exists(fname):
+						logger.info("ftp: uploading %s", fname)
+						with open(fname) as fh:
+							ftp.storbinary("STOR %s"%fname, fh)
+					else:
+						logger.error("file %s does not exist for upload", fname)
+			elif not option.upload_extract_only:
 				logger.info("ftp: upload %s to archive.zip",archive)
 				with open(archive,"rb") as fh:
 					ftp.storbinary("STOR archive.zip", fh)
@@ -231,11 +249,12 @@ def deploy(config_file, archive, option):
 				#TODO : test if the archive exists on server
 				logger.info("ftp: skip upload to archive.zip")
 
-			logger.info("ftp: cd web")
-			ftp.cwd("web")
-			logger.info("ftp: upload %s to extract.php",extract)
-			with open(extract,"r") as fh:
-				ftp.storlines("STOR extract.php", fh)
+			if not option.upload_files:
+				logger.info("ftp: cd web")
+				ftp.cwd("web")
+				logger.info("ftp: upload %s to extract.php",extract)
+				with open(extract,"r") as fh:
+					ftp.storlines("STOR extract.php", fh)
 
 			quiting=True
 			ftp.quit()
@@ -254,7 +273,7 @@ def deploy(config_file, archive, option):
 			else:
 				logger.info("created %s was kept, as requested", archive)
 
-		if config.has_option(section, "url"):
+		if config.has_option(section, "url") and not option.upload_files:
 			logger.info("")
 			url=config.get(section, "url").rstrip("/")+"/extract.php"
 			logger.info("calling extract script at %s", url)

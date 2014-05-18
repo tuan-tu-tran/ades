@@ -47,8 +47,14 @@ class Tools{
 		}
 	}
 
-	public static function GetLastError(){
-		return error_get_last()["message"];
+	public static function GetLastError($full=FALSE){
+        $last=error_get_last();
+        if($last) {
+            $msg=$last["message"];
+            if($full) {
+                $msg.=" in ".$last["file"]." at line ".$last["line"];
+            }
+        }
 	}
 
 	public static function GetDefault(&$array, $key, $default=NULL){
