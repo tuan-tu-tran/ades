@@ -71,12 +71,12 @@ class Config{
 
 	public static function SchoolConfigFile()
 	{
-		return DIRNAME(__FILE__)."/../../../web/config/constantes.inc.php";
+		return DIRNAME(__FILE__)."/../../../local/constantes.inc.php";
 	}
 
 	public static function DbConfigFile()
 	{
-		return DIRNAME(__FILE__)."/../../../web/config/confbd.inc.php";
+		return DIRNAME(__FILE__)."/../../../local/confbd.inc.php";
 	}
 
     public static function LocalFile($file)
