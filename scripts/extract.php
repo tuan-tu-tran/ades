@@ -17,6 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
+namespace EducAction\AdesBundle\Deploy;
+
 header("Content-type: text/plain");
 
 function error($msg)
@@ -47,7 +49,7 @@ function rm($path, $except=NULL)
 chdir("..") or error("could not change dir to parent");
 $archive="archive.zip";
 if (file_exists($archive)) {
-    $zip=new ZipArchive;
+    $zip=new \ZipArchive;
     $zip->open("archive.zip") or error("could not open archve");
     
     $config_files=array(
