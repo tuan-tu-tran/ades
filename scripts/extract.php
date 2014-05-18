@@ -21,7 +21,8 @@ header("Content-type: text/plain");
 
 function error($msg)
 {
-    die("error: $msg: ".error_get_last()["message"]);
+    $last_error=error_get_last();
+    die("error: $msg: ".$last_error["message"]);
 }
 
 function rm($path, $except=NULL)
