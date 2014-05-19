@@ -293,7 +293,7 @@ foreach ($descriptionChamps as $unChamp)
 	{
 	// on vérifie si le champ doit être affichée dans le $contexte
 	// les $contexte(s) sont précisés dans le fichier .ini de la description des champs
-	if (ereg($contexte, $unChamp['contextes']))
+	if (strpos( $unChamp['contextes'], $contexte)!==FALSE)
 		{
 		// pour le champ en cours, recherche de ses caractéristiques
 		foreach ($unChamp as $key => $value)
@@ -354,7 +354,7 @@ foreach ($descriptionChamps as $unChamp)
 					"Aucune date de retenue n'est encore d&eacute;finie \nou elles sont toutes cach&eacute;es.",3000);
 					exit;
 					}
-				$form = ereg_replace("##options##",$listeOptions,$form); 
+				$form = str_replace("##options##",$listeOptions,$form); 
 				}
 			break;
 			}

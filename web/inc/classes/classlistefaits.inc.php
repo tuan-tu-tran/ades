@@ -127,7 +127,7 @@ foreach ($listeTypeFaits->liste as $leTypeFait)
 		foreach ($lesChamps as $leChamp)
 			{
 			// Vérifier que le champ est visible dans le $contexte
-			if (ereg($contexte, $leChamp['contextes']))
+			if (strpos( $leChamp['contextes'], $contexte)!==FALSE)
 				$tableau .= "\t<td>{$leChamp['label']}</td>\n";
 			}
 		// on cléture la ligne de titre
@@ -138,9 +138,9 @@ foreach ($listeTypeFaits->liste as $leTypeFait)
 		foreach ($sousListe as $faitSuivant)
 			{
 			$nofait = (string) $faitSuivant['idfait'];
-			$img1 = ereg_replace('##idfait##', $nofait, $this->images('imgedt'));
-			$img2 = ereg_replace('##idfait##', $nofait, $this->images('imgsup'));
-			$img3 = ereg_replace('##idfait##', $nofait, $this->images('imgimp'));
+			$img1 = str_replace('##idfait##', $nofait, $this->images('imgedt'));
+			$img2 = str_replace('##idfait##', $nofait, $this->images('imgsup'));
+			$img3 = str_replace('##idfait##', $nofait, $this->images('imgimp'));
 	
 			$tableau .= "<tr>\n";
 			$images = $img1.$img2;
@@ -150,7 +150,7 @@ foreach ($listeTypeFaits->liste as $leTypeFait)
 			// détail de chacune des colonnes du tableau
 			foreach ($lesChamps as $leChamp)
 				// si le champ $leChamp doit apparaétre dans le contexte défini
-				if (ereg($contexte, $leChamp['contextes']))
+				if (strpos( $leChamp['contextes'], $contexte)!==FALSE)
 					{
 					$nomChamp = $leChamp['champ'];
 					$typeDate = $leChamp['typeDate'];

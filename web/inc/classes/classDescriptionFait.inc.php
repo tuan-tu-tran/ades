@@ -179,7 +179,7 @@ class prototypeFait {
         foreach ($listeChamps as $unChamp) {
             $descriptionChamp = $this->descriptionChampParNom ($unChamp);
             // si le champ doit apparaître dans le contexte précisé, on l'ajoute à la série
-            if (ereg($contexte, $descriptionChamp['contextes'])) {
+            if (strpos($descriptionChamp['contextes'], $contexte)!==FALSE) {
                 $detail[] = $descriptionChamp;
             }
         }

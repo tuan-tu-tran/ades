@@ -130,7 +130,7 @@ function TitreColonnes ($description, $contexte)
 {
 $tableau = "<tr>\n";
 foreach ($description as $leChamp)
-	if (ereg($contexte, $leChamp['contextes']))
+	if (strpos( $leChamp['contextes'], $contexte)!==FALSE)
 		$tableau .= "\t<td>{$leChamp['label']}</td>\n";
 $tableau .= "</tr>\n";
 return $tableau;
@@ -144,7 +144,7 @@ foreach ($unGroupeFaits as $unFait)
 	$fragment .= "<tr>\n";
 	foreach ($description as $leChamp)
 		// ce champ est-il affiché dans ce contexte?
-		if (ereg($contexte, $leChamp['contextes']))
+		if (strpos( $leChamp['contextes'], $contexte)!==FALSE)
 			{
 			$nomChamp = $leChamp['champ'];
 			$typeDate = $leChamp['typeDate'];
