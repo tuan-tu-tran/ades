@@ -63,20 +63,37 @@ if(isset($_POST['typeimpression']))
 	}
 	// Rami Adrien création du fichier confdb.inc.php
 	$fichierconfbillet = fopen("config/confbilletretenue.inc.php","w");
-	fwrite($fichierconfbillet, "<?php\n");
-	fwrite($fichierconfbillet, "//Rami Adrien\n");
-	fwrite($fichierconfbillet, "//Fichier qui permet de définir tout les variables et paramètre du billet de retenue\n");
-	fwrite($fichierconfbillet, "\$typeimpression =\"".$_POST['typeimpression']."\";\n");
-	fwrite($fichierconfbillet, "\$imageenteteecole =\"".$nometcheminfichier."\";\n");
-	fwrite($fichierconfbillet, "\$nomecole =\"".$_POST['nomecole']."\";\n");
-	fwrite($fichierconfbillet, "\$adresseecole =\"".$_POST['adresseecole']."\";\n");
-	fwrite($fichierconfbillet, "\$telecole =\"".$_POST['telecole']."\";\n");
-	fwrite($fichierconfbillet, "\$lieuecole =\"".$_POST['lieu']."\";\n");
-	fwrite($fichierconfbillet, "\$signature1 =\"".$_POST['signature1']."\";\n");
-	fwrite($fichierconfbillet, "\$signature2 =\"".$_POST['signature2']."\";\n");
-	fwrite($fichierconfbillet, "\$signature3 =\"".$_POST['signature3']."\";\n");
-	fwrite($fichierconfbillet, "?>");
-	fclose($fichierconfbillet);
+    $template=<<<EOF
+<?php
+\$typeimpression =%s;
+\$imageenteteecole =%s;
+\$nomecole =%s;
+\$adresseecole =%s;
+\$telecole =%s;
+\$lieuecole =%s;
+\$signature1 =%s;
+\$signature2 =%s;
+\$signature3 =%s;
+
+EOF;
+    $params=array(
+        $_POST['typeimpression'],
+        $nometcheminfichier,
+        $_POST['nomecole'],
+        $_POST['adresseecole'],
+        $_POST['telecole'],
+        $_POST['lieu'],
+        $_POST['signature1'],
+        $_POST['signature2'],
+        $_POST['signature3'],
+    );
+    $escaped=array();
+    foreach ($params as $p) {
+        $escaped[]=var_export($p, true);
+    }
+    $content=vsprintf($template, $escaped);
+    fwrite($fichierconfbillet, $content);
+    fclose($fichierconfbillet);
 	echo("Configuration du billet enregistr&eacute;");
 }
 

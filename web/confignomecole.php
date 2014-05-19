@@ -31,14 +31,14 @@ if(isset($_POST['ecole']) && isset($_POST['titre']))
 		//variable rempli on créer le dossier
 		// Rami Adrien création du fichier confdb.inc.php
 		$fichierconstantesinc = fopen("config/constantes.inc.php","w");
-		fwrite($fichierconstantesinc, "<?php\n");
-		fwrite($fichierconstantesinc, "define( \"ECOLE\" ,\"");
-		fwrite($fichierconstantesinc, $varecole);
-		fwrite($fichierconstantesinc, "\");\n");
-		fwrite($fichierconstantesinc, "define ( \"TITRE\" , \"");
-		fwrite($fichierconstantesinc, $vartitre);
-		fwrite($fichierconstantesinc, "\");\n");
-		fwrite($fichierconstantesinc, "?>");		
+        $template=<<<EOF
+<?php
+define("ECOLE", %s);
+define("TITRE", %s);
+
+EOF;
+        $content=sprintf($template, var_export($varecole, true), var_export($vartitre, true));
+		fwrite($fichierconstantesinc, $content);
 		fclose($fichierconstantesinc);
 		header("location:option.php");
 		}
