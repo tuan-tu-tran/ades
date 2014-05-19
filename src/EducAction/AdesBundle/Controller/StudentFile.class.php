@@ -85,6 +85,7 @@ class StudentFile
 
         //set the menu style
         $menu->horizontalSpacing=Tools::GetDefault($styleConfig, "horizontal-spacing", "5px");
+        $menu->class="inv";
         return $menu;
     }
 

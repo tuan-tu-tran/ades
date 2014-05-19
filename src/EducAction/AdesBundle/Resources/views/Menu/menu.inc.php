@@ -22,7 +22,7 @@ use EducAction\AdesBundle\View;
 use EducAction\AdesBundle\Html;
 ?>
 
-<ul class="menu_facts" id="<?php echo $id?>">
+<ul class="menu_facts <?php echo $class?>" id="<?php echo $id?>">
 <?php foreach($tree as $label=>$value):?><li>
         <?php if (is_array($value)):?>
             <div class="top_label with_children"><?php echo Html::Encode($label)?></div>

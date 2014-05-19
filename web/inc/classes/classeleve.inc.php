@@ -222,7 +222,7 @@ class eleve
     function boutonEdit ()
     {
         $ideleve = $this->ideleve();
-        $texte = "<div style=\"float:right\">\n<ul class=\"menuhorz\">\n";
+        $texte = "<div style=\"float:right\">\n<ul class=\"menuhorz inv\">\n";
         $texte .= "<li>\n<a href=\"ficheel.php?mode=editer&amp;ideleve=$ideleve\">Modifier</a>\n</li>\n";
         $texte .= "</ul>\n</div>\n";
         return $texte; 

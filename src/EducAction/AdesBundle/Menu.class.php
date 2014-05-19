@@ -24,6 +24,7 @@ class Menu
 {
     private $tree=array();
     public $horizontalSpacing = "0px";
+    public $class = "";
 
     public function __construct($id)
     {
