@@ -76,3 +76,8 @@ a {
 }
 
 .ongletsDisc {display: none}
+
+table.tableau_faits td {
+  max-width:15cm;
+  word-wrap:break-word;
+}

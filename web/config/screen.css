@@ -424,3 +424,7 @@ text-align: center
 }
 #memento a:hover {color: orange; background-color: blue}
  
+table.tableau_faits td {
+  max-width:600px;
+  word-wrap:break-word;
+}

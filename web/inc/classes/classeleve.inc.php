@@ -354,7 +354,7 @@ class eleve
             $titreFait = $prototypeFait->titreFaitId($id_TypeFait);
             $entete = "<div ##ID## ##CLASSE## ##STYLE##>\n";
             $entete .= "<h4>##TITREFAIT## [##NOMBRE##]</h4>\n";
-            $entete .= "<table width=\"100%\" cellspacing=\"2px\" border=\"1px\">\n";
+            $entete .= "<table width=\"100%\" cellspacing=\"2px\" border=\"1px\" class='tableau_faits'>\n";
 
             $classe = "class='tableauVisible'";
             $id = "id=\"tableau".$id_TypeFait."\"";
