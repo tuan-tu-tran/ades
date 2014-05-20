@@ -19,6 +19,11 @@
 */
 //Rami Adrien
 include("confbilletretenue.inc.php");
+$ext=EducAction\AdesBundle\Tools::GetImageType($imageenteteecole);
+if(!$ext){
+    echo "Veuillez reconfigurer le billet de retenue et utiliser une image de type supporté.";
+    throw new \Exception("could not determine type of image '$imageenteteecole'");
+}
 // Rédaction du billet de retenue: choisir l'un des deux modes d'impression
 // *********************************************************
 if($typeimpression == "Paysage")
@@ -32,7 +37,7 @@ if($typeimpression == "Paysage")
 }
 $pdf->AddPage();
 
-$pdf->Image($imageenteteecole, 15, 10, 40,40, 'png');
+$pdf->Image($imageenteteecole, 15, 10, 40,40, $ext);
 $pdf->SetFont('Arial','',14);
 $pdf->SetXY(90,10);
 $pdf->Cell(100,5,$nomecole, 0, 2, 'C', 0);

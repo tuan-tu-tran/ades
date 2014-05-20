@@ -18,8 +18,14 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 //Rami Adrien
+require_once "inc/init.inc.php";
 require ("fpdf/fpdf.php");
 include("config/confbilletretenue.inc.php");
+$ext=EducAction\AdesBundle\Tools::GetImageType($imageenteteecole);
+if(!$ext){
+    echo "Veuillez reconfigurer le billet de retenue et utiliser une image de type supporté.";
+    throw new \Exception("could not determine type of image '$imageenteteecole'");
+}
 // Rédaction du billet de retenue: choisir l'un des deux modes d'impression
 // *********************************************************
 if($typeimpression == "paysage")
@@ -34,7 +40,7 @@ if($typeimpression == "paysage")
 }
 $pdf->AddPage();
 
-$pdf->Image($imageenteteecole, 15, 10, 40,40, 'jpeg');
+$pdf->Image($imageenteteecole, 15, 10, 40,40, $ext);
 $pdf->SetFont('Arial','',14);
 $pdf->SetXY(90,10);
 $pdf->Cell(100,5,$nomecole, 0, 2, 'C', 0);

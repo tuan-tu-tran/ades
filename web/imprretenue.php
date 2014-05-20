@@ -17,10 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-include ("inc/prive.inc.php");
+require "inc/init.inc.php";
+EducAction\AdesBundle\User::CheckIfLogged();
 require ("fpdf/fpdf.php");
 require ("inc/funcdate.inc.php");
-require ("inc/fonctions.inc.php");
 Normalisation();
 
 $idfait = isset($_GET['idfait'])?$_GET['idfait']:Null;
