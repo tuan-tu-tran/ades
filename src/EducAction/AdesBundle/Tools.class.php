@@ -54,6 +54,7 @@ class Tools{
             if($full) {
                 $msg.=" in ".$last["file"]." at line ".$last["line"];
             }
+            return $msg;
         }
 	}
 
