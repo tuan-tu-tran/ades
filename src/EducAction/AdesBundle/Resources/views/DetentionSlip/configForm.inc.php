@@ -25,7 +25,10 @@ use EducAction\AdesBundle\Html;
     <style type="text/css">
         form#config_detention_slip label
         {
+            float:none;
+            display:inline-block;
             width:10em;
+            cursor:pointer;
         }
     </style>
 <?php View::EndBlock()?>
@@ -50,32 +53,32 @@ use EducAction\AdesBundle\Html;
                 <?php Html::Option("Portrait", NULL, !$paysage) ?>
             </select>
             <p>
-                <label>Image de l'école :</label>
-                <input type="file" name="fichierimagebilletretenue"/>
+                <label for="fichierimagebilletretenue">Image de l'école :</label>
+                <input type="file" id="fichierimagebilletretenue" name="fichierimagebilletretenue"/>
             <p>
-                <label>Nom de l'école :</label>
+                <label for="nomecole">Nom de l'école :</label>
                 <input name="nomecole" id="nomecole" size="30" maxlength="50" type="text" value="<?php echo Html::Encode($nomecole)?>" />
             <p>
-                <label>Adresse de l'école :</label>
+                <label for="adresseecole">Adresse de l'école :</label>
                 <input name="adresseecole" id="adresseecole" size="30" maxlength="50" type="text" value="<?php echo Html::Encode($adresseecole)?>" />
             <p>
-                <label>Lieu :</label>
-                <input name="lieu" id="lieu" size="30" maxlength="50" type="text" value="<?php echo Html::Encode($lieuecole )?>" />
+                <label for="lieu">Lieu :</label>
+                <input name="lieuecole" id="lieu" size="30" maxlength="50" type="text" value="<?php echo Html::Encode($lieuecole )?>" />
             </p>
             <p>
-                <label>Telephone :</label>
+                <label for="telecole">Telephone :</label>
                 <input name="telecole" id="telecole" size="30" maxlength="50" type="text" value="<?php echo Html::Encode($telecole )?>" />
             </p>
             <p>
-                <label>Signature 1 :</label>
+                <label for="signature1">Signature 1 :</label>
                 <input name="signature1" id="signature1" size="30" maxlength="50" type="text" value="<?php echo Html::Encode($signature1)?>" />
             </p>
             <p>
-                <label>Signature 2 :</label>
+                <label for="signature2">Signature 2 :</label>
                 <input name="signature2" id="signature2" size="30" maxlength="50" type="text" value="<?php echo Html::Encode($signature2 )?>" />
             </p>
             <p>
-                <label>Signature 3 :</label>
+                <label for="signature3">Signature 3 :</label>
                 <input name="signature3" id="signature3" size="30" maxlength="50" type="text" value="<?php echo Html::Encode($signature3 )?>" />
             </p>
 
