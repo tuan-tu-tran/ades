@@ -51,15 +51,25 @@ class DetentionSlip
         
         //read the config
         if (file_exists($configFile)) {
-            $config=parse_ini_file($configFile);
-        } else {
-            $config=NULL;
-        }
-
-        if(!$config) {
-            if ($config === FALSE) {
+            $content=file_get_contents($configFile);
+            if ($content===FALSE) {
                 $this->errors[]="Impossible de lire le fichier de configuration: ".Tools::GetLastError();
+                $config=self::GetEmptyConfig();
+            } else {
+                $config=unserialize($content);
+                if($config===FALSE) {
+                    $err="Le fichier de configuration contient des données invalides";
+                    $last_err=Tools::GetLastError();
+                    if ($last_err) {
+                        $err.=": $last_err";
+                    } else {
+                        $err.=".";
+                    }
+                    $this->errors[]=$err;
+                    $config=self::GetEmptyConfig();
+                }
             }
+        } else {
             $config=self::GetDefaultConfig();
             if (!self::WriteConfig($config)) {
                 $this->errors[]="Impossible d'écrire un fichier de configuration par default: ".Tools::GetLastError();
@@ -88,13 +98,19 @@ class DetentionSlip
         );
     }
 
+    private static function GetEmptyConfig()
+    {
+        $config=&self::GetDefaultConfig();
+        foreach ($config as $key=>$value) {
+            $config[$key]=NULL;
+        }
+        return $config;
+    }
+
     private static function WriteConfig($config)
     {
         $configFile = Config::LocalFile("config_detention_slip.ini");
-        $content="";
-        foreach ($config as $key=>$value) {
-            $content.="$key=\"$value\"\n";
-        }
-        return file_put_contents($configFile, $content);
+        $content=serialize($config);
+        return $content && file_put_contents($configFile, $content);
     }
 }
