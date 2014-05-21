@@ -19,10 +19,34 @@
 */
 namespace EducAction\AdesBundle\Controller;
 
+use EducAction\AdesBundle\User;
+use EducAction\AdesBundle\Tools;
+use EducAction\AdesBundle\View;
+
 class DetentionSlip
 {
     public function parseRequest()
     {
+        User::CheckIfLogged();
+        User::CheckAccess(User::ACCESS_ADMIN);
+        $action=Tools::GetDefault($_GET, "action");
+        switch ($action) {
+            default:
+                $this->configFormAction();
+                break;
+        }
+    }
 
+    private function Render($template)
+    {
+        View::Render("DetentionSlip/$template", $this);
+    }
+
+    private function configFormAction()
+    {
+        //read the config
+        //display the config form
+
+        $this->Render("configForm.inc.php");
     }
 }
