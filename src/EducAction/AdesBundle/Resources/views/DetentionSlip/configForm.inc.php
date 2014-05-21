@@ -33,6 +33,15 @@ use EducAction\AdesBundle\Html;
 <?php View::StartBlock("content")?>
     <h2>Configuration billet retenue</h2>
 
+    <?php if ($errors) :?>
+        <fieldset class="notice impt">
+            <legend>Erreurs</legend>
+            <?php foreach($errors as $e) :?>
+                <p><?php echo Html::Encode($e)?></p>
+            <?php endforeach ?>
+        </fieldset>
+    <?php endif ?>
+
     <p style="margin-left: 1em"><a href="apercubilletretenue.php" target="_blank">Visualiser un aperçu du billet de retenue</a></p>
     <form id="config_detention_slip" method="POST" enctype="multipart/form-data">
             <label>Type Impression :</label>

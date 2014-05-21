@@ -22,9 +22,12 @@ namespace EducAction\AdesBundle\Controller;
 use EducAction\AdesBundle\User;
 use EducAction\AdesBundle\Tools;
 use EducAction\AdesBundle\View;
+use EducAction\AdesBundle\Config;
 
 class DetentionSlip
 {
+    private $errors=array();
+
     public function parseRequest()
     {
         User::CheckIfLogged();
@@ -37,16 +40,61 @@ class DetentionSlip
         }
     }
 
-    private function Render($template)
+    private function Render($template, $params=NULL)
     {
-        View::Render("DetentionSlip/$template", $this);
+        View::Render("DetentionSlip/$template", $this, $params);
     }
 
     private function configFormAction()
     {
+        $configFile = Config::LocalFile("config_detention_slip.ini");
+        
         //read the config
-        //display the config form
+        if (file_exists($configFile)) {
+            $config=parse_ini_file($configFile);
+        } else {
+            $config=NULL;
+        }
 
-        $this->Render("configForm.inc.php");
+        if(!$config) {
+            if ($config === FALSE) {
+                $this->errors[]="Impossible de lire le fichier de configuration: ".Tools::GetLastError();
+            }
+            $config=self::GetDefaultConfig();
+            if (!self::WriteConfig($config)) {
+                $this->errors[]="Impossible d'écrire un fichier de configuration par default: ".Tools::GetLastError();
+            }
+        }
+
+        //display the config form
+        $config["errors"]=$this->errors;
+        $config["paysage"]=$config["typeimpression"]=="paysage";
+
+        $this->Render("configForm.inc.php", $config);
+    }
+
+    private static function GetDefaultConfig()
+    {
+        return array(
+            "typeimpression" =>'Portrait',
+            "imageenteteecole" =>'config/billetretenueimage.jpeg',
+            "nomecole" =>"Ecole",
+            "adresseecole" =>"Adresse",
+            "telecole" =>"Téléphone",
+            "lieuecole" =>"Ville",
+            "signature1" =>"signature1",
+            "signature2" =>"signature2",
+            "signature3" =>"signature3",
+        );
+    }
+
+    private static function WriteConfig($config)
+    {
+        $configFile = Config::LocalFile("config_detention_slip.ini");
+        $content="";
+        foreach ($config as $key=>$value) {
+            $content.="$key=\"$value\"\n";
+        }
+        return file_put_contents($configFile, $content);
     }
 }
