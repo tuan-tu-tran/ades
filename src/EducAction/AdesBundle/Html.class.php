@@ -39,4 +39,21 @@ class Html{
     {
         return htmlspecialchars($string, $flags, $encoding, $double_encode);
     }
+
+    public static function Option($text, $value=NULL, $selected=FALSE)
+    {
+        if (!$text) {
+            throw new \Exception("text cannot be empty");
+        }
+
+        $text=self::Encode($text);
+        if (!$value) {
+            $value=$text;
+        }
+        echo "<option";
+        if ($selected) {
+            echo " selected='selected'";
+        }
+        echo " value='$value'>$text</option>\n";
+    }
 }
