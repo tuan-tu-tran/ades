@@ -30,7 +30,6 @@ require_once DIRNAME(__FILE__)."/../../../../../web/config/constantes.inc.php";
 	<script language="javascript" type="text/javascript" src="inc/fonctions.js"></script>
 	<script type="text/javascript" type="text/javascript" src="ADESMemo.js"></script>
 	<script type="text/javascript" src="inc/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
-    <?php Html::Script("js/jquery-1.11.0.min.js")?>
 <?php View::EndBlock(View::PREPEND);?>
 
 <?php View::StartBlock("body");?>

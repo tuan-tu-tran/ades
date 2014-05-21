@@ -434,3 +434,5 @@ table.tableau_faits td {
   max-width:600px;
   word-wrap:break-word;
 }
+
+.auto_close{ cursor:pointer;}

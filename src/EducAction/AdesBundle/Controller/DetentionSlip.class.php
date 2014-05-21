@@ -23,10 +23,12 @@ use EducAction\AdesBundle\User;
 use EducAction\AdesBundle\Tools;
 use EducAction\AdesBundle\View;
 use EducAction\AdesBundle\Config;
+use EducAction\AdesBundle\FlashBag;
 
 class DetentionSlip
 {
     private $errors=array();
+    public $configSaved = FALSE;
 
     public function parseRequest()
     {
@@ -35,7 +37,11 @@ class DetentionSlip
         $action=Tools::GetDefault($_GET, "action");
         switch ($action) {
             default:
-                $this->configFormAction();
+                if( Tools::IsPost()) {
+                    $this->submitConfigFormAction();
+                } else {
+                    $this->configFormAction();
+                }
                 break;
         }
     }
@@ -45,8 +51,33 @@ class DetentionSlip
         View::Render("DetentionSlip/$template", $this, $params);
     }
 
+    private function submitConfigFormAction()
+    {
+        $config=self::GetDefaultConfig();
+        foreach ($config as $key=>$value) {
+            if($key=="imageenteteecole") {
+                continue;
+            }
+            if(!($config[$key] = Tools::GetDefault($_POST, $key)) && !$this->errors) {
+                $this->errors[]="Veuillez remplir tous les champs";
+            }
+        }
+
+        $this->submittedConfig=$config;
+
+        if (!$this->errors) {
+            if(!self::WriteConfig($config)) {
+                $this->errors[]="Impossible d'écrire le fichier de configuration: ".Tools::GetLastError();
+            }
+        }
+        FlashBag::Set("result",$this);
+        Tools::Redirect("configurationbilletretenue.php");
+    }
+
     private function configFormAction()
     {
+        if(!($result=FlashBag::Pop("result")) || !$result->errors) {
+            $this->configSaved=$result;
         $configFile = Config::LocalFile("config_detention_slip.ini");
         
         //read the config
@@ -75,10 +106,14 @@ class DetentionSlip
                 $this->errors[]="Impossible d'écrire un fichier de configuration par default: ".Tools::GetLastError();
             }
         }
+        } else {
+            $config=$result->submittedConfig;
+            $this->errors=$result->errors;
+        }
 
         //display the config form
         $config["errors"]=$this->errors;
-        $config["paysage"]=$config["typeimpression"]=="paysage";
+        $config["paysage"]=$config["typeimpression"]=="Paysage";
 
         $this->Render("configForm.inc.php", $config);
     }

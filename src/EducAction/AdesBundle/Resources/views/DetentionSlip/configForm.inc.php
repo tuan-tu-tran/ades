@@ -36,8 +36,12 @@ use EducAction\AdesBundle\Html;
 <?php View::StartBlock("content")?>
     <h2>Configuration billet retenue</h2>
 
+    <?php if($configSaved) :?>
+        <p class="success auto_close" style="margin-left:1em">La configuration a été sauvegardée.</p>
+    <?php endif ?>
+
     <?php if ($errors) :?>
-        <fieldset class="notice impt">
+        <fieldset class="notice impt auto_close">
             <legend>Erreurs</legend>
             <?php foreach($errors as $e) :?>
                 <p><?php echo Html::Encode($e)?></p>
