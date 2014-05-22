@@ -172,64 +172,7 @@ class DetentionSlip
         } elseif ( !($ext=Tools::GetImageType($config["imageenteteecole"])) ) {
             $this->PreviewError(self::ERR_IMG_TYPE);
         } else {
-            if($config["typeimpression"] == "Paysage")
-            {
-                $pdf=new FPDF('L','mm','A5');
-            }else{
-                $pdf=new FPDF('P','mm','A4');
-            }
-            $pdf->AddPage();
-
-            $pdf->Image($config["imageenteteecole"], 15, 10, 40,40, $ext);
-            $pdf->SetFont('Arial','',14);
-            $pdf->SetXY(90,10);
-            $pdf->Cell(100,5,$config["nomecole"], 0, 2, 'C', 0);
-            $pdf->SetXY(90,15);
-            $pdf->Cell(100,5,$config["adresseecole"], 0, 2, 'C', 0);
-            $pdf->SetXY(90,20);
-            $pdf->Cell(100,5,"Téléphone:".$config["telecole"], 0, 2, 'C', 0);
-
-            $pdf->SetFont('Arial','',12);
-            $dt = date("d/m/y");
-            $pdf->SetXY(140,35);
-            $pdf->Cell(50,5,$config["lieuecole"].', le '.$dt, 0, 2, 'R');
-
-            $pdf->SetFont('','B',24);
-            $pdf->SetXY(70,45);
-            $pdf->Cell(110,10, "INTITULE", 1, 0, 'C');
-
-            $pdf->SetXY(10,65);
-            $pdf->SetFont('', 'B',10);
-            $chaine = "M. PRENOM NOM en classe de CLASSE\n";
-            $pdf->Cell(200,5, $chaine, 0,0,'L');
-            //$pdf->Write(5, $chaine);
-
-            $pdf->SetXY(10,70);
-            $pdf->SetFont('');
-            $chaine = "a mérité une retenue de DUREE h ce DATE RETENUE à HEURE ";
-            $chaine .= "(local LOCAL) pour le motif suivant\n";
-            $pdf->Cell(200,5, $chaine, 0,0,'L');
-            //$pdf->Write(5, $chaine);
-            $pdf->SetXY(10,75);
-            $pdf->SetFont('','B',12);
-            $pdf->Write(5, "MOTIF");
-            $pdf->SetFont('', 'B', 10);
-            $pdf->SetXY(10,90);
-
-            $chaine = "Matériel à apporter: JDC et matériel d'écriture - MATERIEL.\n";
-            $chaine .= "Travail à effectuer: TRAVAIL.\n";
-            $chaine .= "Veuillez prendre contact avec l'éducateur de votre enfant. Merci.\n";
-
-            $pdf->Write(5, $chaine);
-
-            $pdf->SetXY(10,110);
-            $pdf->Cell(30,5,$config["signature1"], 0, 0, 'L', 0);
-            $pdf->SetXY(80,110);
-            $pdf->Cell(30,5,$config["signature2"], 0, 0, 'L', 0);
-            $pdf->SetXY(150,110);
-            $pdf->Cell(30,5,$config["signature3"], 0, 0, 'L', 0);
-
-            $pdf->Output();
+            $this->Render("pdf.inc.php", $config);
         }
     }
 
