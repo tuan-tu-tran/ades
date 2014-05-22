@@ -78,7 +78,7 @@ class DetentionSlip
     {
         if(!($result=FlashBag::Pop("result")) || !$result->errors) {
             $this->configSaved=$result;
-        $configFile = Config::LocalFile("config_detention_slip.ini");
+        $configFile = self::ConfigFile();
         
         //read the config
         if (file_exists($configFile)) {
@@ -142,9 +142,14 @@ class DetentionSlip
         return $config;
     }
 
+    private static function ConfigFile()
+    {
+        return Config::LocalFile("config_detention_slip.txt");
+    }
+
     private static function WriteConfig($config)
     {
-        $configFile = Config::LocalFile("config_detention_slip.ini");
+        $configFile = self::ConfigFile();
         $content=serialize($config);
         return $content && file_put_contents($configFile, $content);
     }
