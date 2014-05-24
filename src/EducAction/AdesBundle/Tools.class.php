@@ -76,24 +76,4 @@ class Tools{
     {
         return strtoupper($_SERVER["REQUEST_METHOD"]) == "POST";
     }
-
-    public static function GetImageType($filename)
-    {
-        switch (exif_imagetype($filename)) {
-            case IMAGETYPE_GIF:
-                return "gif";
-                break;
-            case IMAGETYPE_PNG:
-                return "png";
-                break;
-            case IMAGETYPE_JPEG:
-                return "jpeg";
-                break;
-            case IMAGETYPE_BMP:
-                return "bmp";
-                break;
-            default:
-                return NULL;
-        }
-    }
 }

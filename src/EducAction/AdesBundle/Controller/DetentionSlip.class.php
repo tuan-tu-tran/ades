@@ -197,10 +197,23 @@ class DetentionSlip
             $this->PreviewError(self::ERR_READ_CONFIG);
         } elseif ( ($config=unserialize($content)) === FALSE ) {
             $this->PreviewError(self::ERR_CONFIG_CONTENT);
-        } elseif ( !($ext=Tools::GetImageType($config["imageenteteecole"])) ) {
+        } elseif ( !self::SupportedImageType($config["imageenteteecole"]) ) {
             $this->PreviewError(self::ERR_IMG_TYPE);
         } else {
             $this->Render("pdf.inc.php", $config, $params);
+        }
+    }
+
+    private static function SupportedImageType($file)
+    {
+        switch (exif_imagetype($file)) {
+            case IMAGETYPE_GIF:
+            case IMAGETYPE_PNG:
+            case IMAGETYPE_JPEG:
+            case IMAGETYPE_BMP:
+                return TRUE;
+            default:
+                return FALSE;
         }
     }
 
