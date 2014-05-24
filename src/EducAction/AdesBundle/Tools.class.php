@@ -76,4 +76,17 @@ class Tools{
     {
         return strtoupper($_SERVER["REQUEST_METHOD"]) == "POST";
     }
+
+    public static function FormatDate($date)
+    {
+        $joursSemaine = array ('dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi');
+        // transformer la date sql en microtemps
+        $temps = strtotime($date);
+        // reconversion en date PHP
+        $quand = getdate($temps);
+        // calcul de la date
+        $js = $joursSemaine[$quand["wday"]];
+        $date = $js." ".$quand["mday"]."/".$quand["mon"]."/".$quand["year"];
+        return $date;
+    }
 }
