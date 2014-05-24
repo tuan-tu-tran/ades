@@ -228,14 +228,10 @@ class DetentionSlip
     private static function GetImageType($file)
     {
         switch (exif_imagetype($file)) {
-            case IMAGETYPE_GIF:
-                return "gif";
             case IMAGETYPE_PNG:
                 return "png";
             case IMAGETYPE_JPEG:
                 return "jpeg";
-            case IMAGETYPE_BMP:
-                return "bmp";
             default:
                 return FALSE;
         }
