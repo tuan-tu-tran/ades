@@ -24,6 +24,7 @@ use EducAction\AdesBundle\Tools;
 use EducAction\AdesBundle\View;
 use EducAction\AdesBundle\Config;
 use EducAction\AdesBundle\FlashBag;
+use EducAction\AdesBundle\Db;
 use \FPDF;
 
 class DetentionSlip
@@ -168,6 +169,7 @@ class DetentionSlip
     const ERR_READ_CONFIG="read";
     const ERR_CONFIG_CONTENT="configContent";
     const ERR_IMG_TYPE="imgType";
+    const ERR_FACT_NOT_FOUND="noFact";
     public function previewAction()
     {
         $this->RenderPdf(array(
@@ -222,5 +224,43 @@ class DetentionSlip
         $this->Render("previewError.inc.php", array(
             "error"=>$error,
         ));
+    }
+
+    public function printAction($factId)
+    {
+        User::CheckIfLogged();
+        if($factId) {
+            $sql = "SELECT ades_faits.* , ades_retenues.typeDeRetenue, ";
+            $sql .= "ades_retenues.ladate AS dateRetenue, ades_retenues.heure, ";
+            $sql .= "ades_retenues.local, ades_retenues.duree, nom, prenom, classe ";
+            $sql .= "FROM ades_faits ";
+            $sql .= "LEFT JOIN ades_retenues ON ades_faits.idretenue = ades_retenues.idretenue ";
+            $sql .= "LEFT JOI ades_eleves ON ades_faits.ideleve = ades_eleves.ideleve ";
+            $sql .= "WHERE idfait = %d";
+            $query=sprintf($sql, $factId);
+
+            if (Db::GetInstance()->TryQuery($query, $result)) {
+                if ($result) {
+                    $infos=$result[0];
+                    $intituleDesRetenues = parse_ini_file("config/intitulesretenues.ini", TRUE);
+
+                    // le numéro de type de retenue
+                    $typeDeRetenue = $infos['typeDeRetenue'];
+
+                    // permet de retrouver l'intitulé du type, issu du fichier .ini
+                    $infos["intitule"] = $intituleDesRetenues[$typeDeRetenue]['intitule'];
+
+                    $infos["dateRetenue"] = Tools::FormatDate($infos['dateRetenue']);
+
+                    $this->RenderPdf($infos);
+                } else {
+                    $this->PreviewError(self::ERR_FACT_NOT_FOUND);
+                }
+            } else {
+                View::Render("db_error.inc.php", array("back"=>FALSE));
+            }
+        } else {
+            Tools::Redirect("unauthorized.php");
+        }
     }
 }

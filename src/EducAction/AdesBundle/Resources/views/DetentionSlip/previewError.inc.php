@@ -20,6 +20,8 @@
 namespace EducAction\AdesBundle;
 use EducAction\AdesBundle\Controller\DetentionSlip as Error;
 
+$showLink=TRUE;
+$title="Aperçu";
 switch ($error) {
     case Error::ERR_NO_CONFIG:
         $msg="Le billet de retenue n'est pas configuré";
@@ -34,20 +36,29 @@ switch ($error) {
     case Error::ERR_IMG_TYPE:
         $msg="Le format du logo de l'établissement n'est pas supporté.";
         break;
+    case Error::ERR_FACT_NOT_FOUND:
+        $msg="Le billet de retenue demandé n'a pas été trouvé.";
+        $showLink=FALSE;
+        $title="Impression";
+        break;
     default:
         throw new \Exception("unhandled error type: '$error'");
 }
 ?>
 
 <?php View::StartBlock("content")?>
-    <h2>Aperçu du billet retenue</h2>
+    <h2><?php echo $title?> du billet retenue</h2>
 
-    <fieldset class="notice impt auto_close">
+    <fieldset class="notice impt">
         <legend>Erreur</legend>
         <p><?php echo $msg?></p>
     </fieldset>
 
-    <p><a href="<?php echo $config_url?>">Configurer le billet de retenue</a></p>
+    <?php if ($showLink) :?>
+        <p><a href="<?php echo $config_url?>">Configurer le billet de retenue</a></p>
+    <?php else:?>
+        <p><a href="javascript:history.go(-1)">Retourner à la page précédente</a></p>
+    <?php endif?>
 <?php View::EndBlock()?>
 
 <?php View::Render("layout.inc.php")?>
