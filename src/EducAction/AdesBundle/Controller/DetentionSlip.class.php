@@ -190,6 +190,11 @@ class DetentionSlip
         ));
     }
 
+    private static function GetLogoFile()
+    {
+        return Config::LocalFile("logo.img");
+    }
+
     private function RenderPdf($params)
     {
         $configFile = self::ConfigFile();
@@ -199,21 +204,38 @@ class DetentionSlip
             $this->PreviewError(self::ERR_READ_CONFIG);
         } elseif ( ($config=unserialize($content)) === FALSE ) {
             $this->PreviewError(self::ERR_CONFIG_CONTENT);
-        } elseif ( !self::SupportedImageType($config["imageenteteecole"]) ) {
-            $this->PreviewError(self::ERR_IMG_TYPE);
         } else {
-            $this->Render("pdf.inc.php", $config, $params);
+            $logoFile = self::GetLogoFile();
+            $logo=&$config["imageenteteecole"];
+            if(file_exists($logoFile)) {
+                $logo=$logoFile;
+            } elseif (file_exists($logo)) {
+                if(copy($logo, $logoFile)) {
+                    $logo=$logoFile;
+                }
+            } else {
+                $logo=NULL;
+            }
+            if($logo && !($config["imgType"]=self::GetImageType($logo))){
+                $this->PreviewError(self::ERR_IMG_TYPE);
+            } else {
+                unset($logo);
+                $this->Render("pdf.inc.php", $config, $params);
+            }
         }
     }
 
-    private static function SupportedImageType($file)
+    private static function GetImageType($file)
     {
         switch (exif_imagetype($file)) {
             case IMAGETYPE_GIF:
+                return "gif";
             case IMAGETYPE_PNG:
+                return "png";
             case IMAGETYPE_JPEG:
+                return "jpeg";
             case IMAGETYPE_BMP:
-                return TRUE;
+                return "bmp";
             default:
                 return FALSE;
         }

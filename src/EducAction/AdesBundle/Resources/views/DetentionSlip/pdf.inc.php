@@ -26,7 +26,13 @@ if($typeimpression == "Paysage")
 }
 $pdf->AddPage();
 
-$pdf->Image($imageenteteecole, 15, 10, 40,40);
+if($imageenteteecole) {
+    $pdf->Image($imageenteteecole, 15, 10, 40,40, $imgType);
+} else {
+    $pdf->SetFont('Arial','',14);
+    $pdf->SetXY(15,10);
+    $pdf->Cell(40,40,"#LOGO", 1, 2, 'C', 0);
+}
 $pdf->SetFont('Arial','',14);
 $pdf->SetXY(90,10);
 $pdf->Cell(100,5,$nomecole, 0, 2, 'C', 0);
