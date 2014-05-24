@@ -48,9 +48,17 @@ class DetentionSlip
         }
     }
 
-    private function Render($template, $params=NULL)
+    private function Render($template)
     {
-        View::Render("DetentionSlip/$template", $this, $params);
+        $params=array("DetentionSlip/$template", $this);
+        $i=0;
+        foreach(func_get_args() as $arg) {
+            if($i>0 && $arg){
+                $params[]=$arg;
+            }
+            ++$i;
+        }
+        call_user_func_array(array("EducAction\\AdesBundle\\View","Render"), $params);
     }
 
     private function submitConfigFormAction()
@@ -162,6 +170,26 @@ class DetentionSlip
     const ERR_IMG_TYPE="imgType";
     public function previewAction()
     {
+        $this->RenderPdf(array(
+            "intitule"=>"{INTITULE}",
+            "prenom"=>"{PRENOM}",
+            "nom"=>"{NOM}",
+            "classe"=>"{CLASSE}",
+            "duree"=>"{DUREE}",
+            "dateRetenue"=>"{DATE_RETENUE}",
+            "heure"=>"{HEURE}",
+            "local"=>"{LOCAL}",
+            "motif"=>"{MOTIF}",
+            "materiel"=>"{MATERIEL}",
+            "travail"=>"{TRAVAIL}",
+            "signature1"=>"{SIGNATURE1}",
+            "signature2"=>"{SIGNATURE2}",
+            "signature3"=>"{SIGNATURE3}",
+        ));
+    }
+
+    private function RenderPdf($params)
+    {
         $configFile = self::ConfigFile();
         if (!file_exists($configFile)) {
             $this->PreviewError(self::ERR_NO_CONFIG);
@@ -172,7 +200,7 @@ class DetentionSlip
         } elseif ( !($ext=Tools::GetImageType($config["imageenteteecole"])) ) {
             $this->PreviewError(self::ERR_IMG_TYPE);
         } else {
-            $this->Render("pdf.inc.php", $config);
+            $this->Render("pdf.inc.php", $config, $params);
         }
     }
 

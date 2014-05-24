@@ -42,28 +42,28 @@ $pdf->Cell(50,5,$lieuecole.', le '.$dt, 0, 2, 'R');
 
 $pdf->SetFont('','B',24);
 $pdf->SetXY(70,45);
-$pdf->Cell(110,10, "INTITULE", 1, 0, 'C');
+$pdf->Cell(110,10, $intitule, 1, 0, 'C');
 
 $pdf->SetXY(10,65);
 $pdf->SetFont('', 'B',10);
-$chaine = "M. PRENOM NOM en classe de CLASSE\n";
+$chaine = "$prenom $nom en classe de $classe\n";
 $pdf->Cell(200,5, $chaine, 0,0,'L');
 //$pdf->Write(5, $chaine);
 
 $pdf->SetXY(10,70);
 $pdf->SetFont('');
-$chaine = "a mérité une retenue de DUREE h ce DATE RETENUE à HEURE ";
-$chaine .= "(local LOCAL) pour le motif suivant\n";
+$chaine = "a mérité une retenue de $duree h ce $dateRetenue à $heure ";
+$chaine .= "(local $local) pour le motif suivant\n";
 $pdf->Cell(200,5, $chaine, 0,0,'L');
 //$pdf->Write(5, $chaine);
 $pdf->SetXY(10,75);
 $pdf->SetFont('','B',12);
-$pdf->Write(5, "MOTIF");
+$pdf->Write(5, $motif);
 $pdf->SetFont('', 'B', 10);
 $pdf->SetXY(10,90);
 
-$chaine = "Matériel à apporter: JDC et matériel d'écriture - MATERIEL.\n";
-$chaine .= "Travail à effectuer: TRAVAIL.\n";
+$chaine = "Matériel à apporter: JDC et matériel d'écriture - $materiel.\n";
+$chaine .= "Travail à effectuer: $travail.\n";
 $chaine .= "Veuillez prendre contact avec l'éducateur de votre enfant. Merci.\n";
 
 $pdf->Write(5, $chaine);
