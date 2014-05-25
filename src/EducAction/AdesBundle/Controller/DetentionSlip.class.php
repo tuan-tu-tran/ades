@@ -172,6 +172,8 @@ class DetentionSlip
     const ERR_FACT_NOT_FOUND="noFact";
     public function previewAction()
     {
+        User::CheckIfLogged();
+        User::CheckAccess(User::ACCESS_ADMIN);
         $this->RenderPdf(array(
             "intitule"=>"{INTITULE}",
             "prenom"=>"{PRENOM}",
