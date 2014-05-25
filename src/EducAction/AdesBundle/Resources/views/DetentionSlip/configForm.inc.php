@@ -27,7 +27,7 @@ use EducAction\AdesBundle\Html;
         {
             float:none;
             display:inline-block;
-            width:10em;
+            width:15em;
             cursor:pointer;
         }
     </style>
@@ -57,7 +57,7 @@ use EducAction\AdesBundle\Html;
                 <?php Html::Option("Portrait", NULL, !$paysage) ?>
             </select>
             <p>
-                <label for="fichierimagebilletretenue">Image de l'école :</label>
+                <label for="fichierimagebilletretenue">Logo de l'établissement:</label>
                 <input type="file" id="fichierimagebilletretenue" name="fichierimagebilletretenue"/>
             <p>
                 <label for="nomecole">Nom de l'école :</label>
