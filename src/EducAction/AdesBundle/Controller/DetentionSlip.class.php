@@ -229,7 +229,14 @@ class DetentionSlip
     {
         switch (exif_imagetype($file)) {
             case IMAGETYPE_PNG:
-                return "png";
+                //check for alpha channel: coded in the 25th byte
+                $color_byte=ord(file_get_contents($file, NULL, NULL, 25,1));
+                if($color_byte==4 || $color_byte==6) {
+                    //color/grayscale + alpha not supported by fpdf
+                    return FALSE;
+                } else {
+                    return "png";
+                }
             case IMAGETYPE_JPEG:
                 return "jpeg";
             default:
