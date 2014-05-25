@@ -186,9 +186,6 @@ class DetentionSlip
             "motif"=>"{MOTIF}",
             "materiel"=>"{MATERIEL}",
             "travail"=>"{TRAVAIL}",
-            "signature1"=>"{SIGNATURE1}",
-            "signature2"=>"{SIGNATURE2}",
-            "signature3"=>"{SIGNATURE3}",
         ));
     }
 
