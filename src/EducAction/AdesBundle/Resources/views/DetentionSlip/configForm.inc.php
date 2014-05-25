@@ -36,9 +36,18 @@ use EducAction\AdesBundle\Html;
 <?php View::StartBlock("content")?>
     <h2>Configuration billet retenue</h2>
 
-    <?php if($configSaved) :?>
-        <p class="success auto_close" style="margin-left:1em">La configuration a été sauvegardée.</p>
+    <?php if(isset($result) && ($result->configSaved || $result->logoSaved)) :?>
+        <p class="success auto_close" style="margin-left:1em">
+            <?php if($result->configChanged && $result->logoSaved) :?>
+                La configuration et le logo ont été sauvegardés.
+            <?php elseif ($result->configSaved && !$result->logoSaved) : ?>
+                La configuration a été sauvegardée.
+            <?php else :?>
+                Le logo a été sauvegardé.
+            <?php endif ?>
+        </p>
     <?php endif ?>
+
 
     <?php if ($errors) :?>
         <fieldset class="notice impt auto_close">

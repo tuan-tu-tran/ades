@@ -30,7 +30,6 @@ use \FPDF;
 class DetentionSlip
 {
     private $errors=array();
-    public $configSaved = FALSE;
     public $config_url="configurationbilletretenue.php";
 
     public function parseRequest()
@@ -75,20 +74,42 @@ class DetentionSlip
         }
 
         $this->submittedConfig=$config;
-
+        $this->configSaved=FALSE;
+        $configChanged=FALSE;
         if (!$this->errors) {
-            if(!self::WriteConfig($config)) {
+            $configChanged = !file_exists(self::ConfigFile())
+                || !($currentConfig=unserialize(file_get_contents(self::ConfigFile())))
+                || $config!=$currentConfig
+            ;
+            if($configChanged && !self::WriteConfig($config)) {
                 $this->errors[]="Impossible d'écrire le fichier de configuration: ".Tools::GetLastError();
+            } else {
+                $this->configSaved=TRUE;
             }
         }
+        $this->configChanged=$configChanged;
+
+        //image upload
+        $this->logoSaved = FALSE;
+        $upload=$_FILES["fichierimagebilletretenue"];
+        if($upload && $upload["error"]===0) {
+            $tmpFile=$upload["tmp_name"];
+            if(!self::GetImageType($tmpFile)){
+                $this->errors[]="Ce format d'image n'est pas supporté pour le logo (JPEG ou PNG sans transparence seulement).";
+            } else if(!copy($upload["tmp_name"], self::GetLogoFile())) {
+                $this->errors[]="Impossible de copier le logo: ".Tools::GetLastError();
+            } else {
+                $this->logoSaved = TRUE;
+            }
+        }
+
         FlashBag::Set("result",$this);
         Tools::Redirect("configurationbilletretenue.php");
     }
 
     private function configFormAction()
     {
-        if(!($result=FlashBag::Pop("result")) || !$result->errors) {
-            $this->configSaved=$result;
+        if(!($result=FlashBag::Pop("result"))) {
         $configFile = self::ConfigFile();
         
         //read the config
@@ -118,6 +139,7 @@ class DetentionSlip
             }
         }
         } else {
+            $this->result=$result;
             $config=$result->submittedConfig;
             $this->errors=$result->errors;
         }
