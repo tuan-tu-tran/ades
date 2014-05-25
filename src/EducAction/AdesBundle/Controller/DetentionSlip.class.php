@@ -133,7 +133,7 @@ class DetentionSlip
     {
         return array(
             "typeimpression" =>'Portrait',
-            "imageenteteecole" =>'config/billetretenueimage.jpeg',
+            "imageenteteecole" =>Config::ConfigFile("default_logo.png"),
             "nomecole" =>"Ecole",
             "adresseecole" =>"Adresse",
             "telecole" =>"Téléphone",
