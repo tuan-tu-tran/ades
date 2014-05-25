@@ -23,11 +23,17 @@ use EducAction\AdesBundle\Html;
 
 <?php View::StartBlock("post_head")?>
     <style type="text/css">
+        form#config_detention_slip div
+        {
+            display:inline-block;
+            vertical-align:top;
+            margin-right:0.5em;
+        }
         form#config_detention_slip label
         {
             float:none;
             display:inline-block;
-            width:15em;
+            width:13em;
             cursor:pointer;
         }
     </style>
@@ -60,20 +66,22 @@ use EducAction\AdesBundle\Html;
 
     <p style="margin-left: 1em"><a href="apercubilletretenue.php" target="_blank">Visualiser un aperçu du billet de retenue</a></p>
     <form id="config_detention_slip" method="POST" enctype="multipart/form-data">
+            <div>
+            <p>
             <label>Type Impression :</label>
             <select name="typeimpression" id="typeimpression">
                 <?php Html::Option("Paysage", NULL, $paysage) ?>
                 <?php Html::Option("Portrait", NULL, !$paysage) ?>
             </select>
-            <p>
-                <label for="fichierimagebilletretenue">Logo de l'établissement:</label>
-                <input type="file" id="fichierimagebilletretenue" name="fichierimagebilletretenue"/>
+            </p>
             <p>
                 <label for="nomecole">Nom de l'école :</label>
                 <input name="nomecole" id="nomecole" size="30" maxlength="50" type="text" value="<?php echo Html::Encode($nomecole)?>" />
+            </p>
             <p>
                 <label for="adresseecole">Adresse de l'école :</label>
                 <input name="adresseecole" id="adresseecole" size="30" maxlength="50" type="text" value="<?php echo Html::Encode($adresseecole)?>" />
+            </p>
             <p>
                 <label for="lieu">Lieu :</label>
                 <input name="lieuecole" id="lieu" size="30" maxlength="50" type="text" value="<?php echo Html::Encode($lieuecole )?>" />
@@ -81,6 +89,11 @@ use EducAction\AdesBundle\Html;
             <p>
                 <label for="telecole">Telephone :</label>
                 <input name="telecole" id="telecole" size="30" maxlength="50" type="text" value="<?php echo Html::Encode($telecole )?>" />
+            </p>
+            </div><div>
+            <p>
+                <label for="fichierimagebilletretenue">Logo de l'établissement:</label>
+                <input type="file" id="fichierimagebilletretenue" name="fichierimagebilletretenue"/>
             </p>
             <p>
                 <label for="signature1">Signature 1 :</label>
@@ -94,8 +107,9 @@ use EducAction\AdesBundle\Html;
                 <label for="signature3">Signature 3 :</label>
                 <input name="signature3" id="signature3" size="30" maxlength="50" type="text" value="<?php echo Html::Encode($signature3 )?>" />
             </p>
+            </div>
 
-            <input name="Submit" value="Enregistrer" type="submit"><br/><br/> 
+            <p><input name="Submit" value="Enregistrer" type="submit"/></p>
     </form>
 <?php View::EndBlock()?>
 
