@@ -18,45 +18,5 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 require "inc/init.inc.php";
-EducAction\AdesBundle\User::CheckIfLogged();
-require ("fpdf/fpdf.php");
-require ("inc/funcdate.inc.php");
-Normalisation();
-
-$idfait = isset($_GET['idfait'])?$_GET['idfait']:Null;
-if (!(isset($idfait))) jeter();
-
-// Rechercher les références del'élève connaissant le "idfait"
-require ("config/confbd.inc.php");
-$lienDB = mysql_connect($sql_serveur, $sql_user, $sql_passwd);
-mysql_select_db ($sql_bdd);
-
-$sql = "SELECT ades_faits.* , ades_retenues.typeDeRetenue, ";
-$sql .= "ades_retenues.ladate AS dateRetenue, ades_retenues.heure, ";
-$sql .= "ades_retenues.local, ades_retenues.duree, nom, prenom, classe ";
-$sql .= "FROM ades_faits LEFT JOIN ades_retenues ";
-$sql .= "ON ades_faits.idretenue = ades_retenues.idretenue ";
-$sql .= "LEFT JOIN ades_eleves ON ades_faits.ideleve = ades_eleves.ideleve ";
-$sql .= "WHERE idfait = $idfait";
-
-// echo $sql;
-
-$resultat = mysql_query ($sql);
-$infos = mysql_fetch_assoc($resultat);
-
-$intituleDesRetenues = parse_ini_file("config/intitulesretenues.ini", TRUE);
-
-// le numéro de type de retenue
-$typeDeRetenue = $infos['typeDeRetenue'];
-
-// permet de retrouver l'intitulé du type, issu du fichier .ini
-$intitule = $intituleDesRetenues[$typeDeRetenue]['intitule'];
-
-// lecture de toutes les variables retournées par la requête $sql
-foreach ($infos as $key=>$value)
-	$$key = stripslashes($value);
-$dateRetenue = date_sql_php($infos['dateRetenue']);
-
-require ("config/billetretenue.inc.php");
-
-?>
+$controller=new EducAction\AdesBundle\Controller\DetentionSlip;
+$controller->printAction(EducAction\AdesBundle\Tools::GetDefault($_GET, "idfait"));
