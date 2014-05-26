@@ -92,7 +92,7 @@ class DetentionSlip
         //image upload
         $this->logoSaved = FALSE;
         $upload=$_FILES["fichierimagebilletretenue"];
-        if($upload && $upload["error"]===0) {
+        if($upload && $upload["error"]===UPLOAD_ERR_OK) {
             $tmpFile=$upload["tmp_name"];
             if(!self::GetImageType($tmpFile)){
                 $this->errors[]="Ce format d'image n'est pas supporté pour le logo (JPEG ou PNG sans transparence seulement).";
@@ -100,6 +100,27 @@ class DetentionSlip
                 $this->errors[]="Impossible de copier le logo: ".Tools::GetLastError();
             } else {
                 $this->logoSaved = TRUE;
+            }
+        } else {
+            $uploadError=$upload["error"];
+            switch($uploadError){
+                case UPLOAD_ERR_NO_FILE:
+                    break;
+                case UPLOAD_ERR_INI_SIZE:
+                    $max_size=ini_get("upload_max_filesize");
+                    $this->errors[]="La taille du logo ne peut pas excéder $max_size.";
+                    break;
+                case UPLOAD_ERR_FORM_SIZE:
+                case UPLOAD_ERR_PARTIAL:
+                case UPLOAD_ERR_NO_TMP_DIR:
+                case UPLOAD_ERR_CANT_WRITE:
+                case UPLOAD_ERR_EXTENSION:
+                default:
+                    $filname=$upload["name"];
+                    $userId=User::GetId();
+                    error_log("DetentionSlip::submitAction(file='$filname', user=$userId) : upload error : $uploadError");
+                    $this->errors[]="Une erreur est survenue pendant l'envoi du fichier. Réessayez ou contactez l'administrateur si l'erreur persiste.";
+                    break;
             }
         }
 
