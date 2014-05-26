@@ -154,7 +154,20 @@ class DetentionSlip
                 }
             }
         } else {
-            $config=self::GetDefaultConfig();
+            if (file_exists($oldConfigFile=Config::WebFile("config/confbilletretenue.inc.php"))) {
+                require $oldConfigFile;
+                $config["typeimpression"] =$typeimpression;
+                $config["imageenteteecole"] =$imageenteteecole;
+                $config["nomecole"] =$nomecole;
+                $config["adresseecole"] =$adresseecole;
+                $config["telecole"] =$telecole;
+                $config["lieuecole"] =$lieuecole;
+                $config["signature1"] =$signature1;
+                $config["signature2"] =$signature2;
+                $config["signature3"] =$signature3;
+            } else {
+                $config=self::GetDefaultConfig();
+            }
             if (!self::WriteConfig($config)) {
                 $this->errors[]="Impossible d'écrire un fichier de configuration par default: ".Tools::GetLastError();
             }
