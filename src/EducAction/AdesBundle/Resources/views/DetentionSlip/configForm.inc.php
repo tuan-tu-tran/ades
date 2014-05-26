@@ -23,6 +23,7 @@ use EducAction\AdesBundle\Html;
 
 <?php View::StartBlock("post_head")?>
     <style type="text/css">
+        form#config_detention_slip{ padding-top:0px; }
         form#config_detention_slip div
         {
             display:inline-block;
@@ -40,9 +41,9 @@ use EducAction\AdesBundle\Html;
 <?php View::EndBlock()?>
 
 <?php View::StartBlock("content")?>
-    <h2>Configuration billet retenue</h2>
+    <h2>Configuration du billet de retenue</h2>
 
-    <?php if(isset($result) && ($result->configSaved || $result->logoSaved)) :?>
+    <?php if(isset($result) && ($result->configSaved || $result->logoSaved) && !(!$result->logoSaved && $errors && !$result->configChanged)) :?>
         <p class="success auto_close" style="margin-left:1em">
             <?php if($result->configChanged && $result->logoSaved) :?>
                 La configuration et le logo ont été sauvegardés.
@@ -64,7 +65,7 @@ use EducAction\AdesBundle\Html;
         </fieldset>
     <?php endif ?>
 
-    <p style="margin-left: 1em"><a href="apercubilletretenue.php" target="_blank">Visualiser un aperçu du billet de retenue</a></p>
+    <p style="margin-left: 0.5em"><a href="apercubilletretenue.php" target="_blank">Visualiser un aperçu du billet de retenue</a></p>
     <form id="config_detention_slip" method="POST" enctype="multipart/form-data">
             <div>
             <p>
