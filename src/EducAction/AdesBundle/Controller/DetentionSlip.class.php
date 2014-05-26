@@ -281,7 +281,7 @@ class DetentionSlip
             $sql .= "ades_retenues.local, ades_retenues.duree, nom, prenom, classe ";
             $sql .= "FROM ades_faits ";
             $sql .= "LEFT JOIN ades_retenues ON ades_faits.idretenue = ades_retenues.idretenue ";
-            $sql .= "LEFT JOI ades_eleves ON ades_faits.ideleve = ades_eleves.ideleve ";
+            $sql .= "LEFT JOIN ades_eleves ON ades_faits.ideleve = ades_eleves.ideleve ";
             $sql .= "WHERE idfait = %d";
             $query=sprintf($sql, $factId);
 
