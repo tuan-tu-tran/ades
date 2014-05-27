@@ -154,7 +154,7 @@ class DetentionSlip
                 }
             }
         } else {
-            if (file_exists($oldConfigFile=Config::WebFile("config/confbilletretenue.inc.php"))) {
+            if (file_exists($oldConfigFile=Config::LocalFile("confbilletretenue.inc.php"))) {
                 require $oldConfigFile;
                 $config["typeimpression"] =$typeimpression;
                 $config["imageenteteecole"] =$imageenteteecole;
