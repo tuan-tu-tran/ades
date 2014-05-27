@@ -154,22 +154,7 @@ class DetentionSlip
                 }
             }
         } else {
-            if (file_exists($oldConfigFile=Config::LocalFile("confbilletretenue.inc.php"))) {
-                require $oldConfigFile;
-                if(file_exists($imageenteteecole) && copy($imageenteteecole, self::GetLogoFile())){
-                    $imageenteteecole=self::GetLogoFile();
-                }
-                $config=array();
-                $config["typeimpression"] =$typeimpression;
-                $config["imageenteteecole"] =$imageenteteecole;
-                $config["nomecole"] =$nomecole;
-                $config["adresseecole"] =$adresseecole;
-                $config["telecole"] =$telecole;
-                $config["lieuecole"] =$lieuecole;
-                $config["signature1"] =$signature1;
-                $config["signature2"] =$signature2;
-                $config["signature3"] =$signature3;
-            } else {
+            if (!($config=self::GetOldConfig())) {
                 $config=self::GetDefaultConfig();
             }
             if (!self::WriteConfig($config)) {
@@ -187,6 +172,29 @@ class DetentionSlip
         $config["paysage"]=$config["typeimpression"]=="Paysage";
 
         $this->Render("configForm.inc.php", $config);
+    }
+
+    private static function GetOldConfig()
+    {
+        if (file_exists($oldConfigFile=Config::LocalFile("confbilletretenue.inc.php"))) {
+            require $oldConfigFile;
+            if(file_exists($imageenteteecole) && copy($imageenteteecole, self::GetLogoFile())){
+                $imageenteteecole=self::GetLogoFile();
+            }
+            $config=array();
+            $config["typeimpression"] =$typeimpression;
+            $config["imageenteteecole"] =$imageenteteecole;
+            $config["nomecole"] =$nomecole;
+            $config["adresseecole"] =$adresseecole;
+            $config["telecole"] =$telecole;
+            $config["lieuecole"] =$lieuecole;
+            $config["signature1"] =$signature1;
+            $config["signature2"] =$signature2;
+            $config["signature3"] =$signature3;
+            return $config;
+        } else {
+            return NULL;
+        }
     }
 
     private static function GetDefaultConfig()
