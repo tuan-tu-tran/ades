@@ -265,11 +265,12 @@ class DetentionSlip
     private function RenderPdf($params)
     {
         $configFile = self::ConfigFile();
-        if (!file_exists($configFile)) {
+        $config=NULL;
+        if (!file_exists($configFile) && !($config=self::GetOldConfig())) {
             $this->PreviewError(self::ERR_NO_CONFIG);
-        } elseif ( ($content=file_get_contents($configFile)) === FALSE ) {
+        } elseif ( !$config && ($content=file_get_contents($configFile)) === FALSE ) {
             $this->PreviewError(self::ERR_READ_CONFIG);
-        } elseif ( ($config=unserialize($content)) === FALSE ) {
+        } elseif ( !$config && ($config=unserialize($content)) === FALSE ) {
             $this->PreviewError(self::ERR_CONFIG_CONTENT);
         } else {
             $logoFile = self::GetLogoFile();
