@@ -1,6 +1,7 @@
 {
 	"require": {
-		"symfony/process":"2.4.4"
+		"symfony/process":"2.4.4",
+		"symfony/symfony":"2.4.5"
 	},
 	"autoload": {
 		"files": [ "vendor/autoload-custom.php" ]
