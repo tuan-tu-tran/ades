@@ -178,7 +178,7 @@ class DetentionSlip
     {
         if (file_exists($oldConfigFile=Config::LocalFile("confbilletretenue.inc.php"))) {
             require $oldConfigFile;
-            if(file_exists($imageenteteecole) && copy($imageenteteecole, self::GetLogoFile())){
+            if(file_exists(self::GetLogoFile()) || (file_exists($imageenteteecole) && copy($imageenteteecole, self::GetLogoFile()))){
                 $imageenteteecole=self::GetLogoFile();
             }
             $config=array();
