@@ -27,6 +27,8 @@ use EducAction\AdesBundle\View;
 		<title><?php View::Block("title") ?></title>
 		<link media="screen" rel="stylesheet" href="config/screen.css" type="text/css">
 		<link media="print" rel="stylesheet" href="config/print.css" type="text/css">
+        <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="js/base.js"></script>
 		<!--[if IE]>
 		<link href="css/facelist_ie.css" rel="stylesheet" type="text/css" />
 		<![endif]-->

@@ -1,6 +1,5 @@
-<?php
 /**
- * Copyright (c) 2014 Educ-Action
+ * Copyright (c) 2014 Tuan-Tu TRAN
  * 
  * This file is part of ADES.
  * 
@@ -17,6 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-require "inc/init.inc.php";
-$controller=new EducAction\AdesBundle\Controller\DetentionSlip;
-$controller->printAction(EducAction\AdesBundle\Tools::GetDefault($_GET, "idfait"));
+jQuery(function($){
+	$(".auto_close")
+	.click(function(){
+		$(this).slideUp()
+	})
+	.hover(
+		function(){overlib("Cliquer pour fermer");},
+		nd
+	);
+	$("form").submit(function(){
+		$(".auto_close").slideUp();
+	});
+});

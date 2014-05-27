@@ -21,6 +21,8 @@
 namespace EducAction\AdesBundle;
 
 class User{
+    const ACCESS_ADMIN="admin";
+
 	public static function IsLogged(){
 		return isset($_SESSION["identification"]["user"]);
 	}

@@ -17,27 +17,22 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-//Rami Adrien
-include("confbilletretenue.inc.php");
-$ext=EducAction\AdesBundle\Tools::GetImageType($imageenteteecole);
-if(!$ext){
-    echo "Veuillez reconfigurer le billet de retenue et utiliser une image de type supporté.";
-    throw new \Exception("could not determine type of image '$imageenteteecole'");
-}
-// Rédaction du billet de retenue: choisir l'un des deux modes d'impression
-// *********************************************************
+
 if($typeimpression == "Paysage")
 {
-// Impression en mode "Paysage" = "Landscape" sur pages A5
-	$pdf=new FPDF('L','mm','A5');
+    $pdf=new FPDF('L','mm','A5');
 }else{
-// impression en mode "Portrait" = "Portrait" sur page A4
-	$pdf=new FPDF('P','mm','A4');
-// *********************************************************
+    $pdf=new FPDF('P','mm','A4');
 }
 $pdf->AddPage();
 
-$pdf->Image($imageenteteecole, 15, 10, 40,40, $ext);
+if($imageenteteecole) {
+    $pdf->Image($imageenteteecole, 15, 10, 40,40, $imgType);
+} else {
+    $pdf->SetFont('Arial','',14);
+    $pdf->SetXY(15,10);
+    $pdf->Cell(40,40,"#LOGO", 1, 2, 'C', 0);
+}
 $pdf->SetFont('Arial','',14);
 $pdf->SetXY(90,10);
 $pdf->Cell(100,5,$nomecole, 0, 2, 'C', 0);
@@ -57,7 +52,7 @@ $pdf->Cell(110,10, $intitule, 1, 0, 'C');
 
 $pdf->SetXY(10,65);
 $pdf->SetFont('', 'B',10);
-$chaine = "M. $prenom $nom en classe de $classe\n";
+$chaine = "$prenom $nom en classe de $classe\n";
 $pdf->Cell(200,5, $chaine, 0,0,'L');
 //$pdf->Write(5, $chaine);
 
@@ -87,4 +82,3 @@ $pdf->SetXY(150,110);
 $pdf->Cell(30,5,$signature3, 0, 0, 'L', 0);
 
 $pdf->Output();
-?>

@@ -54,6 +54,7 @@ class Tools{
             if($full) {
                 $msg.=" in ".$last["file"]." at line ".$last["line"];
             }
+            return $msg;
         }
 	}
 
@@ -76,23 +77,16 @@ class Tools{
         return strtoupper($_SERVER["REQUEST_METHOD"]) == "POST";
     }
 
-    public static function GetImageType($filename)
+    public static function FormatDate($date)
     {
-        switch (exif_imagetype($filename)) {
-            case IMAGETYPE_GIF:
-                return "gif";
-                break;
-            case IMAGETYPE_PNG:
-                return "png";
-                break;
-            case IMAGETYPE_JPEG:
-                return "jpeg";
-                break;
-            case IMAGETYPE_BMP:
-                return "bmp";
-                break;
-            default:
-                return NULL;
-        }
+        $joursSemaine = array ('dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi');
+        // transformer la date sql en microtemps
+        $temps = strtotime($date);
+        // reconversion en date PHP
+        $quand = getdate($temps);
+        // calcul de la date
+        $js = $joursSemaine[$quand["wday"]];
+        $date = $js." ".$quand["mday"]."/".$quand["mon"]."/".$quand["year"];
+        return $date;
     }
 }

@@ -58,6 +58,12 @@ a {
     -moz-border-radius-bottomright: 20px;
     -moz-border-radius-bottomleft: 20px;
   }
+
+.notice {
+  margin-left:0px;
+  max-width:912px;
+  word-wrap:break-word;
+}
 #CadreAccueilMemo {
     border: 2px solid blue;
     width: 44%;
@@ -428,3 +434,5 @@ table.tableau_faits td {
   max-width:600px;
   word-wrap:break-word;
 }
+
+.auto_close{ cursor:pointer;}

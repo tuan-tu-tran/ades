@@ -25,7 +25,6 @@ use EducAction\AdesBundle\ViewHelper;
 ?>
 
 <?php View::StartBlock("post_head")?>
-	<?php Html::Script("js/jquery-1.11.0.min.js")?>
 	<script type="text/javascript">
 		$(function(){
 			$("div#notice").click(function(){

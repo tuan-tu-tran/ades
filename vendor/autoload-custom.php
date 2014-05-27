@@ -9,6 +9,7 @@ $oldClassesLoader=new EducAction\AdesBundle\ClassLoader(
     DIRNAME(__FILE__)."/../web",
     array(
         "prototypeFait"=>"inc/classes/classDescriptionFait.inc.php",
+        "FPDF"=>"fpdf/fpdf.php",
     )
 );
 $oldClassesLoader->Register();
