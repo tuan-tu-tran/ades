@@ -159,6 +159,7 @@ class DetentionSlip
                 if(file_exists($imageenteteecole) && copy($imageenteteecole, self::GetLogoFile())){
                     $imageenteteecole=self::GetLogoFile();
                 }
+                $config=array();
                 $config["typeimpression"] =$typeimpression;
                 $config["imageenteteecole"] =$imageenteteecole;
                 $config["nomecole"] =$nomecole;
