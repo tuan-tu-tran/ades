@@ -44,7 +44,7 @@ use EducAction\AdesBundle\Html;
     <h2>Configuration du billet de retenue</h2>
 
     <?php if(isset($result) && ($result->configSaved || $result->logoSaved) && !(!$result->logoSaved && $errors && !$result->configChanged)) :?>
-        <p class="success auto_close" style="margin-left:1em">
+        <p class="success auto_close" style="margin-left:0.5em">
             <?php if($result->configChanged && $result->logoSaved) :?>
                 La configuration et le logo ont été sauvegardés.
             <?php elseif ($result->configSaved && !$result->logoSaved) : ?>
