@@ -46,15 +46,30 @@ function rm($path, $except=NULL)
     }
 }
 
+function backup_logo()
+{
+    $file="web/config/confbilletretenue.inc.php";
+    if(file_exists($file)){
+        require $file;
+        if (!isset($imageenteteecole)) {
+            die("pas de logo dans le fichier confbilletretenue.inc.php:\n".file_get_contents($file));
+        }
+        $imageenteteecole="web/$imageenteteecole";
+        copy($imageenteteecole, "local/logo.img") or error("impossible de copier le logo $imageenteteecole");
+    }
+}
+
 chdir("..") or error("could not change dir to parent");
 $archive="archive.zip";
 if (file_exists($archive)) {
     $zip=new \ZipArchive;
     $zip->open("archive.zip") or error("could not open archve");
     
+    backup_logo();
     $config_files=array(
         "web/config/confbd.inc.php",
         "web/config/constantes.inc.php",
+        "web/config/confbilletretenue.inc.php",
     );
     foreach ($config_files as $file) {
         $dst="local/".basename($file);
