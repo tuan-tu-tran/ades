@@ -10,6 +10,7 @@ return array(
     'Symfony\\Component\\Process\\' => array($vendorDir . '/symfony/process'),
     'Symfony\\Component\\Icu\\' => array($vendorDir . '/symfony/icu'),
     'Symfony\\' => array($vendorDir . '/symfony/symfony/src'),
+    'Sensio\\Bundle\\GeneratorBundle' => array($vendorDir . '/sensio/generator-bundle'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log'),
     'Doctrine\\Common\\Lexer\\' => array($vendorDir . '/doctrine/lexer/lib'),
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib'),
