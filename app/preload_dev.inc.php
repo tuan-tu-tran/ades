@@ -4,13 +4,11 @@ use Symfony\Component\Yaml\Yaml;
 $ipFile=__DIR__."/../local/ip_dev.yml";
 $ipList=NULL;
 if (file_exists($ipFile)) {
-    error_log("file exists: $ipFile");
     $ipList=Yaml::Parse(file_get_contents($ipFile));
 }
 if(!$ipList){
     $ipList=array('127.0.0.1', 'fe80::1', '::1');
 }
-error_log(var_export($ipList, TRUE));
 
 // This check prevents access to debug front controllers that are deployed by accident to production servers.
 // Feel free to remove this, extend it, or make something more sophisticated.
