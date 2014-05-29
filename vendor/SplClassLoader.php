@@ -38,7 +38,7 @@
  */
 class SplClassLoader
 {
-    private $_fileExtension = array('.php');
+    private $_fileExtension = '.php';
     private $_namespace;
     private $_includePath;
     private $_namespaceSeparator = '\\';
@@ -100,9 +100,9 @@ class SplClassLoader
      * 
      * @param string $fileExtension
      */
-    public function setFileExtension()
+    public function setFileExtension($fileExtension)
     {
-        $this->_fileExtension = func_get_args();
+        $this->_fileExtension = $fileExtension;
     }
 
     /**
@@ -148,22 +148,14 @@ class SplClassLoader
                 $className = substr($className, $lastNsPos + 1);
                 $fileName = str_replace($this->_namespaceSeparator, DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
             }
-            $found=FALSE;
-            foreach($this->_fileExtension as $fileExtension){
-                $tmpFilename = $fileName . str_replace('_', DIRECTORY_SEPARATOR, $className) . $fileExtension;
+            $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . $this->_fileExtension;
 
-                $fullname=($this->_includePath !== null ? $this->_includePath . DIRECTORY_SEPARATOR : '') . $tmpFilename;
+			$fullname=($this->_includePath !== null ? $this->_includePath . DIRECTORY_SEPARATOR : '') . $fileName;
 
-                if(!file_exists($fullname)) {
-                    continue;
-                }
-                $found=TRUE;
-                require $fullname;
-            }
+			if(!file_exists($fullname))
+				throw new Exception("file \"$fullname\" does not exist: could not load class \"$fqClassName\"");
 
-            if(!$found) {
-                    throw new Exception("file \"$fullname\" does not exist: could not load class \"$fqClassName\"");
-            }
+            require $fullname;
         }
     }
 }
