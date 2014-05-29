@@ -24,4 +24,3 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
 
 $env="dev";
 $debug=TRUE;
-Symfony\Component\Debug\Debug::Enable();
