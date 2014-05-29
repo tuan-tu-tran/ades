@@ -13,11 +13,22 @@ $apcLoader = new ApcClassLoader('sf2', $loader);
 $loader->unregister();
 $apcLoader->register(true);
 */
+if(isset($preload) && $preload) {
+    if(file_exists($preload)) {
+        require $preload;
+    } else {
+        header("HTTP/1.0 500 Internal server error");
+        exit("The file $preload does not exist.");
+    }
+}
 
 require_once __DIR__.'/../app/AppKernel.php';
 //require_once __DIR__.'/../app/AppCache.php';
 
-$kernel = new AppKernel('prod', false);
+$env=isset($env)?$env:'prod';
+$debug=isset($debug)?$debug:FALSE;
+
+$kernel = new AppKernel($env, FALSE);
 $kernel->loadClassCache();
 //$kernel = new AppCache($kernel);
 
