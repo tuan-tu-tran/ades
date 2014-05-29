@@ -2,6 +2,8 @@
 
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Security\Core\Util\SecureRandom;
 
 class AppKernel extends Kernel
 {
@@ -30,6 +32,18 @@ class AppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
+        $localConfig=__DIR__."/../local/config.yml";
+        if(!file_exists($localConfig)){
+            $random=new SecureRandom();
+            $secret=base64_encode($random->nextBytes(20));
+            $config=array(
+                "parameters"=>array(
+                    "secret"=>$secret
+                )
+            );
+            file_put_contents($localConfig, Yaml::Dump($config));
+            chmod($localConfig,0666);
+        }
         $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
     }
 }
