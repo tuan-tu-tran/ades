@@ -73,9 +73,9 @@ class InstallController extends Controller {
         exit;
     }
 
-    private function indexAction()
+    public function indexAction()
     {
-        $this->Render("index.inc.php");
+        return $this->Render("EducActionAdesBundle:Install:index.html.twig");
     }
 
     private function configureDbAction()

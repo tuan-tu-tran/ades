@@ -1,0 +1,3 @@
+educ_action_ades:
+    resource: "@EducActionAdesBundle/Resources/config/routing.yml"
+    prefix: /

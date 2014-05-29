@@ -22,3 +22,4 @@ jquery-.*\.js$
 ^config/
 ^app/
 ^web/app(_dev)?\.php$
+\.yml$
