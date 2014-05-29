@@ -20,6 +20,8 @@
 
 namespace EducAction\AdesBundle\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 use EducAction\AdesBundle\Db;
 use EducAction\AdesBundle\Path;
 use EducAction\AdesBundle\Config;
@@ -27,7 +29,7 @@ use EducAction\AdesBundle\Tools;
 use EducAction\AdesBundle\View;
 use EducAction\AdesBundle\FlashBag;
 
-class Install{
+class InstallController extends Controller {
 	const ACTION_CONFIG_DB="configure_db";
 	const ACTION_CREATE_TABLES="create_tables";
 	const ACTION_CONFIG_SCHOOL="configure_school";
@@ -62,7 +64,7 @@ class Install{
 		}
 	}
 
-    private function Render($view, $params=NULL)
+    private function _Render($view, $params=NULL)
     {
         if ($params == NULL) {
             $params=$this;
@@ -127,7 +129,7 @@ class Install{
         }
     }
 
-    private function Redirect($action)
+    private function _Redirect($action)
     {
         Tools::Redirect("creation.php?action=$action");
     }
