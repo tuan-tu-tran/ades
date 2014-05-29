@@ -1,7 +1,7 @@
 <?php
 require("SplClassLoader.php");
 
-$educActionLoader=new SplClassLoader("EducAction", "../src");
+$educActionLoader=new SplClassLoader("EducAction", __DIR__."/../src");
 $educActionLoader->setFileExtension(".class.php");
 $educActionLoader->register();
 
