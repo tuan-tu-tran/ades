@@ -21,10 +21,12 @@ jQuery(function($){
 	.click(function(){
 		$(this).slideUp()
 	})
-	.hover(
-		function(){overlib("Cliquer pour fermer");},
-		nd
-	);
+	if(window.hasOwnProperty("nd")){
+		$(".auto_close").hover(
+			function(){overlib("Cliquer pour fermer");},
+			nd
+		);
+	}
 	$("form").submit(function(){
 		$(".auto_close").slideUp();
 	});
