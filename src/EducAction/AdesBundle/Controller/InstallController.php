@@ -20,8 +20,6 @@
 
 namespace EducAction\AdesBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use EducAction\AdesBundle\Db;
 use EducAction\AdesBundle\Path;
 use EducAction\AdesBundle\Config;
