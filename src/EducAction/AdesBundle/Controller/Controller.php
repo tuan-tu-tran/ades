@@ -23,10 +23,12 @@ namespace EducAction\AdesBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as SfController;
 use Symfony\Component\HttpFoundation\Session\Session;
 use EducAction\AdesBundle\ViewParameters;
+use EducAction\AdesBundle\FlashBagWrapper;
 
 class Controller extends SfController
 {
     protected $params;
+    private $flashWrapper = NULL;
 
     public function __construct()
     {
@@ -57,5 +59,13 @@ class Controller extends SfController
         }
         return $this->Render($template, $allParameters);
 	}
+
+    protected function flash()
+    {
+        if(!$this->flashWrapper) {
+            $this->flashWrapper = new FlashBagWrapper($this->getRequest()->getSession()->getFlashBag());
+        }
+        return $this->flashWrapper;
+    }
 }
 

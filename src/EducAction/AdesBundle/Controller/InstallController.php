@@ -78,8 +78,7 @@ class InstallController extends Controller {
 
     public function configureDbAction()
     {
-        $this->getRequest()->getSession()->start();
-        $configure_db_result=FlashBag::Get("configure_db_result");
+        $configure_db_result=$this->flash()->peek("configure_db_result");
         if(file_exists(Config::DbConfigFile()) && !$configure_db_result) {
             //TODO
             $this->Render("overwrite_forbidden.inc.php");
@@ -93,18 +92,17 @@ class InstallController extends Controller {
         } elseif (!$configure_db_result->valid_config) {
             return $this->View("db_config_form.html.twig", $configure_db_result);
         } else {
-            FlashBag::Clear();
+            $this->flash()->clear();
             $this->Render("db_config_written.inc.php", $configure_db_result);
         }
     }
 
     public function submitDbConfigAction()
     {
-        $this->getRequest()->getSession()->start();
         if(file_exists(Config::DbConfigFile())) {
             $this->Render("overwrite_forbidden.inc.php");
         } else if(!$this->ConfigIsValid() || $this->WriteDbConfig()){
-            FlashBag::Set("configure_db_result", $this->params);
+            $this->flash()->set("configure_db_result", $this->params);
             return $this->redirect($this->generateUrl("educ_action_ades_install_db"));
         } else {
             $this->ShowWriteError(Config::DbConfigFile(), $this->GetDbConfigSubmitUrl());
