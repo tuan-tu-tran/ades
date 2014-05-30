@@ -105,7 +105,7 @@ class InstallController extends Controller {
             $this->flash()->set("configure_db_result", $this->params);
             return $this->redirect($this->generateUrl("educ_action_ades_install_db"));
         } else {
-            $this->ShowWriteError(Config::DbConfigFile(), $this->GetDbConfigSubmitUrl());
+            return $this->ShowWriteError(Config::DbConfigFile(), $this->generateUrl("educ_action_ades_install_db_submit"));
         }
     }
 
@@ -293,11 +293,12 @@ EOF;
 
 	private function ShowWriteError($fname, $resubmitAction)
     {
-		$this->error=error_get_last()["message"];
-		$this->system_user=posix_getpwuid(posix_geteuid())["name"];
-		$this->config_filename=realpath(DIRNAME($fname)).DIRECTORY_SEPARATOR.basename($fname);
-		$this->resubmitAction=$resubmitAction;
-        $this->Render("write_error.inc.php");
+		$this->params->error=error_get_last()["message"];
+		$this->params->system_user=posix_getpwuid(posix_geteuid())["name"];
+		$this->params->config_filename=realpath(DIRNAME($fname)).DIRECTORY_SEPARATOR.basename($fname);
+		$this->params->resubmitAction=$resubmitAction;
+        $this->params->form_values=$_POST;
+        return $this->View("write_error.html.twig");
 	}
 
 	private function GetLink($action, $text){ echo "<a href='".$this->GetUrl($action)."'>".$text."</a>"; }

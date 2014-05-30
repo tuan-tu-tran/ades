@@ -1,0 +1,39 @@
+{#
+/**
+ * Copyright (c) 2014 Tuan-Tu TRAN
+ * 
+ * This file is part of ADES.
+ * 
+ * ADES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * ADES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+*/
+#}
+
+{% extends 'EducActionAdesBundle:Install:layout.html.twig' %}
+
+{% block content %}
+    <form name="form" method="post" action="{{ resubmitAction }}">
+    <p>Le fichier de configuration n'a pas pu être écrit.</p>
+    <p>
+        Veuillez vérifier que l'utilisateur système
+		<b>{{ system_user }}</b>
+        dispose des droits suffisants pour écrire le fichier
+		<b>{{ config_filename }}</b>
+    </p>
+    <p>Le système a renvoyé l'erreur suivante: {{ error }}</p>
+    {% for key, value in form_values %}
+	    <input name="{{ key }}" type="hidden" value="{{ value }}" />
+    {% endfor %}
+    <input name="Submit" value="Réessayer" type="submit">
+    </form>
+{% endblock %}
