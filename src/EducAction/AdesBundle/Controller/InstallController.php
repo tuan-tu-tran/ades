@@ -76,33 +76,36 @@ class InstallController extends Controller {
         return $this->View("index.html.twig");
     }
 
-    private function configureDbAction()
+    public function configureDbAction()
     {
+        $this->GetSession();
         $configure_db_result=FlashBag::Get("configure_db_result");
         if(file_exists(Config::DbConfigFile()) && !$configure_db_result) {
+            //TODO
             $this->Render("overwrite_forbidden.inc.php");
         } elseif (!$configure_db_result) {
             //show config form
-            $this->host=NULL;
-            $this->username=NULL;
-            $this->pwd=NULL;
-            $this->dbname=NULL;
-            $this->Render("db_config_form.inc.php");
+            $this->params->host=NULL;
+            $this->params->username=NULL;
+            $this->params->pwd=NULL;
+            $this->params->dbname=NULL;
+            return $this->View("db_config_form.html.twig");
         } elseif (!$configure_db_result->valid_config) {
-            $this->Render("db_config_form.inc.php", $configure_db_result);
+            return $this->View("db_config_form.html.twig", $configure_db_result);
         } else {
             FlashBag::Clear();
             $this->Render("db_config_written.inc.php", $configure_db_result);
         }
     }
 
-    private function submitDbConfigAction()
+    public function submitDbConfigAction()
     {
+        $this->GetSession();
         if(file_exists(Config::DbConfigFile())) {
             $this->Render("overwrite_forbidden.inc.php");
         } else if(!$this->ConfigIsValid() || $this->WriteDbConfig()){
-            FlashBag::Set("configure_db_result", $this);
-            $this->Redirect(self::ACTION_CONFIG_DB);
+            FlashBag::Set("configure_db_result", $this->params);
+            return $this->redirect($this->generateUrl("educ_action_ades_install_db"));
         } else {
             $this->ShowWriteError(Config::DbConfigFile(), $this->GetDbConfigSubmitUrl());
         }
@@ -203,23 +206,23 @@ EOF;
 		}
 	}
 	private function ConfigIsValid(){
-		$this->host=$_POST["sqlserver"];
-		$this->username=$_POST["utilisateursql"];
-		$this->pwd=$_POST["motdepassesql"];
-		$this->dbname=$_POST["nomdelabasesql"];
+		$this->params->host=$_POST["sqlserver"];
+		$this->params->username=$_POST["utilisateursql"];
+		$this->params->pwd=$_POST["motdepassesql"];
+		$this->params->dbname=$_POST["nomdelabasesql"];
 		if(
-			$this->host!=NULL
-			&& $this->username!=NULL
-			&& $this->pwd!=NULL
-			&& $this->dbname!=NULL
+			$this->params->host!=NULL
+			&& $this->params->username!=NULL
+			&& $this->params->pwd!=NULL
+			&& $this->params->dbname!=NULL
 		){
-			$valid=Db::GetInstance($this->host, $this->username, $this->pwd, $this->dbname)->connect();
-			if(!$valid) $this->error=Db::GetInstance()->error();
+			$valid=Db::GetInstance($this->params->host, $this->params->username, $this->params->pwd, $this->params->dbname)->connect();
+			if(!$valid) $this->params->error=Db::GetInstance()->error();
 		}else{
 			$valid=false;
-			$this->missing_fields=true;
+			$this->params->missing_fields=true;
 		}
-        $this->valid_config=$valid;
+        $this->params->valid_config=$valid;
 		return $valid;
 	}
 

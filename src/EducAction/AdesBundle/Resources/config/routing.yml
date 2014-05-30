@@ -1,3 +1,13 @@
 educ_action_ades_install:
     pattern: /install 
     defaults: { _controller: EducActionAdesBundle:Install:index }
+
+educ_action_ades_install_db:
+    pattern: /install/db
+    defaults: { _controller: EducActionAdesBundle:Install:configureDb }
+    methods: [GET]
+
+educ_action_ades_install_db_submit:
+    pattern: /install/db
+    defaults: { _controller: EducActionAdesBundle:Install:submitDbConfig }
+    methods: [POST]
