@@ -22,8 +22,17 @@ namespace EducAction\AdesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as SfController;
 use Symfony\Component\HttpFoundation\Session\Session;
+use EducAction\AdesBundle\ViewParameters;
 
-class Controller extends SfController {
+class Controller extends SfController
+{
+    protected $params;
+
+    public function __construct()
+    {
+        $this->params=new ViewParameters();
+    }
+
     protected function View($template)
     {
         if(strpos($template,":") === FALSE){
@@ -31,9 +40,10 @@ class Controller extends SfController {
             $template="EducActionAdesBundle:$controller:$template";
         }
         $allParameters=array();
+        $givenParameters=array_merge(array($this->params), array_slice(func_get_args(), 1));
         $i=0;
-        foreach (func_get_args() as $parameters) {
-            if ($i>0 && $parameters) {
+        foreach ($givenParameters as $parameters) {
+            if ($parameters) {
                 if (!is_array($parameters)) {
                     $parameters=get_object_vars($parameters);
                 }
@@ -41,6 +51,7 @@ class Controller extends SfController {
             }
             ++$i;
         }
+        error_log(var_export($allParameters, TRUE));
         return $this->Render($template, $allParameters);
 	}
 
