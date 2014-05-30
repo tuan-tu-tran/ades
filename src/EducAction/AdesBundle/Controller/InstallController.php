@@ -78,7 +78,7 @@ class InstallController extends Controller {
 
     public function configureDbAction()
     {
-        $this->GetSession();
+        $this->getRequest()->getSession()->start();
         $configure_db_result=FlashBag::Get("configure_db_result");
         if(file_exists(Config::DbConfigFile()) && !$configure_db_result) {
             //TODO
@@ -100,7 +100,7 @@ class InstallController extends Controller {
 
     public function submitDbConfigAction()
     {
-        $this->GetSession();
+        $this->getRequest()->getSession()->start();
         if(file_exists(Config::DbConfigFile())) {
             $this->Render("overwrite_forbidden.inc.php");
         } else if(!$this->ConfigIsValid() || $this->WriteDbConfig()){

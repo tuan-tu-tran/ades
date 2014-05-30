@@ -54,15 +54,5 @@ class Controller extends SfController
         error_log(var_export($allParameters, TRUE));
         return $this->Render($template, $allParameters);
 	}
-
-    protected function GetSession()
-    {
-        $session=$this->getRequest()->getSession();
-        if(!$session) {
-            $session=new Session();
-            $session->start();
-        }
-        return $session;
-    }
 }
 
