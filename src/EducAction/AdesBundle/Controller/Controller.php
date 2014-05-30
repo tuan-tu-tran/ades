@@ -45,13 +45,16 @@ class Controller extends SfController
         foreach ($givenParameters as $parameters) {
             if ($parameters) {
                 if (!is_array($parameters)) {
-                    $parameters=get_object_vars($parameters);
+                    if(is_a($parameters, "EducAction\\AdesBundle\\ViewParameters")){
+                        $parameters=get_object_vars($parameters);
+                    } else {
+                        throw new \Exception("View parameter cannot be a ".get_class($parameters));
+                    }
                 }
                 $allParameters=array_replace($allParameters, $parameters);
             }
             ++$i;
         }
-        error_log(var_export($allParameters, TRUE));
         return $this->Render($template, $allParameters);
 	}
 }
