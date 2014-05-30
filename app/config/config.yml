@@ -7,3 +7,5 @@ framework:
         resource: "%kernel.root_dir%/config/routing.yml"
     templating:
         engines: ["twig"]
+twig:
+    strict_variables: true
