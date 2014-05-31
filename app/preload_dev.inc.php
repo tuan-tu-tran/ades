@@ -1,13 +1,24 @@
 <?php
 
 use Symfony\Component\Yaml\Yaml;
-$ipFile=__DIR__."/../local/ip_dev.yml";
+use EducAction\AdesBundle\Tools;
+$configFile=__DIR__."/../local/dev.yml";
 $ipList=NULL;
-if (file_exists($ipFile)) {
-    $ipList=Yaml::Parse(file_get_contents($ipFile));
+$displayErrors=TRUE;
+$defaultIpList=array('127.0.0.1', 'fe80::1', '::1');
+if (file_exists($configFile)) {
+    $config=Yaml::Parse(file_get_contents($configFile));
+    $ipList=Tools::GetDefault($config, "allowed_ips", NULL);
+    $displayErrors=Tools::GetDefault($config,"display_errors", TRUE);
+} else {
+    $config=array(
+        "allowed_ips"=>$defaultIpList,
+        "display_errors"=>TRUE
+    );
+    file_put_contents($configFile, Yaml::Dump($config));
 }
 if(!$ipList){
-    $ipList=array('127.0.0.1', 'fe80::1', '::1');
+    $ipList=$defaultIpList;
 }
 
 // This check prevents access to debug front controllers that are deployed by accident to production servers.

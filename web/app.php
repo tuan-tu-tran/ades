@@ -27,9 +27,10 @@ require_once __DIR__.'/../app/AppKernel.php';
 
 $env=isset($env)?$env:'prod';
 $debug=isset($debug)?$debug:FALSE;
+$displayErrors=isset($displayErrors)?$displayErrors:TRUE;
 
 if($debug) {
-    Symfony\Component\Debug\Debug::Enable();
+    Symfony\Component\Debug\Debug::Enable(NULL, $displayErrors);
 }
 
 $kernel = new AppKernel($env, $debug);
