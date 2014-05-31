@@ -1,4 +1,4 @@
-<?php
+{#
 /**
  * Copyright (c) 2014 Tuan-Tu TRAN
  * 
@@ -17,22 +17,17 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
+#}
 
-use EducAction\AdesBundle\View;
-use EducAction\AdesBundle\Html;
-?>
-<?php View::StartBlock("content")?>
-    <p>Les tables ont été correctement créées dans la base de données.</p>
+{% extends 'EducActionAdesBundle:Install:layout.html.twig' %}
+
+{% block content %}
+    <p>Les tables ont Ã©tÃ© correctement crÃ©Ã©es dans la base de donnÃ©es.</p>
     <p>Login et mot de passe: admin</p>
-    <?php if($install->CanConfigureSchool()):?>
-        <p><?php $install->GetSchoolConfigLink("Configurer le nom de l'école et le titre principal");?></p>
-    <?php else:?>
-        <p>L'installation d'ADES est terminée: <a href="index.php">On y va</a></p>
-    <?php endif;?>
-<?php View::EndBlock()?>
-
-<?php View::Render("Install/layout.inc.php")?>
-
-
-
+    {% if can_configure_school %}
+        <p><a href="{{ path("educ_action_ades_install_school") }}">Configurer le nom de l'Ã©cole et le titre principal</a></p>
+    {% else %}
+        <p>L'installation d'ADES est terminÃ©e: <a href="{{ asset("index.php") }}">On y va</a></p>
+    {% endif %}
+{% endblock %}
 

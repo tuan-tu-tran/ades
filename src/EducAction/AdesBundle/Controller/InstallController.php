@@ -80,7 +80,7 @@ class InstallController extends Controller {
     {
         $configure_db_result=$this->flash()->peek("configure_db_result");
         if(file_exists(Config::DbConfigFile()) && !$configure_db_result) {
-            $this->params->can_configure_school = !file_exists(Config::SchoolConfigFile());
+            $this->checkCanConfigureSchool();
             return $this->View("overwrite_forbidden.html.twig");
         } elseif (!$configure_db_result) {
             //show config form
@@ -109,23 +109,30 @@ class InstallController extends Controller {
         }
     }
 
-    private function createTablesAction()
+    public function createTablesAction()
     {
-        $create_tables_result=FlashBag::Pop("create_tables_result");
+        $create_tables_result=$this->flash()->peek("create_tables_result");
         if (Tools::IsPost() || (!$create_tables_result && !$this->GetTables()) ) {
-            $this->created=$this->CreateTables();
-            FlashBag::Set("create_tables_result", $this);
-            $this->Redirect(self::ACTION_CREATE_TABLES);
+            $this->params->created=$this->CreateTables();
+            $this->flash()->set("create_tables_result", $this->params);
+            return $this->redirect($this->generateUrl("educ_action_ades_install_tables"));
         } elseif ($create_tables_result) {
             if($create_tables_result->created) {
-                $this->Render("tables_created.inc.php", $create_tables_result);
+                return $this->View("tables_created.html.twig", $create_tables_result);
             }else{
-                $this->Render("tables_creation_failed.inc.php", $create_tables_result);
+                $this->checkCanConfigureSchool();
+                return $this->View("tables_creation_failed.html.twig", $create_tables_result);
             }
         } else {
             //test if there already are tables in the db:
-            $this->Render("create_tables.inc.php");
+            $this->checkCanConfigureSchool();
+            return $this->View("create_tables.html.twig");
         }
+    }
+
+    private function checkCanConfigureSchool()
+    {
+        $this->params->can_configure_school=!file_exists(Config::SchoolConfigFile());
     }
 
     private function _Redirect($action)
@@ -136,11 +143,11 @@ class InstallController extends Controller {
     private function GetTables()
     {
         $result=Db::GetInstance()->query("SHOW TABLES");
-        $this->tables=array();
+        $this->params->tables=array();
         foreach ($result as $row) {
-            $this->tables[] = $row[0];
+            $this->params->tables[] = $row[0];
         }
-        return $this->tables;
+        return $this->params->tables;
     }
 
     private function configureSchoolAction()
@@ -238,8 +245,8 @@ EOF;
 			$dernier = substr($uneCommande, $longueur-1, 1);
 			if ($dernier == ";"){
 				if(!Db::GetInstance()->TryExecute($uneCommande)){
-					$this->error_command=$uneCommande;
-					$this->error=Db::GetInstance()->error();
+					$this->params->error_command=$uneCommande;
+					$this->params->error=Db::GetInstance()->error();
 					$error=true;
 					break;
 				}
@@ -252,8 +259,8 @@ EOF;
 				if(!$upgrade->fromBeforeTo){
 					throw new Exception("Upgrade during install failed because trying to upgrade from ".$upgrade->fromVersion." to ".$upgrade->toVersion);
 				}
-				$this->failedScript=$upgrade->failedScript;
-				$this->error=$upgrade->failedScriptError;
+				$this->params->failedScript=$upgrade->failedScript;
+				$this->params->error=$upgrade->failedScriptError;
 				$error=true;
 			}
 		}

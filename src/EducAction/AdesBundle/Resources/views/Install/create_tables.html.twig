@@ -1,4 +1,4 @@
-<?php
+{#
 /**
  * Copyright (c) 2014 Tuan-Tu TRAN
  * 
@@ -17,35 +17,32 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
+#}
 
-use EducAction\AdesBundle\View;
-use EducAction\AdesBundle\Html;
-?>
-<?php View::StartBlock("post_head")?>
+{% extends 'EducActionAdesBundle:Install:layout.html.twig' %}
+
+{% block post_head %}
     <script type="text/javascript">
         function submit()
         {
             document.getElementById("create_table").submit();
         }
     </script>
-<?php View::EndBlock()?>
+{% endblock %}
 
-<?php View::StartBlock("content")?>
-        <p class="impt">ATTENTION! Des tables existent déjà dans la base de données:</p>
+{% block content %}
+        <p class="impt">ATTENTION! Des tables existent dÃ©jÃ  dans la base de donnÃ©es:</p>
         <ul>
-            <?php foreach ($install->tables as $table) :?>
-                <li>- <?php echo $table?></li>
-            <?php endforeach;?>
+            {% for table in tables %}
+                <li>- {{ table }}</li>
+            {% endfor %}
         </ul>
-        <p><a href="" onclick="submit(); return false;">Créer les tables de données quand même</a></p>
-        <?php if($install->CanConfigureSchool()):?>
-            <p><?php $install->GetSchoolConfigLink("Configurer le nom de l'école et le titre principal");?></p>
-        <?php else:?>
-            <p><a href="index.php">Terminer l'installation</a></p>
-        <?php endif;?>
+        <p><a href="" onclick="submit(); return false;">CrÃ©er les tables de donnÃ©es quand mÃªme</a></p>
+        {% if can_configure_school %}
+            <p><a href="{{ path("educ_action_ades_install_school") }}">Configurer le nom de l'Ã©cole et le titre principal</a></p>
+        {% else %}
+            <p><a href="{{ asset("index.php") }}">Terminer l'installation</a></p>
+        {% endif %}
         <form id="create_table" action="" method="POST" style="display:none">
         </form>
-<?php View::EndBlock()?>
-
-<?php View::Render("Install/layout.inc.php")?>
-
+{% endblock %}

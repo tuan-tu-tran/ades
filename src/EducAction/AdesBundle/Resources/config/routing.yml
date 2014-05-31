@@ -15,7 +15,6 @@ educ_action_ades_install_db_submit:
 educ_action_ades_install_tables:
     pattern: /install/create-tables
     defaults: { _controller: EducActionAdesBundle:Install:createTables }
-    methods: [GET]
 
 educ_action_ades_install_school:
     pattern: /install/school
