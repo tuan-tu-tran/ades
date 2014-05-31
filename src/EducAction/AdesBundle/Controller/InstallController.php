@@ -150,45 +150,45 @@ class InstallController extends Controller {
         return $this->params->tables;
     }
 
-    private function configureSchoolAction()
+    public function configureSchoolAction()
     {
-        $configure_school_result=FlashBag::Get("configure_school_result");
+        $configure_school_result=$this->flash()->peek("configure_school_result");
         if(file_exists(Config::SchoolConfigFile()) && !$configure_school_result) {
-            $this->Render("overwrite_school_forbidden.inc.php");
+            return $this->View("overwrite_school_forbidden.html.twig");
         } elseif (!$configure_school_result) {
-            $this->schoolname = NULL;
-            $this->title = NULL;
-            $this->Render("school_config_form.inc.php");
+            $this->params->schoolname = NULL;
+            $this->params->title = NULL;
+            return $this->View("school_config_form.html.twig");
         } elseif (!$configure_school_result->valid_config) {
-            $this->Render("school_config_form.inc.php", $configure_school_result);
+            return $this->View("school_config_form.html.twig", $configure_school_result);
         } else {
-            FlashBag::Clear();
-            $this->Render("school_config_written.inc.php", $configure_school_result);
+            $this->flash()->clear();
+            $this->View("school_config_written.html.twig", $configure_school_result);
         }
     }
 
-    private function submitSchoolConfigAction()
+    public function submitSchoolConfigAction()
     {
         if(file_exists(Config::SchoolConfigFile())) {
-            $this->Render("overwrite_school_forbidden.inc.php");
+            return $this->redirect($this->generateUrl("educ_action_ades_install_school"));
         } else if(!$this->SchoolConfigIsValid() || $this->WriteSchoolConfig()) {
-            FlashBag::Set("configure_school_result", $this);
-            $this->Redirect(self::ACTION_CONFIG_SCHOOL);
+            $this->flash()->set("configure_school_result", $this->params);
+            return $this->redirect($this->generateUrl("educ_action_ades_install_school"));
         } else {
-            $this->ShowWriteError(Config::SchoolConfigFile(), $this->GetSchoolConfigSubmitUrl());
+            return $this->ShowWriteError(Config::SchoolConfigFile(), $this->GetSchoolConfigSubmitUrl());
         }
     }
 
 	private function SchoolConfigIsValid(){
-		$this->schoolname = $_POST["schoolname"];
-		$this->title = $_POST["title"];
-        if($this->schoolname!=NULL && $this->title!=NULL) {
-            $this->valid_config= TRUE;
+		$this->params->schoolname = $_POST["schoolname"];
+		$this->params->title = $_POST["title"];
+        if($this->params->schoolname!=NULL && $this->params->title!=NULL) {
+            $this->params->valid_config= TRUE;
         } else {
-            $this->missing_fields = TRUE;
-            $this->valid_config= FALSE;
+            $this->params->missing_fields = TRUE;
+            $this->params->valid_config= FALSE;
         }
-        return $this->valid_config;
+        return $this->params->valid_config;
 	}
 
 	private function WriteSchoolConfig(){
@@ -201,8 +201,8 @@ EOF;
 		$file=fopen(Config::SchoolConfigFile(),"wt");
 		if($file){
 			fprintf($file, $format
-				, var_export($this->schoolname, true)
-				, var_export($this->title, true)
+				, var_export($this->params->schoolname, true)
+				, var_export($this->params->title, true)
 			);
 			fclose($file);
 			return true;

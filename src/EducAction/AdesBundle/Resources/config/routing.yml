@@ -20,3 +20,8 @@ educ_action_ades_install_school:
     pattern: /install/school
     defaults: { _controller: EducActionAdesBundle:Install:configureSchool }
     methods: [GET]
+
+educ_action_ades_install_school_submit:
+    pattern: /install/school
+    defaults: { _controller: EducActionAdesBundle:Install:submitSchoolConfig }
+    methods: [POST]

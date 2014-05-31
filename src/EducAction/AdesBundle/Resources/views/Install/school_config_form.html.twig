@@ -1,4 +1,4 @@
-<?php
+{#
 /**
  * Copyright (c) 2014 Tuan-Tu TRAN
  * 
@@ -17,18 +17,25 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
+#}
 
-use EducAction\AdesBundle\View;
-use EducAction\AdesBundle\Html;
-?>
-<?php View::StartBlock("content")?>
+{% extends 'EducActionAdesBundle:Install:layout.html.twig' %}
 
-	<p>Le fichier de configuration de l'école existe déjà.</p>
-	<p>Pour reconfigurer l'école, veuillez utiliser <a href="confignomecole.php">l'interface d'adminstration</a>.</p>
-	<p><a href="index.php">Terminer l'installation</a></p>
+{% block content %}
+	<form method="POST">
+		<p>
+			<label>Nom de l'Ã©cole :</label>
+            <input value="{{ schoolname }}" name="schoolname" size="30" maxlength="50" type="text">
+		</p>
+		<p>
+			<label>Titre :</label>
+            <input value="{{ title }}" name="title" size="30" maxlength="50" type="text">
+		</p>
 
-<?php View::EndBlock()?>
+		<input name="Submit" value="Enregistrer" type="submit">
 
-<?php View::Render("Install/layout.inc.php")?>
-
-
+        {% if missing_fields is defined %}
+			<p>Veuillez remplir tous les champs</p>
+        {% endif %}
+	</form>
+{% endblock %}

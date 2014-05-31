@@ -1,4 +1,4 @@
-<?php
+{#
 /**
  * Copyright (c) 2014 Tuan-Tu TRAN
  * 
@@ -17,19 +17,13 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
+#}
 
-use EducAction\AdesBundle\View;
-use EducAction\AdesBundle\Html;
-?>
-<?php View::StartBlock("content")?>
+{% extends 'EducActionAdesBundle:Install:layout.html.twig' %}
 
-	<p>Le fichier de configuration de l'école a été écrit avec succès.</p>
-	<p>L'installation d'ADES est terminée: <a href="index.php">On y va</a></p>
-
-<?php View::EndBlock()?>
-
-<?php View::Render("Install/layout.inc.php")?>
-
-
-
+{% block content %}
+	<p>Le fichier de configuration de l'Ã©cole existe dÃ©jÃ .</p>
+    <p>Pour reconfigurer l'Ã©cole, veuillez utiliser <a href="{{ asset("confignomecole.php") }}">l'interface d'adminstration</a>.</p>
+    <p><a href="{{ asset("index.php") }}">Terminer l'installation</a></p>
+{% endblock %}
 
