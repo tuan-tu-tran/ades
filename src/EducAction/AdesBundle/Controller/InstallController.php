@@ -93,7 +93,7 @@ class InstallController extends Controller {
             return $this->View("db_config_form.html.twig", $configure_db_result);
         } else {
             $this->flash()->clear();
-            $this->Render("db_config_written.inc.php", $configure_db_result);
+            return $this->View("db_config_written.html.twig", $configure_db_result);
         }
     }
 

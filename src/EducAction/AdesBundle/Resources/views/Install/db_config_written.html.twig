@@ -1,4 +1,4 @@
-<?php
+{#
 /**
  * Copyright (c) 2014 Tuan-Tu TRAN
  * 
@@ -17,16 +17,11 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
+#}
 
-use EducAction\AdesBundle\View;
-use EducAction\AdesBundle\Html;
-?>
-<?php View::StartBlock("content")?>
-		<p>Fichier de configuration crÈÈ avec succËs</p>
-        <p><?php $install->GetCreateTableLink("CrÈer les tables de donnÈes")?></p>
-<?php View::EndBlock()?>
+{% extends 'EducActionAdesBundle:Install:layout.html.twig' %}
 
-<?php View::Render("Install/layout.inc.php")?>
-
-
-
+{% block content %}
+		<p>Fichier de configuration cr√©√© avec succ√®s</p>
+        <p><a href="{{ path("educ_action_ades_install_tables") }}">Cr√©er les tables de donn√©es</a></p>
+{% endblock %}
