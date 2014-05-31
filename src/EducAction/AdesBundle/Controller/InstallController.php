@@ -80,8 +80,8 @@ class InstallController extends Controller {
     {
         $configure_db_result=$this->flash()->peek("configure_db_result");
         if(file_exists(Config::DbConfigFile()) && !$configure_db_result) {
-            //TODO
-            $this->Render("overwrite_forbidden.inc.php");
+            $this->params->can_configure_school = !file_exists(Config::SchoolConfigFile());
+            return $this->View("overwrite_forbidden.html.twig");
         } elseif (!$configure_db_result) {
             //show config form
             $this->params->host=NULL;
@@ -100,7 +100,7 @@ class InstallController extends Controller {
     public function submitDbConfigAction()
     {
         if(file_exists(Config::DbConfigFile())) {
-            $this->Render("overwrite_forbidden.inc.php");
+            return $this->redirect($this->generateUrl("educ_action_ades_install_db"));
         } else if(!$this->ConfigIsValid() || $this->WriteDbConfig()){
             $this->flash()->set("configure_db_result", $this->params);
             return $this->redirect($this->generateUrl("educ_action_ades_install_db"));
