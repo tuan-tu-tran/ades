@@ -30,5 +30,5 @@
     {% if can_configure_school %}
         <p><a href="{{ path("educ_action_ades_install_school") }}">Passer à l'étape de configuration du nom de l'école</a></p>
     {% endif %}
-	<p><a href="index.php">Terminer l'installation</a></p>
+    <p><a href="{{ asset("index.php") }}">Terminer l'installation</a></p>
 {% endblock %}
