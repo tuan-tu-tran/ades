@@ -21,56 +21,11 @@
 namespace EducAction\AdesBundle\Controller;
 
 use EducAction\AdesBundle\Db;
-use EducAction\AdesBundle\Path;
 use EducAction\AdesBundle\Config;
 use EducAction\AdesBundle\Tools;
-use EducAction\AdesBundle\View;
-use EducAction\AdesBundle\FlashBag;
 
-class InstallController extends Controller {
-	const ACTION_CONFIG_DB="configure_db";
-	const ACTION_CREATE_TABLES="create_tables";
-	const ACTION_CONFIG_SCHOOL="configure_school";
-
-	public function parseRequest(){
-		//get the action
-		$action = Tools::GetDefault($_GET,"action");
-
-		switch($action){
-			case self::ACTION_CONFIG_DB:
-                if (Tools::IsPost()) {
-                    $this->submitDbConfigAction();
-                } else {
-                    $this->configureDbAction();
-                }
-				break;
-
-			case self::ACTION_CREATE_TABLES:
-                $this->createTablesAction();
-				break;
-
-			case self::ACTION_CONFIG_SCHOOL:
-                if(Tools::IsPost()) {
-                    $this->submitSchoolConfigAction();
-                } else {
-                    $this->configureSchoolAction();
-                }
-				break;
-			default:
-                $this->indexAction();
-                break;
-		}
-	}
-
-    private function _Render($view, $params=NULL)
-    {
-        if ($params == NULL) {
-            $params=$this;
-        }
-        View::Render("Install/$view", array("install"=>$params));
-        exit;
-    }
-
+class InstallController extends Controller
+{
     public function indexAction()
     {
         return $this->View("index.html.twig");
@@ -133,11 +88,6 @@ class InstallController extends Controller {
     private function checkCanConfigureSchool()
     {
         $this->params->can_configure_school=!file_exists(Config::SchoolConfigFile());
-    }
-
-    private function _Redirect($action)
-    {
-        Tools::Redirect("creation.php?action=$action");
     }
 
     private function GetTables()
@@ -306,21 +256,5 @@ EOF;
 		$this->params->resubmitAction=$resubmitAction;
         $this->params->form_values=$_POST;
         return $this->View("write_error.html.twig");
-	}
-
-	private function GetLink($action, $text){ echo "<a href='".$this->GetUrl($action)."'>".$text."</a>"; }
-	private function GetUrl($action){ return "creation.php?action=".$action; }
-	public function GetDbConfigLink($text){ $this->GetLink(self::ACTION_CONFIG_DB, $text);}
-	public function GetCreateTableLink($text){ $this->GetLink(self::ACTION_CREATE_TABLES, $text);}
-	public function GetSchoolConfigLink($text){ $this->GetLink(self::ACTION_CONFIG_SCHOOL, $text);} 
-	public function GetDbConfigSubmitUrl(){return $this->GetUrl(self::ACTION_CONFIG_DB);}
-	public function GetSchoolConfigSubmitUrl(){return $this->GetUrl(self::ACTION_CONFIG_SCHOOL);}
-	public function CanConfigureSchool(){ return !file_exists(Config::SchoolConfigFile()); }
-
-	public static function CheckIfNeeded()
-	{
-		if(!file_exists(Config::DbConfigFile()) || !file_exists(Config::SchoolConfigFile())){
-			Tools::Redirect("creation.php");
-		}
 	}
 }
