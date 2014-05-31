@@ -32,6 +32,9 @@ class Controller extends SfController
 
     public function __construct()
     {
+        if(method_exists(get_parent_class(),"__construct")){
+            parent::__construct();
+        }
         $this->params=new ViewParameters();
     }
 
