@@ -24,7 +24,7 @@ require "inc/init.inc.php";
  * Si il n'existe pas on lance le processus d'installation d'ADES avec le fichier creation.php
  * Si il existe on laisse le programme se lancé normalement
  */
-EducAction\AdesBundle\Controller\Install::CheckIfNeeded();
+EducAction\AdesBundle\Install::CheckIfNeeded();
 EducAction\AdesBundle\Controller\Upgrade::CheckIfNeeded();
 require_once "config/constantes.inc.php";
 

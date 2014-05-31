@@ -18,7 +18,7 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 require "inc/init.inc.php";
-EducAction\AdesBundle\Controller\Install::CheckIfNeeded();
+EducAction\AdesBundle\Install::CheckIfNeeded();
 EducAction\AdesBundle\Controller\Upgrade::CheckIfNeeded();
 EducAction\AdesBundle\User::CheckIfLogged();
 
