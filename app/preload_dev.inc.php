@@ -16,6 +16,7 @@ if (file_exists($configFile)) {
         "display_errors"=>TRUE
     );
     file_put_contents($configFile, Yaml::Dump($config));
+    chmod($configFile, 0666);
 }
 if(!$ipList){
     $ipList=$defaultIpList;
