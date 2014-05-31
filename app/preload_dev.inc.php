@@ -8,12 +8,16 @@ $displayErrors=TRUE;
 $defaultIpList=array('127.0.0.1', 'fe80::1', '::1');
 if (file_exists($configFile)) {
     $config=Yaml::Parse(file_get_contents($configFile));
-    $ipList=Tools::GetDefault($config, "allowed_ips", NULL);
-    $displayErrors=Tools::GetDefault($config,"display_errors", TRUE);
+    $parameters=Tools::GetDefault($config,"parameters", array());
+    $ipList=Tools::GetDefault($parameters, "allowed_ips", NULL);
+    $displayErrors=Tools::GetDefault($parameters,"display_errors", TRUE);
 } else {
     $config=array(
-        "allowed_ips"=>$defaultIpList,
-        "display_errors"=>TRUE
+        "parameters"=>array(
+            "allowed_ips"=>$defaultIpList,
+            "display_errors"=>TRUE,
+            "profiler.enabled"=>TRUE,
+        )
     );
     file_put_contents($configFile, Yaml::Dump($config));
     chmod($configFile, 0666);
