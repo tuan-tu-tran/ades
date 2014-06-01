@@ -1,3 +1,6 @@
+educ_action_ades_homepage:
+    pattern: /
+    defaults: { _controller: EducActionAdesBundle:Home:index }
 educ_action_ades_install:
     pattern: /install 
     defaults: { _controller: EducActionAdesBundle:Install:index }
