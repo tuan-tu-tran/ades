@@ -22,7 +22,7 @@ namespace EducAction\AdesBundle;
 
 class MiniMail{
 	public static function UnreadMailCount(){
-		if(!User::IsLogged()) throw new Exception("user is not logged");
+		if(!User::IsLogged()) throw new \Exception("user is not logged");
 		return Db::GetInstance()->scalar(sprintf(
 			"SELECT COUNT(*) "
 			."FROM ades_boite_email "
