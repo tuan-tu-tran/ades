@@ -1,0 +1,76 @@
+{#
+Copyright (c) 2014 Educ-Action
+
+This file is part of ADES.
+
+ADES is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+ADES is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+#}
+<!--[if lt IE 7]>
+<script type="text/javascript" src="inc/ieHover.js"></script>
+<![endif]--><!-- <body onload="IEpatchLiHover('navlist');"> -->
+<img src="{{ asset("images/ades.png") }}" alt="Administration de la Discipline dans les Etablissements Scolaires" 
+	style= "margin: 0px 25px; width: 130px; height: 130px; float: left; position: aboslute;" class="inv">
+<h1 class="inv">{{ base.TITRE }}</h1>
+<img src="{{ asset("images/printer.gif") }}" title="Imprimer cette page" alt="Impression"
+border="0" class="inv" style="float:right; cursor: pointer;" onclick="javascript:print()">
+<a href="{{ asset("index.php") }}">
+<img src="{{ asset("images/retour.gif") }}" title="retour à l'index" alt="Retour à l'index"
+border="0" class="inv" style="float: right">
+</a>
+<a href="#">
+<img src="{{ asset("images/prec.gif") }}" border="0" title="Page précédente" alt="Page précédente"
+ height="32" width="32" onclick="javascript:history.go(-1)" style="float: right" class="inv">
+</a>
+
+{% if base.user.logged() %}
+    {% import "EducActionAdesBundle::menu_macros.html.twig" as menu %}
+	<ul class="navlist inv">
+        {{ menu.item("index.php", "home.png") }}
+        {{ menu.item("mail.php", "minimail.png", "<b>"~base.user.unreadMail()~"</b>") }}
+        {{ menu.super_item("eleve.png","Elèves") }}
+            {{ menu.item("parclasse.php", "classe.png", "Par classe", "Recherche d'un élève par classe") }}
+            {{ menu.item("parnom.php?nomOuPrenom=nom", "noms.png", "Par nom", "Recherche d'un élève par nom") }}
+            {{ menu.item("parnom.php?nomOuPrenom=prenom", "prenoms.png", "Par prénom", "Recherche d'un élève par prénom") }}
+            {% if base.user.is("educ", "admin") %}
+                {{ menu.item("ficheel.php?mode=nouveau", "nouveau.png", "Nouveau", "Ajouter un élève") }}
+            {% endif %}
+        {{ menu.end_super_item() }}
+        {{ menu.super_item("retenue.png","Retenues", "Retenues") }}
+            {{ menu.item("listeretenues.php", "listes.png", "Listes", "Liste des élèves en retenue (par date)") }}
+            {% if base.user.is("educ", "admin") %}
+                {{ menu.item("retenue.php", "dates.png", "Dates", "Liste des dates de retenues") }}
+                {{ menu.item("retenue.php?mode=nouveau", "nouvretenue.png", "Nouvelle date", "Nouvelle date de retenue") }}
+            {% endif %}
+        {{ menu.end_super_item() }}
+        {{ menu.super_item("synthese.png","Synthèses", "Synthèses") }}
+            {{ menu.item("synthese.php", "syntheses.png", "Synthèses", "Que s'est-il passé (classe, période, ...)") }}
+            {% if base.user.is("educ", "admin") %}
+                {{ menu.item("synthcsv.php", "tableur.png", "Export tableur", "Exporter vers un tableur") }}
+            {% endif %}
+        {{ menu.end_super_item() }}
+        {{ menu.super_item("utilitaires.png","Utilitaires", "Utilitaires") }}
+            {% if base.user.is("educ", "admin") %}
+                {{ menu.item("sauver.php", "backup.png", "Backup", "Sauvegarde des données") }}
+            {% endif %}
+            {% if base.user.is("admin") %}
+                {{ menu.item("vider.php", "vider.png", "Vider les données", "Vider les données") }}
+                {{ menu.item("importer.php", "proeco.png", "Import ProEco", "Importer les données de ProEco") }}
+                {{ menu.item("utilisateur.php", "utilisateur.png", "Utilisateurs", "Gestion des utilisateurs") }}
+                {{ menu.item("option.php", "utilitaires.png", "Configuration", "Configuration") }}
+            {% endif %}
+            {{ menu.item("mdp.php", "mdp.png", "Mot de passe", "Changer votre mot de passe") }}
+        {{ menu.end_super_item() }}
+        {{ menu.item("deconnexion.php", "deconnexion.png", "Déconnexion") }}
+    </ul>
+{% endif %}

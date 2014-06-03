@@ -54,4 +54,20 @@ class User{
 	public static function GetId(){
 		return $_SESSION["identification"]["idedu"];
 	}
+
+    public function logged()
+    {
+        return self::IsLogged();
+    }
+
+    public function is()
+    {
+		return call_user_func_array(array("EducAction\\AdesBundle\\User","HasAccess"), func_get_args());
+    }
+
+    public function unreadMail()
+    {
+        return MiniMail::UnreadMailCount();
+    }
+
 }
