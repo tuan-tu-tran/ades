@@ -32,7 +32,8 @@ use EducAction\AdesBundle\Config;
 use \DateTime;
 use \SplFileInfo;
 
-class Backup{
+class BackupController extends Controller
+{
 	const regex="/^\d{8}-\d{6}\.sql$/";
 	public function parseRequest(){
 		User::CheckIfLogged();
@@ -123,10 +124,10 @@ class Backup{
 
 	}
 
-	private function View($template,$params=NULL){
-		if($params==NULL) $params = $this;
-		View::Render("Backup/$template", $params);
-	}
+    public function indexAction()
+    {
+        return $this->View("index.html.twig");
+    }
 
 	private function listAction(){
 		$list=Path::ListDir(self::BackupFolder(), self::regex );

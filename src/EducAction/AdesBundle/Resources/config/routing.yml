@@ -28,3 +28,11 @@ educ_action_ades_install_school_submit:
     pattern: /install/school
     defaults: { _controller: EducActionAdesBundle:Install:submitSchoolConfig }
     methods: [POST]
+
+educ_action_ades_backup:
+    pattern: /backup
+    defaults: { _controller: EducActionAdesBundle:Backup:index}
+
+educ_action_ades_backup_old:
+    pattern: /sauver.php
+    defaults: { _controller: EducActionAdesBundle:Backup:index}

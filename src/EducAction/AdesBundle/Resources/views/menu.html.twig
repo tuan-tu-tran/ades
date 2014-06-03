@@ -61,7 +61,7 @@ border="0" class="inv" style="float: right">
         {{ menu.end_super_item() }}
         {{ menu.super_item("utilitaires.png","Utilitaires", "Utilitaires") }}
             {% if base.user.is("educ", "admin") %}
-                {{ menu.item("sauver.php", "backup.png", "Backup", "Sauvegarde des données") }}
+                {{ menu.path_item("educ_action_ades_backup", "backup.png", "Backup", "Sauvegarde des données") }}
             {% endif %}
             {% if base.user.is("admin") %}
                 {{ menu.item("vider.php", "vider.png", "Vider les données", "Vider les données") }}
