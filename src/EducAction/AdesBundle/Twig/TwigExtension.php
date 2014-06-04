@@ -39,6 +39,13 @@ class TwigExtension extends \Twig_Extension
         return "EducAction.AdesBundle.Twig.TwigExtension";
     }
 
+    public function getFilters()
+    {
+        $filters=array();
+        $filters[]=new \Twig_SimpleFilter("file_size", array($this, "formatFileSize"));
+        return $filters;
+    }
+
     public function getFunctions()
     {
         $functions=array();
@@ -78,4 +85,20 @@ class TwigExtension extends \Twig_Extension
             return $env->render("EducActionAdesBundle::whosthere.html.twig", $params);
         }
     }
+
+    const GB=1073741824; //1024*1024*1024
+    const MB=1048576; //1024*1024
+    const KB=1024;
+    public function formatFileSize($size,$dec=0,$byte="o")
+    {
+        if($size>=self::GB){
+            return sprintf("%.".$dec."f G%s", $size/self::GB, $byte);
+        }else if($size>=self::MB){
+            return sprintf("%.".$dec."f M%s", $size/self::MB, $byte);
+        }else if($size>=self::KB){
+            return sprintf("%.".$dec."f K%s", $size/self::KB, $byte);
+        }else{
+            return sprintf("%d %s", $size, $byte);
+        }
+	}
 }

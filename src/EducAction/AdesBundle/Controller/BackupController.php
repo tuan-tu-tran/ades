@@ -62,18 +62,21 @@ class BackupController extends Controller
 				$this->listAction();
 		}
 	}
-	private function restoreAction($filename){
-		if(preg_match(self::regex, $filename)){
-			$this->filename=$filename;
-			if($input=file_get_contents(self::BackupFolder()."/".$filename)){
-				$this->input_read=true;
+
+    public function restoreAction($file)
+    {
+		if(preg_match(self::regex, $file)){
+            $restore=$this->params;
+			$restore->filename=$file;
+			if($input=file_get_contents(self::BackupFolder()."/".$file)){
+				$restore->input_read=true;
                 //drop all the tables first
                 $db=Db::GetInstance();
-                if ($db->TryQuery("SHOW TABLES", $result, $this->error)) {
+                if ($db->TryQuery("SHOW TABLES", $result, $restore->error)) {
                     $dropped=TRUE;
                     foreach($result as $row){
                         $tableName=$row[0];
-                        if (!$db->TryExecute("DROP TABLE $tableName", $this->error)) {
+                        if (!$db->TryExecute("DROP TABLE $tableName", $restore->error)) {
                             $dropped=FALSE;
                             break;
                         }
@@ -82,29 +85,28 @@ class BackupController extends Controller
                     $dropped=FALSE;
                 };
                 if (!$dropped) {
-                    $this->failed=TRUE;
-                    $this->launched=TRUE;
+                    $restore->failed=TRUE;
+                    $restore->launched=TRUE;
                 }else
 				if(Utils::MySqlScript($input, $err,$launched)){
-					$this->failed=false;
-					$this->launched=true;
+					$restore->failed=false;
+					$restore->launched=true;
 				}else{
-					$this->failed=true;
-					$this->launched=$launched;
-					if($this->failed && $this->launched)
-						$this->error=$err;
+					$restore->failed=true;
+					$restore->launched=$launched;
+					if($restore->failed && $restore->launched)
+						$restore->error=$err;
 				}
 			}else{
-				$this->failed=true;
-				$this->input_read=false;
-				$this->error=Tools::GetLastError();
+				$restore->failed=true;
+				$restore->input_read=false;
+				$restore->error=Tools::GetLastError();
 			}
-			FlashBag::Set("restore",$this);
-			Tools::Redirect("sauver.php");
-		}else{
-			Tools::Redirect("sauver.php");
+            $this->flash()->set("restore",$restore);
 		}
+        return $this->redirect($this->generateUrl("educ_action_ades_backup"));
 	}
+
 	private function deleteAction($filename){
 		if(preg_match(self::regex, $filename)){
             $fullname=self::BackupFolder()."/".$filename;
@@ -126,10 +128,6 @@ class BackupController extends Controller
 
     public function indexAction()
     {
-        return $this->View("index.html.twig");
-    }
-
-	private function listAction(){
 		$list=Path::ListDir(self::BackupFolder(), self::regex );
 		rsort($list);
 		$files=array();
@@ -150,28 +148,30 @@ class BackupController extends Controller
                 "comment"=>$backupInfo["comment"],
 			);
 		}
-		$this->backup_files=$files;
+        $params=$this->params;
+		$params->backup_files=$files;
 
 		if(count($list)>0){
-			$this->last_backup=$list[0];
-			$utc_backup_time = new DateTime("@".filemtime(self::BackupFolder()."/".$this->last_backup));
+			$params->last_backup=$list[0];
+			$utc_backup_time = new DateTime("@".filemtime(self::BackupFolder()."/".$params->last_backup));
 			$now=new DateTime();
 			$utc_backup_time->setTimezone($now->getTimezone());
-			$this->last_backup_time=$utc_backup_time;
-			$diff=$now->diff($this->last_backup_time);
-			$this->last_backup_since=$diff;
+			$params->last_backup_time=$utc_backup_time;
+			$diff=$now->diff($params->last_backup_time);
+			$params->last_backup_since=$diff;
 		}
 
-		$this->backup=FlashBag::Pop("backup");
+		$params->backup=$this->flash()->get("backup");
 
-		$this->delete=FlashBag::Pop("delete");
+		$params->delete=$this->flash()->get("delete");
 
-		$this->restore=FlashBag::Pop("restore");
+		$params->restore=$this->flash()->get("restore");
 
-		$this->View("list.inc.php");
+		return $this->View("index.html.twig");
 	}
 
-	private function backupAction(){
+	public function backupAction(){
+        $result=$this->params;
         $comment=$_POST["backup_create_comment_set"]?$_POST["backup_create_comment"]:"";
 		$db=Db::GetInstance();
 		$host=$db->host;
@@ -180,7 +180,7 @@ class BackupController extends Controller
 		$dbname=$db->dbname;
 		$cmd="mysqldump --host=$host --user=$username --password=$pwd $dbname";
 		if(Process::Execute($cmd, NULL, $out, $err, $retval)){
-			$this->dump_launched=true;
+			$result->dump_launched=true;
 			if($retval==0){
 				$filename=date('Ymd-His').".sql";
 				$fullpath = self::BackupFolder()."/".$filename;
@@ -191,24 +191,24 @@ class BackupController extends Controller
                     "comment"=>$comment,
                 );
 				if(file_put_contents($fullpath, $out) && file_put_contents($fullInfoPath, serialize($info))){
-					$this->filename=$filename;
-					$this->failed=false;
+					$result->filename=$filename;
+					$result->failed=false;
 				}else{
-					$this->failed=true;
-					$this->error=error_get_last()["message"];
+					$result->failed=true;
+					$result->error=error_get_last()["message"];
 				}
 			}
 			else{
-				$this->failed=true;
-				$this->error=$err;
+				$result->failed=true;
+				$result->error=$err;
 			}
 		}
 		else{
-			$this->failed=true;
-			$this->dump_launched=false;
+			$result->failed=true;
+			$result->dump_launched=false;
 		}
-		FlashBag::Set("backup", $this);
-		Tools::Redirect("sauver.php");
+		$this->flash()->set("backup", $result);
+        return $this->redirect($this->generateUrl("educ_action_ades_backup"));
 	}
 
     private static function GetInfoFilename($sqlFilename)

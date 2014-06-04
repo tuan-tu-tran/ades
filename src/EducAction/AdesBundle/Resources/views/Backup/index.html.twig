@@ -21,5 +21,170 @@
 
 {% extends 'EducActionAdesBundle::layout.html.twig' %}
 
+{% block post_head %}
+    {{ parent() }}
+	<script type="text/javascript">
+		jQuery(function($){
+            $("input#backup_create_comment")
+                .click(function(){
+                    if($("input#backup_create_comment_set").val()==""){
+                        $(this).select();
+                    }
+                })
+                .change(function(){
+                    $("input#backup_create_comment_set").val(1);
+                })
+            ;
+		});
+	</script>
+	<style type="text/css">
+		tr.backup:hover{background-color:yellow}
+        table#backup_table td{padding:5px;}
+	</style>
+{% endblock %}
 {% block content %}
+
+<h2>Sauvegarde de la base de données</h2>
+
+<fieldset class="notice">
+	<legend>Dernière sauvegarde</legend>
+    <div class="{{ (backup_files|length==0 or last_backup_since.days > 0) ? "impt":"" }}">
+        {% if backup_files|length==0 %}
+			<p>Aucune sauvegarde effectuée.</p>
+        {% else %}
+			<p>
+				La dernière sauvegarde
+                {{ last_backup }}
+                a été effectuée le {{ last_backup_time|date("d/m/Y à H:i") }}
+			</p>
+			<p>Il y a
+                {% if last_backup_since.days > 0 %}
+                    {{ last_backup_since.days }} jour{{last_backup_since.days>1?"s":""}}.
+                {% elseif last_backup_since.h > 0 %}
+                    {{ last_backup_since.h }} heure{{last_backup_since.h>1?"s":""}}.
+                {% else %}
+                    moins d'une heure.
+                {% endif %}
+			</p>
+        {% endif %}
+	</div>
+</fieldset>
+
+<div id="notice" class="auto_close">
+{% if backup %}
+    {% if backup.failed %}
+		<fieldset class="notice">
+			<legend>Erreur</legend>
+			<p class="impt">La sauvegarde a échoué!</p>
+
+            {% if backup.dump_launched %}
+				<p>Le système a renvoyé l'erreur:</p>
+                <p>{{ backup.error }}</p>
+            {% else %}
+				<p>L'utilitaire de sauvegarde n'a pas pu être exécuté.</p>
+            {% endif %}
+		</fieldset>
+    {% else %}
+        <p class="success">Une nouvelle sauvegarde a été effectuée dans le fichier {{ backup.filename }}</p>
+    {% endif %}
+{% endif %}
+
+{% if delete %}
+    {% if delete.failed %}
+		<fieldset class="notice">
+			<legend>Erreur</legend>
+            <p class="impt">La sauvegarde {{ delete.filename }} n'a pas pu être effacée!</p>
+
+			<p>Le système a renvoyé l'erreur:</p>
+            <p>{{ delete.error }}</p>
+		</fieldset>
+    {% else %}
+        <p class="success">La sauvegarde {{ delete.filename }} a été effacée.</p>
+    {% endif %}
+{% endif %}
+
+{% if restore %}
+    {% if restore.failed %}
+		<fieldset class="notice">
+			<legend>Erreur</legend>
+            <p class="impt">La sauvegarde {{ restore.filename }} n'a pas pu être restaurée!</p>
+
+            {% if restore.input_read or restore.launched %}
+				<p>Le système a renvoyé l'erreur:</p>
+                <p>{{restore.error}}</p>
+            {% else %}
+				<p>L'utilitaire de restauration n'a pas pu être exécuté.</p>
+            {% endif %}
+		</fieldset>
+    {% else %}
+        <p class="success">Les données de la sauvegarde {{ restore.filename }} ont été restaurées.</p>
+    {% endif %}
+{% endif %}
+
+</div>
+
+<form method="POST" action="{{path("educ_action_ades_backup_create")}}" style="border:none;padding:0">
+<input type="submit" value="Créer une nouvelle sauvegarde"/>
+<input id="backup_create_comment" type="text" value="Ajouter un commentaire (optionnel)" name="backup_create_comment" size="40"
+    {{ overlib("Si vous le désirez, vous pouvez ajouter un commentaire qui sera lié à la sauvegarde") }}
+/>
+<input id="backup_create_comment_set" type="hidden" value="" name="backup_create_comment_set"/>
+</form>
+
+{% if backup_files|length > 0 %}
+<h3>Liste de dernières sauvegardes disponibles</h3>
+
+<table border="1" cellpadding="2" style="margin:auto;margin-top:1em;" id="backup_table">
+	<tr style="background-color:orangered">
+		<td>Fichiers de sauvegarde</td>
+		<td style="text-align:center">Date</td>
+		<td style="text-align:center">Version</td>
+		<td style="text-align:center">Taille</td>
+		<td style="text-align:center">Commentaire</td>
+		<td style="text-align:center">Effacer</td>
+		<td style="text-align:center">Restaurer</td>
+	</tr>
+    {% for file in backup_files %}
+		<tr class="backup">
+			<td>
+                <a href="{{ path("educ_action_ades_backup_download", { "file" : file.name }) }}"
+					target="_blank"
+                    {{overlib('Cliquer pour télécharger cette sauvegarde')}}
+                >{{file.name}}</a></td>
+            <td style="text-align:center">{{file.time|date("d/m/Y à H:i")}}</td>
+            <td
+                {% if file.is_current_version %}
+                    style="text-align:right;"
+                {% else %}
+                    style="text-align:right;background-color:lightsalmon"
+                    {{ overlib("Une restauration de cette sauvegarde nécessitera une mise à jour de la base de données") }}
+                {% endif %}
+            >
+                {{ file.version }}
+            </td>
+            <td style="text-align:right">{{ file.size|file_size }}</td>
+            <td>{{ file.comment }}</td>
+			<td style="text-align:center">
+                <a href="{{ path("educ_action_ades_backup_delete", { "file" : file.name }) }}"
+                    {{ overlib("Cliquer pour supprimer cette sauvegarde.") }}
+					onclick="return confirm('Êtes vous sûr de vouloir effacer cette sauvegarde?\nCette action est IRREVERSIBLE!');"
+                    ><img style="width:16px;height:16px;" border="0" alt="X" src="{{asset("images/suppr.png")}}"></a>
+            </td>
+			<td style="text-align:center">
+                <a href="{{ path("educ_action_ades_backup_restore", { "file" : file.name }) }}"
+                    {% set overlibText = 'Cliquer pour restaurer cette sauvegarde.' %}
+                    {% set confirmText="Êtes vous sûr de vouloir restaurer cette sauvegarde?\n\nCette action est IRREVERSIBLE!" %}
+                    {% if not file.is_current_version %}
+                        {% set overlibText = overlibText ~ "<br/>ATTENTION! Une mise à jour de la base de données sera nécessaire." %}
+                        {% set confirmText = confirmText ~ "\n\nDe plus, une mise à jour de la base de données sera nécessaire après la restauration." %}
+                    {% endif %}
+                    {{ overlib(overlibText) }}
+                    onclick="return confirm({{ confirmText|json_encode }});"
+                    ><img style="width:16px;height:16px;" border="0" alt="restore" src="{{asset("images/restore.png")}}"></a>
+            </td>
+		</tr>
+    {% endfor %}
+</table>
+{% endif %}
+
 {% endblock %}
