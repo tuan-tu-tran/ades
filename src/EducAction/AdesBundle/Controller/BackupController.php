@@ -220,15 +220,17 @@ class BackupController extends Controller
 		return DIRNAME(__FILE__)."/../../../../local/db_backup";
 	}
 
-	private function downloadAction($filename)
+	public function downloadAction($file)
 	{
-		if(preg_match(self::regex, $filename)){
-			$path=self::BackupFolder()."/$filename";
+		if(preg_match(self::regex, $file)){
+			$path=self::BackupFolder()."/$file";
 			if(file_exists($path)){
 				$content=file_get_contents($path);
 				if($content!==FALSE){
-					header("Content-Type: application/x-sql");
-					echo $content;
+                    $response=new \Symfony\Component\HttpFoundation\Response($content);
+                    $response->headers->set("Content-Type", "application/x-sql");
+                    $response->headers->set("Content-Disposition", "attachment; filename=\"$file\"");
+                    return $response;
 				}
 			}
 		}
