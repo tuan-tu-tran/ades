@@ -20,6 +20,12 @@
 
 namespace EducAction\AdesBundle;
 
-class ViewParameters
+/**
+ * A simple class to contain values.
+ * It can be used to pass values to the template
+ * or as a container to be serialized in flash
+ */
+class Bag
 {
 }
+

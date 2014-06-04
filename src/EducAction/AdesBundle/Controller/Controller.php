@@ -22,7 +22,7 @@ namespace EducAction\AdesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as SfController;
 use Symfony\Component\HttpFoundation\Session\Session;
-use EducAction\AdesBundle\ViewParameters;
+use EducAction\AdesBundle\Bag;
 use EducAction\AdesBundle\FlashBagWrapper;
 
 class Controller extends SfController
@@ -35,7 +35,7 @@ class Controller extends SfController
         if(method_exists(get_parent_class(),"__construct")){
             parent::__construct();
         }
-        $this->params=new ViewParameters();
+        $this->params=new Bag();
     }
 
     protected function View($template)
@@ -49,7 +49,7 @@ class Controller extends SfController
         foreach ($givenParameters as $parameters) {
             if ($parameters) {
                 if (!is_array($parameters)) {
-                    if(is_a($parameters, "EducAction\\AdesBundle\\ViewParameters")){
+                    if(is_a($parameters, "EducAction\\AdesBundle\\Bag")){
                         $parameters=get_object_vars($parameters);
                     } else {
                         throw new \Exception("View parameter cannot be a ".get_class($parameters));
