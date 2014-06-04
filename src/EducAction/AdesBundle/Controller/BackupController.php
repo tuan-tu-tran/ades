@@ -107,23 +107,22 @@ class BackupController extends Controller
         return $this->redirect($this->generateUrl("educ_action_ades_backup"));
 	}
 
-	private function deleteAction($filename){
-		if(preg_match(self::regex, $filename)){
-            $fullname=self::BackupFolder()."/".$filename;
+    public function deleteAction($file)
+    {
+		if(preg_match(self::regex, $file)){
+            $delete=$this->params;
+            $fullname=self::BackupFolder()."/".$file;
             $infoname=self::GetInfoFilename($fullname);
 			if(unlink($fullname) && unlink($infoname)){
-				$this->failed=false;
+				$delete->failed=false;
 			}else{
-				$this->failed=true;
-				$this->error=Tools::GetLastError();
+				$delete->failed=true;
+				$delete->error=Tools::GetLastError();
 			}
-			$this->filename=$filename;
-			FlashBag::Set("delete",$this);
-			Tools::Redirect("sauver.php");
-		}else{
-			Tools::Redirect("sauver.php");
+			$delete->filename=$file;
+			$this->flash()->set("delete",$delete);
 		}
-
+        return $this->redirect($this->generateUrl("educ_action_ades_backup"));
 	}
 
     public function indexAction()
