@@ -69,6 +69,27 @@ class Config{
 		return $db_version;
 	}
 
+    private static $schoolConfig=NULL;
+    public static function getSchoolConfig($key)
+    {
+        if(self::$schoolConfig===NULL) {
+            $fname=self::SchoolConfigFile();
+            if(file_exists($fname)) {
+                require_once $fname;
+                self::$schoolConfig=array(
+                    "name"=>ECOLE,
+                    "title"=>TITRE
+                );
+            } else {
+                self::$schoolConfig=array(
+                    "name"=>"ECOLE",
+                    "title"=>"TITRE"
+                );
+            }
+        }
+        return self::$schoolConfig[$key];
+    }
+
 	public static function SchoolConfigFile()
 	{
 		return DIRNAME(__FILE__)."/../../../local/constantes.inc.php";

@@ -21,7 +21,7 @@ along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 <![endif]--><!-- <body onload="IEpatchLiHover('navlist');"> -->
 <img src="{{ asset("images/ades.png") }}" alt="Administration de la Discipline dans les Etablissements Scolaires" 
 	style= "margin: 0px 25px; width: 130px; height: 130px; float: left; position: aboslute;" class="inv">
-<h1 class="inv">{{ base.TITRE }}</h1>
+<h1 class="inv">{{ school("title") }}</h1>
 <img src="{{ asset("images/printer.gif") }}" title="Imprimer cette page" alt="Impression"
 border="0" class="inv" style="float:right; cursor: pointer;" onclick="javascript:print()">
 <a href="{{ asset("index.php") }}">
@@ -33,37 +33,37 @@ border="0" class="inv" style="float: right">
  height="32" width="32" onclick="javascript:history.go(-1)" style="float: right" class="inv">
 </a>
 
-{% if base.user.logged() %}
+{% if user_is_logged() %}
     {% import "EducActionAdesBundle::menu_macros.html.twig" as menu %}
 	<ul class="navlist inv">
         {{ menu.item("index.php", "home.png") }}
-        {{ menu.item("mail.php", "minimail.png", "<b>"~base.user.unreadMail()~"</b>") }}
+        {{ menu.item("mail.php", "minimail.png", "<b>"~unread_mail()~"</b>") }}
         {{ menu.super_item("eleve.png","Elèves") }}
             {{ menu.item("parclasse.php", "classe.png", "Par classe", "Recherche d'un élève par classe") }}
             {{ menu.item("parnom.php?nomOuPrenom=nom", "noms.png", "Par nom", "Recherche d'un élève par nom") }}
             {{ menu.item("parnom.php?nomOuPrenom=prenom", "prenoms.png", "Par prénom", "Recherche d'un élève par prénom") }}
-            {% if base.user.is("educ", "admin") %}
+            {% if user_has_access("educ", "admin") %}
                 {{ menu.item("ficheel.php?mode=nouveau", "nouveau.png", "Nouveau", "Ajouter un élève") }}
             {% endif %}
         {{ menu.end_super_item() }}
         {{ menu.super_item("retenue.png","Retenues", "Retenues") }}
             {{ menu.item("listeretenues.php", "listes.png", "Listes", "Liste des élèves en retenue (par date)") }}
-            {% if base.user.is("educ", "admin") %}
+            {% if user_has_access("educ", "admin") %}
                 {{ menu.item("retenue.php", "dates.png", "Dates", "Liste des dates de retenues") }}
                 {{ menu.item("retenue.php?mode=nouveau", "nouvretenue.png", "Nouvelle date", "Nouvelle date de retenue") }}
             {% endif %}
         {{ menu.end_super_item() }}
         {{ menu.super_item("synthese.png","Synthèses", "Synthèses") }}
             {{ menu.item("synthese.php", "syntheses.png", "Synthèses", "Que s'est-il passé (classe, période, ...)") }}
-            {% if base.user.is("educ", "admin") %}
+            {% if user_has_access("educ", "admin") %}
                 {{ menu.item("synthcsv.php", "tableur.png", "Export tableur", "Exporter vers un tableur") }}
             {% endif %}
         {{ menu.end_super_item() }}
         {{ menu.super_item("utilitaires.png","Utilitaires", "Utilitaires") }}
-            {% if base.user.is("educ", "admin") %}
+            {% if user_has_access("educ", "admin") %}
                 {{ menu.path_item("educ_action_ades_backup", "backup.png", "Backup", "Sauvegarde des données") }}
             {% endif %}
-            {% if base.user.is("admin") %}
+            {% if user_has_access("admin") %}
                 {{ menu.item("vider.php", "vider.png", "Vider les données", "Vider les données") }}
                 {{ menu.item("importer.php", "proeco.png", "Import ProEco", "Importer les données de ProEco") }}
                 {{ menu.item("utilisateur.php", "utilisateur.png", "Utilisateurs", "Gestion des utilisateurs") }}

@@ -18,15 +18,15 @@ along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 #}
 L'accès à cette page est réservé.<br/>
 Nous sommes le <strong>{{ "now"|date("d-m-Y") }}</strong> à <strong>{{ "now"|date("H:i") }}</strong>.<br />
-Votre adresse IP : <strong>{{ base.ip }}</strong>
-{% if base.hostname and base.hostname!=base.ip %}
-     (<strong>{{ base.hostname }}</strong>)
+Votre adresse IP : <strong>{{ ip }}</strong>
+{% if hostname and hostname!=ip %}
+     (<strong>{{ hostname }}</strong>)
 {% endif %}
 <br/>
 Vous êtes 
 <strong>
-{% if base.who is defined %}
-    {{ base.who }}
+{% if who is defined %}
+    {{ who }}
 {% else %}
     Non identifié
 {% endif %}

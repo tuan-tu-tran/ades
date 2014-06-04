@@ -24,15 +24,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller as SfController;
 use Symfony\Component\HttpFoundation\Session\Session;
 use EducAction\AdesBundle\ViewParameters;
 use EducAction\AdesBundle\FlashBagWrapper;
-use EducAction\AdesBundle\Config;
-use EducAction\AdesBundle\MiniMail;
-use EducAction\AdesBundle\User;
 
 class Controller extends SfController
 {
     protected $params;
     private $flashWrapper = NULL;
-    private $baseConfig = NULL;
 
     public function __construct()
     {
@@ -48,37 +44,8 @@ class Controller extends SfController
             $controller=preg_replace("/^EducAction\\\\AdesBundle\\\\Controller\\\\(.+)Controller$/", "$1", get_class($this));
             $template="EducActionAdesBundle:$controller:$template";
         }
-        if ($this->baseConfig === NULL) {
-            if (file_exists(Config::SchoolConfigFile()))
-            {
-                require Config::SchoolConfigFile();
-                $this->baseConfig=array(
-                    "ECOLE"=>ECOLE,
-                    "TITRE"=>TITRE
-                );
-            } else {
-                $this->baseConfig=array();
-            }
-            $this->baseConfig["ip"] = $_SERVER['REMOTE_ADDR'];
-            $this->baseConfig["hostname"] = gethostbyaddr($_SERVER['REMOTE_ADDR']);
-            if($identification = $this->getRequest()->getSession()->get("identification")) {
-                $who = $_SESSION['identification']['nom'];
-                $who.=" ";
-                $who = $_SESSION['identification']['prenom'];
-                $this->baseConfig["who"]=$who;
-            }
-            $this->baseConfig["user"]=new User;
-        }
-
-
         $allParameters=array();
-        $givenParameters=array(
-            array(
-                "base"=>$this->baseConfig
-            ),
-            $this->params
-        );
-        $givenParameters=array_merge($givenParameters, array_slice(func_get_args(), 1));
+        $givenParameters=array_merge(array($this->params), array_slice(func_get_args(), 1));
         foreach ($givenParameters as $parameters) {
             if ($parameters) {
                 if (!is_array($parameters)) {

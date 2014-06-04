@@ -1,5 +1,6 @@
 imports:
     - { resource: ../../local/config.yml }
+    - { resource: @EducActionAdesBundle/Resources/config/services.yml }
 
 framework:
     secret: '%secret%'

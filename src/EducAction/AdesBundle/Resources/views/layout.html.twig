@@ -18,7 +18,7 @@ along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 #}
 {% extends "EducActionAdesBundle::base.html.twig" %}
 
-{% block title %}{{ base.ECOLE }}{% endblock %}
+{% block title %}{{ school("name") }}{% endblock %}
 
 {% block post_head %}
 	<link rel="stylesheet" href="config/menu.css" type="text/css" media="screen">
@@ -47,7 +47,7 @@ along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 
 	<div style="float: right;margin-right:5px">
 		<span class="micro">
-            {% include "EducActionAdesBundle::whosthere.html.twig" %}
+            {{ whos_there() }}
 		</span>
 	</div>
 

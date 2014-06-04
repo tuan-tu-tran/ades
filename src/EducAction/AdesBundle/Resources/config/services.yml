@@ -1,0 +1,6 @@
+services:
+    educ_action.ades.twig:
+        class: EducAction\AdesBundle\Twig\TwigExtension
+        arguments: ["@request_stack"]
+        tags:
+            - { name: twig.extension }
