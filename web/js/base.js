@@ -27,7 +27,8 @@ jQuery(function($){
 			nd
 		);
 	}
-	$("form").submit(function(){
+	var autoclose=function(){
 		$(".auto_close").slideUp();
-	});
+	};
+	$(window).bind("unload", autoclose).bind("beforeunload", autoclose).click(autoclose);
 });
