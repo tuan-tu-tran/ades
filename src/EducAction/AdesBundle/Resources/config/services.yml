@@ -4,3 +4,8 @@ services:
         arguments: ["@request_stack"]
         tags:
             - { name: twig.extension }
+
+    educ_action.ades.kernel_listener:
+        class: EducAction\AdesBundle\KernelListener\KernelListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onControllerListener }
