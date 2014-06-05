@@ -32,9 +32,15 @@ use EducAction\AdesBundle\Config;
 use \DateTime;
 use \SplFileInfo;
 
-class BackupController extends Controller
+class BackupController extends Controller implements IAccessControlled
 {
 	const regex="/^\d{8}-\d{6}\.sql$/";
+
+    public function getRequiredPrivileges()
+    {
+        return array("admin");
+    }
+
 	public function parseRequest(){
 		User::CheckIfLogged();
 		User::CheckAccess("admin");
