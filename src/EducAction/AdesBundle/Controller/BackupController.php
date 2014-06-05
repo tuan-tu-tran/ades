@@ -20,10 +20,7 @@
 
 namespace EducAction\AdesBundle\Controller;
 
-use EducAction\AdesBundle\User;
 use EducAction\AdesBundle\Path;
-use EducAction\AdesBundle\FlashBag;
-use EducAction\AdesBundle\View;
 use EducAction\AdesBundle\Db;
 use EducAction\AdesBundle\Process;
 use EducAction\AdesBundle\Tools;
@@ -40,34 +37,6 @@ class BackupController extends Controller implements IAccessControlled
     {
         return array("admin");
     }
-
-	public function parseRequest(){
-		User::CheckIfLogged();
-		User::CheckAccess("admin");
-		$action=isset($_GET["action"])?$_GET["action"]:NULL;
-		switch($action){
-			case "create":
-				$this->backupAction();
-				break;
-			case "delete":
-				if(isset($_GET["file"])){
-					$this->deleteAction($_GET["file"]);
-					break;
-				}
-			case "restore":
-				if(isset($_GET["file"])){
-					$this->restoreAction($_GET["file"]);
-					break;
-				}
-			case "download":
-				if(isset($_GET["file"])){
-					$this->downloadAction($_GET["file"]);
-					break;
-				}
-			default:
-				$this->listAction();
-		}
-	}
 
     public function restoreAction($file)
     {
