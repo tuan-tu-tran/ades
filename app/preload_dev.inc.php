@@ -11,6 +11,7 @@ if (file_exists($configFile)) {
     $parameters=Tools::GetDefault($config,"parameters", array());
     $ipList=Tools::GetDefault($parameters, "allowed_ips", NULL);
     $displayErrors=Tools::GetDefault($parameters,"display_errors", TRUE);
+    $cacheRoot=Tools::GetDefault($parameters,"cache_root", NULL);
 } else {
     $config=array(
         "parameters"=>array(

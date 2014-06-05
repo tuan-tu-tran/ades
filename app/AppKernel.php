@@ -7,6 +7,13 @@ use Symfony\Component\Security\Core\Util\SecureRandom;
 
 class AppKernel extends Kernel
 {
+    private $cacheRoot;
+    public function __construct($env, $debug, $cacheRoot=NULL)
+    {
+        $this->cacheRoot=$cacheRoot;
+        parent::__construct($env, $debug);
+    }
+
     public function registerBundles()
     {
         $bundles = array(
@@ -46,5 +53,14 @@ class AppKernel extends Kernel
             chmod($localConfig,0666);
         }
         $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
+    }
+
+    public function getCacheDir()
+    {
+        if($this->cacheRoot) {
+            return $this->cacheRoot."/".$this->getEnvironment();
+        }else{
+            return parent::getCacheDir();
+        }
     }
 }

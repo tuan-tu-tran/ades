@@ -28,12 +28,13 @@ require_once __DIR__.'/../app/AppKernel.php';
 $env=isset($env)?$env:'prod';
 $debug=isset($debug)?$debug:FALSE;
 $displayErrors=isset($displayErrors)?$displayErrors:TRUE;
+$cacheRoot=isset($cacheRoot)?$cacheRoot:NULL;
 
 if($debug) {
     Symfony\Component\Debug\Debug::Enable(NULL, $displayErrors);
 }
 
-$kernel = new AppKernel($env, $debug);
+$kernel = new AppKernel($env, $debug, $cacheRoot);
 $kernel->loadClassCache();
 //$kernel = new AppCache($kernel);
 
