@@ -435,4 +435,4 @@ table.tableau_faits td {
   word-wrap:break-word;
 }
 
-.auto_close{ cursor:pointer;}
+.auto_close, .auto_close_on_click{ cursor:pointer;}

@@ -113,9 +113,8 @@ class BackupController extends Controller implements IAccessControlled
 			$mtime->setTimezone($now->getTimezone());
             $backupInfo=unserialize(file_get_contents(self::GetInfoFilename($path)));
 			$files[]=array(
-				"download_link"=>"?action=download&file=$file",
 				"name"=>$file,
-				"time"=>$mtime,
+				"time"=>Tools::GetDefault($backupInfo, "timestamp", $mtime),
 				"size"=>$info->getSize(),
                 "version"=>$backupInfo["version"],
                 "is_current_version"=>$backupInfo["version"]==Upgrade::Version,
@@ -125,12 +124,9 @@ class BackupController extends Controller implements IAccessControlled
         $params=$this->params;
 		$params->backup_files=$files;
 
-		if(count($list)>0){
-			$params->last_backup=$list[0];
-			$utc_backup_time = new DateTime("@".filemtime(self::BackupFolder()."/".$params->last_backup));
-			$now=new DateTime();
-			$utc_backup_time->setTimezone($now->getTimezone());
-			$params->last_backup_time=$utc_backup_time;
+		if(count($files)>0){
+			$params->last_backup=$files[0]["name"];
+			$params->last_backup_time=$files[0]["time"];
 			$diff=$now->diff($params->last_backup_time);
 			$params->last_backup_since=$diff;
 		}
@@ -141,10 +137,13 @@ class BackupController extends Controller implements IAccessControlled
 
 		$params->restore=$this->flash()->get("restore");
 
+		$params->upload=$this->flash()->get("upload");
+
 		return $this->View("index.html.twig");
 	}
 
-	public function backupAction(){
+    public function backupAction()
+    {
         $result=$this->params;
         $comment=$_POST["comment_set"]?$_POST["comment"]:"";
 		$db=Db::GetInstance();
@@ -156,21 +155,16 @@ class BackupController extends Controller implements IAccessControlled
 		if(Process::Execute($cmd, NULL, $out, $err, $retval)){
 			$result->dump_launched=true;
 			if($retval==0){
-				$filename=date('Ymd-His').".sql";
-				$fullpath = self::BackupFolder()."/".$filename;
-                $fullInfoPath=self::GetInfoFilename($fullpath);
                 $info=array(
-                    "filename"=>$filename,
                     "version"=>Config::GetDbVersion(),
-                    "comment"=>$comment,
+                    "timestamp"=>new DateTime(),
                 );
-				if(file_put_contents($fullpath, $out) && file_put_contents($fullInfoPath, serialize($info))){
-					$result->filename=$filename;
-					$result->failed=false;
-				}else{
-					$result->failed=true;
-					$result->error=error_get_last()["message"];
-				}
+                $content="-- info: ".serialize($info)."\n$out";
+                $signature=$this->sign($content);
+                $content="-- signature: $signature\n".$content;
+                $filename=$this->saveBackup($content, $info, $comment);
+                $result->filename=$filename;
+                $result->failed=false;
 			}
 			else{
 				$result->failed=true;
@@ -185,6 +179,60 @@ class BackupController extends Controller implements IAccessControlled
         return $this->redirect($this->generateUrl("educ_action_ades_backup"));
 	}
 
+    private function sign($content)
+    {
+        return hash_hmac("sha1", $content, $this->container->getParameter("secret"));
+    }
+
+    private function saveBackup($content, $info, $comment)
+    {
+        $info["comment"]=$comment;
+        $timestamp=$info["timestamp"];
+        $filename=$timestamp->format("Ymd-His").".sql";
+        $fullpath = self::BackupFolder()."/".$filename;
+        $fullInfoPath=self::GetInfoFilename($fullpath);
+        file_put_contents($fullpath, $content);
+        file_put_contents($fullInfoPath, serialize($info));
+        return $filename;
+    }
+
+    public function uploadAction()
+    {
+        $request=$this->getRequest();
+        $result=$this->params;
+        $file=$request->files->get("upload");
+
+        $result->success=FALSE;
+        $post=$request->request;
+        $comment=$post->get("comment_set")?($post->get("comment")):"";
+        $result->comment=$comment;
+        if($result->upload_found = ($file!= NULL ) ) { 
+            if($result->uploaded = $file->isValid()){
+                //check the signature
+                $content=file_get_contents($file->getRealPath());
+                if ($result->signature_found = preg_match("/^-- signature: ([0-9a-f]{40})\n/", $content, $matches)) {
+                    $content=substr($content, strlen($matches[0]));
+                    $signature=$this->sign($content);
+                    if($result->signature_valid = ($signature==$matches[1]) ){
+                        if($result->info_found = preg_match("/^-- info: ([^\n]+)\n/", $content, $matches)) {
+                            $info = unserialize($matches[1]);
+                            $filename=$this->saveBackup($content, $info, $comment);
+                            $result->success=TRUE;
+                            $result->filename=$filename;
+                        }
+                    }
+                }
+            } else {
+                $result->error=$file->getError();
+            }
+        }
+        $this->flash()->set("upload", $result);
+        return $this->redirect($this->generateUrl("educ_action_ades_backup"));
+    }
+
+    private function create()
+    {
+    }
     private static function GetInfoFilename($sqlFilename)
     {
         return substr_replace($sqlFilename,"txt", -3);
@@ -202,6 +250,8 @@ class BackupController extends Controller implements IAccessControlled
 			if(file_exists($path)){
 				$content=file_get_contents($path);
 				if($content!==FALSE){
+                    //TODO: sign the content if needed
+                    //TODO: add the timestamp if needed
                     $response=new \Symfony\Component\HttpFoundation\Response($content);
                     $response->headers->set("Content-Type", "application/x-sql");
                     $response->headers->set("Content-Disposition", "attachment; filename=\"$file\"");

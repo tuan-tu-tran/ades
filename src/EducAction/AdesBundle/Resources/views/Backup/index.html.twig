@@ -60,30 +60,6 @@
 
 <h2>Sauvegarde de la base de données</h2>
 
-<fieldset class="notice">
-	<legend>Dernière sauvegarde</legend>
-    <div class="{{ (backup_files|length==0 or last_backup_since.days > 0) ? "impt":"" }}">
-        {% if backup_files|length==0 %}
-			<p>Aucune sauvegarde effectuée.</p>
-        {% else %}
-			<p>
-				La dernière sauvegarde
-                {{ last_backup }}
-                a été effectuée le {{ last_backup_time|date("d/m/Y à H:i") }}
-			</p>
-			<p>Il y a
-                {% if last_backup_since.days > 0 %}
-                    {{ last_backup_since.days }} jour{{last_backup_since.days>1?"s":""}}.
-                {% elseif last_backup_since.h > 0 %}
-                    {{ last_backup_since.h }} heure{{last_backup_since.h>1?"s":""}}.
-                {% else %}
-                    moins d'une heure.
-                {% endif %}
-			</p>
-        {% endif %}
-	</div>
-</fieldset>
-
 <div id="notice" class="auto_close">
 {% if backup %}
     {% if backup.failed %}
@@ -135,13 +111,42 @@
     {% endif %}
 {% endif %}
 
+
 </div>
+
+{% include "EducActionAdesBundle:Backup:upload_result.html.twig" %}
+
+<fieldset class="notice">
+	<legend>Dernière sauvegarde</legend>
+    <div class="{{ (backup_files|length==0 or last_backup_since.days > 0) ? "impt":"" }}">
+        {% if backup_files|length==0 %}
+			<p>Aucune sauvegarde effectuée.</p>
+        {% else %}
+			<p>
+				La dernière sauvegarde
+                {{ last_backup }}
+                a été effectuée le {{ last_backup_time|date("d/m/Y à H:i") }}
+			</p>
+			<p>Il y a
+                {% if last_backup_since.days > 0 %}
+                    {{ last_backup_since.days }} jour{{last_backup_since.days>1?"s":""}}.
+                {% elseif last_backup_since.h > 0 %}
+                    {{ last_backup_since.h }} heure{{last_backup_since.h>1?"s":""}}.
+                {% else %}
+                    moins d'une heure.
+                {% endif %}
+			</p>
+        {% endif %}
+	</div>
+</fieldset>
+
 
 {{
     tabstrip({
-        "new":{ "text":"Nouvelle sauvegarde", "selected":true },
+        "new":{ "text":"Nouvelle sauvegarde"},
         "import": {"text":"Importation"}
     },{
+        "selected": upload and not upload.success ? "import" : "new",
         "id":"tabs"
     })
 }}
@@ -171,10 +176,11 @@
         <input type="file" name="upload" size="40" />
     </p>
     <p>
-        <input class="comment" type="text" value="Ajouter un commentaire (optionnel)" name="comment" size="40"
+        {% set comment = upload and not upload.success ? upload.comment : "" %}
+        <input class="comment" type="text" value="{{ comment ? comment : "Ajouter un commentaire (optionnel)" }}" name="comment" size="40"
             {{ overlib("Si vous le désirez, vous pouvez ajouter un commentaire qui sera lié à la sauvegarde") }}
         />
-        <input type="hidden" value="" name="comment_set"/>
+        <input type="hidden" value="{{ comment }}" name="comment_set"/>
     </p>
     <p>
         <input type="submit" value="Importer le fichier sélectionné"/>

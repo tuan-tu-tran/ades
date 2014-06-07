@@ -35,10 +35,18 @@ class TabPanel
 
     public function strip($headers, $options=array())
     {
-        foreach($headers as $key=>$value){
-            if(!$key || !isset($value["text"])) throw new \Exception("tab key or text cannot be null");
+        $this->selectedTab = Tools::GetDefault($options, "selected");
+        foreach($headers as $key=>&$value){
+            if(is_string($value)) {
+                $value=array("text"=>$value);
+            }
+            if(!$key || !isset($value["text"])) {
+                throw new \Exception("tab key or text cannot be null");
+            }
             if(Tools::GetDefault($value,"selected")){
                 $this->selectedTab=$key;
+            } else {
+                $value["selected"] = $this->selectedTab == $key;
             }
         }
         return $this->twig->render("EducActionAdesBundle:TabPanel:strip.html.twig", array("tabs"=>$headers, "options"=>$options));
