@@ -1,0 +1,43 @@
+{#
+/**
+ * Copyright (c) 2014 Tuan-Tu TRAN
+ * 
+ * This file is part of ADES.
+ * 
+ * ADES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * ADES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+*/
+#}
+<fieldset class="notice">
+	<legend>Dernière sauvegarde</legend>
+    <div class="{{ (backup_files|length==0 or last_backup_since.days > 0) ? "impt":"" }}">
+        {% if backup_files|length==0 %}
+			<p>Aucune sauvegarde effectuée.</p>
+        {% else %}
+			<p>
+				La dernière sauvegarde
+                {{ last_backup }}
+                a été effectuée le {{ last_backup_time|date("d/m/Y à H:i") }}
+			</p>
+			<p>Il y a
+                {% if last_backup_since.days > 0 %}
+                    {{ last_backup_since.days }} jour{{last_backup_since.days>1?"s":""}}.
+                {% elseif last_backup_since.h > 0 %}
+                    {{ last_backup_since.h }} heure{{last_backup_since.h>1?"s":""}}.
+                {% else %}
+                    moins d'une heure.
+                {% endif %}
+			</p>
+        {% endif %}
+	</div>
+</fieldset>
