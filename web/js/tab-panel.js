@@ -34,7 +34,8 @@ EducAction.Ades.TabPanel=new (function(){
 			var max_height=0;
 			$(div).children().each(function(j, panel){
 				max_height=Math.max($(panel).outerHeight(true), max_height);
-			}).outerHeight(max_height);
+			});
+			$(div).height(max_height);
 		});
 	});
 })();
