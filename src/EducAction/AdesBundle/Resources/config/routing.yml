@@ -40,8 +40,13 @@ educ_action_ades_backup_old:
     methods: [GET]
 
 educ_action_ades_backup_create:
-    pattern: /backup
+    pattern: /backup/create
     defaults: { _controller: EducActionAdesBundle:Backup:backup}
+    methods: [POST]
+
+educ_action_ades_backup_upload:
+    pattern: /backup/upload
+    defaults: { _controller: EducActionAdesBundle:Backup:upload}
     methods: [POST]
 
 educ_action_ades_backup_delete:

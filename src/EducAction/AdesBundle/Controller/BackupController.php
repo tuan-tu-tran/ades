@@ -146,7 +146,7 @@ class BackupController extends Controller implements IAccessControlled
 
 	public function backupAction(){
         $result=$this->params;
-        $comment=$_POST["backup_create_comment_set"]?$_POST["backup_create_comment"]:"";
+        $comment=$_POST["comment_set"]?$_POST["comment"]:"";
 		$db=Db::GetInstance();
 		$host=$db->host;
 		$username=$db->username;

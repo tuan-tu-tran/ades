@@ -25,14 +25,14 @@
     {{ parent() }}
 	<script type="text/javascript">
 		jQuery(function($){
-            $("input#backup_create_comment")
+            $("input.comment")
                 .click(function(){
-                    if($("input#backup_create_comment_set").val()==""){
+                    if($(this).next().val()==""){
                         $(this).select();
                     }
                 })
                 .change(function(){
-                    $("input#backup_create_comment_set").val(1);
+                    $(this).next().val(1);
                 })
             ;
 		});
@@ -40,6 +40,20 @@
 	<style type="text/css">
 		tr.backup:hover{background-color:yellow}
         table#backup_table td{padding:5px;}
+        #tabs input
+        {
+            padding:0;
+        }
+
+        #tabs input[type="text"]
+        {
+            padding-left:2px;
+        }
+
+        #tabs input[type="submit"]
+        {
+            padding:2px;
+        }
 	</style>
 {% endblock %}
 {% block content %}
@@ -123,13 +137,52 @@
 
 </div>
 
+{{
+    tabstrip({
+        "new":{ "text":"Nouvelle sauvegarde", "selected":true },
+        "import": {"text":"Importation"}
+    },{
+        "id":"tabs"
+    })
+}}
+
+{{ tab("new") }}
+
+<p>Créer une nouvelle sauvegarde de l'état actuel de la base de données</p>
+
 <form method="POST" action="{{path("educ_action_ades_backup_create")}}" style="border:none;padding:0">
-<input type="submit" value="Créer une nouvelle sauvegarde"/>
-<input id="backup_create_comment" type="text" value="Ajouter un commentaire (optionnel)" name="backup_create_comment" size="40"
-    {{ overlib("Si vous le désirez, vous pouvez ajouter un commentaire qui sera lié à la sauvegarde") }}
-/>
-<input id="backup_create_comment_set" type="hidden" value="" name="backup_create_comment_set"/>
+    <p>
+        <input class="comment" type="text" value="Ajouter un commentaire (optionnel)" name="comment" size="40"
+            {{ overlib("Si vous le désirez, vous pouvez ajouter un commentaire qui sera lié à la sauvegarde") }}
+        />
+        <input type="hidden" value="" name="comment_set"/>
+    </p>
+    <p>
+        <input type="submit" name="new" value="Créer une nouvelle sauvegarde"/>
+    </p>
 </form>
+
+{{ tab("import") }}
+
+<p>Importer une sauvegarde existante depuis votre disque dur</p>
+
+<form method="POST" action="{{path("educ_action_ades_backup_upload")}}" style="border:none;padding:0" enctype="multipart/form-data">
+    <p>
+        <input type="file" name="upload" size="40" />
+    </p>
+    <p>
+        <input class="comment" type="text" value="Ajouter un commentaire (optionnel)" name="comment" size="40"
+            {{ overlib("Si vous le désirez, vous pouvez ajouter un commentaire qui sera lié à la sauvegarde") }}
+        />
+        <input type="hidden" value="" name="comment_set"/>
+    </p>
+    <p>
+        <input type="submit" value="Importer le fichier sélectionné"/>
+    </p>
+</form>
+
+{{ endtabs() }}
+
 
 {% if backup_files|length > 0 %}
 <h3>Liste de dernières sauvegardes disponibles</h3>
