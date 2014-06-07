@@ -16,20 +16,25 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-EducAction={Ades:{}};
-jQuery(function($){
-	$(".auto_close")
-	.click(function(){
-		$(this).slideUp()
-	})
-	if(window.hasOwnProperty("nd")){
-		$(".auto_close").hover(
-			function(){overlib("Cliquer pour fermer");},
-			nd
-		);
+EducAction.Ades.TabPanel=new (function(){
+	var $=jQuery;
+	this.select=function(elem, id)
+	{
+		var tabs=$(elem).parent().next().children();
+		if(tabs.filter("#"+id+":visible").length==0){
+			tabs.filter(":visible").hide();
+			tabs.filter("#"+id).show();
+			$(elem).siblings().removeClass("tab-panel-selected");
+			$(elem).addClass("tab-panel-selected");
+		}
 	}
-	var autoclose=function(){
-		$(".auto_close").slideUp();
-	};
-	$(window).bind("unload", autoclose).bind("beforeunload", autoclose).click(autoclose);
-});
+
+	$(function(){
+		$("div.tab-panel-panels").each(function(i,div){
+			var max_height=0;
+			$(div).children().each(function(j, panel){
+				max_height=Math.max($(panel).outerHeight(true), max_height);
+			}).outerHeight(max_height);
+		});
+	});
+})();

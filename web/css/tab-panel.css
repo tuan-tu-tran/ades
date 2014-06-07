@@ -16,20 +16,36 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-EducAction={Ades:{}};
-jQuery(function($){
-	$(".auto_close")
-	.click(function(){
-		$(this).slideUp()
-	})
-	if(window.hasOwnProperty("nd")){
-		$(".auto_close").hover(
-			function(){overlib("Cliquer pour fermer");},
-			nd
-		);
-	}
-	var autoclose=function(){
-		$(".auto_close").slideUp();
-	};
-	$(window).bind("unload", autoclose).bind("beforeunload", autoclose).click(autoclose);
-});
+div.tab-panel > div.tab-panel-strip > div
+{
+  display:inline-block;
+  border:solid 1pt black;
+  padding:2px;
+  color:white;
+  background-color:#8888ff;
+  cursor: pointer;
+}
+
+div.tab-panel > div.tab-panel-strip > div:hover
+, div.tab-panel > div.tab-panel-strip > div.tab-panel-selected:hover
+{
+  background-color:red;
+}
+
+div.tab-panel > div.tab-panel-strip > div:active
+, div.tab-panel > div.tab-panel-strip > div.tab-panel-selected:active
+{
+  background-color:white;
+  color:black;
+}
+
+div.tab-panel > div.tab-panel-strip > div.tab-panel-selected
+{
+  background-color:blue;
+}
+
+div.tab-panel > div.tab-panel-panels
+{
+  border: solid 1pt black;
+  padding-left:3px;
+}

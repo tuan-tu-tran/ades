@@ -20,11 +20,12 @@
 
 namespace EducAction\AdesBundle\Twig;
 
-use EducAction\AdesBundle\Config;
+use EducAction\AdesBundle\Twig\TabPanelManager;
 
 class TwigExtension extends \Twig_Extension
 {
     private $requestStack;
+    private $tabPanelManager;
 
     public function __construct($requestStack)
     {
@@ -32,6 +33,7 @@ class TwigExtension extends \Twig_Extension
             parent::__construct();
         }
         $this->requestStack=$requestStack;
+        $this->tabPanelManager=new TabPanelManager();
     }
 
     public function getName()
@@ -60,6 +62,22 @@ class TwigExtension extends \Twig_Extension
         $functions[]=new \Twig_SimpleFunction("user_is_logged", array("EducAction\\AdesBundle\\User","IsLogged"));
         $functions[]=new \Twig_SimpleFunction("user_has_access", array("EducAction\\AdesBundle\\User","HasAccess"));
         $functions[]=new \Twig_SimpleFunction("unread_mail", array("EducAction\\AdesBundle\\MiniMail","UnreadMailCount"));
+        $functions[]=new \Twig_SimpleFunction("tabstrip", array($this->tabPanelManager,"strip"),
+            array(
+                "is_safe"=>array("html"),
+                "needs_environment"=>TRUE
+            )
+        );
+        $functions[]=new \Twig_SimpleFunction("tab", array($this->tabPanelManager,"tab"),
+            array(
+                "is_safe"=>array("html"),
+            )
+        );
+        $functions[]=new \Twig_SimpleFunction("endtabs", array($this->tabPanelManager,"end"),
+            array(
+                "is_safe"=>array("html"),
+            )
+        );
         return $functions;
     }
 
