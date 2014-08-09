@@ -42,8 +42,8 @@ border="0" class="inv" style="float: right">
 <?php if(User::IsLogged()):?>
 	<ul class="navlist inv">
 		<li><a href="index.php"><img src="images/home.png" class="icone" alt="Accueil"></a></li>
-		<li><a href="mail.php"><img src="images/minimail.png" class="icone" alt="."><b><?php echo MiniMail::UnreadMailCount()?></b></a></li>
-		<li><a href="#"><img src="images/eleve.png" class="icone" alt=".">Elèves</a>
+		<li><a href="mail.php"><img src="images/minimail.png" class="icone" alt="."> <b><?php echo MiniMail::UnreadMailCount()?></b></a></li>
+		<li><a href="#"><img src="images/eleve.png" class="icone" alt="."> Elèves</a>
 			<ul>
 			<li>
 				<a href="parclasse.php" title="Recherche d'un &eacute;l&eagrave;ve par classe">
@@ -67,7 +67,7 @@ border="0" class="inv" style="float: right">
 			<?php endif;?>
 			</ul>
 		</li>
-		<li><a href="#"><img class="icone" src="images/retenue.png" alt=".">Retenues</a>
+		<li><a href="#"><img class="icone" src="images/retenue.png" alt="."> Retenues</a>
 			<ul>
 			<li>
 			<a href="listeretenues.php" title="Liste des élèves en retenue 
@@ -94,7 +94,7 @@ border="0" class="inv" style="float: right">
 			?>
 			</ul>
 		</li>
-		<li><a href="#"><img src="images/synthese.png" class="icone" alt=".">Synth&egrave;ses</a>
+		<li><a href="#"><img src="images/synthese.png" class="icone" alt="."> Synth&egrave;ses</a>
 			<ul>
 			<li>
 			<a href="synthese.php" title="Que s'est-il pass&eacute; (classe, p&eacute;riode)...">
@@ -112,7 +112,7 @@ border="0" class="inv" style="float: right">
 			?>
 			</ul>
 		</li>
-		<li><a href="#"><img src="images/utilitaires.png" class="icone" alt=".">Utilitaires</a>
+		<li><a href="#"><img src="images/utilitaires.png" class="icone" alt="."> Utilitaires</a>
 			<ul>
 			<?php 
 			if (User::HasAccess ("educ", "admin"))

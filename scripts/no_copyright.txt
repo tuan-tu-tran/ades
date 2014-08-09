@@ -20,3 +20,6 @@ jquery-.*\.js$
 .htaccess$
 ^composer\.(lock|json)$
 ^config/
+^app/
+^web/app(_dev)?\.php$
+\.yml$

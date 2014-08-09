@@ -1,8 +1,7 @@
 <?php
 require("SplClassLoader.php");
 
-$educActionLoader=new SplClassLoader("EducAction", "../src");
-$educActionLoader->setFileExtension(".class.php");
+$educActionLoader=new SplClassLoader("EducAction", __DIR__."/../src");
 $educActionLoader->register();
 
 $oldClassesLoader=new EducAction\AdesBundle\ClassLoader(

@@ -152,10 +152,9 @@ class SplClassLoader
 
 			$fullname=($this->_includePath !== null ? $this->_includePath . DIRECTORY_SEPARATOR : '') . $fileName;
 
-			if(!file_exists($fullname))
-				throw new Exception("file \"$fullname\" does not exist: could not load class \"$fqClassName\"");
-
-            require $fullname;
+			if(file_exists($fullname)) {
+                require $fullname;
+            }
         }
     }
 }

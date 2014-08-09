@@ -88,7 +88,7 @@ if (!isset($_SESSION["identification"]["user"]))
 			?>
 			</ul>
 		</li>
-		<li><a href="#"><img class="icone" src="images/retenue.png" alt=".">Retenues</a>
+		<li><a href="#"><img class="icone" src="images/retenue.png" alt="."> Retenues</a>
 			<ul>
 			<li>
 			<a href="listeretenues.php" title="Liste des élèves en retenue 
@@ -115,7 +115,7 @@ if (!isset($_SESSION["identification"]["user"]))
 			?>
 			</ul>
 		</li>
-		<li><a href="#"><img src="images/synthese.png" class="icone" alt=".">Synth&egrave;ses</a>
+		<li><a href="#"><img src="images/synthese.png" class="icone" alt="."> Synth&egrave;ses</a>
 			<ul>
 			<li>
 			<a href="synthese.php" title="Que s'est-il pass&eacute; (classe, p&eacute;riode)...">
@@ -133,7 +133,7 @@ if (!isset($_SESSION["identification"]["user"]))
 			?>
 			</ul>
 		</li>
-		<li><a href="#"><img src="images/utilitaires.png" class="icone" alt=".">Utilitaires</a>
+		<li><a href="#"><img src="images/utilitaires.png" class="icone" alt="."> Utilitaires</a>
 			<ul>
 			<?php 
 			if (utilisateurParmi ("educ", "admin"))

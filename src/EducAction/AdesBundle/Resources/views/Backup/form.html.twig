@@ -1,0 +1,67 @@
+{#
+/**
+ * Copyright (c) 2014 Tuan-Tu TRAN
+ * 
+ * This file is part of ADES.
+ * 
+ * ADES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * ADES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+*/
+#}
+{{
+    tabstrip({
+        "new":{ "text":"Nouvelle sauvegarde"},
+        "import": {"text":"Importation"}
+    },{
+        "selected": upload and not upload.success ? "import" : "new",
+        "id":"tabs"
+    })
+}}
+
+{{ tab("new") }}
+
+<p>Créer une nouvelle sauvegarde de l'état actuel de la base de données</p>
+
+<form method="POST" action="{{path("educ_action_ades_backup_create")}}" style="border:none;padding:0">
+    <p>
+        <input class="comment" type="text" value="Ajouter un commentaire (optionnel)" name="comment" size="40"
+            {{ overlib("Si vous le désirez, vous pouvez ajouter un commentaire qui sera lié à la sauvegarde") }}
+        />
+        <input type="hidden" value="" name="comment_set"/>
+    </p>
+    <p>
+        <input type="submit" name="new" value="Créer une nouvelle sauvegarde"/>
+    </p>
+</form>
+
+{{ tab("import") }}
+
+<p>Importer une sauvegarde existante depuis votre disque dur</p>
+
+<form method="POST" action="{{path("educ_action_ades_backup_upload")}}" style="border:none;padding:0" enctype="multipart/form-data">
+    <p>
+        <input type="file" name="upload" size="40" />
+    </p>
+    <p>
+        {% set comment = upload and not upload.success ? upload.comment : "" %}
+        <input class="comment" type="text" value="{{ comment ? comment : "Ajouter un commentaire (optionnel)" }}" name="comment" size="40"
+            {{ overlib("Si vous le désirez, vous pouvez ajouter un commentaire qui sera lié à la sauvegarde") }}
+        />
+        <input type="hidden" value="{{ comment }}" name="comment_set"/>
+    </p>
+    <p>
+        <input type="submit" value="Importer le fichier sélectionné"/>
+    </p>
+</form>
+
+{{ endtabs() }}

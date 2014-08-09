@@ -16,16 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
+EducAction={Ades:{}};
 jQuery(function($){
-	$(".auto_close")
+	$(".auto_close_on_click, .auto_close")
 	.click(function(){
 		$(this).slideUp()
 	})
-	.hover(
-		function(){overlib("Cliquer pour fermer");},
-		nd
-	);
-	$("form").submit(function(){
-		$(".auto_close").slideUp();
-	});
+	if(window.hasOwnProperty("nd")){
+		$(".auto_close_on_click, .auto_close").hover(
+			function(){overlib("Cliquer pour fermer");},
+			nd
+		);
+	}
+	var autoclose=function(){
+		$(".auto_close, .auto_close_on_click").slideUp();
+	};
+	$(window).bind("unload", autoclose).bind("beforeunload", autoclose).click(function(){$(".auto_close").slideUp();});
+	$("form").submit(autoclose);
 });

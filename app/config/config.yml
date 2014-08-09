@@ -1,0 +1,14 @@
+imports:
+    - { resource: ../../local/config.yml }
+    - { resource: @EducActionAdesBundle/Resources/config/services.yml }
+
+framework:
+    secret: '%secret%'
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+    session:
+        handler_id: ~
+    templating:
+        engines: ["twig"]
+twig:
+    strict_variables: true
