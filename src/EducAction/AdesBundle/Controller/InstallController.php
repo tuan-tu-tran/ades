@@ -113,7 +113,7 @@ class InstallController extends Controller
             return $this->View("school_config_form.html.twig", $configure_school_result);
         } else {
             $this->flash()->clear();
-            $this->View("school_config_written.html.twig", $configure_school_result);
+            return $this->View("school_config_written.html.twig", $configure_school_result);
         }
     }
 
