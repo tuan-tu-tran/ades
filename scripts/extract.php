@@ -55,7 +55,11 @@ function backup_logo()
             die("pas de logo dans le fichier confbilletretenue.inc.php:\n".file_get_contents($file));
         }
         $imageenteteecole="web/$imageenteteecole";
-        copy($imageenteteecole, "local/logo.img") or error("impossible de copier le logo $imageenteteecole");
+        if (file_exist($imageenteteecole)) {
+            copy($imageenteteecole, "local/logo.img") or error("impossible de copier le logo $imageenteteecole");
+        } else {
+            echo "logo not backed up because it doesn't exist : ".$imageenteteecole;
+        }
     }
 }
 
