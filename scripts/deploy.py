@@ -251,6 +251,10 @@ def deploy(config_file, archive, option):
 
 			if not option.upload_files:
 				logger.info("ftp: cd web")
+				ls=ftp.nlst()
+				if not "web" in ls:
+					logger.info("ftp: mkdir web because not found in %s", ls)
+					ftp.mkd("web")
 				ftp.cwd("web")
 				logger.info("ftp: upload %s to extract.php",extract)
 				with open(extract,"r") as fh:
