@@ -279,15 +279,19 @@ def deploy(config_file, archive, option):
 
 		if config.has_option(section, "url") and not option.upload_files:
 			logger.info("")
-			url=config.get(section, "url").rstrip("/")+"/extract.php"
-			logger.info("calling extract script at %s", url)
-			try:
-				resp=urllib2.urlopen(url)
-				logger.info(resp.read())
-			except:
-				t,e,tb=sys.exc_info()
-				logger.error("error while opening %s : %s", url, e)
-				sys.exit(1)
+			url=config.get(section, "url").rstrip("/")
+			if url:
+				url+="/extract.php"
+				logger.info("calling extract script at %s", url)
+				try:
+					resp=urllib2.urlopen(url)
+					logger.info(resp.read())
+				except:
+					t,e,tb=sys.exc_info()
+					logger.error("error while opening %s : %s", url, e)
+					sys.exit(1)
+			else:
+				logger.info("no url to call")
 		sys.exit(0)
 
 main()
