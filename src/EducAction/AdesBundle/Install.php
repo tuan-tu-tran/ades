@@ -28,7 +28,7 @@ class Install
 	public static function CheckIfNeeded()
 	{
 		if(!file_exists(Config::DbConfigFile()) || !file_exists(Config::SchoolConfigFile())){
-			Tools::Redirect("creation.php");
+			Tools::Redirect("install");
 		}
 	}
 }
