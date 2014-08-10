@@ -26,13 +26,11 @@ use EducAction\AdesBundle\Process;
 use EducAction\AdesBundle\Tools;
 use EducAction\AdesBundle\Utils;
 use EducAction\AdesBundle\Config;
+use EducAction\AdesBundle\Backup;
 use \DateTime;
-use \SplFileInfo;
 
 class BackupController extends Controller implements IAccessControlled
 {
-	const regex="/^\d{8}-\d{6}\.sql$/";
-
     public function getRequiredPrivileges()
     {
         return array("admin");
@@ -40,7 +38,7 @@ class BackupController extends Controller implements IAccessControlled
 
     public function restoreAction($file)
     {
-		if(preg_match(self::regex, $file)){
+        if(Backup::isLegalFile($file)) {
             $restore=$this->params;
 			$restore->filename=$file;
 			if($input=file_get_contents(self::BackupFolder()."/".$file)){
@@ -84,7 +82,7 @@ class BackupController extends Controller implements IAccessControlled
 
     public function deleteAction($file)
     {
-		if(preg_match(self::regex, $file)){
+        if(Backup::isLegalFile($file)) {
             $delete=$this->params;
             $fullname=self::BackupFolder()."/".$file;
             $infoname=self::GetInfoFilename($fullname);
@@ -102,12 +100,11 @@ class BackupController extends Controller implements IAccessControlled
 
     public function indexAction()
     {
-		$list=Path::ListDir(self::BackupFolder(), self::regex );
-		rsort($list);
+		$list=Backup::getFiles();
 		$files=array();
 		$now=new DateTime();
 		foreach($list as $file){
-			$path=self::BackupFolder()."/".$file;
+			$path=Backup::getFolder()."/".$file;
 			$info=new SplFileInfo($path);
 			$mtime=new DateTime("@".$info->getMTime());
 			$mtime->setTimezone($now->getTimezone());
@@ -230,22 +227,19 @@ class BackupController extends Controller implements IAccessControlled
         return $this->redirect($this->generateUrl("educ_action_ades_backup"));
     }
 
-    private function create()
-    {
-    }
     private static function GetInfoFilename($sqlFilename)
     {
-        return substr_replace($sqlFilename,"txt", -3);
+        return Backup::getInfoFilename($sqlFilename);
     }
 
 	private static function BackupFolder()
 	{
-		return DIRNAME(__FILE__)."/../../../../local/db_backup";
+        return Backup::getFolder();
 	}
 
 	public function downloadAction($file)
 	{
-		if(preg_match(self::regex, $file)){
+        if(Backup::isLegalFile($file)) {
 			$path=self::BackupFolder()."/$file";
 			if(file_exists($path)){
 				$content=file_get_contents($path);
