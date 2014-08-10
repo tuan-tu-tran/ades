@@ -27,6 +27,11 @@ class User{
 		return isset($_SESSION["identification"]["user"]);
 	}
 
+    public static function isAdmin()
+    {
+        return self::HasAccess("admin");
+    }
+
 	public static function HasAccess(){
 		if(isset($_SESSION['identification']['privilege'])){
 			$required_access = func_get_args();

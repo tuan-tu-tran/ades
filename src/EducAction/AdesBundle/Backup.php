@@ -84,8 +84,9 @@ class Backup
         return unserialize(file_get_contents(self::GetInfoFilename($this->path)));
     }
 
-    public function getTimestamp($backupInfo)
+    public function getTimestamp($backupInfo=NULL)
     {
+        $this->getInfoIfNull($backupInfo);
         $time=Tools::GetDefault($backupInfo, "timestamp");
         if(!$time) {
             $now=new DateTime();
@@ -95,6 +96,13 @@ class Backup
             $time = $mtime;
         }
         return $time;
+    }
+
+    private function getInfoIfNull(&$backupInfo)
+    {
+        if($backupInfo == NULL) {
+            $backupInfo = $this->getInfo();
+        }
     }
 
     public function getSize()

@@ -63,3 +63,8 @@ educ_action_ades_backup_download:
     pattern: /backup/download/{file}
     defaults: { _controller: EducActionAdesBundle:Backup:download}
     methods: [GET]
+
+educ_action_ades_logout:
+    pattern: /logout
+    defaults: { _controller: EducActionAdesBundle:Logout:index }
+    methods: [GET]
