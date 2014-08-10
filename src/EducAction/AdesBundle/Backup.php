@@ -34,7 +34,7 @@ class Backup
 		return Config::LocalFile("db_backup");
 	}
 
-    public static function getFiles()
+    private static function getFiles()
     {
 		$list=Path::ListDir(self::getFolder(), self::regex );
 		rsort($list);
@@ -56,24 +56,51 @@ class Backup
         }
     }
 
+    public static function getList()
+    {
+        $files=self::getFiles();
+        $list=[];
+        foreach($files as $file) {
+            $list[] = new Backup($file);
+        }
+        return $list;
+    }
+
     private $file;
+    private $path;
     private function __construct($file)
     {
         $this->file=$file;
+        $this->path=self::getFolder()."/".$this->file;
     }
 
-    public function getTimestamp()
+    public function getFilename()
     {
-        $path=self::getFolder()."/".$file;
-        $backupInfo=unserialize(file_get_contents(self::GetInfoFilename($path)));
+        return $this->file;
+    }
+
+    public function getInfo()
+    {
+        return unserialize(file_get_contents(self::GetInfoFilename($this->path)));
+    }
+
+    public function getTimestamp($backupInfo)
+    {
         $time=Tools::GetDefault($backupInfo, "timestamp");
         if(!$time) {
             $now=new DateTime();
-			$info=new SplFileInfo($path);
+			$info=new SplFileInfo($this->path);
 			$mtime=new DateTime("@".$info->getMTime());
 			$mtime->setTimezone($now->getTimezone());
-            return $mtime;
+            $time = $mtime;
         }
+        return $time;
+    }
+
+    public function getSize()
+    {
+        $info=new SplFileInfo($this->path);
+        return $info->getSize();
     }
 
     public static function getInfoFilename($path)

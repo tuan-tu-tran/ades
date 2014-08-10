@@ -100,19 +100,14 @@ class BackupController extends Controller implements IAccessControlled
 
     public function indexAction()
     {
-		$list=Backup::getFiles();
+		$list=Backup::getList();
 		$files=array();
-		$now=new DateTime();
-		foreach($list as $file){
-			$path=Backup::getFolder()."/".$file;
-			$info=new SplFileInfo($path);
-			$mtime=new DateTime("@".$info->getMTime());
-			$mtime->setTimezone($now->getTimezone());
-            $backupInfo=unserialize(file_get_contents(self::GetInfoFilename($path)));
+        foreach($list as $backup){
+            $backupInfo = $backup->getInfo();
 			$files[]=array(
-				"name"=>$file,
-				"time"=>Tools::GetDefault($backupInfo, "timestamp", $mtime),
-				"size"=>$info->getSize(),
+				"name"=>$backup->getFilename(),
+				"time"=>$backup->getTimestamp($backupInfo),
+				"size"=>$backup->getSize(),
                 "version"=>$backupInfo["version"],
                 "is_current_version"=>$backupInfo["version"]==Upgrade::Version,
                 "comment"=>$backupInfo["comment"],
@@ -122,6 +117,7 @@ class BackupController extends Controller implements IAccessControlled
 		$params->backup_files=$files;
 
 		if(count($files)>0){
+            $now=new DateTime();
 			$params->last_backup=$files[0]["name"];
 			$params->last_backup_time=$files[0]["time"];
 			$diff=$now->diff($params->last_backup_time);
