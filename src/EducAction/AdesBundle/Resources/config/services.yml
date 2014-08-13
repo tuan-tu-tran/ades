@@ -9,3 +9,6 @@ services:
         class: EducAction\AdesBundle\KernelListener\KernelListener
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onControllerListener }
+    educ_action.ades.user:
+        class : EducAction\AdesBundle\UserInstance
+        arguments: ["@request_stack"]

@@ -68,5 +68,10 @@ class Controller extends SfController
         }
         return $this->flashWrapper;
     }
+
+    public function getUser()
+    {
+        return $this->get("educ_action.ades.user");
+    }
 }
 
