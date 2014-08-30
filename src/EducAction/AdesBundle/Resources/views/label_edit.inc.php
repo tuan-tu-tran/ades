@@ -22,20 +22,50 @@ use EducAction\AdesBundle\View;
 use EducAction\AdesBundle\Html;
 ?>
 
-<div>
-<label>Etiquettes</label>
-<input class="nomargin" type="text" id="tbLabel"/><button class="nomargin" id="bLabelAdd" onclick="return false;">+</button>
+<div style="float:left;width:100%; margin-top:1em; margin-bottom:1em">
+    <label>Etiquettes</label>
+    <div style="float:left">
+        <div style="display:none; margin-bottom:5px" id="divLabels">
+        </div>
+        <input class="nomargin" type="text" id="tbLabel"/><button class="nomargin" id="bLabelAdd" onclick="return false;">+</button>
+    </div>
+</div>
 <script type="text/javascript">
     jQuery(function($){
-        $("#bLabelAdd").click(function(e){
-
-            var text = $("#tbLabel").val();
-            if(!text){
-                alert("Veuillez entrer un label.");
-            } else {
+        function LabeList(div){
+            var _labels=[];
+            this.contains = function(label){
+                return _labels.indexOf(label) > -1;
             }
-            e.stopImmediatePropagation();
+
+            var __add;
+            __add=function(label){
+                if (typeof(label)=="string"){
+                    _labels.push(label);
+                    div.append(" "+label).show();
+                }else {
+                    $(label).each(function(i,l){
+                        __add(l);
+                    })
+                }
+            }
+            this.add=__add;
+        }
+
+        var labelList = new LabeList($("#divLabels"));
+
+        labelList.add(["test","foo"]);
+        $("#bLabelAdd").click(function(e){
+            var textbox=$("#tbLabel");
+            var label = textbox.val();
+            if(!label){
+                alert("Veuillez entrer un label.");
+            } else if (labelList.contains(label)){
+                alert("Ce label est déjà affecté à ce fait.");
+            } else {
+                labelList.add(label);
+                textbox.val("");
+            }
         });
     });
 </script>
-</div>
