@@ -29,6 +29,7 @@
     $(function(){
         {% if newBackup %}
             $("#bDownload").click(function(){
+                setTimeout(backToLogin, 200);
             });
 
             $("#bNo").click(function(){
@@ -75,7 +76,12 @@
     Désirez-vous la télécharger?
     </p>
     <p>
+    <a href="{{ path("educ_action_ades_backup_download", { "file" : newBackup.filename }) }}"
+        target="_blank"
+        id="downloadLink"
+        >
     <button id="bDownload">Oui</button>
+    </a>
     -
     <button id="bNo">Non</button>
     </p>
