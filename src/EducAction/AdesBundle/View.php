@@ -27,6 +27,14 @@ class View{
 	const PREPEND="prepend";
 	const APPEND="append";
 
+    public static function GetHtml($template){
+        ob_start();
+        call_user_func_array(array("EducAction\\AdesBundle\\View", "Render"), func_get_args());
+		$contents=ob_get_contents();
+		ob_end_clean();
+        return $contents;
+    }
+
 	public static function Render($template){
 		$template=self::GetTemplateFile($template);
 		if(file_exists($template)){

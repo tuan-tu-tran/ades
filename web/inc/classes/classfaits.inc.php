@@ -19,6 +19,8 @@
 */
 require ("inc/classes/classlisteretenues.inc.php");
 
+use EducAction\AdesBundle\View;
+
 // cette classe gère les faits disciplinaires
 // la table $listeRubriques contient les différentes caractéristiques du fait:
 // idfait, idorigine, ideleve, type, date, prof, sanction,...
@@ -360,6 +362,7 @@ foreach ($descriptionChamps as $unChamp)
 			}
 		}
 	}
+$form .= View::GetHtml("label_edit.inc.php");
 $form .= "<div style=\"text-align:center\">\n";
 $form .= "<input type=\"submit\" name=\"mode\" value=\"Enregistrer\">\n";
 $form .= "<input type=\"reset\" name=\"submit\" value=\"R&eacute;initialiser\">\n</div>\n";
