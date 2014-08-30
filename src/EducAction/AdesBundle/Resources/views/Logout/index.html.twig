@@ -24,9 +24,13 @@
 {% block post_head %}
 <script type='text/javascript'>
     $(function(){
+            var timeout=1000;
+            {% if lastBackup %}
+            timeout = 5000;
+            {% endif %}
             setTimeout(function(){
                 window.location="accueil.php";
-            }, 1000);
+            }, timeout);
     });
 </script>
 {% endblock %}
