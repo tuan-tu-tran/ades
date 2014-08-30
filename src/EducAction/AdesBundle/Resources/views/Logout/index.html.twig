@@ -23,16 +23,31 @@
 
 {% block post_head %}
 <script type='text/javascript'>
+    function backToLogin(){
+        window.location="accueil.php";
+    }
     $(function(){
+        {% if newBackup %}
+            $("#bDownload").click(function(){
+            });
+
+            $("#bNo").click(function(){
+                backToLogin();
+            });
+        {% else %}
             var timeout=1000;
             {% if lastBackup %}
             timeout = 5000;
             {% endif %}
-            setTimeout(function(){
-                window.location="accueil.php";
-            }, timeout);
+            setTimeout(backToLogin, timeout);
+        {% endif %}
     });
 </script>
+<style type="text/css">
+    button#bDownload, button#bNo {
+        font-size:inherit;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -53,12 +68,19 @@
         </p>
     {% endif %}
 
+<div class="avertissement" style="padding:0px">
     {% if newBackup %}
-        <p>Une nouvelle sauvegarde a été effectuée.</p>
-    {% endif %}
-
-<p class="avertissement">
+    <p>Une nouvelle sauvegarde a été effectuée.</p>
+    <p>
+    Désirez-vous la télécharger?
+    </p>
+    <p>
+    <button id="bDownload">Oui</button>
+    -
+    <button id="bNo">Non</button>
+    </p>
+    {% else %}
     Vous êtes à présent déconnecté.
-</p>
-
+    {% endif %}
+</div>
 {% endblock %}

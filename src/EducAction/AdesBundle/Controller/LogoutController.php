@@ -51,6 +51,7 @@ class LogoutController extends Controller implements IProtected
 
             if($create) {
                 //create a backup
+                Backup::create("backup automatique", $this, $newBackup);
             }
         }
         $params->lastBackup = $lastBackup;
