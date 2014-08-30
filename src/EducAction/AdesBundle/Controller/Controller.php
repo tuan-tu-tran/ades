@@ -86,5 +86,10 @@ class Controller extends SfController
     {
         return FALSE;
     }
+
+    protected function redirectLogin()
+    {
+        return $this->redirect($this->generateUrl("educ_action_ades_login"));
+    }
 }
 

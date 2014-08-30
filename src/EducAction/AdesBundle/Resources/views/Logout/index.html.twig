@@ -26,14 +26,18 @@
     function backToLogin(){
         window.location="accueil.php";
     }
+    
+    function clearLogout(){
+        $("#logoutForm").submit();
+    }
     $(function(){
         {% if newBackup %}
             $("#bDownload").click(function(){
-                setTimeout(backToLogin, 200);
+                backToLogin();
             });
 
             $("#bNo").click(function(){
-                backToLogin();
+                clearLogout();
             });
         {% else %}
             var timeout=1000;
@@ -85,6 +89,8 @@
     -
     <button id="bNo">Non</button>
     </p>
+    <form id="logoutForm" method="POST" style="display:none"></form>
+    </div>
     {% else %}
     Vous êtes à présent déconnecté.
     {% endif %}

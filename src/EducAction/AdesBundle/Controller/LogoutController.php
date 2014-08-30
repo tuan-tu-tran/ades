@@ -27,6 +27,11 @@ use \DateInterval;
 
 class LogoutController extends Controller implements IProtected
 {
+    public function isPublicAction($action)
+    {
+        return $action=="clearLogoutAction";
+    }
+
     public function indexAction()
     {
         $params=$this->params;
@@ -59,5 +64,12 @@ class LogoutController extends Controller implements IProtected
         $params->newBackup = $newBackup;
         $user->logout();
         return $this->View("index.html.twig");
+    }
+
+    public function clearLogoutAction()
+    {
+        $logout=$this->flash()->get("atLogout");
+        error_log("clearing atLogout: ".var_export($logout, TRUE));
+        return $this->redirectLogin();
     }
 }
