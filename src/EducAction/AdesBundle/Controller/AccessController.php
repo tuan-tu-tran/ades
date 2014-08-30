@@ -37,7 +37,6 @@ class AccessController
     {
         $this->request->getSession()->clear();
         $url=$this->router->generate("educ_action_ades_login");
-        error_log("redirectLogin to $url");
         return new RedirectResponse($url);
     }
 
