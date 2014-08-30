@@ -40,7 +40,10 @@ class KernelListener
             throw new \Exception("controller must be an array, not a ".get_class($controller)." (_route: ".$request->get("_route").")");
         }
         $instance=$controller[0];
+        $action = $controller[1];
         if(is_a($instance, "EducAction\\AdesBundle\\Controller\\IProtected")){
+            $allowed=$instance->isPublicAction($action);
+            if(!$allowed){
             $session = $request->getSession();
             if(!$session->isStarted()) {
                 $session->start();
@@ -53,6 +56,7 @@ class KernelListener
                 if(!in_array($userPrivilege, $requiredPrivileges)){
                     $event->setController(array(new AccessController($request), "unauthorized"));
                 }
+            }
             }
         }
     }

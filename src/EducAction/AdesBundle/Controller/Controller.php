@@ -78,5 +78,13 @@ class Controller extends SfController
     {
         return $this->container->getParameter("secret");
     }
+
+    /**
+     * Default implementation for IProtected
+     */
+    public function isPublicAction($action)
+    {
+        return FALSE;
+    }
 }
 

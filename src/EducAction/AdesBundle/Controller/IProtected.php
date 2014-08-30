@@ -25,5 +25,6 @@ namespace EducAction\AdesBundle\Controller;
  */
 interface IProtected
 {
+    function isPublicAction($action);
 }
 
