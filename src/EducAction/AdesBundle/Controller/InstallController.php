@@ -250,8 +250,10 @@ EOF;
 
 	private function ShowWriteError($fname, $resubmitAction)
     {
-		$this->params->error=error_get_last()["message"];
-		$this->params->system_user=posix_getpwuid(posix_geteuid())["name"];
+        $error=error_get_last();
+		$this->params->error=$error["message"];
+        $pwuid=posix_getpwuid(posix_geteuid());
+		$this->params->system_user=$pwuid["name"];
 		$this->params->config_filename=realpath(DIRNAME($fname)).DIRECTORY_SEPARATOR.basename($fname);
 		$this->params->resubmitAction=$resubmitAction;
         $this->params->form_values=$_POST;
