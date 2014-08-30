@@ -22,6 +22,9 @@ namespace EducAction\AdesBundle;
 
 use EducAction\AdesBundle\Config;
 use EducAction\AdesBundle\Tools;
+use EducAction\AdesBundle\Bag;
+use EducAction\AdesBundle\Db;
+use EducAction\AdesBundle\Process;
 use \DateTime;
 use \SplFileInfo;
 
@@ -115,5 +118,57 @@ class Backup
     {
         return substr_replace($path,"txt", -3);
     }
+
+    public static function create($comment, $controller, &$result)
+    {
+        $result=new Bag();
+		$db=Db::GetInstance();
+		$host=$db->host;
+		$username=$db->username;
+		$pwd=$db->pwd;
+		$dbname=$db->dbname;
+		$cmd="mysqldump --host=$host --user=$username --password=$pwd $dbname";
+		if(Process::Execute($cmd, NULL, $out, $err, $retval)){
+			$result->dump_launched=true;
+			if($retval==0){
+                $info=array(
+                    "version"=>Config::GetDbVersion(),
+                    "timestamp"=>new DateTime(),
+                );
+                $content="-- info: ".serialize($info)."\n$out";
+                $signature=self::sign($content, $controller);
+                $content="-- signature: $signature\n".$content;
+                $filename=self::save($content, $info, $comment);
+                $result->filename=$filename;
+                $result->failed=false;
+                return new Backup($filename);
+			} else {
+				$result->failed=true;
+				$result->error=$err;
+			}
+		}
+		else{
+			$result->failed=true;
+			$result->dump_launched=false;
+		}
+    }
+
+    public static function sign($content, $controller)
+    {
+        return hash_hmac("sha1", $content, $controller->getSecret());
+    }
+
+    public static function save($content, $info, $comment)
+    {
+        $info["comment"]=$comment;
+        $timestamp=$info["timestamp"];
+        $filename=$timestamp->format("Ymd-His").".sql";
+        $fullpath = self::getFolder()."/".$filename;
+        $fullInfoPath=self::getInfoFilename($fullpath);
+        file_put_contents($fullpath, $content);
+        file_put_contents($fullInfoPath, serialize($info));
+        return $filename;
+    }
+
 }
 

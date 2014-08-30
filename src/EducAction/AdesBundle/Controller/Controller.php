@@ -73,5 +73,10 @@ class Controller extends SfController
     {
         return $this->get("educ_action.ades.user");
     }
+
+    public function getSecret()
+    {
+        return $this->container->getParameter("secret");
+    }
 }
 
