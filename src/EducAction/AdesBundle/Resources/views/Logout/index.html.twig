@@ -73,8 +73,8 @@
         </p>
     {% endif %}
 
-<div class="avertissement" style="padding:0px">
     {% if newBackup %}
+    <div class="avertissement" style="padding:0px">
     <p>Une nouvelle sauvegarde a été effectuée.</p>
     <p>
     Désirez-vous la télécharger?
@@ -92,7 +92,6 @@
     <form id="logoutForm" method="POST" style="display:none"></form>
     </div>
     {% else %}
-    Vous êtes à présent déconnecté.
+    <p class="avertissement">Vous êtes à présent déconnecté.</p>
     {% endif %}
-</div>
 {% endblock %}
