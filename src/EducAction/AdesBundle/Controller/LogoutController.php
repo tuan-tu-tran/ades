@@ -47,7 +47,6 @@ class LogoutController extends Controller implements IProtected
                 $maxAge = new DateInterval("PT12H");
                 $limit = $now->sub($maxAge);
                 $create = $time < $limit;
-                $create = TRUE;
             }
 
             if($create) {
