@@ -22,18 +22,39 @@ namespace EducAction\AdesBundle\Controller;
 
 use EducAction\AdesBundle\User;
 use EducAction\AdesBundle\Backup;
+use \DateTime;
+use \DateInterval;
 
 class LogoutController extends Controller implements IProtected
 {
     public function indexAction()
     {
-        $backup=NULL;
-        if (User::isAdmin())
+        $params=$this->params;
+        $user=$this->getUser();
+        if ($user->isAdmin())
         {
             //get last backup
-            $backup=Backup::getLast();
+            $lastBackup=Backup::getLast();
+            $params->lastBackup = $lastBackup;
+            $create=TRUE;
+            if($lastBackup != NULL) {
+                $time=$lastBackup->getTimestamp();
+                $now=new DateTime();
+
+                $params->last_backup_since = $now->diff($time);
+
+                $maxAge = new DateInterval("PT12H");
+                $limit = $now->sub($maxAge);
+                $create = $time < $limit;
+            }
+
+            $newBackup=NULL;
+            if($create) {
+                //create a backup
+            }
+            $params->newBackup = $newBackup;
         }
-        $this->params->backup = $backup;
+        $params->user=$user;
         return $this->View("index.html.twig");
     }
 }

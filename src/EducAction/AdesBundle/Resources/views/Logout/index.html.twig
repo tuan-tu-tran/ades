@@ -22,8 +22,29 @@
 {% extends 'EducActionAdesBundle::layout.html.twig' %}
 
 {% block content %}
-<p>Deconnexion</p>
-{% if backup %}
-    <p>Le dernier backup date du {{ backup.getTimestamp()|date("d/m/Y à H:i") }}</p>
+<p>Déconnexion</p>
+{% if user.isAdmin() %}
+    {% if lastBackup %}
+        <p>
+            La dernière sauvegarde
+            a été effectuée le {{ lastBackup.getTimestamp()|date("d/m/Y à H:i") }}
+        </p>
+        <p>Il y a
+            {% if last_backup_since.days > 0 %}
+                {{ last_backup_since.days }} jour{{last_backup_since.days>1?"s":""}}.
+            {% elseif last_backup_since.h > 0 %}
+                {{ last_backup_since.h }} heure{{last_backup_since.h>1?"s":""}}.
+            {% else %}
+                moins d'une heure.
+            {% endif %}
+        </p>
+    {% endif %}
+
+    {% if newBackup %}
+        <p>Une nouvelle sauvegarde a été effectuée.</p>
+    {% else %}
+        <p>Une nouvelle sauvegarde n'a pas été effectuée car la dernière est assez récente.</p>
+    {% endif %}
+
 {% endif %}
 {% endblock %}
