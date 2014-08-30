@@ -44,5 +44,9 @@ class UserInstance
     {
         return $this->is("admin");
     }
+
+    public function logout(){
+        User::logout();
+    }
 }
 

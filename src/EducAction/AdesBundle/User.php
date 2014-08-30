@@ -22,9 +22,15 @@ namespace EducAction\AdesBundle;
 
 class User{
     const ACCESS_ADMIN="admin";
+    private static $loggedOut = FALSE;
+
+    public static function logout(){
+        self::$loggedOut=TRUE;
+        session_destroy();
+    }
 
 	public static function IsLogged(){
-		return isset($_SESSION["identification"]["user"]);
+		return isset($_SESSION["identification"]["user"]) && !self::$loggedOut;
 	}
 
     public static function isAdmin()

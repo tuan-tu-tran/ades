@@ -21,15 +21,23 @@
 
 {% extends 'EducActionAdesBundle::layout.html.twig' %}
 
+{% block post_head %}
+<script type='text/javascript'>
+    $(function(){
+            setTimeout(function(){
+                window.location="accueil.php";
+            }, 1000);
+    });
+</script>
+{% endblock %}
+
 {% block content %}
-<p>Déconnexion</p>
-{% if user.isAdmin() %}
+<h2>Déconnexion</h2>
     {% if lastBackup %}
         <p>
             La dernière sauvegarde
-            a été effectuée le {{ lastBackup.getTimestamp()|date("d/m/Y à H:i") }}
-        </p>
-        <p>Il y a
+            a été effectuée le {{ lastBackup.getTimestamp()|date("d/m/Y à H:i") }}, 
+            il y a
             {% if last_backup_since.days > 0 %}
                 {{ last_backup_since.days }} jour{{last_backup_since.days>1?"s":""}}.
             {% elseif last_backup_since.h > 0 %}
@@ -42,9 +50,10 @@
 
     {% if newBackup %}
         <p>Une nouvelle sauvegarde a été effectuée.</p>
-    {% else %}
-        <p>Une nouvelle sauvegarde n'a pas été effectuée car la dernière est assez récente.</p>
     {% endif %}
 
-{% endif %}
+<p class="avertissement">
+    Vous êtes à présent déconnecté.
+</p>
+
 {% endblock %}

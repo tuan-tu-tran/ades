@@ -30,12 +30,12 @@ class LogoutController extends Controller implements IProtected
     public function indexAction()
     {
         $params=$this->params;
+        $lastBackup=NULL;
         $user=$this->getUser();
         if ($user->isAdmin())
         {
             //get last backup
             $lastBackup=Backup::getLast();
-            $params->lastBackup = $lastBackup;
             $create=TRUE;
             if($lastBackup != NULL) {
                 $time=$lastBackup->getTimestamp();
@@ -54,7 +54,8 @@ class LogoutController extends Controller implements IProtected
             }
             $params->newBackup = $newBackup;
         }
-        $params->user=$user;
+        $params->lastBackup = $lastBackup;
+        $user->logout();
         return $this->View("index.html.twig");
     }
 }
