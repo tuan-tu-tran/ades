@@ -29,20 +29,34 @@ use EducAction\AdesBundle\Html;
         </div>
         <input class="nomargin" type="text" id="tbLabel"/><button class="nomargin" id="bLabelAdd" onclick="return false;">+</button>
     </div>
+    <div id="labelView" style="display:none">
+        <div style="display:inline-block;">
+            <div style="display:none; margin-right:0.3em; border:solid 1px black; padding:3px">
+            </div>
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
     jQuery(function($){
         function LabeList(div){
             var _labels=[];
+            var _labelView = $("#labelView").html();
             this.contains = function(label){
                 return _labels.indexOf(label) > -1;
             }
 
             var __add;
-            __add=function(label){
+            __add=function(label, no_animate){
                 if (typeof(label)=="string"){
                     _labels.push(label);
-                    div.append(" "+label).show();
+                    var view=$(_labelView);
+                    var inner=view.find("div").text(label);
+                    view.appendTo(div.show());
+                    if(no_animate){
+                        inner.show();
+                    } else {
+                        inner.show("slide", {direction:"left"});
+                    }
                 }else {
                     $(label).each(function(i,l){
                         __add(l);
@@ -54,7 +68,7 @@ use EducAction\AdesBundle\Html;
 
         var labelList = new LabeList($("#divLabels"));
 
-        labelList.add(["test","foo"]);
+        labelList.add(["test","foo"], true);
         $("#bLabelAdd").click(function(e){
             var textbox=$("#tbLabel");
             var label = textbox.val();
