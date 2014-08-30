@@ -26,15 +26,19 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class AccessController
 {
     private $request;
-    public function __construct(Request $request)
+    private $router;
+    public function __construct(Request $request, $router)
     {
         $this->request = $request;
+        $this->router = $router;
     }
 
     public function redirectLogin()
     {
         $this->request->getSession()->clear();
-        return new RedirectResponse("accueil.php");
+        $url=$this->router->generate("educ_action_ades_login");
+        error_log("redirectLogin to $url");
+        return new RedirectResponse($url);
     }
 
     public function unauthorized()

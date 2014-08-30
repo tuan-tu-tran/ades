@@ -26,6 +26,12 @@ use EducAction\AdesBundle\User;
 
 class KernelListener
 {
+    private $router;
+    public function __construct($router)
+    {
+        $this->router=$router;
+    }
+
     public function onControllerListener(FilterControllerEvent $event)
     {
         $request=$event->getRequest();
@@ -40,7 +46,7 @@ class KernelListener
                 $session->start();
             }
             if(!User::IsLogged()) {
-                $event->setController(array(new AccessController($request), "redirectLogin"));
+                $event->setController(array(new AccessController($request, $this->router), "redirectLogin"));
             } elseif (is_a($instance, "EducAction\\AdesBundle\\Controller\\IAccessControlled")) {
                 $requiredPrivileges=$instance->getRequiredPrivileges();
                 $userPrivilege = $_SESSION["identification"]["privilege"];
