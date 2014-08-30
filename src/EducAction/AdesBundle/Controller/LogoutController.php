@@ -31,6 +31,7 @@ class LogoutController extends Controller implements IProtected
     {
         $params=$this->params;
         $lastBackup=NULL;
+        $newBackup=NULL;
         $user=$this->getUser();
         if ($user->isAdmin())
         {
@@ -48,13 +49,12 @@ class LogoutController extends Controller implements IProtected
                 $create = $time < $limit;
             }
 
-            $newBackup=NULL;
             if($create) {
                 //create a backup
             }
-            $params->newBackup = $newBackup;
         }
         $params->lastBackup = $lastBackup;
+        $params->newBackup = $newBackup;
         $user->logout();
         return $this->View("index.html.twig");
     }
