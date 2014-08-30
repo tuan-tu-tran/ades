@@ -180,7 +180,7 @@ if (!isset($_SESSION["identification"]["user"]))
 			</li>
 			</ul>
 			<li>
-			<a href="deconnexion.php">
+			<a href="logout">
 			<img src="images/deconnexion.png" class="icone" alt=".">
 			D&eacute;connexion</a>
 			</li>

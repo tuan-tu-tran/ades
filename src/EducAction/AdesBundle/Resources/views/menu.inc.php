@@ -159,7 +159,7 @@ border="0" class="inv" style="float: right">
 			</li>
 			</ul>
 			<li>
-			<a href="deconnexion.php">
+			<a href="logout">
 			<img src="images/deconnexion.png" class="icone" alt=".">
 			D&eacute;connexion</a>
 			</li>

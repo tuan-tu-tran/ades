@@ -69,6 +69,11 @@ educ_action_ades_logout:
     defaults: { _controller: EducActionAdesBundle:Logout:index }
     methods: [GET]
 
+educ_action_ades_logout_old:
+    pattern: /deconnexion.php
+    defaults: { _controller: EducActionAdesBundle:Logout:index }
+    methods: [GET]
+
 educ_action_ades_logout_clear:
     pattern: /logout
     defaults: { _controller: EducActionAdesBundle:Logout:clearLogout }
