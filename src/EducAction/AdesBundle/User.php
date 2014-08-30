@@ -26,7 +26,7 @@ class User{
 
     public static function logout(){
         self::$loggedOut=TRUE;
-        session_destroy();
+        unset($_SESSION["identification"]);
     }
 
 	public static function IsLogged(){

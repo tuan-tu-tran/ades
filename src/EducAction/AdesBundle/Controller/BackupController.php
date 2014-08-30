@@ -36,6 +36,15 @@ class BackupController extends Controller implements IAccessControlled
         return array("admin");
     }
 
+    public function isPublicAction($action)
+    {
+        if($action == "downloadAction")
+        {
+            $atLogout = $this->flash()->get("atLogout");
+            return $atLogout;
+        }
+    }
+
     public function restoreAction($file)
     {
         if(Backup::isLegalFile($file)) {
