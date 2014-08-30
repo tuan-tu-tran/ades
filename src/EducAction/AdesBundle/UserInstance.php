@@ -18,13 +18,35 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace EducAction\AdesBundle\Controller;
+namespace EducAction\AdesBundle;
 
-/**
- * Controllers that implement this interface require a logged user
- */
-interface IProtected
+use Symfony\Component\HttpFoundation\RequestStack;
+
+class UserInstance
 {
-    function isPublicAction($action);
+    private $requestStack;
+    public function __construct(RequestStack $requestStack)
+    {
+        $this->requestStack = $requestStack;
+    }
+
+    private function request()
+    {
+        return $this->requestStack->getCurrentRequest();
+    }
+
+    public function is($privilege)
+    {
+        return call_user_func_array(array("EducAction\\AdesBundle\\User","HasAccess"), func_get_args());
+    }
+
+    public function isAdmin()
+    {
+        return $this->is("admin");
+    }
+
+    public function logout(){
+        User::logout();
+    }
 }
 

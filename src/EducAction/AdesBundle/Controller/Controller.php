@@ -68,5 +68,28 @@ class Controller extends SfController
         }
         return $this->flashWrapper;
     }
+
+    public function getUser()
+    {
+        return $this->get("educ_action.ades.user");
+    }
+
+    public function getSecret()
+    {
+        return $this->container->getParameter("secret");
+    }
+
+    /**
+     * Default implementation for IProtected
+     */
+    public function isPublicAction($action)
+    {
+        return FALSE;
+    }
+
+    protected function redirectLogin()
+    {
+        return $this->redirect($this->generateUrl("educ_action_ades_login"));
+    }
 }
 

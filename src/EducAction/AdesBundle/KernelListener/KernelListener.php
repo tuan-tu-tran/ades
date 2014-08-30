@@ -26,6 +26,12 @@ use EducAction\AdesBundle\User;
 
 class KernelListener
 {
+    private $router;
+    public function __construct($router)
+    {
+        $this->router=$router;
+    }
+
     public function onControllerListener(FilterControllerEvent $event)
     {
         $request=$event->getRequest();
@@ -34,19 +40,23 @@ class KernelListener
             throw new \Exception("controller must be an array, not a ".get_class($controller)." (_route: ".$request->get("_route").")");
         }
         $instance=$controller[0];
+        $action = $controller[1];
         if(is_a($instance, "EducAction\\AdesBundle\\Controller\\IProtected")){
+            $allowed=$instance->isPublicAction($action);
+            if(!$allowed){
             $session = $request->getSession();
             if(!$session->isStarted()) {
                 $session->start();
             }
             if(!User::IsLogged()) {
-                $event->setController(array(new AccessController($request), "redirectLogin"));
+                $event->setController(array(new AccessController($request, $this->router), "redirectLogin"));
             } elseif (is_a($instance, "EducAction\\AdesBundle\\Controller\\IAccessControlled")) {
                 $requiredPrivileges=$instance->getRequiredPrivileges();
                 $userPrivilege = $_SESSION["identification"]["privilege"];
                 if(!in_array($userPrivilege, $requiredPrivileges)){
                     $event->setController(array(new AccessController($request), "unauthorized"));
                 }
+            }
             }
         }
     }

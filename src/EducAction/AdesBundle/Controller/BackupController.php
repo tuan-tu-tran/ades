@@ -26,21 +26,28 @@ use EducAction\AdesBundle\Process;
 use EducAction\AdesBundle\Tools;
 use EducAction\AdesBundle\Utils;
 use EducAction\AdesBundle\Config;
+use EducAction\AdesBundle\Backup;
 use \DateTime;
-use \SplFileInfo;
 
 class BackupController extends Controller implements IAccessControlled
 {
-	const regex="/^\d{8}-\d{6}\.sql$/";
-
     public function getRequiredPrivileges()
     {
         return array("admin");
     }
 
+    public function isPublicAction($action)
+    {
+        if($action == "downloadAction")
+        {
+            $atLogout = $this->flash()->get("atLogout");
+            return $atLogout;
+        }
+    }
+
     public function restoreAction($file)
     {
-		if(preg_match(self::regex, $file)){
+        if(Backup::isLegalFile($file)) {
             $restore=$this->params;
 			$restore->filename=$file;
 			if($input=file_get_contents(self::BackupFolder()."/".$file)){
@@ -84,7 +91,7 @@ class BackupController extends Controller implements IAccessControlled
 
     public function deleteAction($file)
     {
-		if(preg_match(self::regex, $file)){
+        if(Backup::isLegalFile($file)) {
             $delete=$this->params;
             $fullname=self::BackupFolder()."/".$file;
             $infoname=self::GetInfoFilename($fullname);
@@ -102,20 +109,14 @@ class BackupController extends Controller implements IAccessControlled
 
     public function indexAction()
     {
-		$list=Path::ListDir(self::BackupFolder(), self::regex );
-		rsort($list);
+		$list=Backup::getList();
 		$files=array();
-		$now=new DateTime();
-		foreach($list as $file){
-			$path=self::BackupFolder()."/".$file;
-			$info=new SplFileInfo($path);
-			$mtime=new DateTime("@".$info->getMTime());
-			$mtime->setTimezone($now->getTimezone());
-            $backupInfo=unserialize(file_get_contents(self::GetInfoFilename($path)));
+        foreach($list as $backup){
+            $backupInfo = $backup->getInfo();
 			$files[]=array(
-				"name"=>$file,
-				"time"=>Tools::GetDefault($backupInfo, "timestamp", $mtime),
-				"size"=>$info->getSize(),
+				"name"=>$backup->getFilename(),
+				"time"=>$backup->getTimestamp($backupInfo),
+				"size"=>$backup->getSize(),
                 "version"=>$backupInfo["version"],
                 "is_current_version"=>$backupInfo["version"]==Upgrade::Version,
                 "comment"=>$backupInfo["comment"],
@@ -125,6 +126,7 @@ class BackupController extends Controller implements IAccessControlled
 		$params->backup_files=$files;
 
 		if(count($files)>0){
+            $now=new DateTime();
 			$params->last_backup=$files[0]["name"];
 			$params->last_backup_time=$files[0]["time"];
 			$diff=$now->diff($params->last_backup_time);
@@ -144,57 +146,11 @@ class BackupController extends Controller implements IAccessControlled
 
     public function backupAction()
     {
-        $result=$this->params;
         $comment=$_POST["comment_set"]?$_POST["comment"]:"";
-		$db=Db::GetInstance();
-		$host=$db->host;
-		$username=$db->username;
-		$pwd=$db->pwd;
-		$dbname=$db->dbname;
-		$cmd="mysqldump --host=$host --user=$username --password=$pwd $dbname";
-		if(Process::Execute($cmd, NULL, $out, $err, $retval)){
-			$result->dump_launched=true;
-			if($retval==0){
-                $info=array(
-                    "version"=>Config::GetDbVersion(),
-                    "timestamp"=>new DateTime(),
-                );
-                $content="-- info: ".serialize($info)."\n$out";
-                $signature=$this->sign($content);
-                $content="-- signature: $signature\n".$content;
-                $filename=$this->saveBackup($content, $info, $comment);
-                $result->filename=$filename;
-                $result->failed=false;
-			}
-			else{
-				$result->failed=true;
-				$result->error=$err;
-			}
-		}
-		else{
-			$result->failed=true;
-			$result->dump_launched=false;
-		}
+        Backup::create($comment, $this, $result);
 		$this->flash()->set("backup", $result);
         return $this->redirect($this->generateUrl("educ_action_ades_backup"));
 	}
-
-    private function sign($content)
-    {
-        return hash_hmac("sha1", $content, $this->container->getParameter("secret"));
-    }
-
-    private function saveBackup($content, $info, $comment)
-    {
-        $info["comment"]=$comment;
-        $timestamp=$info["timestamp"];
-        $filename=$timestamp->format("Ymd-His").".sql";
-        $fullpath = self::BackupFolder()."/".$filename;
-        $fullInfoPath=self::GetInfoFilename($fullpath);
-        file_put_contents($fullpath, $content);
-        file_put_contents($fullInfoPath, serialize($info));
-        return $filename;
-    }
 
     public function uploadAction()
     {
@@ -212,11 +168,11 @@ class BackupController extends Controller implements IAccessControlled
                 $content=file_get_contents($file->getRealPath());
                 if ($result->signature_found = preg_match("/^-- signature: ([0-9a-f]{40})\n/", $content, $matches)) {
                     $content=substr($content, strlen($matches[0]));
-                    $signature=$this->sign($content);
+                    $signature=Backup::sign($content, $this);
                     if($result->signature_valid = ($signature==$matches[1]) ){
                         if($result->info_found = preg_match("/^-- info: ([^\n]+)\n/", $content, $matches)) {
                             $info = unserialize($matches[1]);
-                            $filename=$this->saveBackup($content, $info, $comment);
+                            $filename=Backup::save($content, $info, $comment);
                             $result->success=TRUE;
                             $result->filename=$filename;
                         }
@@ -230,22 +186,19 @@ class BackupController extends Controller implements IAccessControlled
         return $this->redirect($this->generateUrl("educ_action_ades_backup"));
     }
 
-    private function create()
-    {
-    }
     private static function GetInfoFilename($sqlFilename)
     {
-        return substr_replace($sqlFilename,"txt", -3);
+        return Backup::getInfoFilename($sqlFilename);
     }
 
 	private static function BackupFolder()
 	{
-		return DIRNAME(__FILE__)."/../../../../local/db_backup";
+        return Backup::getFolder();
 	}
 
 	public function downloadAction($file)
 	{
-		if(preg_match(self::regex, $file)){
+        if(Backup::isLegalFile($file)) {
 			$path=self::BackupFolder()."/$file";
 			if(file_exists($path)){
 				$content=file_get_contents($path);

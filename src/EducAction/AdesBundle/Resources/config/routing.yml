@@ -63,3 +63,21 @@ educ_action_ades_backup_download:
     pattern: /backup/download/{file}
     defaults: { _controller: EducActionAdesBundle:Backup:download}
     methods: [GET]
+
+educ_action_ades_logout:
+    pattern: /logout
+    defaults: { _controller: EducActionAdesBundle:Logout:index }
+    methods: [GET]
+
+educ_action_ades_logout_old:
+    pattern: /deconnexion.php
+    defaults: { _controller: EducActionAdesBundle:Logout:index }
+    methods: [GET]
+
+educ_action_ades_logout_clear:
+    pattern: /logout
+    defaults: { _controller: EducActionAdesBundle:Logout:clearLogout }
+    methods: [POST]
+
+educ_action_ades_login:
+    pattern: /accueil.php

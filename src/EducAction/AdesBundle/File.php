@@ -18,13 +18,18 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace EducAction\AdesBundle\Controller;
+namespace EducAction\AdesBundle;
 
-/**
- * Controllers that implement this interface require a logged user
- */
-interface IProtected
+use \Exception;
+
+class File
 {
-    function isPublicAction($action);
+    public static function put_contents($path, $content)
+    {
+        $result=file_put_contents($path, $content);
+        if(!$result){
+            $msg=Tools::GetLastError();
+            throw new Exception("could not put content to $path : $msg");
+        }
+    }
 }
-

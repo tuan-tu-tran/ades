@@ -1,0 +1,97 @@
+{#
+/**
+ * Copyright (c) 2014 Tuan-Tu TRAN
+ * 
+ * This file is part of ADES.
+ * 
+ * ADES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * ADES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+*/
+#}
+
+{% extends 'EducActionAdesBundle::layout.html.twig' %}
+
+{% block post_head %}
+<script type='text/javascript'>
+    function backToLogin(){
+        window.location="accueil.php";
+    }
+    
+    function clearLogout(){
+        $("#logoutForm").submit();
+    }
+    $(function(){
+        {% if newBackup %}
+            $("#bDownload").click(function(){
+                backToLogin();
+            });
+
+            $("#bNo").click(function(){
+                clearLogout();
+            });
+        {% else %}
+            var timeout=1000;
+            {% if lastBackup %}
+            timeout = 5000;
+            {% endif %}
+            setTimeout(backToLogin, timeout);
+        {% endif %}
+    });
+</script>
+<style type="text/css">
+    button#bDownload, button#bNo {
+        font-size:inherit;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h2>Déconnexion</h2>
+    {% if lastBackup %}
+        <p>
+            La dernière sauvegarde
+            a été effectuée
+            il y a
+            {% if last_backup_since.days > 0 %}
+                {{ last_backup_since.days }} jour{{last_backup_since.days>1?"s":""}},
+            {% elseif last_backup_since.h > 0 %}
+                {{ last_backup_since.h }} heure{{last_backup_since.h>1?"s":""}},
+            {% else %}
+                moins d'une heure,
+            {% endif %}
+            le {{ lastBackup.getTimestamp()|date("d/m/Y à H:i") }}.
+        </p>
+    {% endif %}
+
+    {% if newBackup %}
+    <div class="avertissement" style="padding:0px">
+    <p>Une nouvelle sauvegarde a été effectuée.</p>
+    <p>
+    Désirez-vous la télécharger?
+    </p>
+    <p>
+    <a href="{{ path("educ_action_ades_backup_download", { "file" : newBackup.filename }) }}"
+        target="_blank"
+        id="downloadLink"
+        >
+    <button id="bDownload">Oui</button>
+    </a>
+    -
+    <button id="bNo">Non</button>
+    </p>
+    <form id="logoutForm" method="POST" style="display:none"></form>
+    </div>
+    {% else %}
+    <p class="avertissement">Vous êtes à présent déconnecté.</p>
+    {% endif %}
+{% endblock %}
