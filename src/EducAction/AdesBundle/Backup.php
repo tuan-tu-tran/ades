@@ -165,8 +165,8 @@ class Backup
         $filename=$timestamp->format("Ymd-His").".sql";
         $fullpath = self::getFolder()."/".$filename;
         $fullInfoPath=self::getInfoFilename($fullpath);
-        file_put_contents($fullpath, $content);
-        file_put_contents($fullInfoPath, serialize($info));
+        File::put_contents($fullpath, $content);
+        File::put_contents($fullInfoPath, serialize($info));
         return $filename;
     }
 
