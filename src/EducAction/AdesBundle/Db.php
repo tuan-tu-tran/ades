@@ -107,6 +107,9 @@ class Db{
 		return false;
 	}
 
+    /**
+     * Execute a query a return results or throw an exception
+     */
 	public function query($query){
         $this->private_execute_or_throw($query,$result);
         return self::GetDataTableFromResultInstance($result);
