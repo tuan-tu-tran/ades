@@ -117,15 +117,15 @@ use EducAction\AdesBundle\Html;
                 return this;
             }
 
-            this.length = function(){
-                return _labels.length;
+            this.empty = function(){
+                return _labels.length==0;
             }
         }
 
         var currentLabels, availableLabels;
         currentLabels = new LabeList($("#divCurrentLabels"),"ui-icon-closethick").onRemove(function(label){
             availableLabels.add(label);
-            if (currentLabels.length()==0){
+            if (currentLabels.empty()){
                 $("#divCurrentLabels").hide();
                 $("#lNoCurrentLabel").show();
             }
@@ -135,7 +135,7 @@ use EducAction\AdesBundle\Html;
         });
         availableLabels = new LabeList($("#divAvailableLabels"),"ui-icon-plusthick").onRemove(function(label){
             currentLabels.add(label);
-            if(availableLabels.length()==0){
+            if(availableLabels.empty()){
                 $("#divAvailableLabels").hide();
             } else {
                 $("#divAvailableLabels").show();
