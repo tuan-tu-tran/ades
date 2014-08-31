@@ -28,10 +28,12 @@ use EducAction\AdesBundle\Html;
         <div id="lCurrentLabels" style="margin-bottom:0.3em;">
             Labels actuels:
         </div>
-        <div id="lNoCurrentLabel" style="margin-bottom:0.3em;">
+        <div style="min-height:35px; margin-bottom:5px">
+        <div id="lNoCurrentLabel" style="padding-top:8px">
             Aucun label assigné à ce fait.
         </div>
-        <div style="display:none; margin-bottom:5px" id="divCurrentLabels"></div>
+        <div style="display:none;" id="divCurrentLabels"></div>
+        </div>
         <div id="lChooseLabel" style="margin-bottom:0.3em">
             Choisissez un ou plusieurs labels à ajouter parmi les labels ci-dessous:
         </div>
@@ -148,10 +150,15 @@ use EducAction\AdesBundle\Html;
         var defaultNewLabelText = "Créer un nouveau label";
         var bNewLabel = $("#bNewLabel");
         var tbNewLabel;
+        var timeoutReset;
         function resizeNewLabel(){
-            tbNewLabel.attr("size", Math.max(tbNewLabel.val().length, defaultNewLabelText.length));
+            tbNewLabel.attr("size", Math.max(tbNewLabel.val().length, 19));
         }
         function createNewLabel(){
+            if(timeoutReset){
+                clearTimeout(timeoutReset);
+                timeoutReset=null;
+            }
             var text=tbNewLabel.val();
             if(!text){
                 alert("Veuillez entrer un label.");
@@ -161,9 +168,13 @@ use EducAction\AdesBundle\Html;
                 tbNewLabel.focus();
             } else {
                 currentLabels.add(text);
-                tbNewLabel.detach();
-                bNewLabel.button({label:defaultNewLabelText, icons:{}}).data("editing", false);
+                resetNewLabelButton();
             }
+        }
+        function resetNewLabelButton(){
+            timeoutReset=null;
+            tbNewLabel.detach();
+            bNewLabel.button({label:defaultNewLabelText, icons:{}}).data("editing", false);
         }
         tbNewLabel=$("<input type='text'/>").button()
             .css({
@@ -175,6 +186,9 @@ use EducAction\AdesBundle\Html;
             .focusin(function(){
                 tbNewLabel.css("outline","0");
             })
+            .focusout(function(){
+                timeoutReset = setTimeout(resetNewLabelButton, 100);
+            })
             .keypress(function(e){
                 if(e.which==13){
                     e.preventDefault();
@@ -184,7 +198,15 @@ use EducAction\AdesBundle\Html;
             .click(function(e){
                 e.stopImmediatePropagation();
             })
-            .keyup(resizeNewLabel)
+            .keyup(function(e){
+                if(e.which==27)
+                {
+                    //on escape
+                    resetNewLabelButton();
+                }else {
+                    resizeNewLabel()
+                }
+            })
         ;
         bNewLabel.button({label:defaultNewLabelText})
             .click(function(){
