@@ -31,13 +31,11 @@ use EducAction\AdesBundle\Html;
         <div id="lNoCurrentLabel" style="margin-bottom:0.3em;">
             Aucun label assigné à ce fait.
         </div>
-        <div style="display:none; margin-bottom:5px" id="divCurrentLabels">
-        </div>
+        <div style="display:none; margin-bottom:5px" id="divCurrentLabels"></div>
         <div id="lChooseLabel" style="margin-bottom:0.3em">
             Choisissez un ou plusieurs labels à ajouter parmi les labels ci-dessous:
         </div>
-        <div style="display:none; margin-bottom:5px" id="divAvailableLabels">
-        </div>
+        <div style="display:none; margin-bottom:5px" id="divAvailableLabels"></div>
         <input class="nomargin" type="text" id="tbLabel"/><button class="nomargin" id="bLabelAdd" onclick="return false;">+</button>
     </div>
 </div>
@@ -60,7 +58,7 @@ use EducAction\AdesBundle\Html;
                     view.click(function(){
                         var i=_labels.indexOf(label);
                         _labels = _labels.slice(0, i).concat(_labels.slice(i+1));
-                        button.hide().remove();
+                        view.hide().remove();
                         if(__onRemove){
                             __onRemove(label);
                         }
