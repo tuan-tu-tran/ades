@@ -23,7 +23,7 @@ use EducAction\AdesBundle\Html;
 ?>
 
 <div style="float:left;width:100%; margin-top:1em; margin-bottom:1em">
-    <label>Etiquettes</label>
+    <label>Gestion des labels</label>
     <div style="float:left">
         <div style="display:none; margin-bottom:5px" id="divCurrentLabels">
         </div>
@@ -34,56 +34,64 @@ use EducAction\AdesBundle\Html;
 </div>
 <script type="text/javascript">
     jQuery(function($){
-        function LabeList(div, buttonClass, onClick){
+        function LabeList(div, iconClass){
             var _labels=[];
-            this.contains = function(label){
-                return _labels.indexOf(label) > -1;
-            }
-
             var __add;
-            __add=function(label, no_animate){
+            var __onRemove;
+            var __onAdd;
+
+            __add=function(label){
                 if (typeof(label)=="string"){
                     _labels.push(label);
                     var view=$("<div/>").css("display","inline-block");
                     var button=$("<div/>").appendTo(view).hide();
-                    button.button({label:label, icons:{secondary:buttonClass}}).hide();
+                    button.button({label:label, icons:{secondary:iconClass}}).hide();
                     view.appendTo(div.show());
-                    if(no_animate || true){
-                        button.show();
-                    } else {
-                        button.show("slide", {direction:"left"});
-                    }
+                    button.show();
                     view.click(function(){
-                        /*
-                        button.hide({
-                            effect:"slide", 
-                            direction:"left",
-                            complete:function(){
-                                view.remove();
-                            }
-                        });
-                        */
                         button.hide().remove();
-                        onClick(label);
+                        if(__onRemove){
+                            __onRemove(label);
+                        }
                     });
+                    if(__onAdd){
+                        __onAdd(label);
+                    }
                 }else {
                     $(label).each(function(i,l){
-                        __add(l, no_animate);
+                        __add(l);
                     })
                 }
             }
+
             this.add=__add;
+            this.contains = function(label){
+                return _labels.indexOf(label) > -1;
+            }
+            this.onRemove=function(callback){
+                __onRemove = callback;
+                return this;
+            }
+
+            this.onAdd = function(callback){
+                __onAdd = callback;
+                return this;
+            }
+
+            this.length = function(){
+                return _labels.length;
+            }
         }
 
         var currentLabels, availableLabels;
-        currentLabels = new LabeList($("#divCurrentLabels"),"ui-icon-closethick", function(label){
+        currentLabels = new LabeList($("#divCurrentLabels"),"ui-icon-closethick").onRemove(function(label){
             availableLabels.add(label);
         });
-        availableLabels = new LabeList($("#divAvailableLabels"),"ui-icon-plusthick", function(label){
+        availableLabels = new LabeList($("#divAvailableLabels"),"ui-icon-plusthick").onRemove(function(label){
             currentLabels.add(label);
         });
 
-        availableLabels.add(["test","foo"], true);
+        availableLabels.add(["test","foo"]);
         $("#bLabelAdd").click(function(e){
             var textbox=$("#tbLabel");
             var label = textbox.val();
