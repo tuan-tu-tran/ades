@@ -50,15 +50,14 @@ use EducAction\AdesBundle\Html;
             __add=function(label){
                 if (typeof(label)=="string"){
                     _labels.push(label);
-                    var view=$("<div/>").css("display","inline-block");
-                    var button=$("<div/>").appendTo(view).hide();
+                    var button=$("<div/>").hide();
                     button.button({label:label, icons:{secondary:iconClass}}).hide();
-                    view.appendTo(div.show());
+                    button.appendTo(div.show());
                     button.show();
-                    view.click(function(){
+                    button.click(function(){
                         var i=_labels.indexOf(label);
                         _labels = _labels.slice(0, i).concat(_labels.slice(i+1));
-                        view.hide().remove();
+                        button.hide().remove();
                         if(__onRemove){
                             __onRemove(label);
                         }
