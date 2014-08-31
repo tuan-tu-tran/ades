@@ -20,6 +20,7 @@
 require ("inc/classes/classlisteretenues.inc.php");
 
 use EducAction\AdesBundle\View;
+use EducAction\AdesBundle\Label;
 
 // cette classe gère les faits disciplinaires
 // la table $listeRubriques contient les différentes caractéristiques du fait:
@@ -362,7 +363,12 @@ foreach ($descriptionChamps as $unChamp)
 			}
 		}
 	}
-$form .= View::GetHtml("label_edit.inc.php");
+$labels=Label::GetForFact($this->getRubrique("idfait"));
+$allLabels = Label::GetAll();
+$form .= View::GetHtml("label_edit.inc.php", array(
+    "currentLabels"=> $labels
+    , "allLabels" => $allLabels
+));
 $form .= "<div style=\"text-align:center\">\n";
 $form .= "<input type=\"submit\" name=\"mode\" value=\"Enregistrer\">\n";
 $form .= "<input type=\"reset\" name=\"submit\" value=\"R&eacute;initialiser\">\n</div>\n";

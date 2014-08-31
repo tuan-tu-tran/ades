@@ -149,8 +149,13 @@ use EducAction\AdesBundle\Html;
                 $("#divAvailableLabels").show();
             });
 
-        availableLabels.add(["test","foo"]);
-        currentLabels.add("bar");
+        currentLabels.add(<?php echo json_encode($currentLabels)?>);
+        var allLabels = <?php echo json_encode($allLabels)?>;
+        $(allLabels).each(function(i,l){
+            if(!currentLabels.contains(l)){
+                availableLabels.add(l);
+            }
+        });
 
         var defaultNewLabelText = "Créer un nouveau label";
         var bNewLabel = $("#bNewLabel");
