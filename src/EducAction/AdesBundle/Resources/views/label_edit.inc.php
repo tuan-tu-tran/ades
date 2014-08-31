@@ -52,7 +52,7 @@ use EducAction\AdesBundle\Html;
                     _labels.push(label);
                     var button=$("<div/>").hide();
                     button.button({label:label, icons:{secondary:iconClass}}).hide();
-                    button.appendTo(div.show());
+                    button.appendTo(div);
                     button.show();
                     button.click(function(){
                         var i=_labels.indexOf(label);
@@ -109,6 +109,8 @@ use EducAction\AdesBundle\Html;
             } else {
                 $("#divAvailableLabels").show();
             }
+        }).onAdd(function(){
+            $("#divAvailableLabels").show();
         });
 
         availableLabels.add(["test","foo"]);
