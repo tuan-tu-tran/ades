@@ -43,20 +43,48 @@ use EducAction\AdesBundle\Html;
     jQuery(function($){
         function LabeList(div, iconClass){
             var _labels=[];
+            var _labelsText=[];
             var __add;
             var __onRemove;
             var __onAdd;
+            var __insertAfter;
+            var __removeAt;
+
+            __insertAfter=function(ar, item, index){
+                var tail=ar.splice(index+1);
+                ar.push(item);
+                Array.prototype.push.apply(ar, tail);
+            }
+
+            __removeAt=function(ar, index){
+                ar.splice(index, 1);
+            }
+
 
             __add=function(label){
                 if (typeof(label)=="string"){
-                    _labels.push(label);
+                    var prev=-1;
+                    for(var i=0; i<_labelsText.length; ++i){
+                        if(label>_labelsText[i]){
+                            prev=i;
+                        }else{
+                            break;
+                        }
+                    }
                     var button=$("<div/>").hide();
+                    __insertAfter(_labelsText, label, prev);
+                    __insertAfter(_labels, button, prev);
                     button.button({label:label, icons:{secondary:iconClass}}).hide();
-                    button.appendTo(div);
+                    if(prev<0){
+                        button.prependTo(div);
+                    } else {
+                        button.insertAfter(_labels[prev]);
+                    }
                     button.show();
                     button.click(function(){
-                        var i=_labels.indexOf(label);
-                        _labels = _labels.slice(0, i).concat(_labels.slice(i+1));
+                        var i=_labelsText.indexOf(label);
+                        __removeAt(_labelsText, i);
+                        __removeAt(_labels, i);
                         button.hide().remove();
                         if(__onRemove){
                             __onRemove(label);
@@ -74,7 +102,7 @@ use EducAction\AdesBundle\Html;
 
             this.add=__add;
             this.contains = function(label){
-                return _labels.indexOf(label) > -1;
+                return _labelsText.indexOf(label) > -1;
             }
             this.onRemove=function(callback){
                 __onRemove = callback;
