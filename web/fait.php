@@ -37,6 +37,7 @@ Normalisation();
   <script type="text/javascript" src="inc/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>  
     <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>  
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>  
+	<link href="css/jquery-ui.min.css" rel="stylesheet"/>
     <script type="text/javascript">
     jQuery.noConflict();
     </script>  

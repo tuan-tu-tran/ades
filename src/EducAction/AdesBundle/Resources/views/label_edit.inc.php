@@ -30,10 +30,7 @@ use EducAction\AdesBundle\Html;
         <input class="nomargin" type="text" id="tbLabel"/><button class="nomargin" id="bLabelAdd" onclick="return false;">+</button>
     </div>
     <div id="labelView" style="display:none">
-        <div style="display:inline-block;">
-            <div style="display:none; margin-right:0.3em; border:solid 1px black; padding:3px">
-            </div>
-        </div>
+        <div style="display:inline-block"></div>
     </div>
 </div>
 <script type="text/javascript">
@@ -49,17 +46,27 @@ use EducAction\AdesBundle\Html;
             __add=function(label, no_animate){
                 if (typeof(label)=="string"){
                     _labels.push(label);
-                    var view=$(_labelView);
-                    var inner=view.find("div").text(label);
+                    var view=$("<div/>").css("display","inline-block");
+                    var button=$("<div/>").appendTo(view).hide();
+                    button.button({label:label, icons:{secondary:"ui-icon-close"}}).hide();
                     view.appendTo(div.show());
                     if(no_animate){
-                        inner.show();
+                        button.show();
                     } else {
-                        inner.show("slide", {direction:"left"});
+                        button.show("slide", {direction:"left"});
                     }
+                    view.click(function(){
+                        button.hide({
+                            effect:"slide", 
+                            direction:"left",
+                            complete:function(){
+                                view.remove();
+                            }
+                        });
+                    });
                 }else {
                     $(label).each(function(i,l){
-                        __add(l);
+                        __add(l, no_animate);
                     })
                 }
             }
