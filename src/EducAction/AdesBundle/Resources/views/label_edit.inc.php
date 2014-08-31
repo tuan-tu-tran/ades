@@ -123,26 +123,31 @@ use EducAction\AdesBundle\Html;
         }
 
         var currentLabels, availableLabels;
-        currentLabels = new LabeList($("#divCurrentLabels"),"ui-icon-closethick").onRemove(function(label){
-            availableLabels.add(label);
-            if (currentLabels.empty()){
-                $("#divCurrentLabels").hide();
-                $("#lNoCurrentLabel").show();
-            }
-        }).onAdd(function(){
-            $("#divCurrentLabels").show();
-            $("#lNoCurrentLabel").hide();
-        });
-        availableLabels = new LabeList($("#divAvailableLabels"),"ui-icon-plusthick").onRemove(function(label){
-            currentLabels.add(label);
-            if(availableLabels.empty()){
-                $("#divAvailableLabels").hide();
-            } else {
+        currentLabels = new LabeList($("#divCurrentLabels"),"ui-icon-closethick")
+            .onRemove(function(label){
+                availableLabels.add(label);
+                if (currentLabels.empty()){
+                    $("#divCurrentLabels").hide();
+                    $("#lNoCurrentLabel").show();
+                }
+            })
+            .onAdd(function(){
+                $("#divCurrentLabels").show();
+                $("#lNoCurrentLabel").hide();
+            })
+        ;
+        availableLabels = new LabeList($("#divAvailableLabels"),"ui-icon-plusthick")
+            .onRemove(function(label){
+                currentLabels.add(label);
+                if(availableLabels.empty()){
+                    $("#divAvailableLabels").hide();
+                } else {
+                    $("#divAvailableLabels").show();
+                }
+            })
+            .onAdd(function(){
                 $("#divAvailableLabels").show();
-            }
-        }).onAdd(function(){
-            $("#divAvailableLabels").show();
-        });
+            });
 
         availableLabels.add(["test","foo"]);
         currentLabels.add("bar");
