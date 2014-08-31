@@ -29,15 +29,11 @@ use EducAction\AdesBundle\Html;
         </div>
         <input class="nomargin" type="text" id="tbLabel"/><button class="nomargin" id="bLabelAdd" onclick="return false;">+</button>
     </div>
-    <div id="labelView" style="display:none">
-        <div style="display:inline-block"></div>
-    </div>
 </div>
 <script type="text/javascript">
     jQuery(function($){
         function LabeList(div){
             var _labels=[];
-            var _labelView = $("#labelView").html();
             this.contains = function(label){
                 return _labels.indexOf(label) > -1;
             }
