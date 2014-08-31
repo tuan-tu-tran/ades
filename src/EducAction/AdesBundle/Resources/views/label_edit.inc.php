@@ -25,7 +25,16 @@ use EducAction\AdesBundle\Html;
 <div style="float:left;width:100%; margin-top:1em; margin-bottom:1em">
     <label>Gestion des labels</label>
     <div style="float:left">
+        <div id="lCurrentLabels" style="margin-bottom:0.3em;">
+            Labels actuels:
+        </div>
+        <div id="lNoCurrentLabel" style="margin-bottom:0.3em;">
+            Aucun label assigné à ce fait.
+        </div>
         <div style="display:none; margin-bottom:5px" id="divCurrentLabels">
+        </div>
+        <div id="lChooseLabel" style="margin-bottom:0.3em">
+            Choisissez un ou plusieurs labels à ajouter parmi les labels ci-dessous:
         </div>
         <div style="display:none; margin-bottom:5px" id="divAvailableLabels">
         </div>
@@ -49,6 +58,8 @@ use EducAction\AdesBundle\Html;
                     view.appendTo(div.show());
                     button.show();
                     view.click(function(){
+                        var i=_labels.indexOf(label);
+                        _labels = _labels.slice(0, i).concat(_labels.slice(i+1));
                         button.hide().remove();
                         if(__onRemove){
                             __onRemove(label);
@@ -86,6 +97,13 @@ use EducAction\AdesBundle\Html;
         var currentLabels, availableLabels;
         currentLabels = new LabeList($("#divCurrentLabels"),"ui-icon-closethick").onRemove(function(label){
             availableLabels.add(label);
+            if (currentLabels.length()==0){
+                $("#divCurrentLabels").hide();
+                $("#lNoCurrentLabel").show();
+            }
+        }).onAdd(function(){
+            $("#divCurrentLabels").show();
+            $("#lNoCurrentLabel").hide();
         });
         availableLabels = new LabeList($("#divAvailableLabels"),"ui-icon-plusthick").onRemove(function(label){
             currentLabels.add(label);
