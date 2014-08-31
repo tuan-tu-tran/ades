@@ -104,6 +104,11 @@ use EducAction\AdesBundle\Html;
         });
         availableLabels = new LabeList($("#divAvailableLabels"),"ui-icon-plusthick").onRemove(function(label){
             currentLabels.add(label);
+            if(availableLabels.length()==0){
+                $("#divAvailableLabels").hide();
+            } else {
+                $("#divAvailableLabels").show();
+            }
         });
 
         availableLabels.add(["test","foo"]);
