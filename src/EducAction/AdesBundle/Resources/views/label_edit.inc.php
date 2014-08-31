@@ -36,7 +36,8 @@ use EducAction\AdesBundle\Html;
             Choisissez un ou plusieurs labels à ajouter parmi les labels ci-dessous:
         </div>
         <div style="display:none; margin-bottom:5px" id="divAvailableLabels"></div>
-        <input class="nomargin" type="text" id="tbLabel"/><button class="nomargin" id="bLabelAdd" onclick="return false;">+</button>
+        <div id="bNewLabel">
+        </div>
     </div>
 </div>
 <script type="text/javascript">
@@ -142,6 +143,61 @@ use EducAction\AdesBundle\Html;
         });
 
         availableLabels.add(["test","foo"]);
+        currentLabels.add("bar");
+
+        var defaultNewLabelText = "Créer un nouveau label";
+        var bNewLabel = $("#bNewLabel");
+        var tbNewLabel;
+        function resizeNewLabel(){
+            tbNewLabel.attr("size", Math.max(tbNewLabel.val().length, defaultNewLabelText.length));
+        }
+        function createNewLabel(){
+            var text=tbNewLabel.val();
+            if(!text){
+                alert("Veuillez entrer un label.");
+                tbNewLabel.focus();
+            } else if (currentLabels.contains(text) || availableLabels.contains(text)){
+                alert("Ce label existe déjà.")
+                tbNewLabel.focus();
+            } else {
+                currentLabels.add(text);
+                tbNewLabel.detach();
+                bNewLabel.button({label:defaultNewLabelText, icons:{}}).data("editing", false);
+            }
+        }
+        tbNewLabel=$("<input type='text'/>").button()
+            .css({
+                "border":"none",
+                "margin":"0",
+                "cursor":"text",
+                "padding":"0"
+            })
+            .focusin(function(){
+                tbNewLabel.css("outline","0");
+            })
+            .keypress(function(e){
+                if(e.which==13){
+                    e.preventDefault();
+                    createNewLabel();
+                }
+            })
+            .click(function(e){
+                e.stopImmediatePropagation();
+            })
+            .keyup(resizeNewLabel)
+        ;
+        bNewLabel.button({label:defaultNewLabelText})
+            .click(function(){
+                if(!bNewLabel.data("editing")){
+                    bNewLabel.data("editing",true).button("option","icons", {secondary:"ui-icon-plusthick"});
+                    bNewLabel.children("span").first().text("").append(tbNewLabel);
+                    tbNewLabel.val("").focus();
+                    resizeNewLabel();
+                } else {
+                    createNewLabel();
+                }
+            })
+        ;
         $("#bLabelAdd").click(function(e){
             var textbox=$("#tbLabel");
             var label = textbox.val();
