@@ -220,17 +220,5 @@ use EducAction\AdesBundle\Html;
                 }
             })
         ;
-        $("#bLabelAdd").click(function(e){
-            var textbox=$("#tbLabel");
-            var label = textbox.val();
-            if(!label){
-                alert("Veuillez entrer un label.");
-            } else if (currentLabels.contains(label)){
-                alert("Ce label est déjà affecté à ce fait.");
-            } else {
-                currentLabels.add(label);
-                textbox.val("");
-            }
-        });
     });
 </script>
