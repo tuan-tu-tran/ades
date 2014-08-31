@@ -41,8 +41,13 @@ class StudentFile
         $groups=Tools::GetDefault($menuConfig,"composition", array());
         $styleConfig=Tools::GetDefault($menuConfig,"style", array());
         $order=Tools::GetDefault($styleConfig, "order", array());
+        $ignore=Tools::GetDefault($styleConfig, "ignore", array());
         if ($order) {
             $order=explode(",",$order);
+        }
+
+        if($ignore){
+            $ignore=explode(",",$ignore);
         }
 
         $factInfoById=array();
@@ -77,7 +82,9 @@ class StudentFile
         }
 
         foreach($factInfoById as $id=>$factInfo) {
-            $tree[$factInfo["title"]]=$factInfo["link"];
+            if(!in_array($id, $ignore)){
+                $tree[$factInfo["title"]]=$factInfo["link"];
+            }
         }
 
         $menu=new Menu("menu_facts");
