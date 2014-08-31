@@ -25,14 +25,16 @@ use EducAction\AdesBundle\Html;
 <div style="float:left;width:100%; margin-top:1em; margin-bottom:1em">
     <label>Etiquettes</label>
     <div style="float:left">
-        <div style="display:none; margin-bottom:5px" id="divLabels">
+        <div style="display:none; margin-bottom:5px" id="divCurrentLabels">
+        </div>
+        <div style="display:none; margin-bottom:5px" id="divAvailableLabels">
         </div>
         <input class="nomargin" type="text" id="tbLabel"/><button class="nomargin" id="bLabelAdd" onclick="return false;">+</button>
     </div>
 </div>
 <script type="text/javascript">
     jQuery(function($){
-        function LabeList(div){
+        function LabeList(div, buttonClass, onClick){
             var _labels=[];
             this.contains = function(label){
                 return _labels.indexOf(label) > -1;
@@ -44,14 +46,15 @@ use EducAction\AdesBundle\Html;
                     _labels.push(label);
                     var view=$("<div/>").css("display","inline-block");
                     var button=$("<div/>").appendTo(view).hide();
-                    button.button({label:label, icons:{secondary:"ui-icon-close"}}).hide();
+                    button.button({label:label, icons:{secondary:buttonClass}}).hide();
                     view.appendTo(div.show());
-                    if(no_animate){
+                    if(no_animate || true){
                         button.show();
                     } else {
                         button.show("slide", {direction:"left"});
                     }
                     view.click(function(){
+                        /*
                         button.hide({
                             effect:"slide", 
                             direction:"left",
@@ -59,6 +62,9 @@ use EducAction\AdesBundle\Html;
                                 view.remove();
                             }
                         });
+                        */
+                        button.hide().remove();
+                        onClick(label);
                     });
                 }else {
                     $(label).each(function(i,l){
@@ -69,18 +75,24 @@ use EducAction\AdesBundle\Html;
             this.add=__add;
         }
 
-        var labelList = new LabeList($("#divLabels"));
+        var currentLabels, availableLabels;
+        currentLabels = new LabeList($("#divCurrentLabels"),"ui-icon-closethick", function(label){
+            availableLabels.add(label);
+        });
+        availableLabels = new LabeList($("#divAvailableLabels"),"ui-icon-plusthick", function(label){
+            currentLabels.add(label);
+        });
 
-        labelList.add(["test","foo"], true);
+        availableLabels.add(["test","foo"], true);
         $("#bLabelAdd").click(function(e){
             var textbox=$("#tbLabel");
             var label = textbox.val();
             if(!label){
                 alert("Veuillez entrer un label.");
-            } else if (labelList.contains(label)){
+            } else if (currentLabels.contains(label)){
                 alert("Ce label est déjà affecté à ce fait.");
             } else {
-                labelList.add(label);
+                currentLabels.add(label);
                 textbox.val("");
             }
         });
