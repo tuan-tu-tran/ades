@@ -21,6 +21,8 @@ require ("inc/classes/classlisteretenues.inc.php");
 
 use EducAction\AdesBundle\View;
 use EducAction\AdesBundle\Label;
+use EducAction\AdesBundle\Tools;
+use Symfony\Component\HttpFoundation\Request;
 
 // cette classe gère les faits disciplinaires
 // la table $listeRubriques contient les différentes caractéristiques du fait:
@@ -134,11 +136,21 @@ $sql = $this->formeSQL();
 
 $resultat = mysql_query($sql) or die("Erreur lors de l'enregistrement");
 
+$insertIdResult = mysql_query("SELECT LAST_INSERT_ID()") or die("Error while query last insert id");
+$tmpArray = mysql_fetch_row($insertIdResult) or die("Error while fetch last insert id");
+$lastInsertId = $tmpArray[0];
+
 // si c'est une retenue, ajuster les nombres d'inscrits aux retenues
 $idretenue = $this->getRubrique('idretenue');
 if (isset($idretenue)) $this->ajusterRetenues();
 
 mysql_close($lienDB);
+
+//save labels
+$request = Request::createFromGlobals();
+$labels=$request->request->get("labels");
+Label::Save($lastInsertId, $labels);
+
 redir ("ficheel.php", "mode=voir&ideleve=$ideleve", "Enregistrement effectué");
 return $resultat;
 }

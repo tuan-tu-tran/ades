@@ -40,6 +40,8 @@ use EducAction\AdesBundle\Html;
         <div style="display:none; margin-bottom:5px" id="divAvailableLabels"></div>
         <div id="bNewLabel">
         </div>
+        <div id="hiddenInputLabels">
+        </div>
     </div>
 </div>
 <script type="text/javascript">
@@ -123,6 +125,7 @@ use EducAction\AdesBundle\Html;
         }
 
         var currentLabels, availableLabels;
+        var labelInputDiv=$("#hiddenInputLabels");
         currentLabels = new LabeList($("#divCurrentLabels"),"ui-icon-closethick")
             .onRemove(function(label){
                 availableLabels.add(label);
@@ -130,10 +133,12 @@ use EducAction\AdesBundle\Html;
                     $("#divCurrentLabels").hide();
                     $("#lNoCurrentLabel").show();
                 }
+                labelInputDiv.children("input[value="+JSON.stringify(label)+"]").remove();
             })
-            .onAdd(function(){
+            .onAdd(function(label){
                 $("#divCurrentLabels").show();
                 $("#lNoCurrentLabel").hide();
+                $("<input/>").attr("type","hidden").attr("name","labels[]").val(label).appendTo(labelInputDiv);
             })
         ;
         availableLabels = new LabeList($("#divAvailableLabels"),"ui-icon-plusthick")

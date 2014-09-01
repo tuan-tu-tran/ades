@@ -24,7 +24,6 @@ class Label
 {
     public static function GetForFact($factId) {
         $factId = intval($factId);
-        error_log($factId);
         if($factId <= 0) {
             return array();
         } else {
@@ -46,16 +45,55 @@ class Label
 
     public static function GetAll() {
         $db=Db::GetInstance();
-        $result=$db->query(
-            "SELECT lbl_tag ".
+        $result=self::GetAllTags($db);
+        $labels=array();
+        foreach($result as $row){
+            $labels[] = $row["lbl_tag"];
+        }
+        return $labels;
+    }
+
+    private static function GetAllTags($db) {
+        return $db->query(
+            "SELECT lbl_id, lbl_tag ".
             "FROM ades_labels ".
             "WHERE lbl_deleted = 0".
         "");
-        $labels=array();
-        foreach($result as $row){
-            $labels[] = $row[0];
+    }
+
+    public static function Save($newId, $labels){
+        $newId=intval($newId);
+        if($newId <= 0) {
+            throw new \Exception("newId must be >= 0 : ".$newId);
         }
-        return $labels;
+
+        if($labels){
+            $db=Db::GetInstance();
+            $tags=self::GetAllTags($db);
+            $idByTag = array();
+            foreach($tags as $t){
+                $idByTag[$t["lbl_tag"]] = $t["lbl_id"];
+            }
+            $values=array();
+            $seenTags=array();
+            foreach($labels as $t){
+                if(isset($seenTags[$t])){
+                    throw new \Exception("duplicate tag to insert: $t");
+                }
+                if(!Tools::TryGet($idByTag, $t, $id)){
+                    $id=self::Insert($t, $db);
+                }
+                $values[]="($newId,$id)";
+                $seenTags[$t]=TRUE;
+            }
+            $query="INSERT INTO ades_fact_label(fl_fact_id, fl_lbl_id) VALUES ";
+            $query.=implode($values, ",");
+            $db->execute($query);
+        }
+    }
+
+    private static function Insert($label, $db) {
+        return $db->insert("INSERT INTO ades_labels(lbl_tag) VALUES (".$db->escape_string($label).")");
     }
 }
 
