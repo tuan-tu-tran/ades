@@ -89,4 +89,16 @@ class Tools{
         $date = $js." ".$quand["mday"]."/".$quand["mon"]."/".$quand["year"];
         return $date;
     }
+
+    /**
+     * Return an array where the elements are the result of the callable,
+     * called on each value of the original array (keys are preserved).
+     */
+    public static function map($callable, $array){
+        $result=array();
+        foreach($array as $key=>$value){
+            $result[$key]=$callable($value);
+        }
+        return $result;
+    }
 }
