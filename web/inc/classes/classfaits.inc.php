@@ -285,7 +285,7 @@ $focus = $faitATraiter['focus'];
 
 $form = "<h3 style=\"background-color: #$couleurFond; color: #$couleurTexte\">";
 $form .= "$titreFait</h3>\n";
-$form .= "<form name=\"form1\" method=\"post\" action=\"{$_SERVER[PHP_SELF]}\"";
+$form .= "<form name=\"form1\" method=\"post\" action=\"{$_SERVER["PHP_SELF"]}\"";
 $form .= " onsubmit=\"return(verifForm(this))\">\n";
 
 // recherche de la liste de description de chaque champ
