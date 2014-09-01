@@ -177,7 +177,7 @@ class Db{
 
 	public function escape_string($s){
 		if($this->connect()){
-			return $this->conn->escape_string($s);
+			return "'".$this->conn->escape_string($s)."'";
 		}else{
 			throw new DbException("could not connect to escape string '$s' : ".($this->error()));
 		}
