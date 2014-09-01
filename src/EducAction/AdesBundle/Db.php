@@ -87,6 +87,17 @@ class Db{
     }
 
     /**
+     * Execute an insert query and return the last inserted id or throw a DbException
+     */
+    public function insert($query)
+    {
+        $this->execute($query);
+        $result=$this->query("SELECT LAST_INSERT_ID()");
+        $row=$result[0];
+        return $row[0];
+    }
+
+    /**
      * Execute a query and throw an exception in case of error.
      */
     private function private_execute_or_throw($query, &$result)
@@ -107,6 +118,9 @@ class Db{
 		return false;
 	}
 
+    /**
+     * Execute a query a return results or throw an exception
+     */
 	public function query($query){
         $this->private_execute_or_throw($query,$result);
         return self::GetDataTableFromResultInstance($result);
@@ -174,7 +188,7 @@ class Db{
 
 	public function escape_string($s){
 		if($this->connect()){
-			return $this->conn->escape_string($s);
+			return "'".$this->conn->escape_string($s)."'";
 		}else{
 			throw new DbException("could not connect to escape string '$s' : ".($this->error()));
 		}

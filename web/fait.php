@@ -35,6 +35,12 @@ Normalisation();
   <script language="javascript" type="text/javascript" src="cal/calendrier.js"></script>
   <script language="javascript" type="text/javascript" src="inc/fonctions.js"></script>
   <script type="text/javascript" src="inc/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>  
+    <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>  
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>  
+	<link href="css/jquery-ui.min.css" rel="stylesheet"/>
+    <script type="text/javascript">
+    jQuery.noConflict();
+    </script>  
 </head>
 <body>
 <?php

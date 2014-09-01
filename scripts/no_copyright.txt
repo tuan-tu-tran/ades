@@ -23,3 +23,4 @@ jquery-.*\.js$
 ^app/
 ^web/app(_dev)?\.php$
 \.yml$
+^web/css/jquery-ui.min.css$

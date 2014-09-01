@@ -37,9 +37,9 @@ class Config{
 		$db=Db::GetInstance();
 		$query=
 			"INSERT INTO ades_config(con_key, con_value) "
-			." VALUES ('%s', '%s') "
+			." VALUES (%s, %s) "
 			." ON DUPLICATE KEY UPDATE "
-			." con_value = '%s' "
+			." con_value = %s "
 		;
 		$query=sprintf($query
 			, $db->escape_string($key)

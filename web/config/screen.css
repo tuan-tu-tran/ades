@@ -436,3 +436,7 @@ table.tableau_faits td {
 }
 
 .auto_close, .auto_close_on_click{ cursor:pointer;}
+
+.nomargin{
+  margin:0px;
+}

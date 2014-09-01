@@ -19,6 +19,11 @@
 */
 require ("inc/classes/classlisteretenues.inc.php");
 
+use EducAction\AdesBundle\View;
+use EducAction\AdesBundle\Label;
+use EducAction\AdesBundle\Tools;
+use Symfony\Component\HttpFoundation\Request;
+
 // cette classe gère les faits disciplinaires
 // la table $listeRubriques contient les différentes caractéristiques du fait:
 // idfait, idorigine, ideleve, type, date, prof, sanction,...
@@ -131,11 +136,21 @@ $sql = $this->formeSQL();
 
 $resultat = mysql_query($sql) or die("Erreur lors de l'enregistrement");
 
+$insertIdResult = mysql_query("SELECT LAST_INSERT_ID()") or die("Error while query last insert id");
+$tmpArray = mysql_fetch_row($insertIdResult) or die("Error while fetch last insert id");
+$lastInsertId = $tmpArray[0];
+
 // si c'est une retenue, ajuster les nombres d'inscrits aux retenues
 $idretenue = $this->getRubrique('idretenue');
 if (isset($idretenue)) $this->ajusterRetenues();
 
 mysql_close($lienDB);
+
+//save labels
+$request = Request::createFromGlobals();
+$labels=$request->request->get("labels");
+Label::Save($lastInsertId, $labels);
+
 redir ("ficheel.php", "mode=voir&ideleve=$ideleve", "Enregistrement effectué");
 return $resultat;
 }
@@ -282,7 +297,7 @@ $focus = $faitATraiter['focus'];
 
 $form = "<h3 style=\"background-color: #$couleurFond; color: #$couleurTexte\">";
 $form .= "$titreFait</h3>\n";
-$form .= "<form name=\"form1\" method=\"post\" action=\"{$_SERVER[PHP_SELF]}\"";
+$form .= "<form name=\"form1\" method=\"post\" action=\"{$_SERVER["PHP_SELF"]}\"";
 $form .= " onsubmit=\"return(verifForm(this))\">\n";
 
 // recherche de la liste de description de chaque champ
@@ -360,6 +375,12 @@ foreach ($descriptionChamps as $unChamp)
 			}
 		}
 	}
+$labels=Label::GetForFact($this->getRubrique("idfait"));
+$allLabels = Label::GetAll();
+$form .= View::GetHtml("label_edit.inc.php", array(
+    "currentLabels"=> Tools::map("utf8_encode", $labels)
+    , "allLabels" => Tools::map("utf8_encode", $allLabels)
+));
 $form .= "<div style=\"text-align:center\">\n";
 $form .= "<input type=\"submit\" name=\"mode\" value=\"Enregistrer\">\n";
 $form .= "<input type=\"reset\" name=\"submit\" value=\"R&eacute;initialiser\">\n</div>\n";
