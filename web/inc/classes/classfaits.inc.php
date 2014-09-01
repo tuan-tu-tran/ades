@@ -378,8 +378,8 @@ foreach ($descriptionChamps as $unChamp)
 $labels=Label::GetForFact($this->getRubrique("idfait"));
 $allLabels = Label::GetAll();
 $form .= View::GetHtml("label_edit.inc.php", array(
-    "currentLabels"=> Tools::map(utf8_encode, $labels)
-    , "allLabels" => Tools::map(utf8_encode, $allLabels)
+    "currentLabels"=> Tools::map("utf8_encode", $labels)
+    , "allLabels" => Tools::map("utf8_encode", $allLabels)
 ));
 $form .= "<div style=\"text-align:center\">\n";
 $form .= "<input type=\"submit\" name=\"mode\" value=\"Enregistrer\">\n";
