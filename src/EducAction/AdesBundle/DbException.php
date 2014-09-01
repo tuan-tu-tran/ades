@@ -18,9 +18,9 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace EducAction\AdesBundle\Controller;
+namespace EducAction\AdesBundle;
 
-class DbException extends Exception{
+class DbException extends \Exception{
 	function __construct($message){
 		parent::__construct($message);
 	}
