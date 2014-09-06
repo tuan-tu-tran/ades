@@ -52,6 +52,13 @@ class KernelListener
                 $event->setController(array(new AccessController($request, $this->router), "redirectLogin"));
             } elseif (is_a($instance, "EducAction\\AdesBundle\\Controller\\IAccessControlled")) {
                 $requiredPrivileges=$instance->getRequiredPrivileges();
+                if(is_string($requiredPrivileges)){
+                    $requiredPrivileges=array($requiredPrivileges);
+                }
+                if(!is_array($requiredPrivileges)){
+                    $classname = get_class($instance);
+                    throw new \Exception("$classname::getRequiredPrivileges must return either a string or an array of string");
+                }
                 $userPrivilege = $_SESSION["identification"]["privilege"];
                 if(!in_array($userPrivilege, $requiredPrivileges)){
                     $event->setController(array(new AccessController($request), "unauthorized"));
