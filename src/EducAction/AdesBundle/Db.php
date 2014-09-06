@@ -29,6 +29,7 @@ class Db{
 	public $dbname;
 	private $conn;
 	private $connect_error;
+    private $stmt_error;
 	private static $instance;
 
 	private function __construct($host, $user, $pwd, $dbname){
@@ -69,17 +70,17 @@ class Db{
     /**
      * Execute a query that returns no result (DbException thrown in case of error)
      */
-    public function execute($query)
+    public function execute($query/*, $params, ... or $paramsArray*/)
     {
-        $this->private_execute_or_throw($query, $result);
+        $this->private_execute_or_throw(func_get_args(), $result);
 	}
 
     /**
      * Execute a query without result and return whether succesfully done.
      */
-    public function TryExecute($query)
+    public function TryExecute($query/*, $params, ... or $paramsArray*/)
     {
-        if (!$this->private_safe_execute($query, $result)) {
+        if (!$this->private_safe_execute(func_get_args(), $result)) {
             return FALSE;
         }
         return TRUE;
@@ -99,9 +100,9 @@ class Db{
     /**
      * Execute a query and throw an exception in case of error.
      */
-    private function private_execute_or_throw($query, &$result)
+    private function private_execute_or_throw($args, &$result)
     {
-        if (!$this->private_safe_execute($query, $result)) {
+        if (!$this->private_safe_execute($args, $result)) {
             throw new DbException($this->error());
         }
     }
@@ -109,35 +110,93 @@ class Db{
     /**
      * Execute a query and return if done + the resut
      */
-	private function private_safe_execute($query, &$result){
+	private function private_safe_execute(&$args, &$result){
 		if($this->connect()){
-			$result=$this->conn->query($query);
+            $this->getQueryParams($args, $query, $queryParams);
+            $params=NULL;
+            if(count($queryParams)>0){
+                $values=array();
+                $types="";
+                $i=0;
+                foreach($queryParams as &$value){
+                    if(is_int($value)){
+                        $types.="i";
+                    } elseif (is_float($value)) {
+                        $types.="d";
+                    } elseif (is_string($value)) {
+                        $types.="s";
+                    } elseif (is_bool($value)) {
+                        $types.="i";
+                        $value=$value?1:0;
+                    } else {
+                        throw new DbException("unsupported parameter type ".$i);
+                    }
+                    ++$i;
+                    $values[]=&$value;
+                }
+                $params=array($types);
+                foreach($values as &$value){
+                    $params[]=&$value;
+                }
+            }
+            $stmt = $this->conn->prepare($query);
+            if(!$stmt){
+                return FALSE;
+            }
+            if($params){
+                if(!call_user_func_array(array($stmt, "bind_param"), $params)) {
+                    $this->setStatementError($stmt);
+                    return FALSE;
+                }
+            }
+            if(!$stmt->execute()){
+                $this->setStatementError($stmt);
+                return FALSE;
+            }
+			$result=$stmt->get_result();
+            $stmt->close();
 			return !$this->conn->errno;
 		}
 		return false;
 	}
 
+    private function setStatementError($stmt)
+    {
+        $this->stmt_error = $stmt->error;
+    }
+
+    private function getQueryParams(&$args, &$query, &$params)
+    {
+        $query=array_shift($args);
+        if (count($args) == 1 && is_array($args[0])) {
+            $params=$args[0];
+        } else {
+            $params=$args;
+        }
+
+    }
+
     /**
      * Execute a query a return results or throw an exception
      */
-	public function query($query){
-        $this->private_execute_or_throw($query,$result);
+	public function query($query/*, $params, ... or $paramsArray*/){
+        $this->private_execute_or_throw(func_get_args(), $result);
         return self::GetDataTableFromResultInstance($result);
 	}
     
     /**
      * Execute a query and return if succesfully done.
      * If executed, $result is assigned the query result.
-     * Otherwise, $error is assigned the last error.
      */
-    public function TryQuery($query, &$result)
+    public function TryQuery(&$result, $query/*, $params, ... or $paramsArray*/)
     {
-        if ($this->private_safe_execute($query, $result)) {
+        $args=func_get_args();
+        array_shift($args);
+        if ($this->private_safe_execute($args, $result)) {
             $result=self::GetDataTableFromResultInstance($result);
             return TRUE;
         } else {
             $result=NULL;
-            $error = $this->error();
             return FALSE;
         }
     }
@@ -154,8 +213,8 @@ class Db{
         return $res;
     }
 
-	public function scalar($query){
-        $this->private_execute_or_throw($query,$result);
+	public function scalar($query/*, $params, ... or $paramsArray*/){
+        $this->private_execute_or_throw(func_get_args(), $result);
         if ($result->num_rows>0) {
             $row=$result->fetch_row();
             return $row[0];
@@ -167,6 +226,8 @@ class Db{
 	public function error(){
 		if($this->connect_error!=NULL) return $this->connect_error;
 		if($this->conn!=NULL && $this->conn->errno) return $this->conn->error;
+        if($this->stmt_error) return $this->stmt_error;
+        error_log("here");
 		return "";
 	}
 
