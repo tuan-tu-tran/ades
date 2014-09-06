@@ -89,7 +89,12 @@ class Controller extends SfController
 
     protected function redirectLogin()
     {
-        return $this->redirect($this->generateUrl("educ_action_ades_login"));
+        return $this->redirectRoute("educ_action_ades_login");
+    }
+
+    protected function redirectRoute($route)
+    {
+        return $this->redirect($this->generateUrl($route));
     }
 }
 
