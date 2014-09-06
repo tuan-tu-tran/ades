@@ -77,10 +77,9 @@ class Db{
     /**
      * Execute a query without result and return whether succesfully done.
      */
-    public function TryExecute($query, &$error=NULL)
+    public function TryExecute($query)
     {
         if (!$this->private_safe_execute($query, $result)) {
-            $error=$this->error();
             return FALSE;
         }
         return TRUE;
@@ -131,7 +130,7 @@ class Db{
      * If executed, $result is assigned the query result.
      * Otherwise, $error is assigned the last error.
      */
-    public function TryQuery($query, &$result, &$error=NULL)
+    public function TryQuery($query, &$result)
     {
         if ($this->private_safe_execute($query, $result)) {
             $result=self::GetDataTableFromResultInstance($result);

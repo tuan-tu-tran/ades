@@ -54,11 +54,13 @@ class BackupController extends Controller implements IAccessControlled
 				$restore->input_read=true;
                 //drop all the tables first
                 $db=Db::GetInstance();
-                if ($db->TryQuery("SHOW TABLES", $result, $restore->error)) {
+                if ($db->TryQuery("SHOW TABLES", $result)) {
+                    $restore->error = $db->error();
                     $dropped=TRUE;
                     foreach($result as $row){
                         $tableName=$row[0];
-                        if (!$db->TryExecute("DROP TABLE $tableName", $restore->error)) {
+                        if (!$db->TryExecute("DROP TABLE $tableName")) {
+                            $restore->error = $db->error();
                             $dropped=FALSE;
                             break;
                         }
