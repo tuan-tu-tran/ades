@@ -30,9 +30,9 @@ class ImportController extends Controller implements IAccessControlled
     }
     public function indexAction()
     {
-        $this->flash()->get("errors");
         $this->params->missing_file = $this->flash()->get("missing_file");
         $this->params->upload_error = $this->flash()->get("upload_error");
+        $this->flash()->clear();
         return $this->View("index.html.twig");
     }
 
@@ -51,6 +51,7 @@ class ImportController extends Controller implements IAccessControlled
             $data=array();
             $i=0;
             $errors=array();
+            $students=array();
             while(!$file->eof()){
                 $line=$file->fgetcsv();
                 ++$i;
@@ -59,6 +60,45 @@ class ImportController extends Controller implements IAccessControlled
                 } elseif($header === NULL){
                     $header = $line;
                     $fieldCount = count($header);
+                    $checkHeader = function($h) use (&$errors, $header, $i) {
+                        error_log(var_export(in_array($h, $header), TRUE));
+                        if(!in_array($h, $header)) {
+                            $errors[]=array(
+                                "type"=>"missing_header",
+                                "header"=>$h,
+                                "lineNr"=>$i
+                            );
+                        }
+                    };
+                    $checkHeader("Nom Elève");
+                    $checkHeader("Prénom Elève");
+                    $checkHeader("AnFF");
+                    $checkHeader("Classe");
+                    $checkHeader("DateAnniv");
+                    $checkHeader("Matric Info");
+                    $checkHeader("NomPrénom Resp");
+                    $checkHeader("EMail Responsable");
+                    $checkHeader("Tél Responsable");
+                    $checkHeader("GSM Responsable");
+                    $checkHeader("Tél Rem Responsable");
+                    if($errors){
+                        break;
+                    }
+                    $indexByHeader=array();
+                    foreach($header as $index => $field){
+                        if(!isset($indexByHeader[$field])){
+                            $indexByHeader[$field] = $index;
+                        } else {
+                            $errors[]=array(
+                                "type"=>"duplicate_field",
+                                "header"=>$field,
+                                "lineNr" => $i
+                            );
+                        }
+                    }
+                    if($errors){
+                        break;
+                    }
                 } elseif (count($line)!=$fieldCount){
                     $errors[]=array(
                         "type"=>"bad_count",
@@ -67,11 +107,37 @@ class ImportController extends Controller implements IAccessControlled
                         "expected"=>$fieldCount
                     );
                 } else {
-                    $csv[]=$line;
+                    $get=function($h) use ($header, $line, $indexByHeader) {
+                        if(!isset($indexByHeader[$h])){
+                            throw new \Exception("field $h not in ".var_export($header, TRUE));
+                        }
+                        return $line[$indexByHeader[$h]];
+                    };
+                    $s=array();
+                    $s["nom"]=$get("Nom Elève");
+                    $s["prenom"]=$get("Prénom Elève");
+                    $s["classe"]=$get("AnFF").$get("Classe");
+                    $bday=$get("DateAnniv");
+                    if(!preg_match("/^(\\d\\d\\/){2}.{4}$/", $bday)){
+                        $errors[]=array(
+                            "type"=>"bad_birthday",
+                            "lineNr"=>$i
+                        );
+                    }else{
+                        $bday=substr($bday, 0, 5);
+                    }
+                    $s["anniv"]=$bday;
+                    $s["codeInfo"]=$get("Matric Info");
+                    $s["nomResp"] = $get("NomPrénom Resp");
+                    $s["courriel"] = $get("EMail Responsable");
+                    $s["telephone1"] = $get("Tél Responsable");
+                    $s["telephone2"] = $get("GSM Responsable");
+                    $s["telephone3"] = $get("Tél Rem Responsable");
+                    $students[]=$s;
                 }
             }
-            error_log(var_export($header, TRUE));
             $this->flash()->set("errors", $errors);
+            $this->flash()->set("students", $students);
             return $this->redirectRoute("educ_action_ades_import_proeco_preview");
         }
         return $this->redirectRoute("educ_action_ades_import_proeco");
@@ -80,6 +146,7 @@ class ImportController extends Controller implements IAccessControlled
     public function previewAction()
     {
         $this->params->errors=$this->flash()->peek("errors");
+        $this->params->students=$this->flash()->peek("students");
 
         return $this->view("preview.html.twig");
     }

@@ -31,16 +31,19 @@
     {% for e in errors %}
     <li>
         {% if e.type == "bad_count" %}
-        La ligne {{e.lineNr}} contient {{e.count}} champs au lieu de {{e.expected}}.
+            La ligne {{e.lineNr}} contient {{e.count}} champs au lieu de {{e.expected}}.
+        {% elseif e.type == "missing_header"%}
+            Le champs "{{e.header}}" est manquant (ligne {{e.lineNr}}).
         {% else %}
-        Erreur inconnue.
+            Erreur inconnue.
         {% endif %}
     </li>
     {% endfor %}
 </ul>
-{% else %}
-ok
 {% endif %}
+<p>
+{{students|length}} fiches d'élèves à importer.
+</p>
 
 {% endblock %}
 
