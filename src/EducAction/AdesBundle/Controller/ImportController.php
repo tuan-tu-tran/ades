@@ -21,6 +21,7 @@
 namespace EducAction\AdesBundle\Controller;
 
 use \SplFileObject;
+use EducAction\AdesBundle\Tools;
 
 class ImportController extends Controller implements IAccessControlled
 {
@@ -58,10 +59,9 @@ class ImportController extends Controller implements IAccessControlled
                 if ($line === array(NULL) ) {
                     continue;
                 } elseif($header === NULL){
-                    $header = $line;
+                    $header = Tools::map("utf8_encode",$line);
                     $fieldCount = count($header);
                     $checkHeader = function($h) use (&$errors, $header, $i) {
-                        error_log(var_export(in_array($h, $header), TRUE));
                         if(!in_array($h, $header)) {
                             $errors[]=array(
                                 "type"=>"missing_header",
@@ -70,17 +70,17 @@ class ImportController extends Controller implements IAccessControlled
                             );
                         }
                     };
-                    $checkHeader("Nom Elève");
-                    $checkHeader("Prénom Elève");
+                    $checkHeader("Nom ElÃ¨ve");
+                    $checkHeader("PrÃ©nom ElÃ¨ve");
                     $checkHeader("AnFF");
                     $checkHeader("Classe");
                     $checkHeader("DateAnniv");
                     $checkHeader("Matric Info");
-                    $checkHeader("NomPrénom Resp");
+                    $checkHeader("NomPrÃ©nom Resp");
                     $checkHeader("EMail Responsable");
-                    $checkHeader("Tél Responsable");
+                    $checkHeader("TÃ©l Responsable");
                     $checkHeader("GSM Responsable");
-                    $checkHeader("Tél Rem Responsable");
+                    $checkHeader("TÃ©l Rem Responsable");
                     if($errors){
                         break;
                     }
@@ -114,8 +114,8 @@ class ImportController extends Controller implements IAccessControlled
                         return $line[$indexByHeader[$h]];
                     };
                     $s=array();
-                    $s["nom"]=$get("Nom Elève");
-                    $s["prenom"]=$get("Prénom Elève");
+                    $s["nom"]=$get("Nom ElÃ¨ve");
+                    $s["prenom"]=$get("PrÃ©nom ElÃ¨ve");
                     $s["classe"]=$get("AnFF").$get("Classe");
                     $bday=$get("DateAnniv");
                     if(!preg_match("/^(\\d\\d\\/){2}.{4}$/", $bday)){
@@ -128,11 +128,11 @@ class ImportController extends Controller implements IAccessControlled
                     }
                     $s["anniv"]=$bday;
                     $s["codeInfo"]=$get("Matric Info");
-                    $s["nomResp"] = $get("NomPrénom Resp");
+                    $s["nomResp"] = $get("NomPrÃ©nom Resp");
                     $s["courriel"] = $get("EMail Responsable");
-                    $s["telephone1"] = $get("Tél Responsable");
+                    $s["telephone1"] = $get("TÃ©l Responsable");
                     $s["telephone2"] = $get("GSM Responsable");
-                    $s["telephone3"] = $get("Tél Rem Responsable");
+                    $s["telephone3"] = $get("TÃ©l Rem Responsable");
                     $students[]=$s;
                 }
             }
