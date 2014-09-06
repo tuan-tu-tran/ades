@@ -157,7 +157,8 @@ class Db{
 	public function scalar($query){
         $this->private_execute_or_throw($query,$result);
         if ($result->num_rows>0) {
-            return $result->fetch_row()[0];
+            $row=$result->fetch_row();
+            return $row[0];
         } else {
             return NULL;
         }
