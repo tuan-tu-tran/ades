@@ -54,7 +54,9 @@ class ImportController extends Controller implements IAccessControlled
             while(!$file->eof()){
                 $line=$file->fgetcsv();
                 ++$i;
-                if($header ===NULL){
+                if ($line === array(NULL) ) {
+                    continue;
+                } elseif($header ===NULL){
                     $header = $line;
                     $fieldCount = count($header);
                 } elseif (count($line)!=$fieldCount){
