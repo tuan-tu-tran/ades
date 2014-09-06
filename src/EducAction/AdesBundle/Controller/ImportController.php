@@ -56,7 +56,7 @@ class ImportController extends Controller implements IAccessControlled
                 ++$i;
                 if ($line === array(NULL) ) {
                     continue;
-                } elseif($header ===NULL){
+                } elseif($header === NULL){
                     $header = $line;
                     $fieldCount = count($header);
                 } elseif (count($line)!=$fieldCount){
