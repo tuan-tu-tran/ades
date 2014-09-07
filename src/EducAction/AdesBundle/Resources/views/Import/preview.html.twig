@@ -73,7 +73,7 @@
         <td>{{ s.anniv }}</td>
         <td>{{ s.codeInfo }}</td>
         <td>{{ s.nomResp }}</td>
-        <td>{{ s.courriel }}</td>
+        <td style="word-wrap:break-word; word-break:break-word">{{ s.courriel|replace({"@":"<wbr>@"})|raw}}</td>
         <td>{{ s.telephone1 }}</td>
         <td>{{ s.telephone2 }}</td>
         <td>{{ s.telephone3 }}</td>
@@ -97,7 +97,7 @@
             background-color:orangered;
         }
         table#students td{
-            padding:2px;
+            padding:4px;
         }
     </style>
 {% endblock %}
