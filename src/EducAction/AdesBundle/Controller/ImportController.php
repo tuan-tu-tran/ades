@@ -111,7 +111,7 @@ class ImportController extends Controller implements IAccessControlled
                         if(!isset($indexByHeader[$h])){
                             throw new \Exception("field $h not in ".var_export($header, TRUE));
                         }
-                        return $line[$indexByHeader[$h]];
+                        return utf8_encode($line[$indexByHeader[$h]]);
                     };
                     $s=array();
                     $s["nom"]=$get("Nom Elève");
