@@ -53,6 +53,7 @@ class ImportController extends Controller implements IAccessControlled
             $i=0;
             $errors=array();
             $students=array();
+            $studentByUniqueId=array();
             while(!$file->eof()){
                 $line=$file->fgetcsv();
                 ++$i;
@@ -133,6 +134,26 @@ class ImportController extends Controller implements IAccessControlled
                     $s["telephone1"] = $get("Tél Responsable");
                     $s["telephone2"] = $get("GSM Responsable");
                     $s["telephone3"] = $get("Tél Rem Responsable");
+                    $idunique = $s["nom"].$s["prenom"].$s["classe"].$s["anniv"].$s["codeInfo"];
+                    $s["idunique"]=$idunique;
+                    $s["lineNr"] = $i;
+                    if(!isset($studentByUniqueId[$idunique])){
+                        $studentByUniqueId[$idunique]=array(
+                            "student"=>$s
+                        );
+                    } else {
+                        $record=&$studentByUniqueId[$idunique];
+                        if(!isset($record["error"])){
+                            $e=array(
+                                "type"=>"duplicate_record",
+                                "student"=>$s,
+                                "lines"=>array($record["student"]["lineNr"])
+                            );
+                            $record["error"]=$e;
+                            $errors[]=&$record["error"];
+                        }
+                        $record["error"]["lines"][]=$i;
+                    }
                     $students[]=$s;
                 }
             }

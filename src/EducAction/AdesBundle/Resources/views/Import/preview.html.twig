@@ -34,6 +34,8 @@
             La ligne {{e.lineNr}} contient {{e.count}} champs au lieu de {{e.expected}}.
         {% elseif e.type == "missing_header"%}
             Le champs "{{e.header}}" est manquant (ligne {{e.lineNr}}).
+        {% elseif e.type == "duplicate_record"%}
+            La fiche de l'élève {{e.student.nom}} {{e.student.prenom}} est en double: lignes {{ e.lines|join(", ")}}.
         {% else %}
             Erreur inconnue.
         {% endif %}
@@ -54,6 +56,7 @@
 {% if students %}
 <table id="students">
     <tr>
+        {% if errors %}<th></th>{% endif %}
         <th>Nom</th>
         <th>Prénom</th>
         <th>Classe</th>
@@ -67,6 +70,7 @@
     </tr>
     {% for s in students %}
     <tr>
+        {% if errors %}<td style="text-align: right">{{ s.lineNr }}.</td>{% endif %}
         <td>{{ s.nom }}</td>
         <td>{{ s.prenom }}</td>
         <td>{{ s.classe }}</td>
