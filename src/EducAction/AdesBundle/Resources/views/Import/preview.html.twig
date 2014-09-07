@@ -40,10 +40,64 @@
     </li>
     {% endfor %}
 </ul>
+    {% if students %}
+        <p>
+            {{students|length}} fiches d'élèves trouvées dans le fichier.
+        </p>
+    {% endif %}
+{% else %}
+    <p>
+    {{students|length}} fiches d'élèves à importer.
+    </p>
 {% endif %}
-<p>
-{{students|length}} fiches d'élèves à importer.
-</p>
+
+{% if students %}
+<table id="students">
+    <tr>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Classe</th>
+        <th>Anniv.</th>
+        <th>Code</th>
+        <th>Responsable</th>
+        <th>Courriel</th>
+        <th>Téléphone</th>
+        <th>GSM</th>
+        <th>Téléphone 2</th>
+    </tr>
+    {% for s in students %}
+    <tr>
+        <td>{{ s.nom }}</td>
+        <td>{{ s.prenom }}</td>
+        <td>{{ s.classe }}</td>
+        <td>{{ s.anniv }}</td>
+        <td>{{ s.codeInfo }}</td>
+        <td>{{ s.nomResp }}</td>
+        <td>{{ s.courriel }}</td>
+        <td>{{ s.telephone1 }}</td>
+        <td>{{ s.telephone2 }}</td>
+        <td>{{ s.telephone3 }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
 
 {% endblock %}
 
+{% block post_head %}
+    {{ parent() }}
+    <style type="text/css">
+        table#students{
+            border-collapse:collapse;
+        }
+        table#students, table#students td, table#students th{
+            border:solid black 1pt;
+        }
+        table#students th{
+            background-color:orangered;
+        }
+        table#students td{
+            padding:2px;
+        }
+    </style>
+{% endblock %}
