@@ -136,6 +136,11 @@ class ImportController extends Controller implements IAccessControlled
                     $students[]=$s;
                 }
             }
+            if(!$errors && count($students) == 0) {
+                $errors[]=array(
+                    "type"=>"no_student"
+                );
+            }
             $this->flash()->set("errors", $errors);
             $this->flash()->set("students", $students);
             return $this->redirectRoute("educ_action_ades_import_proeco_preview");
