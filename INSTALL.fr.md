@@ -83,7 +83,7 @@ Non pas que ça risque d'arriver, mais on ne sait jamais ;-).
 
 **ATTENTION!**
 La procédure manuelle décrite ci-dessous **ne fonctionnera pas correctement** si vous partez d'une version d'ADES **antérieure à 2014**.
-Pour mettre à jour une telle installation, veuillez utiliser la procédure de *mise à jour semi-automatique* décrite dans la section suivante,
+Pour mettre à jour une telle installation, veuillez utiliser la procédure de [*mise à jour semi-automatique*](#semiauto) décrite dans la section suivante,
 mais il est *utile* de lire la procédure de mise à jour manuelle.
 
 Pour mettre à jour manuellement votre installation:
@@ -101,14 +101,14 @@ Pour mettre à jour manuellement votre installation:
 
 **Cette procédure est la seule possible pour les versions antérieure à 2014.**
 
-Cette mise à jour semi-automatique procède automatiquement aux étapes de la mise à jour manuelle décrite ci-dessus.
+Cette mise à jour semi-automatique procède automatiquement aux étapes de la mise à jour manuelle décrite [ci-dessus](#manual).
 De plus, si vous partez d'une ancienne version d'ADES (antérieure à 2014),
 cette procédure s'occupera de sauvegarder certains fichiers de configurations qui se trouvaient ailleurs que dans le répertoire `%ROOT%/local` comme par exemple,
 le fichier de configuration de connexion à la base de données `config/confbd.inc.php`.
 
 Pour procéder à la mise à jour semi-automatique:
 
-* Téléchargez une archive zip et nommez la `archive.zip`
+* [Téléchargez](#download) une archive zip et nommez la `archive.zip`
 * De l'archive, extrayez le fichier `scripts/extract.php` *et uniquement ce fichier*.
 * Placez `archive.zip` et `extract.php` dans le répertoire `%ROOT%/web`.
 * Visitez la page `extract.php` sur votre site, à partir d'un navigateur internet (par exemple : `http://monsite.org/extract.php`).
