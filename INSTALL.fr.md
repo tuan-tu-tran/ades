@@ -3,19 +3,29 @@ Installation
 
 Ce fichier contient les instructions d'installation de la plate-forme ADES.
 
-Téléchargement
---------------
+* [Téléchargement](#download)
+* [Installation vierge](#fresh)
+  * [Répertoire d'installation](#rootfolder)
+  * [Configuration sur serveur web](#webserver)
+  * [Premier lancement de la plate-former](#firstlaunch)
+* [Mise à jour d'une installation existante](#update)
+  * [Mise à jour manuelle](#manual)
+  * [Mise à jour semi-automatique](#semiauto)
+  * [Mise à jour automatique](#fullauto)
+
+<a name="download"></a>Téléchargement
+-------------------------------------
 
 Le code source de la plate-forme est disponible sur [Github](https://github.com/doc212/ades).
 
 Une archive zip de la dernière version stable de production est disponible [ici](https://github.com/doc212/ades/archive/prod.zip).
 
-Installation vierge
+<a name="fresh"></a>Installation vierge
 -------------------
 
 Cette section décrit comment faire pour installer ADES la toute première fois.
 
-### Configuration du serveur web
+### <a name="rootfolder"></a>Répertoire d'installation
 
 L'ensemble du code source doit être copié dans le répertoire d'installation d'ADES.
 Pour illustrer nos propos, nous appellerons ce répertoire `%ROOT%`.
@@ -36,6 +46,8 @@ La structure du répertoire d'installation doit donc être la suivante:
     %ROOT%/vendor/
     %ROOT%/web/
 
+### <a name="webserver"></a>Configuration du serveur web
+
 La racine du site web doit pointer vers le répertoire `%ROOT%/web/`.
 Donc si ADES est accessible via l'adresse `http://monsite.org`, il faut que l'adresse `http://monsite.org/index.php` pointe vers `%ROOT%/web/index.php`.
 
@@ -44,12 +56,11 @@ Le serveur web ne doit pas servir les fichiers situés dans les autres répertoi
 
 Il doit cependant être autorisé à écrire dans les répertoires `%ROOT%/local` et `%ROOT%/local/db_backup`.
 
-Premier lancement de la plate-forme
------------------------------------
+### <a name="firstlaunch"></a>Création de la base de données
 
 Après avoir installé les sources dans le répertoire d'installation `%ROOT%` et correctement configuré la racine du site web,
 vous pouvez simplement vous rendre sur le site,
-qui vous guidera à travers la procédure d'installation de la base de données.
+qui vous guidera à travers la procédure de création de la base de données.
 
 Veillez à préparer un accès au serveur MySQL avec tous les droits sur le schéma:
 `DROP TABLE`, `CREATE TABLE`, `ALTER TABLE`, `SHOW TABLES`, `SELECT`, `INSERT`, `UPDATE`, `DELETE`.
@@ -60,7 +71,7 @@ Il est préférable de partir d'un base de données vierge mais si certaines tab
 
 Si tout se passe bien, le site vous demandera ensuite de configurer le nom de l'école et vous redirigera vers la page d'accueil.
 
-Mise à jour d'une installation existante
+<a name="update"></a>Mise à jour d'une installation existante
 ----------------------------------------
 
 Avant toute mise à jour, il est **vivement conseillé** de faire un backup de la base de données et du répertoire d'installation dans son entièreté.
@@ -68,7 +79,7 @@ Cela vous permettra de revenir en arrière si quelque chose se passe mal.
 Non pas que ça risque d'arriver, mais on ne sait jamais ;-).
 
 
-### Mise à jour manuelle
+### <a name="manual"></a>Mise à jour manuelle
 
 **ATTENTION!**
 La procédure manuelle décrite ci-dessous **ne fonctionnera pas correctement** si vous partez d'une version d'ADES **antérieure à 2014**.
@@ -86,7 +97,7 @@ Pour mettre à jour manuellement votre installation:
 * Votre installation est maintenant à jour.
 
 
-### Mise à jour semi-automatique
+### <a name="semiauto"></a>Mise à jour semi-automatique
 
 **Cette procédure est la seule possible pour les versions antérieure à 2014.**
 
@@ -107,7 +118,7 @@ Pour procéder à la mise à jour semi-automatique:
   Si nécessaire la plate-forme procédera à une mise à jour de la base de données.
 * Votre installation est maintenant à jour.
 
-###Mise à jour automatique
+###<a name="fullauto"></a>Mise à jour automatique
 
 Il est possible de configurer GitHub et l'installation d'ADES pour que lors de la publication de nouveau code,
 ce nouveau code soit automatiquement déployé vers votre installation.
