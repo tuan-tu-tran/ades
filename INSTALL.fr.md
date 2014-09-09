@@ -110,7 +110,7 @@ Pour procéder à la mise à jour semi-automatique:
 
 * [Téléchargez](#download) une archive zip et nommez la `archive.zip`
 * De l'archive, extrayez le fichier `scripts/extract.php` *et uniquement ce fichier*.
-* Placez `archive.zip` et `extract.php` dans le répertoire `%ROOT%/web`.
+* Placez `archive.zip` directement dans `%ROOT%` et `extract.php` dans le répertoire `%ROOT%/web`.
 * Visitez la page `extract.php` sur votre site, à partir d'un navigateur internet (par exemple : `http://monsite.org/extract.php`).
 * Si tout se passe bien, la page va afficher un message `archive extracted`.
   Sinon elle affichera des messages d'erreur.
