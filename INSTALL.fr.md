@@ -7,7 +7,7 @@ Ce fichier contient les instructions d'installation de la plate-forme ADES.
 * [Installation vierge](#fresh)
   * [Répertoire d'installation](#rootfolder)
   * [Configuration sur serveur web](#webserver)
-  * [Premier lancement de la plate-former](#firstlaunch)
+  * [Premier lancement de la plate-forme](#firstlaunch)
 * [Mise à jour d'une installation existante](#update)
   * [Mise à jour manuelle](#manual)
   * [Mise à jour semi-automatique](#semiauto)
