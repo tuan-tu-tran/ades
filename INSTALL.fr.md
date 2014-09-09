@@ -90,7 +90,7 @@ Pour mettre à jour manuellement votre installation:
 
 * Créez une copie de sauvegarde du répertoire `%ROOT%/local`.
 * Supprimez ensuite l'entièreté du contenu du répertoire d'installation `%ROOT%`.
-* Copiez toutes les nouvelles sources dans le répertoire d'installation `%ROOT%` (comme pour une installation vierge).
+* Copiez toutes les nouvelles sources dans le répertoire d'installation `%ROOT%` (comme pour une [installation vierge](#fresh)).
 * Ecrasez le répertoire `%ROOT%/local` avec votre sauvegarde du répertoire `local`.
 * Rendez-vous sur le site et connectez vous avec un compte admnistrateur : si nécessaire,
   le site lancera une mise à jour de le base de données.
