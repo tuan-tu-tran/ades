@@ -102,7 +102,7 @@ if (!file_exists($pull_config_file)) {
         http_response_code(400);
         echo "could not decode json";
     } elseif (!isset($json->ref)) {
-        http_response_code(404);
+        http_response_code(400);
         echo "no ref property found in json";
     } elseif ($json->ref!=$pull_ref){
         echo "ignoring ref: ".$json->ref." : only interested in $pull_ref";
