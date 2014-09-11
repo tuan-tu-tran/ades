@@ -97,6 +97,7 @@ if (file_exists($archive)) {
     
     if (!file_exists("local")){
         mkdir("local") or error("could not create folder local");
+        mkdir("local/db_backup") or error("could not create folder local/db_backup");
     }
     backup_logo();
     $config_files=array(
