@@ -94,7 +94,9 @@ chdir("..") or error("could not change dir to parent");
 $archive="archive.zip";
 if (file_exists($archive)) {
     unroot($archive);
-    
+    $zip=new \ZipArchive;
+    $zip->open("archive.zip") or error("could not open archve");
+
     if (!file_exists("local")){
         mkdir("local") or error("could not create folder local");
         mkdir("local/db_backup") or error("could not create folder local/db_backup");
