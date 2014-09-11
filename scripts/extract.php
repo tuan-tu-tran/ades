@@ -69,6 +69,9 @@ if (file_exists($archive)) {
     $zip=new \ZipArchive;
     $zip->open("archive.zip") or error("could not open archve");
     
+    if (!file_exists("local")){
+        mkdir("local") or error("could not create folder local");
+    }
     backup_logo();
     $config_files=array(
         "web/config/confbd.inc.php",
