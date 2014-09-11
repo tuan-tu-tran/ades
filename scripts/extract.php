@@ -58,7 +58,7 @@ function backup_logo()
         if (file_exists($imageenteteecole)) {
             copy($imageenteteecole, "local/logo.img") or error("impossible de copier le logo $imageenteteecole");
         } else {
-            echo "logo not backed up because it doesn't exist : ".$imageenteteecole;
+            echo "logo not backed up because it doesn't exist : $imageenteteecole\n";
         }
     }
 }
