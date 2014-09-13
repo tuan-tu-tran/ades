@@ -58,19 +58,26 @@ $pdf->Cell(200,5, $chaine, 0,0,'L');
 
 $pdf->SetXY(10,70);
 $pdf->SetFont('');
-$chaine = "a mérité une retenue de $duree h ce $dateRetenue à $heure ";
+$chaine = "sera en retenue de $duree h ce $dateRetenue à $heure ";
 $chaine .= "(local $local) pour le motif suivant\n";
 $pdf->Cell(200,5, $chaine, 0,0,'L');
 //$pdf->Write(5, $chaine);
 $pdf->SetXY(10,75);
 $pdf->SetFont('','B',12);
 $pdf->Write(5, $motif);
-$pdf->SetFont('', 'B', 10);
+$pdf->SetFont('', '', 10);
 $pdf->SetXY(10,90);
 
-$chaine = "Matériel à apporter: JDC et matériel d'écriture - $materiel.\n";
-$chaine .= "Travail à effectuer: $travail.\n";
-$chaine .= "Veuillez prendre contact avec l'éducateur de votre enfant. Merci.\n";
+$pdf->Write(5, "Matériel à apporter: Journal de classe - ");
+$pdf->SetFont('', 'B', 10);
+$pdf->Write(5, "Billet de retenue signé");
+$pdf->SetFont('', '');
+$chaine=" - Matériel scolaire (stylo, bloc de feuilles, etc...)";
+if($materiel){
+    $chaine.=" - $materiel";
+}
+$chaine.="\n";
+$chaine .= "Travail à réaliser: $travail.\n";
 
 $pdf->Write(5, $chaine);
 
