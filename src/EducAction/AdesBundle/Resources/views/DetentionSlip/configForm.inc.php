@@ -29,6 +29,7 @@ use EducAction\AdesBundle\Html;
             display:inline-block;
             vertical-align:top;
             margin-right:0.5em;
+            width:49%;
         }
         form#config_detention_slip label
         {
