@@ -58,17 +58,49 @@ function backup_logo()
         if (file_exists($imageenteteecole)) {
             copy($imageenteteecole, "local/logo.img") or error("impossible de copier le logo $imageenteteecole");
         } else {
-            echo "logo not backed up because it doesn't exist : ".$imageenteteecole;
+            echo "logo not backed up because it doesn't exist : $imageenteteecole\n";
         }
     }
+}
+
+function unroot($archive)
+{
+    $zip=new \ZipArchive;
+    $zip->open($archive) or error("could not open archive");
+    $roots=array();
+    for($i=0; $i<$zip->numFiles; ++$i){
+        $filename=$zip->GetNameIndex($i);
+        $root=explode("/",$filename);
+        $root=$root[0]."/";
+        $roots[$root]=NULL;
+    }
+
+    if (count($roots)==1){
+        $roots=array_keys($roots);
+        $root=$roots[0];
+        for($i=0; $i<$zip->numFiles; ++$i){
+            $filename=$zip->GetNameIndex($i);
+            if($filename == $root){
+                $zip->deleteIndex($i);
+            }else{
+                $zip->renameIndex($i, substr($filename, strlen($root), strlen($filename)-strlen($root)));
+            }
+        }
+    }
+    $zip->close();
 }
 
 chdir("..") or error("could not change dir to parent");
 $archive="archive.zip";
 if (file_exists($archive)) {
+    unroot($archive);
     $zip=new \ZipArchive;
     $zip->open("archive.zip") or error("could not open archve");
-    
+
+    if (!file_exists("local")){
+        mkdir("local") or error("could not create folder local");
+        mkdir("local/db_backup") or error("could not create folder local/db_backup");
+    }
     backup_logo();
     $config_files=array(
         "web/config/confbd.inc.php",
