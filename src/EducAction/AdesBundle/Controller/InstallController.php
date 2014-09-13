@@ -72,10 +72,10 @@ class InstallController extends Controller
             $this->flash()->set("create_tables_result", $this->params);
             return $this->redirect($this->generateUrl("educ_action_ades_install_tables"));
         } elseif ($create_tables_result) {
+            $this->checkCanConfigureSchool();
             if($create_tables_result->created) {
                 return $this->View("tables_created.html.twig", $create_tables_result);
             }else{
-                $this->checkCanConfigureSchool();
                 return $this->View("tables_creation_failed.html.twig", $create_tables_result);
             }
         } else {
