@@ -69,7 +69,10 @@ class DetentionSlip
                 continue;
             }
             if(!($config[$key] = Tools::GetDefault($_POST, $key)) && !$this->errors) {
-                $this->errors[]="Veuillez remplir tous les champs";
+                //#71 : signature is not mandatory
+                if(!strpos($key, "signature") === 0) {
+                    $this->errors[]="Veuillez remplir tous les champs";
+                }
             }
         }
 
