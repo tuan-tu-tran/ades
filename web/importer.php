@@ -54,12 +54,13 @@ Normalisation();
                     mysql_select_db ($sql_bdd);
 
                     $handle = fopen(csvFile, "r");
-                    $ligne = 1;
+                    $ligne = 0;
                     $bad_lines=array();
                     $errors=array();
                     $inserts=0;
                     while (($data = fgetcsv($handle, 5000, ",","\"")) !== FALSE) 
                     {
+                        $ligne++;
                         $num = count($data);
                         if ($ligne == 1)
                         {
@@ -88,6 +89,8 @@ Normalisation();
                             //bug #10: pop the last item if needed
                             if($pop_last && count($data)==12){
                                 unset($data[11]);
+                            } elseif (!$pop_last && count($data)==11){
+                                //nothing to do, it's ok
                             }else{
                                 $bad_lines[]="La ligne $ligne du fichier contient ".count($data)." champs au lieu de ".($pop_last?12:11)."<br/>\n";
                                 continue;
@@ -110,7 +113,6 @@ Normalisation();
                                 $inserts++;
                             }
                         }
-                        $ligne++;
                     }
                     fclose($handle);
                     mysql_close ($lienDB);
