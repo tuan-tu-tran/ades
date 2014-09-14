@@ -47,11 +47,22 @@
             {{students|length}} fiches d'élèves trouvées dans le fichier.
         </p>
     {% endif %}
+
+    {% include "EducActionAdesBundle:Import:uploadForm.html.twig" %}
+
 {% else %}
     <p>
     {{students|length}} fiches d'élèves à importer.
     </p>
+    <p>Vérifiez les données à importer et confirmez l'importation</p>
+    <form action="{{path("educ_action_ades_import_confirm")}}" method="POST"
+        style="border:none; padding-top:0px"
+        >
+        <input type="submit" value="Confirmer"/>
+        <input type="submit" value="Annuler" onclick="window.location='{{path("educ_action_ades_import_proeco")}}';return false;"/>
+    </form>
 {% endif %}
+
 
 {% if students %}
 <table id="students">

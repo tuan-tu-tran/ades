@@ -19,25 +19,8 @@
 */
 #}
 
-{% extends 'EducActionAdesBundle::layout.html.twig' %}
-
-{% block content %}
-
-<h2>Importation de données à partir d'un fichier CSV de ProEco</h2>
-
-{% if missing_file %}
-		<fieldset class="notice auto_close_on_click">
-            <legend>Erreur</legend>
-            <p class="impt">Veuillez sélectionner un fichier.</p>
-		</fieldset>
-{% elseif upload_error %}
-		<fieldset class="notice auto_close_on_click">
-            <legend>Erreur</legend>
-            <p class="impt">Une erreur s'est produite lors de l'envoi du fichier vers le serveur:</p>
-            <p>{{ upload_error }}</p>
-		</fieldset>
-{% endif %}
-
-{% include "EducActionAdesBundle:Import:uploadForm.html.twig" %}
-
-{% endblock %}
+<form method="POST" enctype="multipart/form-data" action="{{path("educ_action_ades_import_proeco")}}">
+    <h3 style="margin-top:0px; margin-bottom:0.5em">Selectionner un fichier à importer</h3>
+    <input name="csv" type="file">
+    <input value="Envoyer" type="submit">
+</form>

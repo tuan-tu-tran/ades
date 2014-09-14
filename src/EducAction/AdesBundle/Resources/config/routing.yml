@@ -96,3 +96,8 @@ educ_action_ades_import_proeco_preview:
     pattern: /import-proeco/preview
     defaults: { _controller: EducActionAdesBundle:Import:preview }
     methods: [GET]
+
+educ_action_ades_import_confirm:
+    pattern: /import-proeco/confirm
+    defaults: { _controller: EducActionAdesBundle:Import:confirm }
+    methods: [POST]
