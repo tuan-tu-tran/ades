@@ -189,6 +189,7 @@ class ImportController extends Controller implements IAccessControlled
         else
         {
             $fields=array(
+                "dermodif",
                 "nom","prenom",
                 "classe","anniv","codeInfo",
                 "nomResp", "courriel","telephone1",
@@ -204,15 +205,19 @@ class ImportController extends Controller implements IAccessControlled
             $query.=implode($updateClause,",");
             error_log($query);
             $db=Db::GetInstance();
+            $now=new \Datetime();
             foreach($students as $s)
             {
                 $params=array();
+                $s["dermodif"]=$now;
                 foreach($fields as $f){
                     $params[]=$s[$f];
                 }
                 foreach($updateFields as $f){
                     $params[]=$s[$f];
                 }
+                error_log($query);
+                error_log(var_export($params, TRUE));
                 $db->execute($query, $params);
             }
             return $this->redirectRoute("educ_action_ades_import_proeco_done");
