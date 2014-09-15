@@ -254,4 +254,13 @@ class Db{
 			throw new DbException("could not connect to escape string '$s' : ".($this->error()));
 		}
 	}
+
+    /**
+     * return $n parameters markers, separated by commas enclosed in brackets and spaces.
+     * e.g.: " (?,?,?,...,?) "
+     */
+    public static function getWhereInClause($n)
+    {
+        return " (".implode(array_fill(0,$n,"?"), ",").") ";
+    }
 }

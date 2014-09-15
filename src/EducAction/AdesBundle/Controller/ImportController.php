@@ -22,6 +22,7 @@ namespace EducAction\AdesBundle\Controller;
 
 use \SplFileObject;
 use EducAction\AdesBundle\Tools;
+use EducAction\AdesBundle\Db;
 
 class ImportController extends Controller implements IAccessControlled
 {
@@ -175,5 +176,38 @@ class ImportController extends Controller implements IAccessControlled
         $this->params->students=$this->flash()->peek("students");
 
         return $this->view("preview.html.twig");
+    }
+
+    public function confirmAction()
+    {
+        $students=$this->flash()->get("students");
+        $errors = $this->flash()->get("errors");
+        if($errors || !$students)
+        {
+            return $this->redirectRoute("educ_action_ades_import_proeco");
+        }
+        else
+        {
+            $fields=array(
+                "nom","prenom",
+                "classe","anniv","codeInfo",
+                "nomResp", "courriel","telephone1",
+                "telephone2","telephone3","idunique"
+            );
+            $query="INSERT INTO ades_eleves(".implode($fields,",").")";
+            $query.="VALUES".Db::getWhereInClause(count($fields));
+            error_log($query);
+            $db=Db::GetInstance();
+            foreach($students as $s)
+            {
+                $params=array();
+                foreach($fields as $f){
+                    $params[]=$s[$f];
+                }
+                $db->execute($query, $params);
+            }
+            return $this->redirectRoute("educ_action_ades_import_proeco_done");
+        }
+
     }
 }
