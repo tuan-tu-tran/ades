@@ -180,7 +180,7 @@ class ImportController extends Controller implements IAccessControlled
 
     public function confirmAction()
     {
-        $students=$this->flash()->get("students");
+        $students=$this->flash()->peek("students");
         $errors = $this->flash()->get("errors");
         if($errors || !$students)
         {
@@ -223,5 +223,15 @@ class ImportController extends Controller implements IAccessControlled
             return $this->redirectRoute("educ_action_ades_import_proeco_done");
         }
 
+    }
+
+    public function doneAction()
+    {
+        if(!$students=$this->flash()->get("students")) {
+            return $this->redirectRoute("educ_action_ades_import_proeco");
+        } else {
+            $this->params->students=$students;
+            return $this->View("done.html.twig");
+        }
     }
 }

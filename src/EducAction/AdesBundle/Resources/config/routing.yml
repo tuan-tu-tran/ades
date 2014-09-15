@@ -101,3 +101,8 @@ educ_action_ades_import_confirm:
     pattern: /import-proeco/confirm
     defaults: { _controller: EducActionAdesBundle:Import:confirm }
     methods: [POST]
+
+educ_action_ades_import_proeco_done:
+    pattern: /import-proeco/done
+    defaults: { _controller: EducActionAdesBundle:Import:done }
+    methods: [GET]
