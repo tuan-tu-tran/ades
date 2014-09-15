@@ -128,6 +128,9 @@ class Db{
                     } elseif (is_bool($value)) {
                         $types.="i";
                         $value=$value?1:0;
+                    } elseif (is_a($value, "\\Datetime")){
+                        $types.="s";
+                        $value=$value->format("Y-m-d H:i:s");
                     } else {
                         throw new DbException("unsupported parameter type ".$i);
                     }
