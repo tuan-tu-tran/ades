@@ -194,14 +194,23 @@ class ImportController extends Controller implements IAccessControlled
                 "nomResp", "courriel","telephone1",
                 "telephone2","telephone3","idunique"
             );
+            $updateFields=array_slice($fields, 0, -1);
+            $updateClause=Tools::map(function($f){
+                return "$f=?";
+            },$updateFields);
             $query="INSERT INTO ades_eleves(".implode($fields,",").")";
             $query.="VALUES".Db::getWhereInClause(count($fields));
+            $query.="ON DUPLICATE KEY UPDATE ";
+            $query.=implode($updateClause,",");
             error_log($query);
             $db=Db::GetInstance();
             foreach($students as $s)
             {
                 $params=array();
                 foreach($fields as $f){
+                    $params[]=$s[$f];
+                }
+                foreach($updateFields as $f){
                     $params[]=$s[$f];
                 }
                 $db->execute($query, $params);
