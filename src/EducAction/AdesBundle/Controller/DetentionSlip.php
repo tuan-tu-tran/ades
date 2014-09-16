@@ -335,7 +335,7 @@ class DetentionSlip
             $sql .= "WHERE idfait = %d";
             $query=sprintf($sql, $factId);
 
-            if (Db::GetInstance()->TryQuery($query, $result)) {
+            if (Db::GetInstance()->TryQuery($result, $query)) {
                 if ($result) {
                     $infos=$result[0];
                     $intituleDesRetenues = parse_ini_file("config/intitulesretenues.ini", TRUE);

@@ -1,0 +1,118 @@
+{#
+/**
+ * Copyright (c) 2014 Tuan-Tu TRAN
+ * 
+ * This file is part of ADES.
+ * 
+ * ADES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * ADES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+*/
+#}
+
+{% extends 'EducActionAdesBundle::layout.html.twig' %}
+
+{% block content %}
+
+<h2>Importation de données à partir d'un fichier CSV de ProEco</h2>
+
+{% if errors %}
+<p class="impt">Le fichier csv envoyé contient des erreurs</p>
+<ul>
+    {% for e in errors %}
+    <li>
+        {% if e.type == "bad_count" %}
+            La ligne {{e.lineNr}} contient {{e.count}} champs au lieu de {{e.expected}}.
+        {% elseif e.type == "missing_header"%}
+            Le champs "{{e.header}}" est manquant (ligne {{e.lineNr}}).
+        {% elseif e.type == "duplicate_record"%}
+            La fiche de l'élève {{e.student.nom}} {{e.student.prenom}} est en double: lignes {{ e.lines|join(", ")}}.
+        {% else %}
+            Erreur inconnue.
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+    {% if students %}
+        <p>
+            {{students|length}} fiches d'élèves trouvées dans le fichier.
+        </p>
+    {% endif %}
+
+    {% include "EducActionAdesBundle:Import:uploadForm.html.twig" %}
+
+{% else %}
+    <p>
+    {{students|length}} fiches d'élèves à importer.
+    </p>
+    <p>Vérifiez les données à importer et confirmez l'importation</p>
+    <form action="{{path("educ_action_ades_import_confirm")}}" method="POST"
+        style="border:none; padding-top:0px"
+        >
+        <input type="submit" value="Confirmer"/>
+        <input type="submit" value="Annuler" onclick="window.location='{{path("educ_action_ades_import_proeco")}}';return false;"/>
+    </form>
+{% endif %}
+
+
+{% if students %}
+<table id="students">
+    <tr>
+        {% if errors %}<th></th>{% endif %}
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Classe</th>
+        <th>Anniv.</th>
+        <th>Code</th>
+        <th>Responsable</th>
+        <th>Courriel</th>
+        <th>Téléphone</th>
+        <th>GSM</th>
+        <th>Téléphone 2</th>
+    </tr>
+    {% for s in students %}
+    <tr>
+        {% if errors %}<td style="text-align: right">{{ s.lineNr }}.</td>{% endif %}
+        <td>{{ s.nom }}</td>
+        <td>{{ s.prenom }}</td>
+        <td>{{ s.classe }}</td>
+        <td>{{ s.anniv }}</td>
+        <td>{{ s.codeInfo }}</td>
+        <td>{{ s.nomResp }}</td>
+        <td style="word-wrap:break-word; word-break:break-word">{{ s.courriel|replace({"@":"<wbr>@"})|raw}}</td>
+        <td>{{ s.telephone1 }}</td>
+        <td>{{ s.telephone2 }}</td>
+        <td>{{ s.telephone3 }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% endblock %}
+
+{% block post_head %}
+    {{ parent() }}
+    <style type="text/css">
+        table#students{
+            border-collapse:collapse;
+        }
+        table#students, table#students td, table#students th{
+            border:solid black 1pt;
+        }
+        table#students th{
+            background-color:orangered;
+        }
+        table#students td{
+            padding:4px;
+        }
+    </style>
+{% endblock %}

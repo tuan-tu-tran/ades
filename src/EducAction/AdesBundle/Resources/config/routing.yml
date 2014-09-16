@@ -81,3 +81,28 @@ educ_action_ades_logout_clear:
 
 educ_action_ades_login:
     pattern: /accueil.php
+
+educ_action_ades_import_proeco:
+    pattern: /import-proeco
+    defaults: { _controller: EducActionAdesBundle:Import:index }
+    methods: [GET]
+
+educ_action_ades_import_proeco_upload:
+    pattern: /import-proeco
+    defaults: { _controller: EducActionAdesBundle:Import:upload }
+    methods: [POST]
+
+educ_action_ades_import_proeco_preview:
+    pattern: /import-proeco/preview
+    defaults: { _controller: EducActionAdesBundle:Import:preview }
+    methods: [GET]
+
+educ_action_ades_import_confirm:
+    pattern: /import-proeco/confirm
+    defaults: { _controller: EducActionAdesBundle:Import:confirm }
+    methods: [POST]
+
+educ_action_ades_import_proeco_done:
+    pattern: /import-proeco/done
+    defaults: { _controller: EducActionAdesBundle:Import:done }
+    methods: [GET]
