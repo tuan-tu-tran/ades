@@ -113,7 +113,7 @@ class Db{
     /**
      * Execute a query and return if done + the resut
      */
-	private function private_safe_execute(&$args, &$stmt){
+	private function private_safe_execute($args, &$stmt){
 		if($this->connect()){
             $this->getQueryParams($args, $query, $queryParams);
             $params=NULL;
