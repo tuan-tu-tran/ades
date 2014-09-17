@@ -72,7 +72,8 @@ class Db{
      */
     public function execute($query/*, $params, ... or $paramsArray*/)
     {
-        $this->private_execute_or_throw(func_get_args(), $result);
+        $this->private_execute_or_throw(func_get_args(), $stmt);
+        $stmt->close();
 	}
 
     /**
@@ -80,9 +81,10 @@ class Db{
      */
     public function TryExecute($query/*, $params, ... or $paramsArray*/)
     {
-        if (!$this->private_safe_execute(func_get_args(), $result)) {
+        if (!$this->private_safe_execute(func_get_args(), $stmt)) {
             return FALSE;
         }
+        $stmt->close();
         return TRUE;
     }
 
@@ -100,17 +102,18 @@ class Db{
     /**
      * Execute a query and throw an exception in case of error.
      */
-    private function private_execute_or_throw($args, &$result)
+    private function private_execute_or_throw($args, &$stmt)
     {
-        if (!$this->private_safe_execute($args, $result)) {
+        if (!$this->private_safe_execute($args, $stmt)) {
             throw new DbException($this->error());
         }
+
     }
 
     /**
      * Execute a query and return if done + the resut
      */
-	private function private_safe_execute(&$args, &$result){
+	private function private_safe_execute(&$args, &$stmt){
 		if($this->connect()){
             $this->getQueryParams($args, $query, $queryParams);
             $params=NULL;
@@ -156,8 +159,6 @@ class Db{
                 $this->setStatementError($stmt);
                 return FALSE;
             }
-			$result=$stmt->get_result();
-            $stmt->close();
 			return !$this->conn->errno;
 		}
 		return false;
@@ -183,8 +184,8 @@ class Db{
      * Execute a query a return results or throw an exception
      */
 	public function query($query/*, $params, ... or $paramsArray*/){
-        $this->private_execute_or_throw(func_get_args(), $result);
-        return self::GetDataTableFromResultInstance($result);
+        $this->private_execute_or_throw(func_get_args(), $stmt);
+        return self::GetDataTableFromStatement($stmt);
 	}
     
     /**
@@ -195,12 +196,27 @@ class Db{
     {
         $args=func_get_args();
         array_shift($args);
-        if ($this->private_safe_execute($args, $result)) {
-            $result=self::GetDataTableFromResultInstance($result);
+        if ($this->private_safe_execute($args, $stmt)) {
+            $result=self::GetDataTableFromStatement($stmt);
             return TRUE;
         } else {
             $result=NULL;
             return FALSE;
+        }
+    }
+
+    private static function GetDataTableFromStatement($stmt)
+    {
+        if(method_exists($stmt, "get_result")){
+            $result=$stmt->get_result();
+            if(!$result){
+                throw new DbException("could get result from statement");
+            }
+            $result=self::GetDataTableFromResultInstance($result);
+            $stmt->close();
+            return $result;
+        } else {
+            throw new DbException("not implemented");
         }
     }
 
@@ -217,9 +233,10 @@ class Db{
     }
 
 	public function scalar($query/*, $params, ... or $paramsArray*/){
-        $this->private_execute_or_throw(func_get_args(), $result);
-        if ($result->num_rows>0) {
-            $row=$result->fetch_row();
+        $this->private_execute_or_throw(func_get_args(), $stmt);
+        $result=self::GetDataTableFromStatement($stmt, TRUE);
+        if($result){
+            $row=$result[0];
             return $row[0];
         } else {
             return NULL;
