@@ -65,7 +65,7 @@ border="0" class="inv" style="float: right">
             {% endif %}
             {% if user_has_access("admin") %}
                 {{ menu.item("vider.php", "vider.png", "Vider les données", "Vider les données") }}
-                {{ menu.item("importer.php", "proeco.png", "Import ProEco", "Importer les données de ProEco") }}
+                {{ menu.path_item("educ_action_ades_import_proeco", "proeco.png", "Import ProEco", "Importer les données de ProEco") }}
                 {{ menu.item("utilisateur.php", "utilisateur.png", "Utilisateurs", "Gestion des utilisateurs") }}
                 {{ menu.item("option.php", "utilitaires.png", "Configuration", "Configuration") }}
             {% endif %}
