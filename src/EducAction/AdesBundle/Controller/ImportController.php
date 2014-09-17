@@ -216,8 +216,6 @@ class ImportController extends Controller implements IAccessControlled
                 foreach($updateFields as $f){
                     $params[]=$s[$f];
                 }
-                error_log($query);
-                error_log(var_export($params, TRUE));
                 $db->execute($query, $params);
             }
             return $this->redirectRoute("educ_action_ades_import_proeco_done");
