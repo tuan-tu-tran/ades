@@ -76,13 +76,13 @@ class ImportController extends Controller implements IAccessControlled
                     $checkHeader("Prénom Elève");
                     $checkHeader("AnFF");
                     $checkHeader("Classe");
-                    $checkHeader("DateAnniv");
-                    $checkHeader("Matric Info");
-                    $checkHeader("NomPrénom Resp");
-                    $checkHeader("EMail Responsable");
-                    $checkHeader("Tél Responsable");
-                    $checkHeader("GSM Responsable");
-                    $checkHeader("Tél Rem Responsable");
+                    //$checkHeader("DateAnniv");
+                    //$checkHeader("Matric Info");
+                    //$checkHeader("NomPrénom Resp");
+                    //$checkHeader("EMail Responsable");
+                    //$checkHeader("Tél Responsable");
+                    //$checkHeader("GSM Responsable");
+                    //$checkHeader("Tél Rem Responsable");
                     if($errors){
                         break;
                     }
