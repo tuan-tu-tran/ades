@@ -87,6 +87,11 @@ educ_action_ades_import_proeco:
     defaults: { _controller: EducActionAdesBundle:Import:index }
     methods: [GET]
 
+educ_action_ades_import_proeco_old:
+    pattern: /importer.php
+    defaults: { _controller: EducActionAdesBundle:Import:index}
+    methods: [GET]
+
 educ_action_ades_import_proeco_upload:
     pattern: /import-proeco
     defaults: { _controller: EducActionAdesBundle:Import:upload }

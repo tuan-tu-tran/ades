@@ -132,7 +132,7 @@ border="0" class="inv" style="float: right">
 			<?php 
 			if (User::HasAccess ("admin"))
 				{
-				echo "<li>\n<a href=\"importer.php\" title=\"Importer les donn&eacute;es de PROECO\">";
+				echo "<li>\n<a href=\"import-proeco\" title=\"Importer les donn&eacute;es de PROECO\">";
 				echo "<img src=\"images/proeco.png\" class=\"icone\" alt=\".\"> ";
 				echo "Import ProEco</a>\n</li>\n";
 				}
