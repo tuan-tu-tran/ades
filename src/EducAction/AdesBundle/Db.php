@@ -167,6 +167,7 @@ class Db{
     private function setStatementError($stmt)
     {
         $this->stmt_error = $stmt->error;
+        $stmt->close();
     }
 
     private function getQueryParams(&$args, &$query, &$params)
@@ -205,7 +206,7 @@ class Db{
         }
     }
 
-    private static function GetDataTableFromStatement($stmt)
+    private static function GetDataTableFromStatement($stmt, $onlyOne=FALSE)
     {
         if(method_exists($stmt, "get_result")){
             $result=$stmt->get_result();
@@ -216,7 +217,28 @@ class Db{
             $stmt->close();
             return $result;
         } else {
-            throw new DbException("not implemented");
+            $metadata=$stmt->result_metadata();
+            if(!$metadata){
+                $this-setStatementError($stmt);
+                throw new DbException("could not get statement metadata: ".$stmt->error);
+            }
+            $result=array();
+            $indexedRow=array();
+            $row=array();
+            $fields=$metadata->fetch_fields();
+            foreach($fields as $f){
+                $row[$f->name]=NULL;
+                $row[]=&$row[$f->name];
+                $indexedRow[]=&$row[$f->name];
+            }
+            call_user_func_array(array($stmt,"bind_result"), $indexedRow);
+            while($stmt->fetch()){
+                $resut[]=$row;
+                if($onlyOne){
+                    break;
+                }
+            }
+            return $resut;
         }
     }
 
