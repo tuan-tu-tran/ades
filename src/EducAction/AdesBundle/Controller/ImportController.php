@@ -109,11 +109,15 @@ class ImportController extends Controller implements IAccessControlled
                         "expected"=>$fieldCount
                     );
                 } else {
-                    $get=function($h) use ($header, $line, $indexByHeader) {
-                        if(!isset($indexByHeader[$h])){
+                    $get=function($h , $mandatory) use ($header, $line, $indexByHeader) {
+                        if(!isset($indexByHeader[$h]) && $mandatory){
                             throw new \Exception("field $h not in ".var_export($header, TRUE));
                         }
-                        return utf8_encode($line[$indexByHeader[$h]]);
+                        $value="";
+                        if(isset($line[$indexByHeader[$h]])){
+                            $value=$line[$indexByHeader[$h]];
+                        }
+                        return utf8_encode($value);
                     };
                     $s=array();
                     $s["nom"]=$get("Nom Elève");
@@ -129,12 +133,12 @@ class ImportController extends Controller implements IAccessControlled
                         $bday=substr($bday, 0, 5);
                     }
                     $s["anniv"]=$bday;
-                    $s["codeInfo"]=$get("Matric Info");
-                    $s["nomResp"] = $get("NomPrénom Resp");
-                    $s["courriel"] = $get("EMail Responsable");
-                    $s["telephone1"] = $get("Tél Responsable");
-                    $s["telephone2"] = $get("GSM Responsable");
-                    $s["telephone3"] = $get("Tél Rem Responsable");
+                    $s["codeInfo"]=$get("Matric Info", FALSE);
+                    $s["nomResp"] = $get("NomPrénom Resp", FALSE);
+                    $s["courriel"] = $get("EMail Responsable", FALSE);
+                    $s["telephone1"] = $get("Tél Responsable", FALSE);
+                    $s["telephone2"] = $get("GSM Responsable", FALSE);
+                    $s["telephone3"] = $get("Tél Rem Responsable", FALSE);
                     $idunique = $s["nom"].$s["prenom"].$s["classe"].$s["anniv"].$s["codeInfo"];
                     $s["idunique"]=$idunique;
                     $s["lineNr"] = $i;
