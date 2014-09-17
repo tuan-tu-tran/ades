@@ -233,7 +233,12 @@ class Db{
             }
             call_user_func_array(array($stmt,"bind_result"), $indexedRow);
             while($stmt->fetch()){
-                $resut[]=$row;
+                $resultRow=array();
+                foreach($fields as $f){
+                    $resultRow[$f->name]=$row[$f->name];
+                    $resultRow[]=&$resultRow[$f->name];
+                }
+                $resut[]=$resultRow;
                 if($onlyOne){
                     break;
                 }
