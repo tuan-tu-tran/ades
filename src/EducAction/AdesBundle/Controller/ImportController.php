@@ -123,14 +123,16 @@ class ImportController extends Controller implements IAccessControlled
                     $s["nom"]=$get("Nom Elève");
                     $s["prenom"]=$get("Prénom Elève");
                     $s["classe"]=$get("AnFF").$get("Classe");
-                    $bday=$get("DateAnniv");
-                    if(!preg_match("/^(\\d\\d\\/){2}.{4}$/", $bday)){
-                        $errors[]=array(
-                            "type"=>"bad_birthday",
-                            "lineNr"=>$i
-                        );
-                    }else{
-                        $bday=substr($bday, 0, 5);
+                    $bday=$get("DateAnniv", FALSE);
+                    if($bday){
+                        if(!preg_match("/^(\\d\\d\\/){2}.{4}$/", $bday)){
+                            $errors[]=array(
+                                "type"=>"bad_birthday",
+                                "lineNr"=>$i
+                            );
+                        }else{
+                            $bday=substr($bday, 0, 5);
+                        }
                     }
                     $s["anniv"]=$bday;
                     $s["codeInfo"]=$get("Matric Info", FALSE);
