@@ -109,12 +109,12 @@ class ImportController extends Controller implements IAccessControlled
                         "expected"=>$fieldCount
                     );
                 } else {
-                    $get=function($h , $mandatory) use ($header, $line, $indexByHeader) {
+                    $get=function($h , $mandatory=TRUE) use ($header, $line, $indexByHeader) {
                         if(!isset($indexByHeader[$h]) && $mandatory){
                             throw new \Exception("field $h not in ".var_export($header, TRUE));
                         }
                         $value="";
-                        if(isset($line[$indexByHeader[$h]])){
+                        if(Tools::TryGet($indexByHeader, $h, $index)){
                             $value=$line[$indexByHeader[$h]];
                         }
                         return utf8_encode($value);
