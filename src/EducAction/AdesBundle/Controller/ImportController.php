@@ -76,13 +76,6 @@ class ImportController extends Controller implements IAccessControlled
                     $checkHeader("Prénom Elève");
                     $checkHeader("AnFF");
                     $checkHeader("Classe");
-                    $checkHeader("DateAnniv");
-                    $checkHeader("Matric Info");
-                    $checkHeader("NomPrénom Resp");
-                    $checkHeader("EMail Responsable");
-                    $checkHeader("Tél Responsable");
-                    $checkHeader("GSM Responsable");
-                    $checkHeader("Tél Rem Responsable");
                     if($errors){
                         break;
                     }
@@ -109,32 +102,38 @@ class ImportController extends Controller implements IAccessControlled
                         "expected"=>$fieldCount
                     );
                 } else {
-                    $get=function($h) use ($header, $line, $indexByHeader) {
-                        if(!isset($indexByHeader[$h])){
+                    $get=function($h , $mandatory=TRUE) use ($header, $line, $indexByHeader) {
+                        if(!isset($indexByHeader[$h]) && $mandatory){
                             throw new \Exception("field $h not in ".var_export($header, TRUE));
                         }
-                        return utf8_encode($line[$indexByHeader[$h]]);
+                        $value="";
+                        if(Tools::TryGet($indexByHeader, $h, $index)){
+                            $value=$line[$indexByHeader[$h]];
+                        }
+                        return utf8_encode($value);
                     };
                     $s=array();
                     $s["nom"]=$get("Nom Elève");
                     $s["prenom"]=$get("Prénom Elève");
                     $s["classe"]=$get("AnFF").$get("Classe");
-                    $bday=$get("DateAnniv");
-                    if(!preg_match("/^(\\d\\d\\/){2}.{4}$/", $bday)){
-                        $errors[]=array(
-                            "type"=>"bad_birthday",
-                            "lineNr"=>$i
-                        );
-                    }else{
-                        $bday=substr($bday, 0, 5);
+                    $bday=$get("DateAnniv", FALSE);
+                    if($bday){
+                        if(!preg_match("/^(\\d\\d\\/){2}.{4}$/", $bday)){
+                            $errors[]=array(
+                                "type"=>"bad_birthday",
+                                "lineNr"=>$i
+                            );
+                        }else{
+                            $bday=substr($bday, 0, 5);
+                        }
                     }
                     $s["anniv"]=$bday;
-                    $s["codeInfo"]=$get("Matric Info");
-                    $s["nomResp"] = $get("NomPrénom Resp");
-                    $s["courriel"] = $get("EMail Responsable");
-                    $s["telephone1"] = $get("Tél Responsable");
-                    $s["telephone2"] = $get("GSM Responsable");
-                    $s["telephone3"] = $get("Tél Rem Responsable");
+                    $s["codeInfo"]=$get("Matric Info", FALSE);
+                    $s["nomResp"] = $get("NomPrénom Resp", FALSE);
+                    $s["courriel"] = $get("EMail Responsable", FALSE);
+                    $s["telephone1"] = $get("Tél Responsable", FALSE);
+                    $s["telephone2"] = $get("GSM Responsable", FALSE);
+                    $s["telephone3"] = $get("Tél Rem Responsable", FALSE);
                     $idunique = $s["nom"].$s["prenom"].$s["classe"].$s["anniv"].$s["codeInfo"];
                     $s["idunique"]=$idunique;
                     $s["lineNr"] = $i;
