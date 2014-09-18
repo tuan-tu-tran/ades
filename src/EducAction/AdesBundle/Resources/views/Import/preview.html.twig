@@ -36,8 +36,10 @@
             Le champs "{{e.header}}" est manquant (ligne {{e.lineNr}}).
         {% elseif e.type == "duplicate_record"%}
             La fiche de l'élève {{e.student.nom}} {{e.student.prenom}} est en double: lignes {{ e.lines|join(", ")}}.
+        {% elseif e.type == "bad_birthday"%}
+            La ligne {{e.lineNr}} contient une date d'anniversaire invalide.
         {% else %}
-            Erreur inconnue.
+            Erreur inconnue: {{e.type}}.
         {% endif %}
     </li>
     {% endfor %}
