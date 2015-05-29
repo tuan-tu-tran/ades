@@ -124,7 +124,7 @@ echo($anniversaires);
 ?>
 <?php else:?>
 <p>Pas d'anniversaire aujourd'hui.</p>
-<?endif;?>
+<?php endif;?>
 </fieldset>
 </div>
 <div id="pied"><?php require ("inc/notice.inc.php"); ?></div>
