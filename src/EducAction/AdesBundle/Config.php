@@ -114,4 +114,13 @@ class Config{
     {
 		return DIRNAME(__FILE__)."/../../../web/$file";
     }
+
+    /**
+     * Return the symfony framework secret parameter from local/config.yml
+     */
+    public static function GetSecret()
+    {
+        $config=\Symfony\Component\Yaml\Yaml::Parse(self::LocalFile("config.yml"));
+        return $config["parameters"]["secret"];
+    }
 }

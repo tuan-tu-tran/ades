@@ -121,6 +121,16 @@ class Backup
 
     public static function create($comment, $controller, &$result)
     {
+        return self::privateCreate($comment, $controller->getSecret(), $result);
+    }
+
+    public static function createSigned($comment, &$result)
+    {
+        return self::privateCreate($comment, Config::GetSecret(), $result);
+    }
+
+    public static function privateCreate($comment, $secret, &$result)
+    {
         $result=new Bag();
 		$db=Db::GetInstance();
 		$host=$db->host;
@@ -136,7 +146,7 @@ class Backup
                     "timestamp"=>new DateTime(),
                 );
                 $content="-- info: ".serialize($info)."\n$out";
-                $signature=self::sign($content, $controller);
+                $signature=self::signFromSecret($content, $secret);
                 $content="-- signature: $signature\n".$content;
                 $filename=self::save($content, $info, $comment);
                 $result->filename=$filename;
@@ -155,7 +165,12 @@ class Backup
 
     public static function sign($content, $controller)
     {
-        return hash_hmac("sha1", $content, $controller->getSecret());
+        return self::signFromSecret($content, $controller->getSecret());
+    }
+
+    private static function signFromSecret($content, $secret)
+    {
+        return hash_hmac("sha1", $content, $secret);
     }
 
     public static function save($content, $info, $comment)
