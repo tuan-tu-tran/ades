@@ -228,6 +228,7 @@ $resultat = mysql_query ($sql);
 mysql_close ($lienDB);
 
 $nombre = mysql_num_rows($resultat);
+if(!isset($texte)){$texte="";}
 $texte .= "<h3>Date : $ladate à $heure :: Durée : $duree h </h3>\n";
 
 if ($nombre>0)
