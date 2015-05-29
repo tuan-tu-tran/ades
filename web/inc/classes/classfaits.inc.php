@@ -101,7 +101,7 @@ return true;
 // lit le contenu d'un champ du fait
 function getRubrique ($rubrique)
 {
-return ($this->listeRubriques[$rubrique]);
+return Tools::GetDefault($this->listeRubriques, $rubrique);
 }
 
 //------------------------------------------------------------------------------------

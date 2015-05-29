@@ -61,8 +61,10 @@ if ($occupation == 0)
 	</select>
 	</p>
 	<p><label for="local">Local :</label>
+<?php if(!isset($local)){$local="";}?>
 	<input name="local" id="local" value="<?php echo $local;?>" size="30" maxlength="30" class="obligatoire" type="text"></p>
 	<p><label for="places">Places :</label>
+<?php if(!isset($places)){$places="";}?>
 	<input name="places" id="places" value="<?php echo $places;?>" size="4" maxlength="2" class="obligatoire" type="text">	
 	<?php echo " minimum $occupation place(s)" ?></p>
 	<input name="occupation" value="<?php echo $occupation;?>" type="hidden">
