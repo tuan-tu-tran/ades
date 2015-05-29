@@ -375,12 +375,15 @@ foreach ($descriptionChamps as $unChamp)
 			}
 		}
 	}
+//feature is not yet ready
+if(FALSE){
 $labels=Label::GetForFact($this->getRubrique("idfait"));
 $allLabels = Label::GetAll();
 $form .= View::GetHtml("label_edit.inc.php", array(
     "currentLabels"=> Tools::map("utf8_encode", $labels)
     , "allLabels" => Tools::map("utf8_encode", $allLabels)
 ));
+}
 $form .= "<div style=\"text-align:center\">\n";
 $form .= "<input type=\"submit\" name=\"mode\" value=\"Enregistrer\">\n";
 $form .= "<input type=\"reset\" name=\"submit\" value=\"R&eacute;initialiser\">\n</div>\n";
