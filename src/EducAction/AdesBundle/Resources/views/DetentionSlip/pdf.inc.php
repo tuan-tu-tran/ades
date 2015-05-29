@@ -66,7 +66,7 @@ $pdf->SetXY(10,75);
 $pdf->SetFont('','B',12);
 $pdf->Write(5, $motif);
 $pdf->SetFont('', '', 10);
-$pdf->SetXY(10,90);
+$pdf->SetXY(10,$pdf->GetY()+10);
 
 $pdf->Write(5, "Matériel à apporter: Journal de classe - ");
 $pdf->SetFont('', 'B', 10);
@@ -81,11 +81,11 @@ $chaine .= "Travail à réaliser: $travail.\n";
 
 $pdf->Write(5, $chaine);
 
-$pdf->SetXY(10,110);
+$pdf->SetXY(10,$pdf->GetY()+10);
 $pdf->Cell(30,5,$signature1, 0, 0, 'L', 0);
-$pdf->SetXY(80,110);
+$pdf->SetXY(80,$pdf->GetY());
 $pdf->Cell(30,5,$signature2, 0, 0, 'L', 0);
-$pdf->SetXY(150,110);
+$pdf->SetXY(150,$pdf->GetY());
 $pdf->Cell(30,5,$signature3, 0, 0, 'L', 0);
 
 $pdf->Output();
