@@ -115,13 +115,13 @@ class Upgrade{
 	public function UpgradeDb(){
 		$this->GetVersions();
 		if($this->fromBeforeTo){
+			$this->executedScripts=array();
             //Create the backup
             $backup = Backup::createSigned("Backup automatique avant mise à jour db vers ".self::Version, $backupResult);
-            $this->backupResult=$backupResult;
+            $this->backup=$backupResult;
             if(!$backup){
                 return FALSE;
             }
-			$this->executedScripts=array();
 			$failed=false;
 			foreach($this->scriptsToExecute as $script){
 				$content=file_get_contents(self::UpgradeFolder().$script);

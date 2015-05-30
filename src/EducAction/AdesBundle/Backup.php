@@ -160,6 +160,7 @@ class Backup
 		else{
 			$result->failed=true;
 			$result->dump_launched=false;
+            $result->error=$err;
 		}
     }
 
