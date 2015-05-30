@@ -56,7 +56,7 @@ class LogoutController extends Controller implements IProtected
 
             if($create) {
                 //create a backup
-                Backup::create("backup automatique", $this, $newBackup);
+                Backup::create("[auto]déconnexion", $this, $newBackup);
                 $this->flash()->set("atLogout", true);
             }
         }
