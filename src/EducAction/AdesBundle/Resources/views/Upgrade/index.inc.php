@@ -62,6 +62,7 @@
 		<p class="impt">Aucun script de mise à jour disponible.</p>
 	<?php endif?>
 			
+	<p>Un backup de la db actuelle sera créé avant de faire la mise à jour</p>
 	<?php if(count($scriptsToExecute)>0):?>
 		<input type="submit" value="Mettre à jour"/>
 	<?php endif;?>
