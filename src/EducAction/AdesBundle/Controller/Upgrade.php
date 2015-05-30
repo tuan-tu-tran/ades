@@ -30,7 +30,7 @@ use EducAction\AdesBundle\Utils;
 use EducAction\AdesBundle\Backup;
 
 class Upgrade{
-	const Version="2.0";
+	const Version=UpgradeController::Version;
 
 	public function parseRequest(){
 		$action=isset($_GET["action"])?$_GET["action"]:NULL;
