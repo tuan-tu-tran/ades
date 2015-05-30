@@ -113,6 +113,7 @@ class BackupController extends Controller implements IAccessControlled
 
     public function indexAction()
     {
+        Upgrade::CheckIfNeeded();
 		$list=Backup::getList();
 		$files=array();
         foreach($list as $backup){
