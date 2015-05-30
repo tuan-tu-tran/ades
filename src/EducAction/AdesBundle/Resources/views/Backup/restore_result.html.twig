@@ -19,19 +19,19 @@
 */
 #}
 {% if restore %}
-    {% if restore.failed %}
+	{% if restore.failed %}
 		<fieldset class="notice auto_close_on_click">
 			<legend>Erreur lors de la restauration</legend>
-            <p class="impt">La sauvegarde {{ restore.filename }} n'a pas pu être restaurée!</p>
+			<p class="impt">La sauvegarde {{ restore.filename }} n'a pas pu être restaurée!</p>
 
-            {% if restore.input_read or restore.launched %}
+			{% if restore.input_read or restore.launched %}
 				<p>Le système a renvoyé l'erreur:</p>
-                <p>{{restore.error}}</p>
-            {% else %}
+				<p>{{restore.error}}</p>
+			{% else %}
 				<p>L'utilitaire de restauration n'a pas pu être exécuté.</p>
-            {% endif %}
+			{% endif %}
 		</fieldset>
-    {% else %}
-        <p class="success auto_close">Les données de la sauvegarde {{ restore.filename }} ont été restaurées.</p>
-    {% endif %}
+	{% else %}
+		<p class="success auto_close">Les données de la sauvegarde {{ restore.filename }} ont été restaurées.</p>
+	{% endif %}
 {% endif %}
