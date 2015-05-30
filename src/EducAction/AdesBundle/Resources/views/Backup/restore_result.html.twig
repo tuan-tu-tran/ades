@@ -24,7 +24,10 @@
 			<legend>Erreur lors de la restauration</legend>
 			<p class="impt">La sauvegarde {{ restore.filename }} n'a pas pu être restaurée!</p>
 
-			{% if restore.input_read or restore.launched %}
+                        {% if restore.backup.failed %}
+                                <p>La création d'un backup avant la restauration a échoué:</p>
+                                <p>{{restore.backup.error}}</p>
+			{% elseif restore.input_read or restore.launched %}
 				<p>Le système a renvoyé l'erreur:</p>
 				<p>{{restore.error}}</p>
 			{% else %}
@@ -33,5 +36,6 @@
 		</fieldset>
 	{% else %}
 		<p class="success auto_close">Les données de la sauvegarde {{ restore.filename }} ont été restaurées.</p>
+                <p>Un backup automatique {{ restore.backup.filename }} a été créé avant la restauration.</p>
 	{% endif %}
 {% endif %}

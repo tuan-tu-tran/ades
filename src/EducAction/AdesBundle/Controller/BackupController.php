@@ -50,7 +50,9 @@ class BackupController extends Controller implements IAccessControlled
         if(Backup::isLegalFile($file)) {
             $restore=$this->params;
 			$restore->filename=$file;
-			if($input=file_get_contents(self::BackupFolder()."/".$file)){
+            $backupDone=Backup::create("[auto]avant restauration du backup $file", $this, $backup);
+            $restore->backup = $backup;
+			if($backupDone && $input=file_get_contents(self::BackupFolder()."/".$file)){
 				$restore->input_read=true;
                 //drop all the tables first
                 $db=Db::GetInstance();
