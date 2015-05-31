@@ -22,20 +22,30 @@
 <h3>Liste de dernières sauvegardes disponibles</h3>
 
 <form style="border:none; padding:0" method="POST" action="{{path("educ_action_ades_backup_delete_many")}}">
+{% if allow_backup_delete is not defined %}
+        {% set allow_backup_delete = true %}
+{% endif %}
+
 <table id="backup_table">
 	<tr style="background-color:orangered">
+		{% if allow_backup_delete %}
                 <td></td>
+		{% endif%}
 		<td>Fichiers de sauvegarde</td>
 		<td style="text-align:center">Date</td>
 		<td style="text-align:center">Version</td>
 		<td style="text-align:center">Taille</td>
 		<td style="text-align:center">Commentaire</td>
+		{% if allow_backup_delete %}
 		<td style="text-align:center">Effacer</td>
+		{% endif%}
 		<td style="text-align:center">Restaurer</td>
 	</tr>
     {% for file in backup_files %}
 		<tr class="backup">
+			{% if allow_backup_delete %}
                         <td><input type="checkbox" name="to_delete[]" value="{{file.name}}"/></td>
+			{% endif%}
 			<td>
                 <a href="{{ path("educ_action_ades_backup_download", { "file" : file.name }) }}"
 					target="_blank"
@@ -54,12 +64,14 @@
             </td>
             <td style="text-align:right">{{ file.size|file_size }}</td>
             <td>{{ file.comment }}</td>
+		{% if allow_backup_delete %}
 			<td style="text-align:center">
                 <a href="{{ path("educ_action_ades_backup_delete", { "file" : file.name }) }}"
                     {{ overlib("Cliquer pour supprimer cette sauvegarde.") }}
 					onclick="return confirm('Êtes vous sûr de vouloir effacer cette sauvegarde?\nCette action est IRREVERSIBLE!');"
                     ><img style="width:16px;height:16px;" border="0" alt="X" src="{{asset("images/suppr.png")}}"></a>
             </td>
+		{% endif%}
 			<td style="text-align:center">
                 <a href="{{ path("educ_action_ades_backup_restore", { "file" : file.name }) }}"
                     {% set overlibText = 'Cliquer pour restaurer cette sauvegarde.' %}
@@ -74,12 +86,14 @@
             </td>
 		</tr>
     {% endfor %}
+	{% if allow_backup_delete %}
     <tr>
             <td style="text-align:center">&#8627;</td>
             <td colspan="7">
                     <input type="submit" value="Supprimer la sélection" id="delete_many"/>
                 </td>
     </tr>
+	{% endif%}
 </table>
 </form>
 {% endif %}
