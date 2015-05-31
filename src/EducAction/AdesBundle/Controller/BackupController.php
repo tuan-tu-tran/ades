@@ -27,6 +27,8 @@ use EducAction\AdesBundle\Tools;
 use EducAction\AdesBundle\Utils;
 use EducAction\AdesBundle\Config;
 use EducAction\AdesBundle\Backup;
+use EducAction\AdesBundle\Bag;
+use EducAction\AdesBundle\Upgrade;
 use \DateTime;
 
 class BackupController extends Controller implements IAccessControlled

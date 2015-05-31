@@ -28,7 +28,7 @@ use EducAction\AdesBundle\Utils;
 
 class UpgradeController extends Controller
 {
-    const Version="2.0";
+    const Version=\EducAction\AdesBundle\Upgrade::Version;
 
     public function indexAction()
     {

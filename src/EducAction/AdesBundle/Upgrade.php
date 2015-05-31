@@ -19,144 +19,11 @@
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace EducAction\AdesBundle\Controller;
+namespace EducAction\AdesBundle;
 
-use EducAction\AdesBundle\Db;
-use EducAction\AdesBundle\Config;
-use EducAction\AdesBundle\Tools;
-use EducAction\AdesBundle\Path;
-use EducAction\AdesBundle\FlashBag;
-use EducAction\AdesBundle\View;
-use EducAction\AdesBundle\Utils;
-use EducAction\AdesBundle\Backup;
-
-class Upgrade{
-	const Version=UpgradeController::Version;
-
-	public function parseRequest(){
-		$action=isset($_GET["action"])?$_GET["action"]:NULL;
-		if($action!="result" && !self::Required()){
-			Tools::Redirect("index.php");
-		}
-		if (strtoupper($_SERVER["REQUEST_METHOD"])=="POST" || $action=="upgrade"){
-			$this->UpgradeDbAction();
-		}elseif($action=="result"){
-			$this->ResultAction();
-		}else{
-			$this->ShowVersionAction();
-		}
-	}
-
-	private function ResultAction(){
-		$result=FlashBag::Pop("upgrade_result");
-		if($result){
-			$this->result=$result;
-			$this->currentVersion = Config::GetDbVersion();
-			View::Render("Upgrade/result.inc.php", $this);
-		}else{
-			Tools::Redirect("upgrade.php");
-		}
-	}
-
-	private function ShowVersionAction(){
-		$this->GetVersions();
-		View::Render("Upgrade/index.inc.php", $this);
-	}
-
-	private function GetVersions(){
-		$this->fromVersion = Config::GetDbVersion();
-		$this->toVersion = self::Version;
-		$this->fromBeforeTo = self::CompareVersions($this->fromVersion, $this->toVersion)==-1;
-		if($this->fromBeforeTo){
-			$upgradeScripts=Path::ListDir(self::UpgradeFolder(), "/^to\d+\.\d+\.sql$/");
-			usort($upgradeScripts, function ($x,$y){
-				$vx=self::GetScriptVersion($x);
-				$vy=self::GetScriptVersion($y);
-				return self::CompareVersions($vx,$vy);
-			});
-			$scriptsToExecute=array();
-			foreach($upgradeScripts as $script){
-				$scriptVersion=self::GetScriptVersion($script);
-				if(
-					self::CompareVersions($scriptVersion, $this->fromVersion)>0
-					&& 
-					self::CompareVersions($scriptVersion, $this->toVersion)<=0
-				){
-					$scriptsToExecute[]=$script;
-				}
-			}
-			$this->upgradeScripts=$upgradeScripts;
-			$this->scriptsToExecute=$scriptsToExecute;
-		}
-	}
-
-	private static function UpgradeFolder(){
-		return DIRNAME(__FILE__)."/../Resources/sql_scripts/";
-	}
-
-	private static function CompareVersions($x,$y){
-		list($majx,$minx)=explode(".",$x);
-		list($majy,$miny)=explode(".",$y);
-		if($majx<$majy) return -1;
-		else if($majx>$majy) return 1;
-		else if($minx<$miny) return -1;
-		else if($minx>$miny) return 1;
-		else return 0;
-	}
-
-	private function UpgradeDbAction(){
-		if($this->UpgradeDb() || $this->fromBeforeTo){
-			FlashBag::Set("upgrade_result",$this);
-			Tools::Redirect("upgrade.php?action=result");
-		}else{
-			Tools::Redirect("upgrade.php");
-		}
-	}
-
-	public function UpgradeDb(){
-		$this->GetVersions();
-		if($this->fromBeforeTo){
-			$this->executedScripts=array();
-            //Create the backup
-            $backup = Backup::createSigned("[auto]avant mise à jour db vers ".self::Version, $backupResult);
-            $this->backup=$backupResult;
-            if(!$backup){
-                return FALSE;
-            }
-			$failed=false;
-			foreach($this->scriptsToExecute as $script){
-				$content=file_get_contents(self::UpgradeFolder().$script);
-				if($content===FALSE){
-					$this->failedScript=$script;
-					$this->failedScriptError=Tools::GetLastError();
-					$failed=true;
-					break;
-				}elseif(!Utils::MySqlScript($content, $err,$launched)){
-					$this->failedScript = $script;
-                    if(!$err){
-                        if($launched){
-                            $err="mysql script launched but no error output returned";
-                        }else {
-                            $err="mysql script not launched and no error output";
-                        }
-                    }
-					$this->failedScriptError=$err;
-					$failed=true;
-					break;
-				}else{
-					$this->executedScripts[]=$script;
-					Config::SetDbVersion(self::GetScriptVersion($script));
-				}
-			}
-			return !$failed;
-		}else{
-			return FALSE;
-		}
-	}
-
-	private static function GetScriptVersion($script){
-		return str_replace("to","",str_replace(".sql","",$script));
-	}
+class Upgrade
+{
+	const Version="2.0";
 
 	public static function Required(){
 		return Config::GetDbVersion()!=self::Version;
@@ -164,7 +31,7 @@ class Upgrade{
 
 	public static function CheckIfNeeded(){
 		if(self::Required()){
-			Tools::Redirect("upgrade.php");
+			Tools::Redirect("upgrade-db");
 		}
 	}
 }

@@ -25,7 +25,7 @@ require "inc/init.inc.php";
  * Si il existe on laisse le programme se lancé normalement
  */
 EducAction\AdesBundle\Install::CheckIfNeeded();
-EducAction\AdesBundle\Controller\Upgrade::CheckIfNeeded();
+EducAction\AdesBundle\Upgrade::CheckIfNeeded();
 require_once "config/constantes.inc.php";
 
 ?>
