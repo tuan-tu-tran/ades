@@ -40,6 +40,7 @@ class UpgradeController extends Controller
             if($versions->fromVersion == $versions->toVersion){
                 return $this->redirectRoute("educ_action_ades_homepage");
             } else {
+                $versions->restore=$this->flash()->get("restore");
                 return $this->View("index.html.twig", $versions);
             }
         }

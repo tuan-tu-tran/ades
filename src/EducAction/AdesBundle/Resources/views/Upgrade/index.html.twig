@@ -22,6 +22,9 @@ along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 {% block content %}
 	{% if fromBeforeTo %}
 		<form method="POST" class="no_border">
+                        {% if restore %}
+                        <p>La sauvegarde {{restore.filename}} a été correctement restaurée.</p>
+                        {% endif%}
 			<p>La base de données doit être mise à jour de la version
 				{{ fromVersion }}
 				vers la version
