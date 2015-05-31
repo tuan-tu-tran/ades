@@ -235,13 +235,23 @@ class BackupController extends Controller implements IAccessControlled
     {
         $request=$this->getRequest();
         $files=$request->request->get("to_delete");
-        $deleted=array();
+        if(count($files) == 1){
+            return $this->deleteAction($files[0]);
+        } else {
+        $deleted=new Bag();
+        $deleted->successes=array();
+        $deleted->failures=array();
         foreach($files as $file){
             if($this->delete($file, $result)){
-                $delete[]=$result;
+                if($result->failed){
+                    $deleted->failures[]=$result;
+                }else{
+                    $deleted->successes[]=$result;
+                }
             }
         }
         $this->flash()->set("deleted_files",$deleted);
         return $this->redirectRoute("educ_action_ades_backup");
+        }
     }
 }
