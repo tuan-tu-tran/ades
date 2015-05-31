@@ -106,7 +106,7 @@ class Upgrade
         return $versions;
     }
 
-    private static function CompareVersions($x,$y)
+    public static function CompareVersions($x,$y)
     {
         list($majx,$minx)=explode(".",$x);
         list($majy,$miny)=explode(".",$y);

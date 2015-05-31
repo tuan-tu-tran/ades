@@ -64,6 +64,9 @@
             <td
                 {% if file.is_current_version %}
                     style="text-align:right;"
+                {% elseif not file.restorable %}
+                    style="text-align:right;background-color:lightsalmon"
+                    {{ overlib("Cette sauvegarde ne peut pas être restaurée car elle est incompatible avec la version actuelle du code ("~constant("EducAction\\AdesBundle\\Upgrade::Version")~")") }}
                 {% else %}
                     style="text-align:right;background-color:lightsalmon"
                     {{ overlib("Une restauration de cette sauvegarde nécessitera une mise à jour de la base de données") }}
@@ -82,6 +85,7 @@
             </td>
 		{% endif%}
 			<td style="text-align:center">
+			{% if file.restorable %}
                 <a href="{{ path("educ_action_ades_backup_restore", { "file" : file.name }) }}"
                     {% set overlibText = 'Cliquer pour restaurer cette sauvegarde.' %}
                     {% set confirmText="Êtes vous sûr de vouloir restaurer cette sauvegarde?\n\nCette action est IRREVERSIBLE!" %}
@@ -92,6 +96,7 @@
                     {{ overlib(overlibText) }}
                     onclick="return confirm({{ confirmText|json_encode }});"
                     ><img style="width:16px;height:16px;" border="0" alt="restore" src="{{asset("images/restore.png")}}"></a>
+		    {%endif%}
             </td>
 		</tr>
     {% endfor %}
