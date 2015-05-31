@@ -36,12 +36,12 @@ class UpgradeController extends Controller
         if($result){
             return $this->View("result.html.twig", $result);
         } else{
-        $versions=self::GetVersions();
-        if($versions->fromVersion == $versions->toVersion){
-            return $this->redirectRoute("educ_action_ades_homepage");
-        } else {
-            return $this->View("index.html.twig", $versions);
-        }
+            $versions=self::GetVersions();
+            if($versions->fromVersion == $versions->toVersion){
+                return $this->redirectRoute("educ_action_ades_homepage");
+            } else {
+                return $this->View("index.html.twig", $versions);
+            }
         }
     }
 
