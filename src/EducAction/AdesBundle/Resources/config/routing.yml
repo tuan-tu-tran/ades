@@ -34,6 +34,11 @@ educ_action_ades_backup:
     defaults: { _controller: EducActionAdesBundle:Backup:index}
     methods: [GET]
 
+educ_action_ades_backup_delete_many:
+    pattern: /backup
+    defaults: { _controller: EducActionAdesBundle:Backup:deleteMany}
+    methods: [POST]
+
 educ_action_ades_backup_old:
     pattern: /sauver.php
     defaults: { _controller: EducActionAdesBundle:Backup:index}
