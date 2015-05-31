@@ -20,26 +20,20 @@
 
 namespace EducAction\AdesBundle\Controller;
 
-use EducAction\AdesBundle\Config;
-use EducAction\AdesBundle\Bag;
-use EducAction\AdesBundle\Path;
-use EducAction\AdesBundle\Backup;
-use EducAction\AdesBundle\Utils;
+use EducAction\AdesBundle\Upgrade;
 
 class UpgradeController extends Controller
 {
-    const Version=\EducAction\AdesBundle\Upgrade::Version;
-
     public function indexAction()
     {
         $result=$this->flash()->get("result");
         if($result){
             return $this->View("result.html.twig", $result);
         } else{
-            $versions=self::GetVersions();
-            if($versions->fromVersion == $versions->toVersion){
+            if(!Upgrade::Required()){
                 return $this->redirectRoute("educ_action_ades_homepage");
             } else {
+                $versions=Upgrade::GetVersions();
                 $versions->restore=$this->flash()->get("restore");
                 return $this->View("index.html.twig", $versions);
             }
@@ -48,100 +42,9 @@ class UpgradeController extends Controller
 
     public function upgradeAction()
     {
-        if (self::execute($result)) {
+        if (Upgrade::execute($result)) {
             $this->flash()->set("result",$result);
         }
         return $this->redirectRoute("educ_action_ades_upgrade");
-    }
-
-    private static function execute(&$result)
-    {
-        $result=self::GetVersions();
-        if($result->fromBeforeTo){
-            $result->currentVersion = $result->fromVersion;
-            $result->executedScripts=array();
-            //Create the backup
-            $backup = Backup::createSigned("[auto]avant mise à jour db vers ".self::Version, $backupResult);
-            $result->backup=$backupResult;
-            if($backup){
-                foreach($result->scriptsToExecute as $script){
-                    $content=file_get_contents(self::UpgradeFolder().$script);
-                    if($content===FALSE){
-                        $result->failedScript=$script;
-                        $result->failedScriptError=Tools::GetLastError();
-                        break;
-                    }elseif(!Utils::MySqlScript($content, $err,$launched)){
-                        $result->failedScript = $script;
-                        if(!$err){
-                            if($launched){
-                                $err="mysql script launched but no error output returned";
-                            }else {
-                                $err="mysql script not launched and no error output";
-                            }
-                        }
-                        $result->failedScriptError=$err;
-                        break;
-                    }else{
-                        $result->executedScripts[]=$script;
-                        $result->currentVersion = self::GetScriptVersion($script);
-                        Config::SetDbVersion($result->currentVersion);
-                    }
-                }
-            }
-            return TRUE;
-        }
-        return FALSE;
-    }
-
-    private static function GetVersions()
-    {
-        $versions=new Bag();
-        $versions->fromVersion = Config::GetDbVersion();
-        $versions->toVersion = self::Version;
-        $versions->fromBeforeTo = self::CompareVersions($versions->fromVersion, $versions->toVersion)==-1;
-        if($versions->fromBeforeTo){
-            $upgradeScripts=Path::ListDir(self::UpgradeFolder(), "/^to\d+\.\d+\.sql$/");
-            usort($upgradeScripts, function ($x,$y){
-                $vx=self::GetScriptVersion($x);
-                $vy=self::GetScriptVersion($y);
-                return self::CompareVersions($vx,$vy);
-            });
-            $scriptsToExecute=array();
-            foreach($upgradeScripts as $script){
-                $scriptVersion=self::GetScriptVersion($script);
-                if(
-                    self::CompareVersions($scriptVersion, $versions->fromVersion)>0
-                    &&
-                    self::CompareVersions($scriptVersion, $versions->toVersion)<=0
-                ){
-                    $scriptsToExecute[]=$script;
-                }
-            }
-            $versions->upgradeScripts=$upgradeScripts;
-            $versions->scriptsToExecute=$scriptsToExecute;
-        }
-        return $versions;
-    }
-
-    private static function UpgradeFolder()
-    {
-        return DIRNAME(__FILE__)."/../Resources/sql_scripts/";
-    }
-
-    private static function GetScriptVersion($script)
-    {
-        return str_replace("to","",str_replace(".sql","",$script));
-    }
-
-
-    private static function CompareVersions($x,$y)
-    {
-        list($majx,$minx)=explode(".",$x);
-        list($majy,$miny)=explode(".",$y);
-        if($majx<$majy) return -1;
-        else if($majx>$majy) return 1;
-        else if($minx<$miny) return -1;
-        else if($minx>$miny) return 1;
-        else return 0;
     }
 }
