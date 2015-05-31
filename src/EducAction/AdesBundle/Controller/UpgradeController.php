@@ -48,16 +48,23 @@ class UpgradeController extends Controller
 
     public function upgradeAction()
     {
-        $versions=self::GetVersions();
-        if($versions->fromBeforeTo){
-            $result=$versions;
-            $result->currentVersion = $versions->fromVersion;
+        if (self::execute($result)) {
+            $this->flash()->set("result",$result);
+        }
+        return $this->redirectRoute("educ_action_ades_upgrade");
+    }
+
+    private static function execute(&$result)
+    {
+        $result=self::GetVersions();
+        if($result->fromBeforeTo){
+            $result->currentVersion = $result->fromVersion;
             $result->executedScripts=array();
             //Create the backup
             $backup = Backup::createSigned("[auto]avant mise à jour db vers ".self::Version, $backupResult);
             $result->backup=$backupResult;
             if($backup){
-                foreach($versions->scriptsToExecute as $script){
+                foreach($result->scriptsToExecute as $script){
                     $content=file_get_contents(self::UpgradeFolder().$script);
                     if($content===FALSE){
                         $result->failedScript=$script;
@@ -81,9 +88,9 @@ class UpgradeController extends Controller
                     }
                 }
             }
-            $this->flash()->set("result",$result);
+            return TRUE;
         }
-        return $this->redirectRoute("educ_action_ades_upgrade");
+        return FALSE;
     }
 
     private static function GetVersions()
