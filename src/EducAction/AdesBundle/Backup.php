@@ -59,6 +59,9 @@ class Backup
         }
     }
 
+    /**
+     * Return a list of arrays that represent backups appropriate for listing
+     */
     public static function getList()
     {
         $files=self::getFiles();
@@ -66,7 +69,19 @@ class Backup
         foreach($files as $file) {
             $list[] = new Backup($file);
         }
-        return $list;
+		$files=array();
+        foreach($list as $backup){
+            $backupInfo = $backup->getInfo();
+			$files[]=array(
+				"name"=>$backup->getFilename(),
+				"time"=>$backup->getTimestamp($backupInfo),
+				"size"=>$backup->getSize(),
+                "version"=>$backupInfo["version"],
+                "is_current_version"=>$backupInfo["version"]==Upgrade::Version,
+                "comment"=>$backupInfo["comment"],
+			);
+		}
+        return $files;
     }
 
     private $file;
