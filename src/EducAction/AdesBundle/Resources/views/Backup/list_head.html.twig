@@ -24,22 +24,22 @@
 {% endif %}
 
 {% if allow_backup_delete %}
-<script type="text/javascript">
-        jQuery(function($){
-                $("input#delete_many").click(function(event){
-                        if($("input[name='to_delete[]']:checked").length == 0){
-                                alert("Veuillez sélectionner un ou plusieurs backups à effacer");
-                                event.preventDefault();
-                        }
+        <script type="text/javascript">
+                jQuery(function($){
+                        $("input#delete_many").click(function(event){
+                                if($("input[name='to_delete[]']:checked").length == 0){
+                                        alert("Veuillez sélectionner un ou plusieurs backups à effacer");
+                                        event.preventDefault();
+                                }
+                        });
+                        $("table#backup_table  tr:not(:first-child) td:first-child input").click(function(event){
+                                event.stopPropagation();
+                        });
+                        $("table#backup_table  tr:not(:first-child) td:first-child").click(function(){
+                                $(this).children().click();
+                        });
                 });
-                $("table#backup_table  tr:not(:first-child) td:first-child input").click(function(event){
-                        event.stopPropagation();
-                });
-                $("table#backup_table  tr:not(:first-child) td:first-child").click(function(){
-                        $(this).children().click();
-                });
-        });
-</script>
+        </script>
 {%endif%}
 
 <style type="text/css">
@@ -54,13 +54,13 @@
                 margin-top:1em;
         }
         {% if allow_backup_delete %}
-        table#backup_table  tr:last-child td{
-                border:none;
-        }
-        table#backup_table  tr:not(:first-child) td:first-child,
-        table#backup_table  tr:not(:first-child) td:first-child input
-        {
-                cursor:pointer;
-        }
+                table#backup_table  tr:last-child td{
+                        border:none;
+                }
+                table#backup_table  tr:not(:first-child) td:first-child,
+                table#backup_table  tr:not(:first-child) td:first-child input
+                {
+                        cursor:pointer;
+                }
         {%endif%}
 </style>
