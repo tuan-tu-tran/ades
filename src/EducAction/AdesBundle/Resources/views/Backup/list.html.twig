@@ -21,8 +21,10 @@
 {% if backup_files|length > 0 %}
 <h3>Liste de dernières sauvegardes disponibles</h3>
 
-<table border="1" cellpadding="2" style="margin:auto;margin-top:1em;" id="backup_table">
+<form style="border:none; padding:0">
+<table id="backup_table">
 	<tr style="background-color:orangered">
+                <td></td>
 		<td>Fichiers de sauvegarde</td>
 		<td style="text-align:center">Date</td>
 		<td style="text-align:center">Version</td>
@@ -33,6 +35,7 @@
 	</tr>
     {% for file in backup_files %}
 		<tr class="backup">
+                        <td><input type="checkbox" name="to_delete[]" value="{{file.name}}"/></td>
 			<td>
                 <a href="{{ path("educ_action_ades_backup_download", { "file" : file.name }) }}"
 					target="_blank"
@@ -71,5 +74,12 @@
             </td>
 		</tr>
     {% endfor %}
+    <tr>
+            <td style="text-align:center">&#8627;</td>
+            <td colspan="7">
+                    <input type="submit" value="Supprimer la sélection" id="delete_many"/>
+                </td>
+    </tr>
 </table>
+</form>
 {% endif %}
