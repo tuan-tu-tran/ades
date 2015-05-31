@@ -19,7 +19,7 @@ along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 
 {% extends 'EducActionAdesBundle:Upgrade:base.html.twig' %}
 
-{% set allow_backup_delete = false %}
+{% set allow_backup_delete, allow_backup_download = false, false %}
 {% block content %}
         <div class="impt avertissement">
                 <p>La version du code

@@ -26,6 +26,10 @@
         {% set allow_backup_delete = true %}
 {% endif %}
 
+{% if allow_backup_download is not defined %}
+        {% set allow_backup_download = true %}
+{% endif %}
+
 <table id="backup_table">
 	<tr style="background-color:orangered">
 		{% if allow_backup_delete %}
@@ -47,10 +51,15 @@
                         <td><input type="checkbox" name="to_delete[]" value="{{file.name}}"/></td>
 			{% endif%}
 			<td>
+		{% if allow_backup_download %}
                 <a href="{{ path("educ_action_ades_backup_download", { "file" : file.name }) }}"
 					target="_blank"
                     {{overlib('Cliquer pour télécharger cette sauvegarde')}}
-                >{{file.name}}</a></td>
+                >{{file.name}}</a>
+		{% else%}
+			{{file.name}}
+		{% endif%}
+</td>
             <td style="text-align:center">{{file.time|date("d/m/Y à H:i")}}</td>
             <td
                 {% if file.is_current_version %}
