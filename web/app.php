@@ -33,6 +33,7 @@ $cacheRoot=isset($cacheRoot)?$cacheRoot:NULL;
 if($debug) {
     Symfony\Component\Debug\Debug::Enable(NULL, $displayErrors);
 }
+EducAction\AdesBundle\ErrorHandler::register();
 
 $kernel = new AppKernel($env, $debug, $cacheRoot);
 $kernel->loadClassCache();
