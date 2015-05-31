@@ -57,40 +57,8 @@
                     $(this).next().val(1);
                 })
             ;
-                $("input#delete_many").click(function(event){
-                        if($("input[name='to_delete[]']:checked").length == 0){
-                                alert("Veuillez sélectionner un ou plusieurs backups à effacer");
-                                event.preventDefault();
-                        }
-                });
-                $("table#backup_table  tr:not(:first-child) td:first-child input").click(function(event){
-                        event.stopPropagation();
-                });
-                $("table#backup_table  tr:not(:first-child) td:first-child").click(function(){
-                        $(this).children().click();
-                });
-		});
 	</script>
 	<style type="text/css">
-		tr.backup:hover{background-color:yellow}
-        table#backup_table td{
-                padding:5px;
-                border:1pt solid black;
-        }
-        table#backup_table{
-                border-collapse:collapse;
-                margin:auto;
-                margin-top:1em;
-        }
-        table#backup_table  tr:last-child td{
-                border:none;
-        }
-        table#backup_table  tr:not(:first-child) td:first-child,
-        table#backup_table  tr:not(:first-child) td:first-child input
-        {
-                cursor:pointer;
-        }
-
         #tabs input
         {
             padding:0;
@@ -106,4 +74,5 @@
             padding:2px;
         }
 	</style>
+        {% include "EducActionAdesBundle:Backup:list_head.html.twig" %}
 {% endblock %}
