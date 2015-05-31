@@ -109,13 +109,14 @@ class BackupController extends Controller implements IAccessControlled
             $delete = new Bag();
             $fullname=self::BackupFolder()."/".$file;
             $infoname=self::GetInfoFilename($fullname);
-			if(unlink($fullname) && unlink($infoname)){
-				$delete->failed=false;
-			}else{
-				$delete->failed=true;
-				$delete->error=Tools::GetLastError();
-			}
+            try{
+                $done = unlink($fullname) && unlink($infoname);
+            }catch(\Exception $e){
+                $done = FALSE;
+                $delete->error = $e->getMessage();
+            }
 			$delete->filename=$file;
+            $delete->failed = !$done;
             return TRUE;
 		}
         return FALSE;
