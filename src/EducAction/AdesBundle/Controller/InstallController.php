@@ -22,6 +22,7 @@ namespace EducAction\AdesBundle\Controller;
 
 use EducAction\AdesBundle\Db;
 use EducAction\AdesBundle\Config;
+use EducAction\AdesBundle\Upgrade;
 use EducAction\AdesBundle\Tools;
 
 class InstallController extends Controller
@@ -204,15 +205,15 @@ EOF;
 			}
 		}
 		if(!$error && Upgrade::Required()){
-			$upgrade=new Upgrade();
-			if(!$upgrade->UpgradeDb()){
-				if(!$upgrade->fromBeforeTo){
-					throw new Exception("Upgrade during install failed because trying to upgrade from ".$upgrade->fromVersion." to ".$upgrade->toVersion);
-				}
-				$this->params->failedScript=$upgrade->failedScript;
-				$this->params->error=$upgrade->failedScriptError;
-				$error=true;
-			}
+            if(Upgrade::execute($upgrade)){
+                if($upgrade->currentVersion!=$upgrade->toVersion){
+                    $this->params->failedScript=$upgrade->failedScript;
+                    $this->params->error=$upgrade->failedScriptError;
+                    $error=true;
+                }
+            } else {
+                throw new Exception("upgrade required but not executed");
+            }
 		}
 		return !$error;
 	}
