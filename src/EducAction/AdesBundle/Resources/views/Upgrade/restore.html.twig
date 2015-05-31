@@ -27,5 +27,13 @@ along with ADES.  If not, see <http://www.gnu.org/licenses/>.
                 {{ fromVersion }}
                 </p>
         </div>
+
+        {% include "EducActionAdesBundle:Backup:list.html.twig" %}
 {% endblock %}
+
+{% block post_head %}
+        {{ parent() }}
+        <script type="text/javascript" src="{{ asset("inc/overlib/overlib.js") }}"><!-- overLIB (c) Erik Bosrup --></script>
+        {% include "EducActionAdesBundle:Backup:list_head.html.twig" %}
+{% endblock%}
 

@@ -21,6 +21,7 @@
 namespace EducAction\AdesBundle\Controller;
 
 use EducAction\AdesBundle\Upgrade;
+use EducAction\AdesBundle\Backup;
 
 class UpgradeController extends Controller
 {
@@ -38,6 +39,7 @@ class UpgradeController extends Controller
                     $versions->restore=$this->flash()->get("restore");
                     return $this->View("index.html.twig", $versions);
                 } else {
+                    $versions->backup_files = Backup::getList();
                     return $this->View("restore.html.twig",$versions);
                 }
             }
