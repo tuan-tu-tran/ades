@@ -205,7 +205,7 @@ EOF;
 			}
 		}
 		if(!$error && Upgrade::Required()){
-            if(Upgrade::execute($upgrade)){
+            if(Upgrade::execute($upgrade, FALSE)){
                 if($upgrade->currentVersion!=$upgrade->toVersion){
                     $this->params->failedScript=$upgrade->failedScript;
                     $this->params->error=$upgrade->failedScriptError;

@@ -35,16 +35,18 @@ class Upgrade
 		}
 	}
 
-    public static function execute(&$result)
+    public static function execute(&$result, $createBackup = TRUE)
     {
         $result=self::GetVersions();
         if($result->fromBeforeTo){
             $result->currentVersion = $result->fromVersion;
             $result->executedScripts=array();
+            if ($createBackup) {
             //Create the backup
             $backup = Backup::createSigned("[auto]avant mise à jour db vers ".self::Version, $backupResult);
             $result->backup=$backupResult;
-            if($backup){
+            }
+            if(!$createBackup || $backup){
                 foreach($result->scriptsToExecute as $script){
                     $content=file_get_contents(self::UpgradeFolder().$script);
                     if($content===FALSE){
