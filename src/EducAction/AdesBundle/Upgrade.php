@@ -1,6 +1,7 @@
 <?php
 /**
  * Copyright (c) 2014 Educ-Action
+ * Copyright (c) 2015 Tuan-Tu Tran
  * 
  * This file is part of ADES.
  * 
