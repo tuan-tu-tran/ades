@@ -44,35 +44,36 @@
 {% endblock %}
 
 {% block post_head %}
-    {{ parent() }}
+	{{ parent() }}
 	<script type="text/javascript">
 		jQuery(function($){
-            $("input.comment")
-                .click(function(){
-                    if($(this).next().val()==""){
-                        $(this).select();
-                    }
-                })
-                .change(function(){
-                    $(this).next().val(1);
-                })
-            ;
+			$("input.comment")
+				.click(function(){
+					if($(this).next().val()==""){
+						$(this).select();
+					}
+				})
+				.change(function(){
+					$(this).next().val(1);
+				})
+			;
+		});
 	</script>
 	<style type="text/css">
-        #tabs input
-        {
-            padding:0;
-        }
+		#tabs input
+		{
+			padding:0;
+		}
 
-        #tabs input[type="text"]
-        {
-            padding-left:2px;
-        }
+		#tabs input[type="text"]
+		{
+			padding-left:2px;
+		}
 
-        #tabs input[type="submit"]
-        {
-            padding:2px;
-        }
+		#tabs input[type="submit"]
+		{
+			padding:2px;
+		}
 	</style>
-        {% include "EducActionAdesBundle:Backup:list_head.html.twig" %}
+	{% include "EducActionAdesBundle:Backup:list_head.html.twig" %}
 {% endblock %}
