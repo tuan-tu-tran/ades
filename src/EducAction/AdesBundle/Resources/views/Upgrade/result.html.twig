@@ -1,0 +1,79 @@
+{#
+Copyright (c) 2015 Tuan-Tu TRAN
+
+This file is part of ADES.
+
+ADES is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+ADES is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% extends 'EducActionAdesBundle:Upgrade:base.html.twig' %}
+
+{% block post_head %}
+	<style type="text/css">
+		div{padding-left:5px;}
+	</style>
+{% endblock %}
+{% block content %}
+        <div style="font-weight:bold; text-align:center; font-size:1.5em">
+                {%if currentVersion == toVersion%}
+                        <p style="color:green">La mise à jour s'est bien passée</p>
+                {%else%}
+                        <p style="color:red">La mise à jour a échoué.</p>
+                {%endif%}
+        </div>
+        <div>
+                <p>Version de base: {{fromVersion}}</p>
+                <p>Version cible: {{toVersion}}</p>
+                <p>Version actuelle: {{currentVersion}}</p>
+                <p>Scripts à exécuter:</p>
+                <ul>
+                        {% for script in scriptsToExecute %}
+                                <li>{{script}}</li>
+                        {% endfor %}
+                </ul>
+
+                {% if executedScripts is not empty %}
+                        <p>Scripts correctement exécutés:</p>
+                        <ul>
+                                {% for script in executedScripts %}
+                                        <li>{{script}}</li>
+                                {% endfor %}
+                        </ul>
+                {% endif %}
+
+                {% if backup.failed %}
+                        <p class="impt">Le backup automatique de la db a échoué</p>
+                        {% if not backup.dump_launched %}
+                                <p>L'utilitaire de création de backup ne s'est pas exécuté</p>
+                        {% endif %}
+                        {% if backup.error is not empty %}
+                                <p>Le système a renvoyé l'erreur:</p>
+                                <p>{{backup.error}}</p>
+                        {% endif %}
+                {%else%}
+                        <p>Un backup de la db a été automatiquement créé avant la mise à jour: {{backup.filename}}</p>
+                {% endif %}
+
+                {% if failedScript is defined %}
+                        <p class="impt">L'exécution du script {{failedScript}} a échoué.</p>
+                        <p>Le système a renvoyé l'erreur:</p>
+                        <p>{{failedScriptError}}</p>
+                {%endif%}
+        </div>
+
+        {% if currentVersion == toVersion %}
+                <p style="font-weight:bold; text-align:center"><a href="{{path("educ_action_ades_homepage")}}">Retour à la page d'accueil d'ADES</a></p>
+        {% endif%}
+{% endblock %}
+
