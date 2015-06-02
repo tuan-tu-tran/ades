@@ -63,8 +63,6 @@ require "inc/init.inc.php";
 use EducAction\AdesBundle\Config;
 use EducAction\AdesBundle\Tools;
 
-$url_file=Config::LocalFile("pull_url.txt");
-$secret_file=Config::LocalFile("pull_secret.txt");
 $pull_config_file=Config::LocalFile("pull.ini");
 if (!file_exists($pull_config_file)) {
     http_response_code(500);
