@@ -92,7 +92,7 @@ if source == "merge":
                 logging.debug("generate fix message")
                 msg = "Merge fixes #%s : '%s'"%(issue, newBranch)
                 if currentBranch != "master":
-                    msg+=" into '%s'"%currentBranch
+                    msg+=" into %s"%currentBranch
                 msg+="\n"
                 with open(msgFile, "w") as fh:
                     fh.write(msg)
