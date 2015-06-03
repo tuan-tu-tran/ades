@@ -24,20 +24,7 @@
 {% block content %}
 
 <h2>Faits disciplinaires</h2>
-{#
-        $texte = "<h3>Nom : <strong>##NOM## ##PRENOM##</strong> :: ";
-        $texte .= "Classe : <strong>##CLASSE##</strong>\n";
-        $texte .= "<span class=\"impt\">##CONTRAT##</span></h3>\n";
 
-        $texte = str_replace ("##NOM##", $this->proprietes['nom'], $texte);
-        $texte = str_replace ("##PRENOM##", $this->proprietes['prenom'], $texte);
-        $texte = str_replace ("##CLASSE##", $this->proprietes['classe'], $texte);
-        if ($this->proprietes['contrat']=="O") {
-            $texte = str_replace ("##CONTRAT##", "Contrat", $texte);
-        } else {
-            $texte = str_replace ("##CONTRAT##", "", $texte);
-        }
-        return $texte;
 <h3>
 	Nom : <strong>{{student.lastName}} {{student.firstName}}</strong> :: 
 	Classe : <strong>{{student.class}}</strong>
@@ -45,7 +32,6 @@
 		<span class="impt">Contrat</span>
 	{%endif%}
 </h3>
-#}
 
 {% endblock %}
 

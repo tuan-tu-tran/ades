@@ -21,6 +21,9 @@
 
 namespace EducAction\AdesBundle\Controller;
 
+use EducAction\AdesBundle\Bag;
+use EducAction\AdesBundle\Entities\Student;
+
 class FactController extends Controller implements IAccessControlled
 {
     public function getRequiredPrivileges()
@@ -30,7 +33,13 @@ class FactController extends Controller implements IAccessControlled
 
     public function createAction($factTypeId, $studentId)
     {
-        return $this->View("create.html.twig");
+        $student = Student::GetById($studentId);
+        if(!$student){
+            throw $this->createNotFoundException("Cet élève n'existe pas");
+        }
+        $params=new Bag();
+        $params->student = $student;
+        return $this->View("create.html.twig", $params);
     }
 }
 

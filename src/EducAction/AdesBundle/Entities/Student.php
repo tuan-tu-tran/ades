@@ -20,6 +20,66 @@
 
 namespace EducAction\AdesBundle\Entities;
 
+use EducAction\AdesBundle\Db;
+use EducAction\AdesBundle\Tools;
+
 class Student
 {
+    const SELECT_FIELDS="
+        nom, prenom, classe, contrat
+        ";
+    public $lastName;
+    public $firstName;
+    public $class;
+    public $hasContract;
+
+    private static $mapping=array(
+        "nom"=>"lastName",
+        "prenom"=>"firstName",
+        "classe"=>"class",
+        "contrat"=>"hasContract",
+    );
+
+    private static $conversion=array(
+        "contrat"=>array("EducAction\\AdesBundle\\Entities\\Student", "Boolean")
+    );
+
+    /**
+     * Get a Student instance by it numeric $id
+     *
+     * @param int $id the numeric id
+     * @return a Student instance or NULL if not found
+     */
+    public static function GetById($id)
+    {
+        $db=Db::GetInstance();
+        $result=
+        $db->query("SELECT ".self::SELECT_FIELDS."
+            FROM ades_eleves
+            WHERE ideleve = ?
+            ", $id);
+        if(count($result) > 0) {
+            return self::FromDbRow($result[0]);
+        } else {
+            return NULL;
+        }
+    }
+
+    private static function FromDbRow(array &$row)
+    {
+        $student=new Student();
+        foreach(self::$mapping as $src=>$dst){
+            $value = $row[$src];
+            if(Tools::TryGet(self::$conversion, $src, $conversion)){
+                $value = call_user_func($conversion, $value);
+            }
+            $student->$dst = $value;
+        }
+        return $student;
+    }
+
+    public static function Boolean($char)
+    {
+        return $char == "O";
+    }
 }
