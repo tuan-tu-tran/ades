@@ -131,3 +131,8 @@ educ_action_ades_upgrade_restore:
     pattern: /upgrade-db/restore/{file}
     defaults: { _controller: EducActionAdesBundle:Upgrade:restore }
     methods: [GET]
+
+educ_action_ades_fact_create_one:
+    pattern: /fact/new/{factTypeId}/student/{studentId}
+    defaults: { _controller: EducActionAdesBundle:Fact:create }
+    methods: [GET]

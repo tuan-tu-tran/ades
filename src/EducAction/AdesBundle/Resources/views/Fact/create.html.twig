@@ -1,0 +1,51 @@
+{#
+/**
+ * Copyright (c) 2015 Tuan-Tu Tran
+ * 
+ * This file is part of ADES.
+ * 
+ * ADES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * ADES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+*/
+#}
+
+{% extends 'EducActionAdesBundle::layout.html.twig' %}
+
+{% block content %}
+
+<h2>Faits disciplinaires</h2>
+{#
+        $texte = "<h3>Nom : <strong>##NOM## ##PRENOM##</strong> :: ";
+        $texte .= "Classe : <strong>##CLASSE##</strong>\n";
+        $texte .= "<span class=\"impt\">##CONTRAT##</span></h3>\n";
+
+        $texte = str_replace ("##NOM##", $this->proprietes['nom'], $texte);
+        $texte = str_replace ("##PRENOM##", $this->proprietes['prenom'], $texte);
+        $texte = str_replace ("##CLASSE##", $this->proprietes['classe'], $texte);
+        if ($this->proprietes['contrat']=="O") {
+            $texte = str_replace ("##CONTRAT##", "Contrat", $texte);
+        } else {
+            $texte = str_replace ("##CONTRAT##", "", $texte);
+        }
+        return $texte;
+<h3>
+	Nom : <strong>{{student.lastName}} {{student.firstName}}</strong> :: 
+	Classe : <strong>{{student.class}}</strong>
+	{% if student.hasContract %}
+		<span class="impt">Contrat</span>
+	{%endif%}
+</h3>
+#}
+
+{% endblock %}
+
