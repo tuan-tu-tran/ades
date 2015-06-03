@@ -1,0 +1,47 @@
+{#
+Copyright (c) 2015 Tuan-Tu TRAN
+
+This file is part of ADES.
+
+ADES is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+ADES is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{% if deleted_files is not empty %}
+        {% if deleted_files.failures is empty %}
+                <p class="success auto_close">{{deleted_files.successes|length}} sauvegardes ont été effacées.</p>
+        {% else%}
+		<fieldset class="notice auto_close_on_click">
+			<legend>Erreur lors de la suppression</legend>
+
+                        {% if deleted_files.successes|length > 1 %}
+                                <p>{{deleted_files.successes|length}} sauvegardes ont été effacées.</p>
+                        {% elseif deleted_files.successes|length == 1 %}
+                                <p>La sauvegarde {{deleted_files.successes[0].filename}} a été effacée.</p>
+                        {% endif %}
+
+                        <p class="impt">
+                                {% if deleted_files.failures|length > 1%}
+                                        {{deleted_files.failures|length}} sauvegardes n'ont pas pu être effacées!
+                                {%else%}
+                                        {{deleted_files.failures|length}} sauvegarde n'a pas pu être effacée!
+                                {%endif%}
+                        </p>
+                        <ul>
+                                {%for file in deleted_files.failures%}
+                                        <li>{{file.filename}} : {{file.error}}</li>
+                                {%endfor%}
+                        </ul>
+		</fieldset>
+        {% endif %}
+{% endif %}
+

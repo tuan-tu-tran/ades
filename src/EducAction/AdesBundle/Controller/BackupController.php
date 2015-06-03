@@ -97,21 +97,30 @@ class BackupController extends Controller implements IAccessControlled
 
     public function deleteAction($file)
     {
-        if(Backup::isLegalFile($file)) {
-            $delete=$this->params;
-            $fullname=self::BackupFolder()."/".$file;
-            $infoname=self::GetInfoFilename($fullname);
-			if(unlink($fullname) && unlink($infoname)){
-				$delete->failed=false;
-			}else{
-				$delete->failed=true;
-				$delete->error=Tools::GetLastError();
-			}
-			$delete->filename=$file;
+        if($this->delete($file, $delete)){
 			$this->flash()->set("delete",$delete);
-		}
+        }
         return $this->redirect($this->generateUrl("educ_action_ades_backup"));
 	}
+
+    private function delete($file, &$delete)
+    {
+        if(Backup::isLegalFile($file)) {
+            $delete = new Bag();
+            $fullname=self::BackupFolder()."/".$file;
+            $infoname=self::GetInfoFilename($fullname);
+            try{
+                $done = unlink($fullname) && unlink($infoname);
+            }catch(\Exception $e){
+                $done = FALSE;
+                $delete->error = $e->getMessage();
+            }
+			$delete->filename=$file;
+            $delete->failed = !$done;
+            return TRUE;
+		}
+        return FALSE;
+    }
 
     public function indexAction()
     {
@@ -147,6 +156,8 @@ class BackupController extends Controller implements IAccessControlled
 		$params->restore=$this->flash()->get("restore");
 
 		$params->upload=$this->flash()->get("upload");
+
+        $params->deleted_files = $this->flash()->get("deleted_files");
 
 		return $this->View("index.html.twig");
 	}
@@ -220,4 +231,28 @@ class BackupController extends Controller implements IAccessControlled
 			}
 		}
 	}
+
+    public function deleteManyAction()
+    {
+        $request=$this->getRequest();
+        $files=$request->request->get("to_delete");
+        if(count($files) == 1){
+            return $this->deleteAction($files[0]);
+        } else {
+        $deleted=new Bag();
+        $deleted->successes=array();
+        $deleted->failures=array();
+        foreach($files as $file){
+            if($this->delete($file, $result)){
+                if($result->failed){
+                    $deleted->failures[]=$result;
+                }else{
+                    $deleted->successes[]=$result;
+                }
+            }
+        }
+        $this->flash()->set("deleted_files",$deleted);
+        return $this->redirectRoute("educ_action_ades_backup");
+        }
+    }
 }

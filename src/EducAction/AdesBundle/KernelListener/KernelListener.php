@@ -21,6 +21,7 @@
 namespace EducAction\AdesBundle\KernelListener;
 
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use EducAction\AdesBundle\Controller\AccessController;
 use EducAction\AdesBundle\User;
 
@@ -66,6 +67,12 @@ class KernelListener
             }
             }
         }
+    }
+
+    public function onKernelException(GetResponseForExceptionEvent $event)
+    {
+        $exception = $event->getException();
+        error_log("Uncaught exception: $exception");
     }
 }
 
