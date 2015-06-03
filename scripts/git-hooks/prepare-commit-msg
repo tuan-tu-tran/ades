@@ -37,6 +37,11 @@ This script formats messages of merge commits to automate integration with githu
             * Merge #???: 'something' if initial message was "issue"
             * Merge fixes #???: 'something' if initial message was "fix"
     * otherwise : regular merge commit
+
+This script requires you to install pygithub3.
+Also you should add two aliases:
+    * git config alias.fix "merge --no-ff -m fix"
+    * git config alias.issue "merge --no-ff -m issue"
 """
 
 import sys
