@@ -41,7 +41,7 @@ if (!empty($qui) && !empty($mdp))
 	// on recupère dans la BD les données utilisateur correspondant à l'identifiant
 	$lienDB = mysql_connect($sql_serveur, $sql_user, $sql_passwd);
 	mysql_select_db ($sql_bdd);
-	$sql = "select * from ades_users where user='$qui'";
+	$sql = "select * from ades_users where user='".mysql_real_escape_string($qui)."'";
 	$resultat = mysql_query($sql) 
 		or die('Erreur SQL !<br />'.$sql.'<br />'.mysql_error());
 	$utilisateur = @mysql_fetch_assoc($resultat);
