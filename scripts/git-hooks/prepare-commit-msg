@@ -1,0 +1,155 @@
+#!/usr/bin/env python
+"""
+Copyright (c) 2015 Tuan-Tu Tran
+
+This file is part of ADES.
+
+ADES is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+ADES is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+"""
+This script formats messages of merge commits to automate integration with github.
+
+* if merged branch matches xxx_something where xxx is a number:
+    * commit message will be: Merge branch #xxx: 'something'
+    * unless merge specified "fix" as message
+        * i.e. git merge xxx_something -m "fix"
+        * in that case, message will be: Merge fixes #xxx: 'something'
+* else (merged branch does not match xxx_something):
+    * if merge message is "fix" or "issue":
+        * i.e. git merge something -m "fix" (or -m "issue")
+        * a text editor is opened to get title + body of new issue to create:
+            * title is the first line
+            * the rest is the body
+            * github account is configured with git config : github.login/password/repo
+        * commit message will be:
+            * Merge #???: 'something' if initial message was "issue"
+            * Merge fixes #???: 'something' if initial message was "fix"
+    * otherwise : regular merge commit
+
+This script requires you to install pygithub3.
+Also you should add two aliases:
+    * git config alias.fix "merge --no-ff -m fix"
+    * git config alias.issue "merge --no-ff -m issue"
+"""
+
+import sys
+import logging
+import subprocess
+import os
+import re
+import pygithub3
+logging.basicConfig(level=logging.INFO)
+
+def shell(cmd, *accepted_codes):
+    p=subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+    out,err=p.communicate()
+    if p.returncode!=0 and p.returncode not in accepted_codes:
+        raise RuntimeError, ("shell error",cmd,p.returncode, accepted_codes)
+    return out
+
+
+logging.debug("argv: %s",sys.argv)
+
+msgFile = sys.argv[1]
+if len(sys.argv) > 2:
+    source=sys.argv[2]
+else:
+    source=None
+
+if os.path.exists(msgFile):
+    with open(msgFile) as fh:
+        msg=fh.read()
+else:
+    msg=""
+
+currentBranch = shell("git rev-parse --abbrev-ref HEAD")
+logging.debug("currentBranch: %s", currentBranch)
+logging.debug("msg: %s", msg)
+logging.debug(shell("env|grep GIT"))
+
+if source == "merge":
+    logging.debug("merge")
+    branch=None
+    for k,v in os.environ.items():
+        if k.startswith("GITHEAD_"):
+            branch=v
+    if not branch:
+        logging.warn("could not find merged branch")
+    else:
+        logging.debug("merging branch %s", branch)
+        m=re.match(r"^(\d+)_", branch)
+        if m:
+            issue = m.group(1)
+            newBranch = branch[len(m.group(0)):]
+            logging.debug("branch %s is linked to issue %s : %s",branch, issue, newBranch)
+            head="Merge branch '%s'"%branch
+            if msg.startswith(head):
+                logging.debug("changed message")
+                msg="Merge branch #%s : '%s'"%(issue, newBranch)+msg[len(head):]
+                with open(msgFile, "w") as fh:
+                    fh.write(msg)
+            elif msg.strip()=="fix":
+                logging.debug("generate fix message")
+                msg = "Merge fixes #%s : '%s'"%(issue, newBranch)
+                if currentBranch != "master":
+                    msg+=" into %s"%currentBranch
+                msg+="\n"
+                with open(msgFile, "w") as fh:
+                    fh.write(msg)
+            else:
+                raise RuntimeError,("unexpected msg format", msg)
+        elif msg.strip()=="fix" or msg.strip()=="issue":
+            logging.debug("create new issue: %s", msg.strip())
+            def githubConfig(key):
+                item = shell("git config github."+key, 1)
+                if not item:
+                    logging.error("github."+key+" is not configured")
+                    sys.exit(1)
+                return item.strip()
+            login = githubConfig("login")
+            password = githubConfig("password")
+            repo = githubConfig("repo")
+            with open(msgFile,"w") as fh:
+                fh.write("#Write the issue title on the next line and then the rest of the description\n")
+            shell("gvim %s"%msgFile)
+            with open(msgFile) as fh:
+                dummy=fh.readline().strip()
+                title=fh.readline().strip()
+                body=fh.read().strip()
+            if not title:
+                logging.error("Bad issue title")
+                sys.exit(1)
+            g=pygithub3.Github(login=login, password=password, user=login, repo=repo)
+            issue=g.issues.create({
+                "title":title,
+                "body":body,
+            })
+            if msg.strip()=="fix":
+                fixes="fixes "
+            else:
+                fixes=""
+            msg = "Merge %s#%s : '%s'"%(fixes,issue.number, branch)
+            if currentBranch != "master":
+                msg+=" into %s"%currentBranch
+            msg+="\n"
+            msg+=title+"\n\n"+body
+            with open(msgFile, "w") as fh:
+                fh.write(msg)
+        else:
+            logging.debug("branch %s is not linked to any issue",branch)
+
+
+
+

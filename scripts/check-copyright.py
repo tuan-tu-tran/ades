@@ -18,7 +18,8 @@ You should have received a copy of the GNU General Public License
 along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-copyright="Copyright (c) 2014 Educ-Action"
+import datetime
+copyright="Copyright (c) %i Educ-Action"%(datetime.datetime.now().year)
 import sys
 import optparse
 import re
@@ -32,7 +33,7 @@ parser.add_option("--author", default=None, help="Use git config user.name as co
 options,args=parser.parse_args()
 author=None
 if options.author:
-	author="Copyright (c) 2014 %s"%options.author
+	author="Copyright (c) %i %s"%(datetime.datetime.now().year,options.author)
 retval=0
 if len(args)==0:
 	file_list=sys.stdin.readlines()
