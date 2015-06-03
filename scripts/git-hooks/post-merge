@@ -1,0 +1,97 @@
+#!/usr/bin/env python
+"""
+Copyright (c) 2015 Tuan-Tu Tran
+
+This file is part of ADES.
+
+ADES is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+ADES is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+"""
+This checks that the HEAD commit has 2 parents and that its message closed an issue.
+Then if a branch marked with config branch.*.main is true currently points at HEAD,
+all branches who point at HEAD^2 and whose name is in the HEAD's subject are deleted.
+"""
+
+import sys
+import logging
+import subprocess
+import re
+level = logging.INFO
+if "--debug" in sys.argv:
+    level=logging.DEBUG
+logging.basicConfig(level=level, format="%(name)s: %(levelname)s : %(message)s")
+logging=logging.getLogger("post-merge")
+
+def shell(cmd, *accepted_codes):
+    p=subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+    out,err=p.communicate()
+    if p.returncode!=0 and p.returncode not in accepted_codes:
+        raise RuntimeError, ("shell error",cmd,p.returncode, accepted_codes)
+    return out
+
+def getHash(ref):
+	h=shell("git log --pretty=%%H %s -n1"%ref).strip()
+	return h
+
+def findBranches(sha1):
+	branches=shell("git branch|cut -c3-").split()
+	candidates=[]
+	for b in branches:
+		h=getHash(b)
+		logging.debug("branch: %s : %s", b, h)
+		if h == sha1:
+			candidates.append(b)
+	return candidates
+
+parents=shell("git log --pretty=%P HEAD -n1").strip().split()
+logging.debug("parents: %s", parents)
+if len(parents) == 2:
+	logging.debug("merge commit")
+        subject = shell("git log --pretty=%s HEAD -n1")
+        logging.debug("subject: %s", subject)
+        if re.search(r"fix(es)? +#\d+", subject):
+            logging.debug("HEAD commit closed an issue")
+            head=getHash("HEAD")
+            headBranches = findBranches(head)
+            for b in headBranches:
+                    logging.debug("%s points at HEAD", b)
+                    main = shell("git config branch.%s.main"%b, 1).strip()
+                    logging.debug("branch.%s.main : %s",b, main)
+                    if main in ("true","1"):
+                            logging.debug("HEAD branch %s is a main branch", b)
+                            #get the parent hashes
+                            p=parents[-1]
+                            logging.debug("2nd parent: %s", p)
+                            candidates = findBranches(p)
+                            logging.debug("candidates: %s", candidates)
+                            for c in candidates:
+                                    m = re.match(r"^(\d+)_", c)
+                                    marker = c
+                                    if m:
+                                            marker=c[len(m.group(0)):]
+                                            logging.debug("issue number removed from branch: %s => %s", c, marker)
+                                    if "'"+marker+"'" in subject:
+                                            logging.debug("delete branch %s because fixing marker found in subject", c)
+                                            logging.info("delete merged branch %s", c)
+                                            shell("git branch -d %s"%c)
+                            break
+                    else:
+                            logging.debug("branch %s points at HEAD but is not main", b)
+else:
+	logging.debug("not a merge commit")
+
+			
+
+
