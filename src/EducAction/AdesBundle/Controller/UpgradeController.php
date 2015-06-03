@@ -21,6 +21,7 @@
 namespace EducAction\AdesBundle\Controller;
 
 use EducAction\AdesBundle\Upgrade;
+use EducAction\AdesBundle\Backup;
 
 class UpgradeController extends Controller
 {
@@ -34,8 +35,13 @@ class UpgradeController extends Controller
                 return $this->redirectRoute("educ_action_ades_homepage");
             } else {
                 $versions=Upgrade::GetVersions();
-                $versions->restore=$this->flash()->get("restore");
-                return $this->View("index.html.twig", $versions);
+                if($versions->fromBeforeTo){
+                    $versions->restore=$this->flash()->get("restore");
+                    return $this->View("index.html.twig", $versions);
+                } else {
+                    $versions->backup_files = Backup::getList();
+                    return $this->View("restore.html.twig",$versions);
+                }
             }
         }
     }

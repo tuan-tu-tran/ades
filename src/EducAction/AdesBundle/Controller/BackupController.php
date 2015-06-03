@@ -125,19 +125,7 @@ class BackupController extends Controller implements IAccessControlled
     public function indexAction()
     {
         Upgrade::CheckIfNeeded();
-		$list=Backup::getList();
-		$files=array();
-        foreach($list as $backup){
-            $backupInfo = $backup->getInfo();
-			$files[]=array(
-				"name"=>$backup->getFilename(),
-				"time"=>$backup->getTimestamp($backupInfo),
-				"size"=>$backup->getSize(),
-                "version"=>$backupInfo["version"],
-                "is_current_version"=>$backupInfo["version"]==Upgrade::Version,
-                "comment"=>$backupInfo["comment"],
-			);
-		}
+		$files=Backup::getList();
         $params=$this->params;
 		$params->backup_files=$files;
 

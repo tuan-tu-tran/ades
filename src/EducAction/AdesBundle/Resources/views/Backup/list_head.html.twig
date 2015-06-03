@@ -1,0 +1,66 @@
+{#
+/**
+ * Copyright (c) 2015 Tuan-Tu Tran
+ * 
+ * This file is part of ADES.
+ * 
+ * ADES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * ADES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+*/
+#}
+
+{% if allow_backup_delete is not defined %}
+        {% set allow_backup_delete = true %}
+{% endif %}
+
+{% if allow_backup_delete %}
+        <script type="text/javascript">
+                jQuery(function($){
+                        $("input#delete_many").click(function(event){
+                                if($("input[name='to_delete[]']:checked").length == 0){
+                                        alert("Veuillez sélectionner un ou plusieurs backups à effacer");
+                                        event.preventDefault();
+                                }
+                        });
+                        $("table#backup_table  tr:not(:first-child) td:first-child input").click(function(event){
+                                event.stopPropagation();
+                        });
+                        $("table#backup_table  tr:not(:first-child) td:first-child").click(function(){
+                                $(this).children().click();
+                        });
+                });
+        </script>
+{%endif%}
+
+<style type="text/css">
+        tr.backup:hover{background-color:yellow}
+        table#backup_table td{
+                padding:5px;
+                border:1pt solid black;
+        }
+        table#backup_table{
+                border-collapse:collapse;
+                margin:auto;
+                margin-top:1em;
+        }
+        {% if allow_backup_delete %}
+                table#backup_table  tr:last-child td{
+                        border:none;
+                }
+                table#backup_table  tr:not(:first-child) td:first-child,
+                table#backup_table  tr:not(:first-child) td:first-child input
+                {
+                        cursor:pointer;
+                }
+        {%endif%}
+</style>

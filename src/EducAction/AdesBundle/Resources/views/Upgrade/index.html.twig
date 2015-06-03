@@ -20,7 +20,6 @@ along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 {% extends 'EducActionAdesBundle:Upgrade:base.html.twig' %}
 
 {% block content %}
-	{% if fromBeforeTo %}
 		<form method="POST" class="no_border">
                         {% if restore %}
                         <p>La sauvegarde {{restore.filename}} a été correctement restaurée.</p>
@@ -60,13 +59,4 @@ along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 				<input type="submit" value="Mettre à jour"/>
 			{%endif%}
 		</form>
-	{% else %}
-		<div class="impt avertissement">
-			<p>La version du code
-			est antérieure à celle de la base de données:
-			{{ toVersion }} &lt;
-			{{ fromVersion }}
-			</p>
-		</div>
-	{% endif %}
 {% endblock %}
