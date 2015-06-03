@@ -74,7 +74,7 @@ if source == "merge":
         if k.startswith("GITHEAD_"):
             branch=v
     if not branch:
-        logger.warn("could not find merged branch")
+        logging.warn("could not find merged branch")
     else:
         logging.debug("merging branch %s", branch)
         m=re.match(r"^(\d+)_", branch)
