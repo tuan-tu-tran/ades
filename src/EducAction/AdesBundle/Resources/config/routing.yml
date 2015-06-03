@@ -111,3 +111,13 @@ educ_action_ades_import_proeco_done:
     pattern: /import-proeco/done
     defaults: { _controller: EducActionAdesBundle:Import:done }
     methods: [GET]
+
+educ_action_ades_upgrade:
+    pattern: /upgrade-db
+    defaults: { _controller: EducActionAdesBundle:Upgrade:index }
+    methods: [GET]
+
+educ_action_ades_upgrade_do:
+    pattern: /upgrade-db
+    defaults: { _controller: EducActionAdesBundle:Upgrade:upgrade }
+    methods: [POST]

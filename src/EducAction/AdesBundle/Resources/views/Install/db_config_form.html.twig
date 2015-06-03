@@ -22,7 +22,7 @@
 {% extends 'EducActionAdesBundle:Install:layout.html.twig' %}
 
 {% block content %}
-<form name="form" method="post" action="{{ path("educ_action_ades_install_db_submit") }}">
+<form name="form" method="post" action="{{ path("educ_action_ades_install_db_submit") }}" autocomplete="on">
 	<p>
 		<label>Serveur Sql :</label>
 		<input value="{{ host }}" name="sqlserver" id="sqlserver" size="30" maxlength="50" type="text">

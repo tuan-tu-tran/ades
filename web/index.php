@@ -19,7 +19,7 @@
 */
 require "inc/init.inc.php";
 EducAction\AdesBundle\Install::CheckIfNeeded();
-EducAction\AdesBundle\Controller\Upgrade::CheckIfNeeded();
+EducAction\AdesBundle\Upgrade::CheckIfNeeded();
 EducAction\AdesBundle\User::CheckIfLogged();
 
 require ("config/constantes.inc.php");
