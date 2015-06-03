@@ -1,0 +1,98 @@
+#!/usr/bin/env python
+"""
+Copyright (c) 2015 Tuan-Tu Tran
+
+This file is part of ADES.
+
+ADES is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+ADES is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+"""
+This script formats messages of merge commits that merge branches names like
+
+xxx_something
+
+where xxx is an issue number.
+
+The merge commit message is automatically modified to be something like
+
+Merge branch #xxx : 'something'
+
+Also: git merge xxx_something -m "fix" 
+yields: Merge fix #xxx : 'something'
+"""
+
+import sys
+import logging
+import subprocess
+import os
+import re
+logging.basicConfig(level=logging.INFO)
+
+def shell(cmd):
+    p=subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+    out,err=p.communicate()
+    if p.returncode!=0:
+        raise RuntimeError, ("shell error",cmd,p.returncode)
+    return out
+
+
+logging.debug("argv: %s",sys.argv)
+
+msgFile = sys.argv[1]
+if len(sys.argv) > 2:
+    source=sys.argv[2]
+else:
+    source=None
+
+if os.path.exists(msgFile):
+    with open(msgFile) as fh:
+        msg=fh.read()
+else:
+    msg=""
+logging.debug("msg: %s", msg)
+logging.debug(shell("env|grep GIT"))
+
+if source == "merge":
+    logging.debug("merge")
+    branch=None
+    for k,v in os.environ.items():
+        if k.startswith("GITHEAD_"):
+            branch=v
+    if not branch:
+        logger.warn("could not find merged branch")
+    else:
+        logging.debug("merging branch %s", branch)
+        m=re.match(r"^(\d+)_", branch)
+        if m:
+            issue = m.group(1)
+            newBranch = branch[len(m.group(0)):]
+            logging.debug("branch %s is linked to issue %s : %s",branch, issue, newBranch)
+            head="Merge branch '%s'"%branch
+            if msg.startswith(head):
+                logging.debug("changed message")
+                msg="Merge branch #%s : '%s'"%(issue, newBranch)+msg[len(head):]
+                with open(msgFile, "w") as fh:
+                    fh.write(msg)
+            elif msg.strip()=="fix":
+                logging.debug("generate fix message")
+                msg = "Merge fixes #%s : '%s'\n"%(issue, newBranch)
+                with open(msgFile, "w") as fh:
+                    fh.write(msg)
+        else:
+            logging.debug("branch %s is not linked to any issue",branch)
+
+
+
+
