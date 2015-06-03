@@ -70,7 +70,7 @@
 <?php else:?>
 	<div class="impt avertissement">
 		<p>La version du code
-		est anterieure à celle de la base de données:
+		est antérieure à celle de la base de données:
 		<?php echo $toVersion?> &lt;
 		<?php echo $fromVersion?>
 		</p>

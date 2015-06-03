@@ -117,7 +117,7 @@ class Upgrade{
 		if($this->fromBeforeTo){
 			$this->executedScripts=array();
             //Create the backup
-            $backup = Backup::createSigned("Backup automatique avant mise à jour db vers ".self::Version, $backupResult);
+            $backup = Backup::createSigned("[auto]avant mise à jour db vers ".self::Version, $backupResult);
             $this->backup=$backupResult;
             if(!$backup){
                 return FALSE;
