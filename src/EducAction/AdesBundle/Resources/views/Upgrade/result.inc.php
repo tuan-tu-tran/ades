@@ -60,6 +60,21 @@
 		</ul>
 	<?php endif?>
 
+    <?php if(isset($result->backup)):?>
+        <?php if($result->backup->failed):?>
+            <p class="impt">Le backup automatique de la db a échoué</p>
+            <?php if(!$result->backup->dump_launched):?>
+                <p>L'utilitaire de création de backup ne s'est pas exécuté</p>
+            <?php endif?>
+            <?php if(isset($result->backup->error)):?>
+                <p>Le système a renvoyé l'erreur:</p>
+                <p><?php echo htmlspecialchars($result->backup->error)?></p>
+            <?php endif?>
+        <?php else:?>
+            <p>Un backup de la db a été automatiquement créé avant la mise à jour: <?php echo htmlspecialchars($result->backup->filename) ?></p>
+        <?php endif?>
+    <?php endif;?>
+
 	<?php if(isset($result->failedScript)):?>
 		<p class="impt">L'exécution du script <?php echo $result->failedScript?> a échoué.</p>
 		<p>Le système a renvoyé l'erreur:</p>

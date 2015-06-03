@@ -27,6 +27,7 @@ use EducAction\AdesBundle\Path;
 use EducAction\AdesBundle\FlashBag;
 use EducAction\AdesBundle\View;
 use EducAction\AdesBundle\Utils;
+use EducAction\AdesBundle\Backup;
 
 class Upgrade{
 	const Version="2.0";
@@ -115,6 +116,12 @@ class Upgrade{
 		$this->GetVersions();
 		if($this->fromBeforeTo){
 			$this->executedScripts=array();
+            //Create the backup
+            $backup = Backup::createSigned("Backup automatique avant mise à jour db vers ".self::Version, $backupResult);
+            $this->backup=$backupResult;
+            if(!$backup){
+                return FALSE;
+            }
 			$failed=false;
 			foreach($this->scriptsToExecute as $script){
 				$content=file_get_contents(self::UpgradeFolder().$script);
