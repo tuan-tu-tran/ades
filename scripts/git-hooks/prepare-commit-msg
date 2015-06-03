@@ -61,6 +61,9 @@ if os.path.exists(msgFile):
         msg=fh.read()
 else:
     msg=""
+
+currentBranch = shell("git rev-parse --abbrev-ref HEAD")
+logging.debug("currentBranch: %s", currentBranch)
 logging.debug("msg: %s", msg)
 logging.debug(shell("env|grep GIT"))
 
