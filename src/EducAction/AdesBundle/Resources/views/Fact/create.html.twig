@@ -82,6 +82,12 @@
 					class="{{field.cssClass}}"
                                 >{{field.value}}</textarea>
                         </p>
+                {%elseif field.type == "hidden"%}
+                        <input
+                                name="{{field.name}}"
+                                value="{{field.value}}"
+                                type="hidden"
+                                />
 		{% endif %}
 	{% endfor %}
 </form>
