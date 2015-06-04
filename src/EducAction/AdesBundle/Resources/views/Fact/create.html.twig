@@ -105,7 +105,7 @@
                                                                 disabled="disabled"
                                                         {%endif%}
                                                 >
-                                                        {{d.duration}} h le {{d.date}} à {{d.time}}
+                                                        {{d.duration}} h le {{d.date|weekday}} {{d.date|date("j/n/Y")}} à {{d.time}}
                                                 </option>
                                         {% endfor %}
                                 </select>

@@ -46,6 +46,7 @@ class TwigExtension extends \Twig_Extension
     {
         $filters=array();
         $filters[]=new \Twig_SimpleFilter("file_size", array($this, "formatFileSize"));
+        $filters[]=new \Twig_SimpleFilter("weekday", array($this, "getWeekDay"));
         return $filters;
     }
 
@@ -120,4 +121,16 @@ class TwigExtension extends \Twig_Extension
             return sprintf("%d %s", $size, $byte);
         }
 	}
+
+    /**
+     * Return the weekday of a date in french
+     *
+     * @param string $date a string that can be parsed by strtotime.
+     * @return string the week day of the date in french
+     */
+    private static $weekdays=["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"];
+    public function getWeekDay($date)
+    {
+        return self::$weekdays[date("w", strtotime($date))];
+    }
 }
