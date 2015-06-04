@@ -21,6 +21,7 @@
 namespace EducAction\AdesBundle\Twig;
 
 use EducAction\AdesBundle\Twig\TabPanelManager;
+use EducAction\AdesBundle\Tools;
 
 class TwigExtension extends \Twig_Extension
 {
@@ -94,10 +95,10 @@ class TwigExtension extends \Twig_Extension
             $params=array();
             $params["ip"] = $_SERVER['REMOTE_ADDR'];
             $params["hostname"] = gethostbyaddr($_SERVER['REMOTE_ADDR']);
-            if($identification = $request->getSession()->get("identification")) {
+            if($identification = Tools::GetDefault($_SESSION,"identification")) {
                 $who = $identification['nom'];
                 $who.=" ";
-                $who = $identification['prenom'];
+                $who.= $identification['prenom'];
                 $params["who"]=$who;
             }
             return $env->render("EducActionAdesBundle::whosthere.html.twig", $params);
