@@ -50,6 +50,10 @@
 	{{prototype.title}}
 </h3>
 
+{%if no_dates is defined %}
+        {% from "EducActionAdesBundle::macros.html.twig" import redirect %}
+        {{ redirect("Aucune date de return n'est encore définie ou elles sont toutes cachées", asset("ficheel.php?mode=voir&ideleve="~student.id), 3000) }}
+{%else%}
 
 <form method="POST" onsubmit="return verifForm(this)">
 
@@ -113,6 +117,7 @@
 		{% endif %}
 	{% endfor %}
 </form>
+{%endif%}
 
 {% endblock %}
 

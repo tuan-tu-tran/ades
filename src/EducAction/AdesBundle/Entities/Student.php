@@ -26,18 +26,20 @@ use EducAction\AdesBundle\Tools;
 class Student
 {
     const SELECT_FIELDS="
-        nom, prenom, classe, contrat
+        nom, prenom, classe, contrat, ideleve
         ";
     public $lastName;
     public $firstName;
     public $class;
     public $hasContract;
+    public $id;
 
     private static $mapping=array(
         "nom"=>"lastName",
         "prenom"=>"firstName",
         "classe"=>"class",
         "contrat"=>"hasContract",
+        "ideleve"=>"id",
     );
 
     private static $conversion=array(
