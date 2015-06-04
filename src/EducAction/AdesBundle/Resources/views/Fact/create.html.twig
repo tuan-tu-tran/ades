@@ -116,6 +116,17 @@
                         </p>
 		{% endif %}
 	{% endfor %}
+        <div style="text-align:center">
+                <input type="submit" name="mode" value="Enregistrer"/>
+                <input type="submit" name="reset" value="Réinitialiser"/>
+        </div>
+        {% if prototype.focus %}
+                <script type="text/javascript">
+                        jQuery(function($){{"{"}}
+                                document.forms[0].elements["{{prototype.focus}}"].focus();
+                        {{"}"}});
+                </script>
+        {%endif%}
 </form>
 {%endif%}
 

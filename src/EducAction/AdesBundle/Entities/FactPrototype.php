@@ -20,10 +20,13 @@
 
 namespace EducAction\AdesBundle\Entities;
 
+use EducAction\AdesBundle\Tools;
+
 class FactPrototype
 {
     public $backgroundColor;
     public $textColor;
+    public $focus;
     /**
      * @var string $title The fact title encoded in utf8
      */
@@ -47,6 +50,7 @@ class FactPrototype
         $prototype->textColor = "#".$data["couleurTexte"];
         $prototype->title = utf8_encode($data["titreFait"]);
         $prototype->detentionType = $data["typeDeRetenue"];
+        $prototype->focus=Tools::GetDefault($data, "focus");
         $fields = $repo->detailDesChampsPourContexte($id, $context);
         foreach($fields as $data) {
             $prototype->fields[] = new PrototypeField($data);
