@@ -31,6 +31,8 @@ class PrototypeField
     public $isDate;
     public $javascriptEvent;
     public $javascriptCommand;
+    public $columns;
+    public $rows;
     private $contexts;
 
     public function __construct(&$data)
@@ -40,12 +42,14 @@ class PrototypeField
         $this->size = $data["size"];
         $this->maxlength = $data["maxlength"];
         $this->cssClass = $data["classCSS"];
-        $this->label = $data["label"];
+        $this->label = utf8_encode($data["label"]);
         $this->isDate =$data["typeDate"];
         $this->contexts = $data["contextes"];
         $this->javascriptEvent = $data["javascriptEvent"];
         $this->javascriptCommand = $data["javascriptCommand"];
         $this->contexts = $data["contextes"];
+        $this->columns=$data["colonnes"];
+        $this->rows=$data["lignes"];
     }
 }
 
