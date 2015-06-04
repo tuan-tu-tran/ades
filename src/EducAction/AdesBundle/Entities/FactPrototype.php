@@ -28,6 +28,7 @@ class FactPrototype
      * @var string $title The fact title encoded in utf8
      */
     public $title;
+    public $detentionType;
     public $fields=array();
 
     /**
@@ -45,6 +46,7 @@ class FactPrototype
         $prototype->backgroundColor = "#".$data["couleurFond"];
         $prototype->textColor = "#".$data["couleurTexte"];
         $prototype->title = utf8_encode($data["titreFait"]);
+        $prototype->detentionType = $data["typeDeRetenue"];
         $fields = $repo->detailDesChampsPourContexte($id, $context);
         foreach($fields as $data) {
             $prototype->fields[] = new PrototypeField($data);

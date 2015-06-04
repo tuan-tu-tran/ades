@@ -88,6 +88,28 @@
                                 value="{{field.value}}"
                                 type="hidden"
                                 />
+                {% elseif field.isDetentionDate %}
+                        <p>
+                                <label for={{field.name}}>{{field.label}}</label>
+                                <select
+					id="{{field.name}}"
+                                        name="{{field.name}}"
+                                        >
+                                        {% for d in field.detentions %}
+                                                <option
+                                                        value="{{d.id}}"
+                                                        title="{{d.freePlaces}} place(s)"
+                                                        {% if d.id == field.value %}
+                                                                selected="selected"
+                                                        {%elseif d.freePlaces == 0%}
+                                                                disabled="disabled"
+                                                        {%endif%}
+                                                >
+                                                        {{d.duration}} h le {{d.date}} à {{d.time}}
+                                                </option>
+                                        {% endfor %}
+                                </select>
+                        </p>
 		{% endif %}
 	{% endfor %}
 </form>

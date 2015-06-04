@@ -26,6 +26,7 @@ use EducAction\AdesBundle\User;
 use EducAction\AdesBundle\Entities\Student;
 use EducAction\AdesBundle\Entities\FactPrototype;
 use EducAction\AdesBundle\Entities\Fact;
+use EducAction\AdesBundle\Entities\Detention;
 
 class FactController extends Controller implements IAccessControlled
 {
@@ -41,6 +42,9 @@ class FactController extends Controller implements IAccessControlled
         $fact=Fact::GetNew($factTypeId, $studentId, User::GetId());
         foreach($prototype->fields as $f){
             $f->value=$fact->getValue($f);
+            if($f->isDetentionDate){
+                $f->detentions=Detention::getVisibleDates($prototype->detentionType);
+            }
         }
         $params=new Bag();
         $params->student = $student;

@@ -33,6 +33,7 @@ class PrototypeField
     public $javascriptCommand;
     public $columns;
     public $rows;
+    public $isDetentionDate;
     private $contexts;
 
     public function __construct(&$data)
@@ -50,6 +51,7 @@ class PrototypeField
         $this->contexts = $data["contextes"];
         $this->columns=$data["colonnes"];
         $this->rows=$data["lignes"];
+        $this->isDetentionDate=$data["typeDateRetenue"];
     }
 }
 
