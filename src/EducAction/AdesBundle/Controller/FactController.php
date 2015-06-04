@@ -33,10 +33,7 @@ class FactController extends Controller implements IAccessControlled
 
     public function createAction($factTypeId, $studentId)
     {
-        $student = Student::GetById($studentId);
-        if(!$student){
-            throw $this->createNotFoundException("Cet élève n'existe pas");
-        }
+        $student = Student::GetById($studentId) or $this->ThrowNotFoundException("Cet élève n'existe pas");
         $params=new Bag();
         $params->student = $student;
         return $this->View("create.html.twig", $params);

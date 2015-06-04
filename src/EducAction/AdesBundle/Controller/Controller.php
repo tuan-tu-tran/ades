@@ -96,5 +96,18 @@ class Controller extends SfController
     {
         return $this->redirect($this->generateUrl($route));
     }
+
+    /**
+     * Throw a not found exception created with $this->createNotFoundException.
+     *
+     * This is useful in construcs like DoSomething or $this->ThrowNotFoundException($msg).
+     *
+     * @param string $msg the exception message.
+     * @return void
+     */
+    protected function ThrowNotFoundException($msg)
+    {
+        throw $this->createNotFoundException($msg);
+    }
 }
 
