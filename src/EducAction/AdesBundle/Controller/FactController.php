@@ -22,6 +22,7 @@
 namespace EducAction\AdesBundle\Controller;
 
 use EducAction\AdesBundle\Bag;
+use EducAction\AdesBundle\User;
 use EducAction\AdesBundle\Entities\Student;
 use EducAction\AdesBundle\Entities\FactPrototype;
 use EducAction\AdesBundle\Entities\Fact;
@@ -37,13 +38,13 @@ class FactController extends Controller implements IAccessControlled
     {
         $student = Student::GetById($studentId) or $this->ThrowNotFoundException("Cet élève n'existe pas");
         $prototype = FactPrototype::GetById($factTypeId, "formulaire") or $this->ThrowNotFoundException("Ce type de fait n'existe pas");
-        $fact=new Fact();
-        $params=new Bag();
-        $params->student = $student;
-        $params->prototype = $prototype;
+        $fact=Fact::GetNew($factTypeId, $studentId, User::GetId());
         foreach($prototype->fields as $f){
             $f->value=$fact->getValue($f);
         }
+        $params=new Bag();
+        $params->student = $student;
+        $params->prototype = $prototype;
         return $this->View("create.html.twig", $params);
     }
 }

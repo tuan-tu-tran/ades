@@ -26,9 +26,15 @@ class Fact
 {
     private $dbRow=array();
 
-    public function __construct()
+    public static function GetNew($typeId, $studentId, $userId)
     {
-        $this->dbRow["ladate"] = date("Y-m-d");
+        $f=new Fact();
+        $f->dbRow["ladate"] = date("Y-m-d");
+        $f->dbRow["idfait"] = -1;
+        $f->dbRow["type"] = $typeId;
+        $f->dbRow["ideleve"] = $studentId;
+        $f->dbRow["qui"] = $userId;
+        return $f;
     }
 
     public function getValue(PrototypeField $field)
