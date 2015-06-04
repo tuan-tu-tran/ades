@@ -23,35 +23,33 @@
 //------------------------------------------------------------------------------------
 
 class listesDeRetenues {
-var $listes = array();
-var $intitulesDesRetenues = array();
+    var $listes = array();
+    var $intitulesDesRetenues = array();
 
-//------------------------------------------------------------------------------------
-// fonction constructeur
-function __construct ()
-{
-// lire la liste des types de retenues avec leur intitulé
-$this->intituleDesRetenues = parse_ini_file("config/intitulesretenues.ini", TRUE);
+    //------------------------------------------------------------------------------------
+    // fonction constructeur
+    function __construct () {
+        // lire la liste des types de retenues avec leur intitulé
+        $this->intituleDesRetenues = parse_ini_file("config/intitulesretenues.ini", TRUE);
 
-// construit les listes pour tous les types de retenues
-require ("config/confbd.inc.php");
-$lienDB = mysql_connect($sql_serveur, $sql_user, $sql_passwd);
-mysql_select_db ($sql_bdd);
-$sql = "SELECT * FROM ades_retenues ";
-$sql .= "ORDER BY typeDeRetenue, ladate";
-// echo $sql;
-$resultat = mysql_query ($sql);
-mysql_close ($lienDB);
+        // construit les listes pour tous les types de retenues
+        require ("config/confbd.inc.php");
+        $lienDB = mysql_connect($sql_serveur, $sql_user, $sql_passwd);
+        mysql_select_db ($sql_bdd);
+        $sql = "SELECT * FROM ades_retenues ";
+        $sql .= "ORDER BY typeDeRetenue, ladate";
+        // echo $sql;
+        $resultat = mysql_query ($sql);
+        mysql_close ($lienDB);
 
-// on construit X listes où X = nombre de types de retenues
-// dans chaque liste, on empile les caractéristiques des retenues de ce type
-while ($ligne = mysql_fetch_assoc($resultat))
-	{
-	$typeDeRetenue = $ligne['typeDeRetenue'];
-	$this->listes[$typeDeRetenue][] = $ligne;
-	}
-}
-//------------------------------------------------------------------------------------
+        // on construit X listes où X = nombre de types de retenues
+        // dans chaque liste, on empile les caractéristiques des retenues de ce type
+        while ($ligne = mysql_fetch_assoc($resultat)) {
+            $typeDeRetenue = $ligne['typeDeRetenue'];
+            $this->listes[$typeDeRetenue][] = $ligne;
+        }
+    }
+    //------------------------------------------------------------------------------------
 function intitule ($typeDeRetenue)
 {
 return ($this->intituleDesRetenues[$typeDeRetenue]['intitule']);
