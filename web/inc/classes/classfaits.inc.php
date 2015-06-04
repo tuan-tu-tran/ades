@@ -293,7 +293,7 @@ function formulaire ($ideleve)
     $couleurFond = $faitATraiter['couleurFond'];
     $couleurTexte = $faitATraiter['couleurTexte'];
     $titreFait = $faitATraiter['titreFait'];
-    $focus = $faitATraiter['focus'];
+    $focus = isset($faitATraiter['focus'])?$faitATraiter["focus"]:"";
 
     $form = "<h3 style=\"background-color: #$couleurFond; color: #$couleurTexte\">";
     $form .= "$titreFait</h3>\n";
