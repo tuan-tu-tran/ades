@@ -1,0 +1,49 @@
+<?php
+/**
+ * Copyright (c) 2015 Tuan-Tu Tran
+ * 
+ * This file is part of ADES.
+ * 
+ * ADES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * ADES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+namespace EducAction\AdesBundle\Entities;
+
+class FactPrototype
+{
+    public $backgroundColor;
+    public $textColor;
+    /**
+     * @var string $title The fact title encoded in utf8
+     */
+    public $title;
+
+    /**
+     * Return the FactPrototype that corresponds to the given id
+     *
+     * @param int $id the fact prototype id
+     * @return FactPrototype the prototype or NULL if not found
+     */
+    public static function GetById($id)
+    {
+        $repo = new \prototypeFait();
+        $data = $repo->descriptionFaitId($id);
+        $prototype = new FactPrototype();
+        $prototype->backgroundColor = "#".$data["couleurFond"];
+        $prototype->textColor = "#".$data["couleurTexte"];
+        $prototype->title = utf8_encode($data["titreFait"]);
+        return $prototype;
+    }
+}
+
