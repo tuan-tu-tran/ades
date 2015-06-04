@@ -27,3 +27,7 @@
                 {{ "}" }},{{timeout}});
         </script>
 {% endmacro %}
+
+{% macro back(text) %}
+        <div class="inv" style="text-align:center; margin: 1em 0 2em 0"><a href="javascript:history.go(-1)">{{text|default("Retour à la page précédente")}}</a></div>
+{% endmacro %}
