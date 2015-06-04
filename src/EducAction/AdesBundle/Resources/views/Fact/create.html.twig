@@ -51,6 +51,7 @@
 				<label for="{{field.name}}">{{field.label}}</label>
 				<input
 					id="{{field.name}}"
+                                        name={{field.name}}
                                         value="{{ field.isDate ? field.value|date("j/n/Y") : field.value}}"
 					size=="{{field.size}}"
 					maxlength="{{field.maxlength}}"
