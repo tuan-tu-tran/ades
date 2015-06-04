@@ -27,6 +27,13 @@
         <link rel="stylesheet" href="{{ asset("config/calendrier.css") }}" type="text/css" media="screen">
 {% endblock %}
 
+{% macro javascript(field) %}
+        {% if field.javascriptEvent is not empty%}
+                {{field.javascriptEvent}}="{{field.javascriptCommand}}"
+        {% endif %}
+{%endmacro%}
+{% import _self as macros %}
+
 {% block content %}
 
 <h2>Faits disciplinaires</h2>
@@ -45,6 +52,7 @@
 
 
 <form method="POST" onsubmit="return verifForm(this)">
+
 	{% for field in prototype.fields %}
 		{% if field.type == "text" %}
 			<p>
@@ -56,14 +64,24 @@
 					size=="{{field.size}}"
 					maxlength="{{field.maxlength}}"
 					class="{{field.cssClass}}"
-					{% if field.javascriptEvent %}
-					{{field.javascriptEvent}}="{{field.javascriptCommand}}"
-					{%endif%}
+                                        {{macros.javascript(field)}}
 				/>
 				{% if field.isDate %}
 					<span id="calendrier" style="position: absolute; z-index: 100;"></span>
 				{% endif%}
 			</p>
+                {%elseif field.type == "textarea"%}
+                        <p>
+                                <label for={{field.name}}>{{field.label}}</label>
+                                <textarea
+                                        cols="{{field.columns}}"
+                                        rows="{{field.rows}}"
+                                        name={{field.name}}
+                                        id={{field.name}}
+                                        {{macros.javascript(field)}}
+					class="{{field.cssClass}}"
+                                >{{field.value}}</textarea>
+                        </p>
 		{% endif %}
 	{% endfor %}
 </form>
