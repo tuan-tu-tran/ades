@@ -59,7 +59,7 @@
 				<label for="{{field.name}}">{{field.label}}</label>
 				<input
 					id="{{field.name}}"
-                                        name={{field.name}}
+                                        name="{{field.name}}"
                                         value="{{ field.isDate ? field.value|date("j/n/Y") : field.value}}"
 					size=="{{field.size}}"
 					maxlength="{{field.maxlength}}"
@@ -76,8 +76,8 @@
                                 <textarea
                                         cols="{{field.columns}}"
                                         rows="{{field.rows}}"
-                                        name={{field.name}}
-                                        id={{field.name}}
+                                        name="{{field.name}}"
+					id="{{field.name}}"
                                         {{macros.javascript(field)}}
 					class="{{field.cssClass}}"
                                 >{{field.value}}</textarea>
