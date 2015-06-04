@@ -21,6 +21,12 @@
 
 {% extends 'EducActionAdesBundle::layout.html.twig' %}
 
+{% block post_head %}
+	{{parent()}}
+        <script language="javascript" type="text/javascript" src="{{asset("cal/calendrier.js")}}"></script>
+        <link rel="stylesheet" href="{{ asset("config/calendrier.css") }}" type="text/css" media="screen">
+{% endblock %}
+
 {% block content %}
 
 <h2>Faits disciplinaires</h2>
@@ -36,6 +42,34 @@
 <h3 style="background-color: {{prototype.backgroundColor}}; color: {{prototype.textColor}}">
 	{{prototype.title}}
 </h3>
+
+
+<form method="POST" onsubmit="return verifForm(this)">
+	{% for field in prototype.fields %}
+		{% if field.type == "text" %}
+			<p>
+				<label for="{{field.name}}">{{field.label}}</label>
+				<input
+					id="{{field.name}}"
+                                        {% set value=fact.getValue(field)%}
+                                        {% if field.isDate%}
+                                                {%set value=value|date("j/n/Y")%}
+                                        {% endif%}
+                                        value="{{value}}"
+					size=="{{field.size}}"
+					maxlength="{{field.maxlength}}"
+					class="{{field.cssClass}}"
+					{% if field.javascriptEvent %}
+					{{field.javascriptEvent}}="{{field.javascriptCommand}}"
+					{%endif%}
+				/>
+				{% if field.isDate %}
+					<span id="calendrier" style="position: absolute; z-index: 100;"></span>
+				{% endif%}
+			</p>
+		{% endif %}
+	{% endfor %}
+</form>
 
 {% endblock %}
 

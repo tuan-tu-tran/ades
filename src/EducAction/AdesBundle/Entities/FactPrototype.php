@@ -28,14 +28,16 @@ class FactPrototype
      * @var string $title The fact title encoded in utf8
      */
     public $title;
+    public $fields=array();
 
     /**
      * Return the FactPrototype that corresponds to the given id
      *
      * @param int $id the fact prototype id
+     * @param string $context the context filter for the fields
      * @return FactPrototype the prototype or NULL if not found
      */
-    public static function GetById($id)
+    public static function GetById($id, $context)
     {
         $repo = new \prototypeFait();
         $data = $repo->descriptionFaitId($id);
@@ -43,6 +45,10 @@ class FactPrototype
         $prototype->backgroundColor = "#".$data["couleurFond"];
         $prototype->textColor = "#".$data["couleurTexte"];
         $prototype->title = utf8_encode($data["titreFait"]);
+        $fields = $repo->detailDesChampsPourContexte($id, $context);
+        foreach($fields as $data) {
+            $prototype->fields[] = new PrototypeField($data);
+        }
         return $prototype;
     }
 }
