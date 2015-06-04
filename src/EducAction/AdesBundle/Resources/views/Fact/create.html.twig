@@ -51,11 +51,7 @@
 				<label for="{{field.name}}">{{field.label}}</label>
 				<input
 					id="{{field.name}}"
-                                        {% set value=fact.getValue(field)%}
-                                        {% if field.isDate%}
-                                                {%set value=value|date("j/n/Y")%}
-                                        {% endif%}
-                                        value="{{value}}"
+                                        value="{{ field.isDate ? field.value|date("j/n/Y") : field.value}}"
 					size=="{{field.size}}"
 					maxlength="{{field.maxlength}}"
 					class="{{field.cssClass}}"

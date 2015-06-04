@@ -37,10 +37,13 @@ class FactController extends Controller implements IAccessControlled
     {
         $student = Student::GetById($studentId) or $this->ThrowNotFoundException("Cet élève n'existe pas");
         $prototype = FactPrototype::GetById($factTypeId, "formulaire") or $this->ThrowNotFoundException("Ce type de fait n'existe pas");
+        $fact=new Fact();
         $params=new Bag();
         $params->student = $student;
         $params->prototype = $prototype;
-        $params->fact = new Fact();
+        foreach($prototype->fields as $f){
+            $f->value=$fact->getValue($f);
+        }
         return $this->View("create.html.twig", $params);
     }
 }
