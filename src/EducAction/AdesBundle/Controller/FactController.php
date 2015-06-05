@@ -65,6 +65,16 @@ class FactController extends Controller implements IAccessControlled
                 $f->detentions=Detention::getVisibleDates($prototype->detentionType);
                 if(count($f->detentions)==0){
                     $params->no_dates=TRUE;
+                } else if($f->value<=0){
+                    $notfull=FALSE;
+                    foreach($f->detentions as $d){
+                        if($d->freePlaces > 0){
+                            $notfull=TRUE;
+                        }
+                    }
+                    if(!$notfull){
+                        $params->no_dates=TRUE;
+                    }
                 }
             }
         }

@@ -51,8 +51,8 @@
 	{{prototype.title}}
 </h3>
 
-{%if no_dates is defined %}
-        {{ redirect("Aucune date de return n'est encore définie ou elles sont toutes cachées", asset("ficheel.php?mode=voir&ideleve="~student.id), 3000) }}
+{%if no_dates is defined and no_dates%}
+        {{ redirect("Aucune date de retenue n'est encore définie ou elles sont toutes cachées ou pleines", asset("ficheel.php?mode=voir&ideleve="~student.id), 3000) }}
 {%else%}
 
 <form method="POST" onsubmit="return verifForm(this)" action="{{path("educ_action_ades_fact_post")}}">
