@@ -43,7 +43,9 @@ class Student
     );
 
     private static $conversion=array(
-        "contrat"=>array("EducAction\\AdesBundle\\Entities\\Student", "Boolean")
+        "contrat"=>array("EducAction\\AdesBundle\\Entities\\Student", "Boolean"),
+        "nom"=>"utf8_encode",
+        "prenom"=>"utf8_encode",
     );
 
     /**
