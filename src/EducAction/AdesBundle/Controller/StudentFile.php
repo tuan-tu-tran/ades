@@ -54,7 +54,7 @@ class StudentFile
         foreach ($listeTitres as $unTitre) {
             $id = $unTitre['id_TypeFait'];
             $title = $unTitre['titreFait'];
-            $link = "fait.php?mode=nouveau&ideleve=$ideleve&type=$id";
+            $link = "fact/new/$id/student/$ideleve";
             $factInfoById[$id]=array(
                 "title"=>$title,
                 "link"=>$link,
