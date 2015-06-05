@@ -37,11 +37,25 @@ class FactController extends Controller implements IAccessControlled
         return array("admin","educ");
     }
 
+    public function editAction($id)
+    {
+        $fact=Fact::GetById($id) or $this->throwNotFoundException("Ce fait n'existe pas");
+        $student=$fact->getStudent();
+        $prototype=FactPrototype::GetByIdForForm($fact->prototypeId);
+        $params=$this->getFormParams($student, $fact, $prototype);
+        return $this->View("create.html.twig", $params);
+    }
     public function createAction($factTypeId, $studentId)
     {
         $student = Student::GetById($studentId) or $this->ThrowNotFoundException("Cet élève n'existe pas");
-        $prototype = FactPrototype::GetByIdForForm($factTypeId, "formulaire") or $this->ThrowNotFoundException("Ce type de fait n'existe pas");
+        $prototype = FactPrototype::GetByIdForForm($factTypeId) or $this->ThrowNotFoundException("Ce type de fait n'existe pas");
         $fact=Fact::GetNew($factTypeId, $studentId, User::GetId());
+        $params=$this->getFormParams($student, $fact, $prototype);
+        return $this->View("create.html.twig", $params);
+    }
+
+    private function getFormParams($student, $fact, $prototype)
+    {
         $params=new Bag();
         $params->student = $student;
         $params->prototype = $prototype;
@@ -54,7 +68,7 @@ class FactController extends Controller implements IAccessControlled
                 }
             }
         }
-        return $this->View("create.html.twig", $params);
+        return $params;
     }
 
     public function postAction()
@@ -62,6 +76,11 @@ class FactController extends Controller implements IAccessControlled
         $request=$this->get("request");
         $post=$request->request;
         $type = $post->get("type");
+        $id=$post->get("idfait", 0);
+        $db=Db::GetInstance();
+        if($id){
+            $db->execute("UPDATE ades_faits SET supprime='O' WHERE idfait=?", $id);
+        }
         $prototype=FactPrototype::GetByIdForForm($post->get("type")) or $this->throwNotFoundException("post: type $type");
         $fields=array();
         $values=array();
@@ -71,9 +90,15 @@ class FactController extends Controller implements IAccessControlled
             $name = $f->name;
             if($name!="idfait"){
                 $fields[]="`$name`";
+                if($name=="qui"){
+                    $v=User::GetId();
+                }elseif($name=="idorigine"){
+                    $v=$id;
+                } else {
                 Tools::TryGet($all, $name, $v) or $this->throwNotFoundException("post: $name");
                 if($f->isDate){
                     $v=\DateTime::createFromFormat("j/n/Y", $v);
+                }
                 }
                 $values[]=$v;
                 $markers[]="?";

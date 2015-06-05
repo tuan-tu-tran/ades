@@ -174,7 +174,7 @@ $lesClasses .= "</li>\n";
 switch ($type)
 {
 case "edit":
-	$img = "<a href=\"fait.php?mode=editer&amp;ideleve=$ideleve&amp;idfait=$idfait\">";
+	$img = "<a href=\"fact/edit/$idfait\">";
 	$img .= "<img src=\"images/editer.png\" alt=\"editer\" title=\"Modifier\" ";
 	$img .= "border=\"0\"></a>";
 	break;

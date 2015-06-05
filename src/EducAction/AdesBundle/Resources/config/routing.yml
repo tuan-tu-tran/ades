@@ -146,3 +146,8 @@ educ_action_ades_fact_done:
     pattern: /fact
     defaults: { _controller: EducActionAdesBundle:Fact:showDone }
     methods: [GET]
+
+educ_action_ades_fact_edit:
+    pattern: /fact/edit/{id}
+    defaults: { _controller: EducActionAdesBundle:Fact:edit }
+    methods: [GET]
