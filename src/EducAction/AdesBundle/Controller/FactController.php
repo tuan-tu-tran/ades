@@ -86,7 +86,15 @@ class FactController extends Controller implements IAccessControlled
         $values[]=new \DateTime();
         Db::GetInstance()->execute($query, $values);
 
-        return $this->redirect("ficheel.php?mode=voir&ideleve=".$post->get("ideleve"));
+        $this->flash()->set("studentId", $post->get("ideleve"));
+
+        return $this->redirectRoute("educ_action_ades_fact_done");
+    }
+
+    public function showDoneAction()
+    {
+        $studentId = $this->flash()->get("studentId") or $this->throwNotFoundException("Missing student");
+        return $this->View("done.html.twig", array("studentId"=>$studentId));
     }
 }
 
