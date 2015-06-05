@@ -109,7 +109,19 @@ class FactController extends Controller implements IAccessControlled
             ." ,`dermodif`"
             ." ) VALUES ( ".join(",", $markers).",?)";
         $values[]=new \DateTime();
-        Db::GetInstance()->execute($query, $values);
+        $db->execute($query, $values);
+
+        $db->execute("
+            UPDATE ades_retenues
+            JOIN (
+                SELECT r.idretenue AS tmp_id_retenue, SUM(f.idfait IS NOT null) AS real_occ
+                FROM ades_retenues r
+                LEFT join ades_faits f ON r.idretenue = f.idretenue AND f.supprime = 'N'
+                GROUP BY r.idretenue
+            ) tmp ON tmp_id_retenue = idretenue
+            SET occupation = real_occ
+            WHERE occupation != real_occ
+        ");
 
         $this->flash()->set("studentId", $post->get("ideleve"));
 
