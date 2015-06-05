@@ -55,7 +55,7 @@
         {{ redirect("Aucune date de return n'est encore définie ou elles sont toutes cachées", asset("ficheel.php?mode=voir&ideleve="~student.id), 3000) }}
 {%else%}
 
-<form method="POST" onsubmit="return verifForm(this)">
+<form method="POST" onsubmit="return verifForm(this)" action="{{path("educ_action_ades_fact_post")}}">
 
 	{% for field in prototype.fields %}
 		{% if field.type == "text" %}

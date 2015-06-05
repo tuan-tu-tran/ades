@@ -23,6 +23,8 @@ namespace EducAction\AdesBundle\Controller;
 
 use EducAction\AdesBundle\Bag;
 use EducAction\AdesBundle\User;
+use EducAction\AdesBundle\Tools;
+use EducAction\AdesBundle\Db;
 use EducAction\AdesBundle\Entities\Student;
 use EducAction\AdesBundle\Entities\FactPrototype;
 use EducAction\AdesBundle\Entities\Fact;
@@ -38,7 +40,7 @@ class FactController extends Controller implements IAccessControlled
     public function createAction($factTypeId, $studentId)
     {
         $student = Student::GetById($studentId) or $this->ThrowNotFoundException("Cet élève n'existe pas");
-        $prototype = FactPrototype::GetById($factTypeId, "formulaire") or $this->ThrowNotFoundException("Ce type de fait n'existe pas");
+        $prototype = FactPrototype::GetByIdForForm($factTypeId, "formulaire") or $this->ThrowNotFoundException("Ce type de fait n'existe pas");
         $fact=Fact::GetNew($factTypeId, $studentId, User::GetId());
         $params=new Bag();
         $params->student = $student;
@@ -53,6 +55,38 @@ class FactController extends Controller implements IAccessControlled
             }
         }
         return $this->View("create.html.twig", $params);
+    }
+
+    public function postAction()
+    {
+        $request=$this->get("request");
+        $post=$request->request;
+        $type = $post->get("type");
+        $prototype=FactPrototype::GetByIdForForm($post->get("type")) or $this->throwNotFoundException("post: type $type");
+        $fields=array();
+        $values=array();
+        $markers=array();
+        $all=$post->all();
+        foreach($prototype->fields as $f) {
+            $name = $f->name;
+            if($name!="idfait"){
+                $fields[]="`$name`";
+                Tools::TryGet($all, $name, $v) or $this->throwNotFoundException("post: $name");
+                if($f->isDate){
+                    $v=\DateTime::createFromFormat("j/n/Y", $v);
+                }
+                $values[]=$v;
+                $markers[]="?";
+            }
+        }
+        $query="INSERT INTO ades_faits("
+            .join(",",$fields)
+            ." ,`dermodif`"
+            ." ) VALUES ( ".join(",", $markers).",?)";
+        $values[]=new \DateTime();
+        Db::GetInstance()->execute($query, $values);
+
+        return $this->redirect("ficheel.php?mode=voir&ideleve=".$post->get("ideleve"));
     }
 }
 

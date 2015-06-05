@@ -136,3 +136,8 @@ educ_action_ades_fact_create_one:
     pattern: /fact/new/{factTypeId}/student/{studentId}
     defaults: { _controller: EducActionAdesBundle:Fact:create }
     methods: [GET]
+
+educ_action_ades_fact_post:
+    pattern: /fact
+    defaults: { _controller: EducActionAdesBundle:Fact:post }
+    methods: [POST]

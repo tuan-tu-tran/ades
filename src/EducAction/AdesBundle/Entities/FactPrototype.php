@@ -57,5 +57,13 @@ class FactPrototype
         }
         return $prototype;
     }
+
+    /**
+     * Shorthand for GetById($id, "formulaire")
+     */
+    public static function GetByIdForForm($id)
+    {
+        return self::GetById($id, "formulaire");
+    }
 }
 
