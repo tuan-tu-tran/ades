@@ -60,9 +60,28 @@ var register_detention_places, set_detention_list_id;
                 });
                 var _detentionList;
                 var _initialDetentionId;
+                var _lastDetentionId;
                 if(_detentionListId){
                         _detentionList=$("#"+_detentionListId);
                         _initialDetentionId=_detentionList.val();
+                        _detentionList.click(function(){
+                                _lastDetentionId=_detentionList.val();
+                        })
+                        _detentionList.change(function(){
+                                //allow the change only if the room constraint can be met
+                                var newDetentionId=_detentionList.val();
+                                var free=_freePlacesByDentention[newDetentionId];
+                                //the "current" student takes a spot, unless we're editing and we're selecting the initial detention
+                                if(!(_editing && _initialDetentionId==newDetentionId)){
+                                        free-=1;
+                                }
+                                free-=_selectedCount;
+                                if(free<0){
+                                        //the change would lead to overflow
+                                        alert("La retenue sélectionnée ne peut pas accueillir le nombre d'élèves sélectionnés!");
+                                        _detentionList.val(_lastDetentionId);
+                                }
+                        });
                 }
                 var lNoExtraStudent=$("#lNoExtraStudent");
                 var lExtraStudents=$("#lExtraStudents");
