@@ -22,24 +22,39 @@
                         this.value="";
                         $(this).unbind("focus", _tbFilterFocus);
                 };
-                var _options = $("#lbAllStudents > option");
+                var _table=$("#tExtraStudents");
+                $("#lbAllStudents > option").click(function(){
+                        var option = $(this);
+                        option.attr("selected","selected");
+                        var row=$("<tr>");
+                        var clear=$("<span>").text("clear");
+                        clear.addClass("clearButton").click(function(){
+                                row.detach();
+                                option.removeAttr("selected");
+                        });
+                        $("<td>").text(this.text).appendTo(row);
+                        $("<td>").append(clear).appendTo(row);
+                        _table.append(row);
+                });
+                function showOption(o, show){
+                        if(show){
+                                $(o).removeClass("hide");
+                        }else{
+                                $(o).addClass("hide");
+                        }
+                }
                 var _lbAllStudents = $("#lbAllStudents");
                 $("#tbFilter").focus(_tbFilterFocus).bind("change keyup", function(){
                         var text=this.value.trim();
-                        _lbAllStudents.empty().scrollTop(0);
                         if (text.length>0){
                                 var re=new RegExp(text,"i");
-                                _options.each(function(i,o){
-                                        var add = re.test(o.text);
-                                        console.log("'"+o.text+"' matches '"+text+"' : "+add);
-                                        if(add){
-                                                _lbAllStudents.append(o);
-                                        }
+                                _lbAllStudents.children().each(function(i,o){
+                                        showOption(o, re.test(o.text));
                                 })
                         }else{
-                                _options.each(function(i,o){
-                                        _lbAllStudents.append(o);
-                                })
+                                _lbAllStudents.children().each(function(i,o){
+                                        showOption(o, true);
+                                });
                         }
                 });
         });
