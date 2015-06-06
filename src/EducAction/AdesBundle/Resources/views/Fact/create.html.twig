@@ -56,6 +56,7 @@
 {%else%}
 
 <form method="POST" onsubmit="return verifForm(this)" action="{{path("educ_action_ades_fact_post")}}">
+        <div style="width:70%; display:inline-block">
 
 	{% for field in prototype.fields %}
 		{% if field.type == "text" %}
@@ -116,6 +117,16 @@
                         </p>
 		{% endif %}
 	{% endfor %}
+        </div>
+        <div style="width:28%; display:inline-block; vertical-align:top" >
+                <p style="background-color:yellow">Dupliquer ce fait à d'autres élèves</p>
+                <p><select size="6">
+                        {%for s in allStudents%}
+                                <option value="{{s.id}}">{{"[%s] %s %s"|format(s.class,s.lastName,s.firstName)}}</option>
+                        {%endfor%}
+                </select></p>
+                <p><input value="Entrez le nom d'un élève à ajouter" style="width:100%" id="tbAddStudent"/></p>
+        </div>
         <div style="text-align:center">
                 <input type="submit" name="mode" value="Enregistrer"/>
                 <input type="submit" name="reset" value="Réinitialiser"/>

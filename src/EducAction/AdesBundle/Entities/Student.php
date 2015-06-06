@@ -69,6 +69,13 @@ class Student
         }
     }
 
+    public static function GetAll()
+    {
+        $query="SELECT ".self::SELECT_FIELDS." FROM ades_eleves";
+        $result=Db::GetInstance()->query($query);
+        return Tools::orm($result, get_class(), self::$mapping, self::$conversion);
+    }
+
     private static function FromDbRow(array &$row)
     {
         $student=new Student();

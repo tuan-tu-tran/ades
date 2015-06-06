@@ -78,6 +78,15 @@ class FactController extends Controller implements IAccessControlled
                 }
             }
         }
+        $allStudents = Student::GetAll();
+        foreach($allStudents as $i=>$s){
+            if($s->id == $student->id){
+                unset($allStudents[$i]);
+            }
+        }
+        usort($allStudents, Tools::CompareBy("class","lastName","firstName"));
+        $params->allStudents = $allStudents;
+
         return $params;
     }
 

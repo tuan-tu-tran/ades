@@ -133,4 +133,30 @@ class Tools{
         }
         return $result;
     }
+
+    /**
+     * Return a comparator function that compares two objects by comparing their properties.
+     *
+     * This function takes a variadic list of string property names $properties to compare.
+     * It returns a comparator function that takes two objects as parameters and compares them to return -1,0 or +1 accordingly.
+     * The comparison is done by comparing the object's properties specified in $properties.
+     *
+     * @param string $properties a variable number of string properties
+     */
+    public static function CompareBy(/*...$properties*/)
+    {
+        $properties=func_get_args();
+        return function($x,$y) use ($properties) {
+            foreach($properties as $p){
+                $u=$x->$p;
+                $v=$y->$p;
+                if($u < $v){
+                    return -1;
+                }else if($u > $v){
+                    return +1;
+                }
+            }
+            return 0;
+        };
+    }
 }
