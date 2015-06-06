@@ -24,6 +24,7 @@
 {% block post_head %}
 	{{parent()}}
         <script language="javascript" type="text/javascript" src="{{asset("cal/calendrier.js")}}"></script>
+        <script language="javascript" type="text/javascript" src="{{asset("js/fact.js")}}"></script>
         <link rel="stylesheet" href="{{ asset("config/calendrier.css") }}" type="text/css" media="screen">
 {% endblock %}
 
@@ -120,12 +121,12 @@
         </div>
         <div style="width:28%; display:inline-block; vertical-align:top" >
                 <p style="background-color:yellow">Dupliquer ce fait à d'autres élèves</p>
-                <p><select size="6">
+                <p><select size="6" id="lbAllStudents" style="width:100%">
                         {%for s in allStudents%}
                                 <option value="{{s.id}}">{{"[%s] %s %s"|format(s.class,s.lastName,s.firstName)}}</option>
                         {%endfor%}
                 </select></p>
-                <p><input value="Entrez le nom d'un élève à ajouter" style="width:100%" id="tbAddStudent"/></p>
+                <p><input value="Filtrez la liste" style="width:100%" id="tbFilter"/></p>
         </div>
         <div style="text-align:center">
                 <input type="submit" name="mode" value="Enregistrer"/>
