@@ -138,7 +138,7 @@
         </div>
         <div style="width:28%; display:inline-block; vertical-align:top" >
                 <p style="background-color:yellow">Dupliquer ce fait à d'autres élèves</p>
-                <p><select id="lbAllStudents" style="width:100%; height:10em" size="2" name="extraStudentIds[]" multiple="multiple">
+                <p><select id="lbAllStudents" style="width:100%; height:10em" size="2">
                         {%for s in allStudents%}
                                 <option value="{{s.id}}">{{"[%s] %s %s"|format(s.class,s.lastName,s.firstName)}}</option>
                         {%endfor%}
