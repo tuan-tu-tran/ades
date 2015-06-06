@@ -72,7 +72,11 @@ class KernelListener
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();
-        error_log("Uncaught exception: $exception");
+        if(!in_array(get_class($exception), array(
+            "Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException"
+        ))){
+            error_log("Uncaught exception: $exception");
+        }
     }
 }
 
