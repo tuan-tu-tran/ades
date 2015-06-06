@@ -27,13 +27,11 @@
                         var option = $(this);
                         option.attr("selected","selected");
                         var row=$("<tr>");
-                        var clear=$("<span>").text("clear");
-                        clear.addClass("clearButton").click(function(){
+                        row.addClass("clearButton").click(function(){
                                 row.detach();
                                 option.removeAttr("selected");
                         });
                         $("<td>").text(this.text).appendTo(row);
-                        $("<td>").append(clear).appendTo(row);
                         _table.append(row);
                 });
                 function showOption(o, show){

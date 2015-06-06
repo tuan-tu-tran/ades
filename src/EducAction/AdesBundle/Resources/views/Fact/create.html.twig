@@ -33,10 +33,12 @@
                         display:none;
                 }
                 #lbAllStudents option:hover
+                ,#tExtraStudents tr:hover
                 {
                         background-color:yellow;
                 }
                 #lbAllStudents option
+                ,#tExtraStudents tr
                 {
                         cursor:pointer;
                 }
@@ -141,8 +143,8 @@
                                 <option value="{{s.id}}">{{"[%s] %s %s"|format(s.class,s.lastName,s.firstName)}}</option>
                         {%endfor%}
                 </select></p>
-                <p><input value="Filtrez la liste" style="width:100%" id="tbFilter"/></p>
-                <p><table id="tExtraStudents">
+                <p><span style="width:10%">Filtre: </span><input value="par nom et/ou par classe" style="width:70%" id="tbFilter"/></p>
+                <p><table id="tExtraStudents" style="width:100%">
                 </table></p>
         </div>
         <div style="text-align:center">
