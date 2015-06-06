@@ -28,7 +28,23 @@
                                 this.value=initFilter;
                                 $(this).focus(_tbFilterFocus);
                         }
-                }).val(initFilter);
+                }).val(initFilter).keypress(function(e){
+                        if(e.which==13){
+                                if(this.value!=""){
+                                        var visible=_lbAllStudents.children(":visible");
+                                        if(visible.length==1){
+                                                visible.click();
+                                                this.value="";
+                                        }else if(visible.length > 1){
+                                                alert("Veuillez raffiner votre filtre");
+                                        }else{
+                                                alert("Aucun élève sélectionné pour ce filtre");
+                                        }
+                                }
+                                e.preventDefault();
+                                e.stopPropagation();
+                        }
+                });
                 var _table=$("#tExtraStudents");
                 $("#lbAllStudents > option").click(function(){
                         var option = $(this);
