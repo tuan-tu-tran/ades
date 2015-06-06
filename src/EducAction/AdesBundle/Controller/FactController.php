@@ -42,7 +42,7 @@ class FactController extends Controller implements IAccessControlled
         $fact=Fact::GetById($id) or $this->throwNotFoundException("Ce fait n'existe pas");
         $student=$fact->getStudent();
         $prototype=FactPrototype::GetByIdForForm($fact->prototypeId);
-        $params=$this->getFormParams($student, $fact, $prototype);
+        $params=$this->getFormParams($student, $fact, $prototype, TRUE);
         return $this->View("create.html.twig", $params);
     }
     public function createAction($factTypeId, $studentId)
@@ -50,18 +50,24 @@ class FactController extends Controller implements IAccessControlled
         $student = Student::GetById($studentId) or $this->ThrowNotFoundException("Cet élève n'existe pas");
         $prototype = FactPrototype::GetByIdForForm($factTypeId) or $this->ThrowNotFoundException("Ce type de fait n'existe pas");
         $fact=Fact::GetNew($factTypeId, $studentId, User::GetId());
-        $params=$this->getFormParams($student, $fact, $prototype);
+        $params=$this->getFormParams($student, $fact, $prototype, FALSE);
         return $this->View("create.html.twig", $params);
     }
 
-    private function getFormParams($student, $fact, $prototype)
+    private function getFormParams($student, $fact, $prototype, $editing)
     {
         $params=new Bag();
         $params->student = $student;
         $params->prototype = $prototype;
+        $params->editing=$editing;
+        $hasDetentionDate= FALSE;
         foreach($prototype->fields as $f){
             $f->value=$fact->getValue($f);
             if($f->isDetentionDate){
+                if($hasDetentionDate){
+                    throw new \Exception("prototype ".$prototype->id." has multiple detention dates");
+                }
+                $hasDetentionDate=TRUE;
                 $f->detentions=Detention::getVisibleDates($prototype->detentionType);
                 if(count($f->detentions)==0){
                     $params->no_dates=TRUE;

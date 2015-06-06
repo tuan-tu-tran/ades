@@ -132,6 +132,12 @@
                                                 </option>
                                         {% endfor %}
                                 </select>
+                                <script type="text/javascript">
+                                        {% for d in field.detentions %}
+                                        register_detention_places({{d.id}}, {{d.freePlaces}});
+                                        {% endfor%}
+                                        set_detention_list_id("{{field.name}}", {{editing|json_encode}});
+                                </script>
                         </p>
 		{% endif %}
 	{% endfor %}
