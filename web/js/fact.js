@@ -54,6 +54,11 @@
                 _lbAllStudents.children().click(function(e){
                         var option = $(this);
                         option.attr("selected","selected");
+                        var val=[];
+                        _lbAllStudents.children("[selected]").each(function(i,o){
+                                return val.push(o.value);
+                        });
+                        _lbAllStudents.val(val);
                         var row=$("<tr>");
                         row.addClass("clearButton").click(function(){
                                 row.detach();
