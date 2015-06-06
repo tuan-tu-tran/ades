@@ -18,10 +18,17 @@
 */
 (function(){
         jQuery(function($){
+                var initFilter="par nom et/ou par classe";
                 var _tbFilterFocus=function(){
                         this.value="";
                         $(this).unbind("focus", _tbFilterFocus);
                 };
+                $("#tbFilter").focus(_tbFilterFocus).focusout(function(){
+                        if (this.value==""){
+                                this.value=initFilter;
+                                $(this).focus(_tbFilterFocus);
+                        }
+                }).val(initFilter);
                 var _table=$("#tExtraStudents");
                 $("#lbAllStudents > option").click(function(){
                         var option = $(this);
@@ -41,14 +48,15 @@
                                 $(o).addClass("hide");
                         }
                 }
-                var _lbAllStudents = $("#lbAllStudents");
-                $("#tbFilter").focus(_tbFilterFocus).bind("change keyup", function(){
+                var _lbAllStudents = $("#lbAllStudents").scrollTop(0);
+                _lbAllStudents[0].selectedIndex=-1;
+                $("#tbFilter").bind("change keyup", function(){
                         var text=this.value.trim();
                         if (text.length>0){
                                 var re=new RegExp(text,"i");
                                 _lbAllStudents.children().each(function(i,o){
                                         showOption(o, re.test(o.text));
-                                })
+                                }).scrollTop(0);
                         }else{
                                 _lbAllStudents.children().each(function(i,o){
                                         showOption(o, true);
