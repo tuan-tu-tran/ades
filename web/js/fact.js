@@ -49,7 +49,9 @@
                 var lExtraStudents=$("#lExtraStudents");
                 var _selectedCount = 0;
                 var _table=$("#tExtraStudents");
-                $("#lbAllStudents > option").click(function(){
+                var _lbAllStudents = $("#lbAllStudents").scrollTop(0);
+                _lbAllStudents[0].selectedIndex=-1;
+                _lbAllStudents.children().click(function(e){
                         var option = $(this);
                         option.attr("selected","selected");
                         var row=$("<tr>");
@@ -75,8 +77,6 @@
                                 $(o).addClass("hide");
                         }
                 }
-                var _lbAllStudents = $("#lbAllStudents").scrollTop(0);
-                _lbAllStudents[0].selectedIndex=-1;
                 $("#tbFilter").bind("change keyup", function(){
                         var text=this.value.trim();
                         var filters=[];
