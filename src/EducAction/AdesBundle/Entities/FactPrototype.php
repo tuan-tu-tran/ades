@@ -45,6 +45,7 @@ class FactPrototype
     {
         $repo = new \prototypeFait();
         $data = $repo->descriptionFaitId($id);
+        if($data){
         $prototype = new FactPrototype();
         $prototype->backgroundColor = "#".$data["couleurFond"];
         $prototype->textColor = "#".$data["couleurTexte"];
@@ -56,6 +57,9 @@ class FactPrototype
             $prototype->fields[] = new PrototypeField($data);
         }
         return $prototype;
+        } else {
+            return NULL;
+        }
     }
 
     /**
