@@ -52,10 +52,26 @@
                 _lbAllStudents[0].selectedIndex=-1;
                 $("#tbFilter").bind("change keyup", function(){
                         var text=this.value.trim();
-                        if (text.length>0){
-                                var re=new RegExp(text,"i");
+                        var filters=[];
+                        $.each(text.split(/(\s+)/), function(i,f){
+                                if(f.trim()!=""){
+                                        filters.push(f);
+                                }
+                        });
+                        if (filters.length>0){
+                                filters=$(filters).map(function(i, t){
+                                        return new RegExp(t,"i");
+                                });
+                                var match=function(t){
+                                        var m=true;
+                                        $.each(filters, function(i,f){
+                                                m=f.test(t);
+                                                return m;
+                                        })
+                                        return m;
+                                }
                                 _lbAllStudents.children().each(function(i,o){
-                                        showOption(o, re.test(o.text));
+                                        showOption(o, match(o.text));
                                 }).scrollTop(0);
                         }else{
                                 _lbAllStudents.children().each(function(i,o){
