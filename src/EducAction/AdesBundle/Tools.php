@@ -124,8 +124,8 @@ class Tools{
             $obj=new $classname();
             foreach($mapping as $src=>$dst){
                 $value = $row[$src];
-                if($conversion && Tools::TryGet(self::$conversion, $src, $conversion)){
-                    $value = call_user_func($conversion, $value);
+                if($conversion && Tools::TryGet($conversion, $src, $c)){
+                    $value = call_user_func($c, $value);
                 }
                 $obj->$dst = $value;
             }
