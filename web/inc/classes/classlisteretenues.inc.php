@@ -64,7 +64,7 @@ return ($this->intituleDesRetenues[$typeDeRetenue]['intitule']);
 function listeOptions ($typeDeRetenue, $id=-1, $desactiver=false)
 {
 $laliste = "";
-$listeBrute = $this->listes[$typeDeRetenue];
+$listeBrute = isset($this->listes[$typeDeRetenue])?$this->listes[$typeDeRetenue]:NULL;
 // voyons si des retenues sont déjà définies
 if (count($listeBrute) > 0)
 	foreach ($listeBrute as $UneRetenue)
