@@ -105,6 +105,9 @@ class FactController extends Controller implements IAccessControlled
         $values=array();
         $markers=array();
         $all=$post->all();
+        $extraStudentIds=$post->get("extraStudentIds");
+        $indexIdOrigine=-1;
+        $indexIdStudent=-1;
         foreach($prototype->fields as $f) {
             $name = $f->name;
             if($name!="idfait"){
@@ -113,15 +116,23 @@ class FactController extends Controller implements IAccessControlled
                     $v=User::GetId();
                 }elseif($name=="idorigine"){
                     $v=$id;
+                    $indexIdOrigine=count($values);
                 } else {
                     Tools::TryGet($all, $name, $v) or $this->throwNotFoundException("post: $name");
                     if($f->isDate){
                         $v=\DateTime::createFromFormat("j/n/Y", $v);
                     }
+                    if($name=="ideleve"){
+                        $indexIdStudent = count($values);
+                    }
                 }
                 $values[]=$v;
                 $markers[]="?";
             }
+        }
+
+        if($extraStudentIds && ($indexIdOrigine<0 || $indexIdStudent <0)){
+            throw new \Exception("could not find index for idorigine $indexIdOrigine or ideleve $indexIdStudent to handle mulitple facts: ".var_export($post->all(), TRUE));
         }
         $query="INSERT INTO ades_faits("
             .join(",",$fields)
@@ -129,6 +140,14 @@ class FactController extends Controller implements IAccessControlled
             ." ) VALUES ( ".join(",", $markers).",?)";
         $values[]=new \DateTime();
         $db->execute($query, $values);
+
+        if($extraStudentIds){
+            $values[$indexIdOrigine]=0;
+            foreach($extraStudentIds as $id){
+                $values[$indexIdStudent]=$id;
+                $db->execute($query, $values);
+            }
+        }
 
         $db->execute("
             UPDATE ades_retenues
