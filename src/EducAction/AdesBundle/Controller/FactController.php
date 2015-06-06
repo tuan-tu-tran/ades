@@ -105,10 +105,10 @@ class FactController extends Controller implements IAccessControlled
                 }elseif($name=="idorigine"){
                     $v=$id;
                 } else {
-                Tools::TryGet($all, $name, $v) or $this->throwNotFoundException("post: $name");
-                if($f->isDate){
-                    $v=\DateTime::createFromFormat("j/n/Y", $v);
-                }
+                    Tools::TryGet($all, $name, $v) or $this->throwNotFoundException("post: $name");
+                    if($f->isDate){
+                        $v=\DateTime::createFromFormat("j/n/Y", $v);
+                    }
                 }
                 $values[]=$v;
                 $markers[]="?";
