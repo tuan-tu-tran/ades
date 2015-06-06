@@ -45,6 +45,9 @@
                                 e.stopPropagation();
                         }
                 });
+                var lNoExtraStudent=$("#lNoExtraStudent");
+                var lExtraStudents=$("#lExtraStudents");
+                var _selectedCount = 0;
                 var _table=$("#tExtraStudents");
                 $("#lbAllStudents > option").click(function(){
                         var option = $(this);
@@ -53,9 +56,17 @@
                         row.addClass("clearButton").click(function(){
                                 row.detach();
                                 option.removeAttr("selected");
+                                _selectedCount-=1;
+                                if(_selectedCount==0){
+                                        lNoExtraStudent.show();
+                                        lExtraStudents.hide();
+                                }
                         });
                         $("<td>").text(this.text).appendTo(row);
                         _table.append(row);
+                        _selectedCount+=1;
+                        lNoExtraStudent.hide();
+                        lExtraStudents.show();
                 });
                 function showOption(o, show){
                         if(show){
