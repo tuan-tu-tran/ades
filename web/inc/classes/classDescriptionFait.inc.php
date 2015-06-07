@@ -189,7 +189,7 @@ class prototypeFait {
     //-----------------------------------------------------------------------------
     // retourne une ligne de tableau HTML contenant les titres du tableau
     // pour un fait de la fiche disciplinaire
-    function htmlTitreColonnesTableau ($id_TypeFait, $icones=true)
+    function htmlTitreColonnesTableau ($id_TypeFait, $icones=true, $author=FALSE)
     {
         $liste = $this->detailDesChampsPourContexte($id_TypeFait, 'tableau');
         $html = "<tr>\n";
@@ -198,17 +198,21 @@ class prototypeFait {
         foreach ($liste as $champ) {
             $html .= "\t<td>{$champ['label']}</td>\n";
         }
+        if($author){
+            $html.="\r<td>Auteur</td>\n";
+        }
         // une colonne pour icônes édition et suppression
         if ($icones) {
-            $html .= "\t<td>&nbsp;</td>\n</tr>\n";
+            $html .= "\t<td>&nbsp;</td>\n";
         }
+        $html.="</tr>";
         return $html;
     }
 
     //-----------------------------------------------------------------------------
     // retourne une ligne de tableau HTML contenant les noms des champs pour 
     // un tableau dans la fiche disciplinaire
-    function htmlChampsTableau ($id_TypeFait, $icones=true)
+    function htmlChampsTableau ($id_TypeFait, $icones=true, $author=FALSE)
     {
         $liste = $this->detailDesChampsPourContexte($id_TypeFait, 'tableau');
         $html = "<tr>\n";
@@ -217,6 +221,9 @@ class prototypeFait {
         }
         foreach ($liste as $champ) {
             $html .= "\t<td>##".$champ['champ']."##</td>\n";
+        }
+        if($author){
+            $html.="\r<td>##AUTHOR##</td>\n";
         }
         // une colonne pour icônes édition et suppression
         if ($icones) {

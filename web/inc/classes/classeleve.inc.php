@@ -369,14 +369,14 @@ class eleve
             $entete = str_replace("##NOMBRE##", $nombre, $entete);
 
             $tableaux .= $entete;
-            $ligneTitre = $prototypeFait->htmlTitreColonnesTableau ($id_TypeFait);
+            $ligneTitre = $prototypeFait->htmlTitreColonnesTableau ($id_TypeFait, TRUE, TRUE);
             $tableaux .= $ligneTitre;
 
             // pour chaque fait de ce type, on écrit les lignes du tableau
             foreach ($groupeFaits as $unFait) {
                 // une nouvelle ligne dans le tableau, pour un nouveau fait de ce type
                 // le prototype indique les champs à noter dans le tableau
-                $nouvelleLigne = $prototypeFait->htmlChampsTableau ($id_TypeFait);
+                $nouvelleLigne = $prototypeFait->htmlChampsTableau ($id_TypeFait, TRUE, TRUE);
                 $lesChamps = $prototypeFait->detailDesChampsPourContexte ($id_TypeFait, "tableau");
                 foreach ($lesChamps as $unChamp) {
                     $nomChamp = $unChamp['champ'];
@@ -390,6 +390,7 @@ class eleve
                 $nouvelleLigne = str_replace("##ED##", images("edit", $idFait, $this->ideleve()), $nouvelleLigne);
                 $nouvelleLigne = str_replace("##SUP##", images("suppr", $idFait, $this->ideleve()), $nouvelleLigne);
                 $nouvelleLigne = str_replace("##PRINT##", images("print", $idFait, $this->ideleve()), $nouvelleLigne);
+                //$nouvelleLigne = str_replace("##AUTHOR##", images("print", $idFait, $this->ideleve()), $nouvelleLigne);
                 $tableaux .= $nouvelleLigne;
             }
             $tableaux .= "</table>\n</div>\n";
