@@ -199,7 +199,7 @@ class prototypeFait {
             $html .= "\t<td>{$champ['label']}</td>\n";
         }
         if($author){
-            $html.="\r<td>Auteur</td>\n";
+            $html.="\r<td style='width:6em;'>Auteur</td>\n";
         }
         // une colonne pour icônes édition et suppression
         if ($icones) {
