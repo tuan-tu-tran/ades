@@ -66,8 +66,10 @@ class eleve
         $lienDB = mysql_connect($sql_serveur, $sql_user, $sql_passwd);
         mysql_select_db ($sql_bdd);
         $sql = "SELECT ades_faits.*, ades_retenues.ladate as dateRetenue, ";
+        $sql .= "ades_users.user, ";
         $sql .= "ades_retenues.duree, ades_retenues.heure, ades_retenues.local FROM ades_faits ";
         $sql .= "LEFT JOIN ades_retenues on ades_faits.idretenue = ades_retenues.idretenue ";
+        $sql .= "LEFT JOIN ades_users on ades_faits.qui = ades_users.idedu ";
         $sql .= "WHERE ideleve='".intval($ideleve)."' AND supprime !='O' ORDER BY type, ladate ASC";
         // echo $sql;
         $resultat = mysql_query ($sql);
@@ -369,14 +371,14 @@ class eleve
             $entete = str_replace("##NOMBRE##", $nombre, $entete);
 
             $tableaux .= $entete;
-            $ligneTitre = $prototypeFait->htmlTitreColonnesTableau ($id_TypeFait);
+            $ligneTitre = $prototypeFait->htmlTitreColonnesTableau ($id_TypeFait, TRUE, TRUE);
             $tableaux .= $ligneTitre;
 
             // pour chaque fait de ce type, on écrit les lignes du tableau
             foreach ($groupeFaits as $unFait) {
                 // une nouvelle ligne dans le tableau, pour un nouveau fait de ce type
                 // le prototype indique les champs à noter dans le tableau
-                $nouvelleLigne = $prototypeFait->htmlChampsTableau ($id_TypeFait);
+                $nouvelleLigne = $prototypeFait->htmlChampsTableau ($id_TypeFait, TRUE, TRUE);
                 $lesChamps = $prototypeFait->detailDesChampsPourContexte ($id_TypeFait, "tableau");
                 foreach ($lesChamps as $unChamp) {
                     $nomChamp = $unChamp['champ'];
@@ -390,6 +392,7 @@ class eleve
                 $nouvelleLigne = str_replace("##ED##", images("edit", $idFait, $this->ideleve()), $nouvelleLigne);
                 $nouvelleLigne = str_replace("##SUP##", images("suppr", $idFait, $this->ideleve()), $nouvelleLigne);
                 $nouvelleLigne = str_replace("##PRINT##", images("print", $idFait, $this->ideleve()), $nouvelleLigne);
+                $nouvelleLigne = str_replace("##AUTHOR##", $unFait["user"], $nouvelleLigne);
                 $tableaux .= $nouvelleLigne;
             }
             $tableaux .= "</table>\n</div>\n";
