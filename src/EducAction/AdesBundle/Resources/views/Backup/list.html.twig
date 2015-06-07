@@ -30,6 +30,10 @@
         {% set allow_backup_download = true %}
 {% endif %}
 
+{%if restore_route is not defined %}
+        {% set restore_route = "educ_action_ades_backup_restore"%}
+{% endif %}
+
 <table id="backup_table">
 	<tr style="background-color:orangered">
 		{% if allow_backup_delete %}
@@ -86,7 +90,7 @@
 		{% endif%}
 			<td style="text-align:center">
 			{% if file.restorable %}
-                <a href="{{ path("educ_action_ades_backup_restore", { "file" : file.name }) }}"
+                <a href="{{ path(restore_route, { "file" : file.name }) }}"
                     {% set overlibText = 'Cliquer pour restaurer cette sauvegarde.' %}
                     {% set confirmText="Êtes vous sûr de vouloir restaurer cette sauvegarde?\n\nCette action est IRREVERSIBLE!" %}
                     {% if not file.is_current_version %}

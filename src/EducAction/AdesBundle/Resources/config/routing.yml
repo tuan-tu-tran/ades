@@ -126,3 +126,8 @@ educ_action_ades_upgrade_do:
     pattern: /upgrade-db
     defaults: { _controller: EducActionAdesBundle:Upgrade:upgrade }
     methods: [POST]
+
+educ_action_ades_upgrade_restore:
+    pattern: /upgrade-db/restore/{file}
+    defaults: { _controller: EducActionAdesBundle:Upgrade:restore }
+    methods: [GET]
