@@ -44,20 +44,47 @@ class Upgrade
      */
     public static function Required()
     {
-        $dbVersion = Config::GetDbVersion();
+        $compatible = self::IsCompatible(Config::GetDbVersion(), $upgradeRequired);
+        if($compatible){
+            return $upgradeRequired;
+        }else{
+            return TRUE;
+        }
+    }
+
+    /**
+     * Returns whether the given db version is compatible with the current code version, possibly requiring an upgrade.
+     *
+     * If this method returns TRUE, then:
+     * <ul>
+     *  <li>either the given version is lower than the code version, in which case an upgrade will need to happen and $upgradeRequired will be TRUE</li>
+     *  <li>or the given version is higher than the code version, but with the same major, meaning the code is allowed to run with it, in which case $upgradeRequired will be FALSE</li>
+     * </ul>
+     * In either case, the code will be able to handle this db version.
+     * Otherwise, it means the code will not be able to run with this db and either the code must be upgraded or the db rolled back to a compatible version.
+     *
+     * @param string $dbVersion the version whose compatibility must be assessed
+     * @param bool &$upgradeRequired if TRUE is returned, this will be set to whether an upgrade is required for this version, otherwise this will be meaningless
+     * @return bool whether the code is allowed to run with the given db version
+     */
+    public static function IsCompatible($dbVersion, &$upgradeRequired)
+    {
         $codeVersion = self::Version;
-        if($dbVersion == $codeVersion){
-            return FALSE;
+        if($dbVersion==$codeVersion){
+            $upgradeRequired = FALSE;
+            return TRUE;
         }else if(self::CompareVersions($codeVersion, $dbVersion) > 0){
             //code > db => upgrade
+            $upgradeRequired = TRUE;
             return TRUE;
         }else{
-            //code < db : return if compatible i.e. major is the same
+            //code < db : compatible if same major
             $codeMajor = self::GetMajor($codeVersion);
             $dbMajor = self::GetMajor($dbVersion);
-            return $codeMajor != $dbMajor;
+            $upgradeRequired = FALSE;
+            return $codeMajor == $dbMajor;
         }
-        throw new \Exception("Upgrade::Required: unhandled case code:$codeVersion vs db:$dbVersion");
+        throw new \Exception("Upgrade::IsCompatible: unhandled case code:$codeVersion vs db:$dbVersion");
 	}
 
 	public static function CheckIfNeeded(){
@@ -160,7 +187,7 @@ class Upgrade
      * @param string $y the second version that must conform to Maj.Min pattern
      * @return int the integer result of the comparison
      */
-    public static function CompareVersions($x,$y)
+    private  static function CompareVersions($x,$y)
     {
         list($majx,$minx)=explode(".",$x);
         list($majy,$miny)=explode(".",$y);

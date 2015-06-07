@@ -79,7 +79,8 @@ class Backup
                 "version"=>$backupInfo["version"],
                 "is_current_version"=>$backupInfo["version"]==Upgrade::Version,
                 "comment"=>$backupInfo["comment"],
-                "restorable"=>Upgrade::CompareVersions($backupInfo["version"], Upgrade::Version)<=0?true:false,
+                "restorable"=>Upgrade::IsCompatible($backupInfo["version"], $upgradeRequired),
+                "upgradeRequired"=>$upgradeRequired,
 			);
 		}
         return $files;
