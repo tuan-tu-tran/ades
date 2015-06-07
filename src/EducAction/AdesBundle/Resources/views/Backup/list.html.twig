@@ -69,11 +69,14 @@
                 {% if file.is_current_version %}
                     style="text-align:right;"
                 {% elseif not file.restorable %}
-                    style="text-align:right;background-color:lightsalmon"
+                    style="text-align:right;background-color:red"
                     {{ overlib("Cette sauvegarde ne peut pas être restaurée car elle est incompatible avec la version actuelle du code ("~constant("EducAction\\AdesBundle\\Upgrade::Version")~")") }}
-                {% else %}
+                {% elseif file.upgradeRequired%}
                     style="text-align:right;background-color:lightsalmon"
-                    {{ overlib("Une restauration de cette sauvegarde nécessitera une mise à jour de la base de données") }}
+                    {{ overlib("Une restauration de cette sauvegarde nécessitera une mise à jour de la base de données vers la version "~constant("EducAction\\AdesBundle\\Upgrade::Version")) }}
+		{% else %}
+                    style="text-align:right;background-color:orange"
+                    {{ overlib("Cette sauvegarde utilise une version différente mais compatible avec celle du code ("~constant("EducAction\\AdesBundle\\Upgrade::Version")~")") }}
                 {% endif %}
             >
                 {{ file.version }}
@@ -93,7 +96,7 @@
                 <a href="{{ path(restore_route, { "file" : file.name }) }}"
                     {% set overlibText = 'Cliquer pour restaurer cette sauvegarde.' %}
                     {% set confirmText="Êtes vous sûr de vouloir restaurer cette sauvegarde?\n\nCette action est IRREVERSIBLE!" %}
-                    {% if not file.is_current_version %}
+                    {% if not file.is_current_version and file.upgradeRequired %}
                         {% set overlibText = overlibText ~ "<br/>ATTENTION! Une mise à jour de la base de données sera nécessaire." %}
                         {% set confirmText = confirmText ~ "\n\nDe plus, une mise à jour de la base de données sera nécessaire après la restauration." %}
                     {% endif %}
