@@ -25,8 +25,39 @@ class Upgrade
 {
 	const Version="2.0";
 
-	public static function Required(){
-		return Config::GetDbVersion()!=self::Version;
+    /**
+     * Return whether a db upgrade is required
+     *
+     * If this method returns FALSE, it means the code is allowed to run with the current db without any change.
+     * This method returns TRUE if:
+     * <ul>
+     *  <li>the version of the code is higher than the version of the db, in which case a db upgrade needs to happen</li>
+     *  <li>otherwise if the version of the code is incompatible with the version of the db (difference in major), in which case:
+     *      <ul>
+     *          <li>a compatible backup must be restored</li>
+     *          <li>or the code needs to be upgraded</li>
+     *      </ul>
+     *  </li>
+     *</ul>
+     *
+     * @return bool TRUE if an upgrade needs to happen or if the code is incompatible with db, FALSE otherwise i.e. code is allowed to run with the current db
+     */
+    public static function Required()
+    {
+        $dbVersion = Config::GetDbVersion();
+        $codeVersion = self::Version;
+        if($dbVersion == $codeVersion){
+            return FALSE;
+        }else if(self::CompareVersions($codeVersion, $dbVersion) > 0){
+            //code > db => upgrade
+            return TRUE;
+        }else{
+            //code < db : return if compatible i.e. major is the same
+            $codeMajor = self::GetMajor($codeVersion);
+            $dbMajor = self::GetMajor($dbVersion);
+            return $codeMajor != $dbMajor;
+        }
+        throw new \Exception("Upgrade::Required: unhandled case code:$codeVersion vs db:$dbVersion");
 	}
 
 	public static function CheckIfNeeded(){
@@ -106,6 +137,29 @@ class Upgrade
         return $versions;
     }
 
+    /**
+     * Return the major of a version
+     *
+     * The first part of X.Y(.Z.T...) i.e. X
+     *
+     * @param string $v a version that should be like X.Y but X.Y.Z... is also accepted
+     * @return string X in X.Y....
+     */
+    private static function GetMajor($v)
+    {
+        return explode(".",$v)[0];
+    }
+
+    /**
+     * Compare two Maj.Min versions
+     *
+     * Return an int < 0 if $x<$y, 0 if $x == $y and >0 if $x > $y.
+     * First Maj is compared and in case of equality, Min is compared.
+     *
+     * @param string $x the first version that must conform to Maj.Min pattern
+     * @param string $y the second version that must conform to Maj.Min pattern
+     * @return int the integer result of the comparison
+     */
     public static function CompareVersions($x,$y)
     {
         list($majx,$minx)=explode(".",$x);
