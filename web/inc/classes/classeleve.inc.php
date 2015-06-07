@@ -68,7 +68,7 @@ class eleve
         $sql = "SELECT ades_faits.*, ades_retenues.ladate as dateRetenue, ";
         $sql .= "ades_retenues.duree, ades_retenues.heure, ades_retenues.local FROM ades_faits ";
         $sql .= "LEFT JOIN ades_retenues on ades_faits.idretenue = ades_retenues.idretenue ";
-        $sql .= "WHERE ideleve='$ideleve' AND supprime !='O' ORDER BY type, ladate ASC";
+        $sql .= "WHERE ideleve='".intval($ideleve)."' AND supprime !='O' ORDER BY type, ladate ASC";
         // echo $sql;
         $resultat = mysql_query ($sql);
         mysql_close ($lienDB);
