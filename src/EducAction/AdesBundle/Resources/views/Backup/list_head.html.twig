@@ -27,10 +27,21 @@
         <script type="text/javascript">
                 jQuery(function($){
                         $("input#delete_many").click(function(event){
-                                if($("input[name='to_delete[]']:checked").length == 0){
+				var checked = $("input[name='to_delete[]']:checked").length;
+				if( checked == 0){
                                         alert("Veuillez sélectionner un ou plusieurs backups à effacer");
                                         event.preventDefault();
-                                }
+				}else{
+					var many=checked > 1;
+					var msg="Êtes vous sûr de vouloir effacer ";
+					msg+=many?("ces "+checked):"cette";
+					msg+=" sauvegarde";
+					msg+=many?"s":"";
+					msg+="?\nCette action est IRREVERSIBLE!";
+					if(!confirm(msg)) {
+						event.preventDefault();
+					}
+				}
                         });
                         $("table#backup_table  tr:not(:first-child) td:first-child input").click(function(event){
                                 event.stopPropagation();
