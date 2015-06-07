@@ -202,5 +202,62 @@ class Backup
         return $filename;
     }
 
-}
+    /**
+     * Restore the given file and redirect to display the result
+     *
+     * This method was extracted from the BackupController::restoreAction
+     * so that it could be run from the UpgradeController action when required,
+     * without the need for a logged admin user (#89).
+     *
+     * @param string $file the basename of the file to restore
+     * @param Controller $controller a Controller instance needed to access the flashbag and generate a RedirectResponse
+     * @return HttpResponse an http response to be returned by a controller method
+     */
+    public static function Restore($file, $controller)
+    {
+        if(Backup::isLegalFile($file)) {
+            $restore=new Bag();
+            $restore->filename=$file;
+            $backupDone=Backup::create("[auto]avant restauration du backup $file", $controller, $backup);
+            $restore->backup = $backup;
+            if($backupDone && $input=file_get_contents(self::getFolder()."/".$file)){
+                $restore->input_read=true;
+                //drop all the tables first
+                $db=Db::GetInstance();
+                if ($db->TryQuery($result, "SHOW TABLES")) {
+                    $restore->error = $db->error();
+                    $dropped=TRUE;
+                    foreach($result as $row){
+                        $tableName=$row[0];
+                        if (!$db->TryExecute("DROP TABLE $tableName")) {
+                            $restore->error = $db->error();
+                            $dropped=FALSE;
+                            break;
+                        }
+                    }
+                } else {
+                    $dropped=FALSE;
+                };
+                if (!$dropped) {
+                    $restore->failed=TRUE;
+                    $restore->launched=TRUE;
+                }else if(Utils::MySqlScript($input, $err,$launched)){
+                    $restore->failed=false;
+                    $restore->launched=true;
+                }else{
+                    $restore->failed=true;
+                    $restore->launched=$launched;
+                    if($restore->failed && $restore->launched)
+                        $restore->error=$err;
+                }
+            }else{
+                $restore->failed=true;
+                $restore->input_read=false;
+                $restore->error=Tools::GetLastError();
+            }
+            $controller->flash()->set("restore",$restore);
+        }
+        return $controller->redirect($controller->generateUrl("educ_action_ades_backup"));
+    }
 
+}

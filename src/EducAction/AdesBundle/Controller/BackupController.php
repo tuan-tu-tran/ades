@@ -49,50 +49,7 @@ class BackupController extends Controller implements IAccessControlled
 
     public function restoreAction($file)
     {
-        if(Backup::isLegalFile($file)) {
-            $restore=$this->params;
-			$restore->filename=$file;
-            $backupDone=Backup::create("[auto]avant restauration du backup $file", $this, $backup);
-            $restore->backup = $backup;
-			if($backupDone && $input=file_get_contents(self::BackupFolder()."/".$file)){
-				$restore->input_read=true;
-                //drop all the tables first
-                $db=Db::GetInstance();
-                if ($db->TryQuery($result, "SHOW TABLES")) {
-                    $restore->error = $db->error();
-                    $dropped=TRUE;
-                    foreach($result as $row){
-                        $tableName=$row[0];
-                        if (!$db->TryExecute("DROP TABLE $tableName")) {
-                            $restore->error = $db->error();
-                            $dropped=FALSE;
-                            break;
-                        }
-                    }
-                } else {
-                    $dropped=FALSE;
-                };
-                if (!$dropped) {
-                    $restore->failed=TRUE;
-                    $restore->launched=TRUE;
-                }else
-				if(Utils::MySqlScript($input, $err,$launched)){
-					$restore->failed=false;
-					$restore->launched=true;
-				}else{
-					$restore->failed=true;
-					$restore->launched=$launched;
-					if($restore->failed && $restore->launched)
-						$restore->error=$err;
-				}
-			}else{
-				$restore->failed=true;
-				$restore->input_read=false;
-				$restore->error=Tools::GetLastError();
-			}
-            $this->flash()->set("restore",$restore);
-		}
-        return $this->redirect($this->generateUrl("educ_action_ades_backup"));
+        return Backup::Restore($file, $this);
 	}
 
     public function deleteAction($file)

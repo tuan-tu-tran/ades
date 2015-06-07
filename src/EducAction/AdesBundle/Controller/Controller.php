@@ -61,7 +61,7 @@ class Controller extends SfController
         return $this->Render($template, $allParameters);
 	}
 
-    protected function flash()
+    public function flash()
     {
         if(!$this->flashWrapper) {
             $this->flashWrapper = new FlashBagWrapper($this->getRequest()->getSession()->getFlashBag());
