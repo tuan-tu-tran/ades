@@ -53,4 +53,13 @@ class UpgradeController extends Controller
         }
         return $this->redirectRoute("educ_action_ades_upgrade");
     }
+
+    public function restoreAction($file)
+    {
+        if(Upgrade::Required()){
+            return Backup::Restore($file, $this);
+        } else {
+            return $this->redirectRoute("educ_action_ades_homepage");
+        }
+    }
 }
