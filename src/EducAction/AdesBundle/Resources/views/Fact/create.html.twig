@@ -1,0 +1,135 @@
+{#
+/**
+ * Copyright (c) 2015 Tuan-Tu Tran
+ * 
+ * This file is part of ADES.
+ * 
+ * ADES is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * ADES is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
+*/
+#}
+
+{% extends 'EducActionAdesBundle::layout.html.twig' %}
+
+{% block post_head %}
+	{{parent()}}
+        <script language="javascript" type="text/javascript" src="{{asset("cal/calendrier.js")}}"></script>
+        <link rel="stylesheet" href="{{ asset("config/calendrier.css") }}" type="text/css" media="screen">
+{% endblock %}
+
+{% macro javascript(field) %}
+        {% if field.javascriptEvent is not empty%}
+                {{field.javascriptEvent}}="{{field.javascriptCommand}}"
+        {% endif %}
+{%endmacro%}
+{% import _self as macros %}
+{% from "EducActionAdesBundle::macros.html.twig" import redirect, back %}
+
+{% block content %}
+
+<h2>Faits disciplinaires</h2>
+
+<h3>
+	Nom : <strong>{{student.lastName}} {{student.firstName}}</strong> :: 
+	Classe : <strong>{{student.class}}</strong>
+	{% if student.hasContract %}
+		<span class="impt">Contrat</span>
+	{%endif%}
+</h3>
+
+<h3 style="background-color: {{prototype.backgroundColor}}; color: {{prototype.textColor}}">
+	{{prototype.title}}
+</h3>
+
+{%if no_dates is defined and no_dates%}
+        {{ redirect("Aucune date de retenue n'est encore définie ou elles sont toutes cachées ou pleines", asset("ficheel.php?mode=voir&ideleve="~student.id), 3000) }}
+{%else%}
+
+<form method="POST" onsubmit="return verifForm(this)" action="{{path("educ_action_ades_fact_post")}}">
+
+	{% for field in prototype.fields %}
+		{% if field.type == "text" %}
+			<p>
+				<label for="{{field.name}}">{{field.label}}</label>
+				<input
+					id="{{field.name}}"
+                                        name="{{field.name}}"
+                                        value="{{ field.isDate ? field.value|date("j/n/Y") : field.value}}"
+					size="{{field.size}}"
+					maxlength="{{field.maxlength}}"
+					class="{{field.cssClass}}"
+                                        {{macros.javascript(field)}}
+				/>
+				{% if field.isDate %}
+					<span id="calendrier" style="position: absolute; z-index: 100;"></span>
+				{% endif%}
+			</p>
+                {%elseif field.type == "textarea"%}
+                        <p>
+                                <label for={{field.name}}>{{field.label}}</label>
+                                <textarea
+                                        cols="{{field.columns}}"
+                                        rows="{{field.rows}}"
+                                        name="{{field.name}}"
+					id="{{field.name}}"
+                                        {{macros.javascript(field)}}
+					class="{{field.cssClass}}"
+                                >{{field.value}}</textarea>
+                        </p>
+                {%elseif field.type == "hidden"%}
+                        <input
+                                name="{{field.name}}"
+                                value="{{field.value}}"
+                                type="hidden"
+                                />
+                {% elseif field.isDetentionDate %}
+                        <p>
+                                <label for={{field.name}}>{{field.label}}</label>
+                                <select
+					id="{{field.name}}"
+                                        name="{{field.name}}"
+                                        >
+                                        {% for d in field.detentions %}
+                                                <option
+                                                        value="{{d.id}}"
+                                                        title="{{d.freePlaces}} place(s)"
+                                                        {% if d.id == field.value %}
+                                                                selected="selected"
+                                                        {%elseif d.freePlaces == 0%}
+                                                                disabled="disabled"
+                                                        {%endif%}
+                                                >
+                                                        {{d.duration}} h le {{d.date|weekday}} {{d.date|date("j/n/Y")}} à {{d.time}}
+                                                </option>
+                                        {% endfor %}
+                                </select>
+                        </p>
+		{% endif %}
+	{% endfor %}
+        <div style="text-align:center">
+                <input type="submit" name="mode" value="Enregistrer"/>
+                <input type="submit" name="reset" value="Réinitialiser"/>
+        </div>
+        {% if prototype.focus %}
+                <script type="text/javascript">
+                        jQuery(function($){{"{"}}
+                                document.forms[0].elements["{{prototype.focus}}"].focus();
+                        {{"}"}});
+                </script>
+        {%endif%}
+</form>
+{{ back()}}
+{%endif%}
+
+{% endblock %}
+

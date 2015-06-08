@@ -183,6 +183,11 @@ class Db{
 
     /**
      * Execute a query a return results or throw an exception
+     *
+     * @param string $query the query to execute
+     * @param mixed variadic query parameters or a single array
+     *
+     * @return array an array of associative arrays.
      */
 	public function query($query/*, $params, ... or $paramsArray*/){
         $this->private_execute_or_throw(func_get_args(), $stmt);

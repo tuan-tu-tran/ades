@@ -101,4 +101,36 @@ class Tools{
         }
         return $result;
     }
+
+    /**
+     * Return an array of objects created from an array of db rows
+     *
+     * For each row in $dbResult, a default instance of $classname is created.
+     * Then for each (db field => property) pair found in mapping, the object's property is assigned
+     * the value from the db row, optionnally converted using the callable in $conversion
+     * whose key is the db field name.
+     *
+     * @param array $dbResult a list of db rows (array of associative arrays)
+     * @param string $classname the class (full) name
+     * @param array $mapping an array of string (db field => property) pairs
+     * @param array $conversion an optional array of (db field => callable) pairs. The callable takes the db value as parameter and must return the property value.
+     *
+     * @return array an array of instances created from the db rows
+     */
+    public static function orm($dbResult, $classname, &$mapping, &$conversion=NULL)
+    {
+        $result=array();
+        foreach($dbResult as $row){
+            $obj=new $classname();
+            foreach($mapping as $src=>$dst){
+                $value = $row[$src];
+                if($conversion && Tools::TryGet($conversion, $src, $c)){
+                    $value = call_user_func($c, $value);
+                }
+                $obj->$dst = $value;
+            }
+            $result[]=$obj;
+        }
+        return $result;
+    }
 }

@@ -283,114 +283,109 @@ foreach ($descriptionChamps as $unChamp)
 // compose le formulaire correspondant au type de fait actuel
 function formulaire ($ideleve)
 {
-$contexte = 'formulaire';
-// quel est le type du fait?
-$type = $this->getRubrique('type');
-// recherche des caractéristiques des rubriques à faire figurer dans le formulaire
-$listeTypeFaits = new prototypeFait();
-$faitATraiter = $listeTypeFaits->descriptionFaitId($type);
+    $contexte = 'formulaire';
+    // quel est le type du fait?
+    $type = $this->getRubrique('type');
+    // recherche des caractéristiques des rubriques à faire figurer dans le formulaire
+    $listeTypeFaits = new prototypeFait();
+    $faitATraiter = $listeTypeFaits->descriptionFaitId($type);
 
-$couleurFond = $faitATraiter['couleurFond'];
-$couleurTexte = $faitATraiter['couleurTexte'];
-$titreFait = $faitATraiter['titreFait'];
-$focus = $faitATraiter['focus'];
+    $couleurFond = $faitATraiter['couleurFond'];
+    $couleurTexte = $faitATraiter['couleurTexte'];
+    $titreFait = $faitATraiter['titreFait'];
+    $focus = isset($faitATraiter['focus'])?$faitATraiter["focus"]:"";
 
-$form = "<h3 style=\"background-color: #$couleurFond; color: #$couleurTexte\">";
-$form .= "$titreFait</h3>\n";
-$form .= "<form name=\"form1\" method=\"post\" action=\"{$_SERVER["PHP_SELF"]}\"";
-$form .= " onsubmit=\"return(verifForm(this))\">\n";
+    $form = "<h3 style=\"background-color: #$couleurFond; color: #$couleurTexte\">";
+    $form .= "$titreFait</h3>\n";
+    $form .= "<form name=\"form1\" method=\"post\" action=\"{$_SERVER["PHP_SELF"]}\"";
+    $form .= " onsubmit=\"return(verifForm(this))\">\n";
 
-// recherche de la liste de description de chaque champ
-// qui doit apparaître dans le formulaire
-$descriptionChamps = $listeTypeFaits->detailDesChampsPourContexte($type,"formulaire");
+    // recherche de la liste de description de chaque champ
+    // qui doit apparaître dans le formulaire
+    $descriptionChamps = $listeTypeFaits->detailDesChampsPourContexte($type,"formulaire");
 
-foreach ($descriptionChamps as $unChamp)
-	{
-	// on vérifie si le champ doit être affichée dans le $contexte
-	// les $contexte(s) sont précisés dans le fichier .ini de la description des champs
-	if (strpos( $unChamp['contextes'], $contexte)!==FALSE)
-		{
-		// pour le champ en cours, recherche de ses caractéristiques
-		foreach ($unChamp as $key => $value)
-			$$key = $value;
-		if ($javascriptEvent != "")
-			$javascript = "$javascriptEvent=\"$javascriptCommand\"";
-			else $javascript ="";
-		// la variable $champ fait partie des caractéristiques obligatoire (provenant de $$key)
-		$valeur = $this->getRubrique($champ);
+    foreach ($descriptionChamps as $unChamp) {
+        // on vérifie si le champ doit être affichée dans le $contexte
+        // les $contexte(s) sont précisés dans le fichier .ini de la description des champs
+        if (strpos( $unChamp['contextes'], $contexte)!==FALSE) {
+            // pour le champ en cours, recherche de ses caractéristiques
+            foreach ($unChamp as $key => $value)
+                $$key = $value;
+            if ($javascriptEvent != "")
+                $javascript = "$javascriptEvent=\"$javascriptCommand\"";
+            else $javascript ="";
+                // la variable $champ fait partie des caractéristiques obligatoire (provenant de $$key)
+                $valeur = $this->getRubrique($champ);
 
-		// la variable $typeChamp fait partie des caractéristiques obligatoires (provenant de $$key)
-		switch ($typeChamp)
-			{
-			case 'text':
-			// s'il s'agit d'une date, convertir de la notation MySQL vers la notation PHP
-			if ($typeDate)
-				$valeur = sh_date_sql_php ($valeur);
-			
-			$form .= "\t<p><label for=\"$champ\">$label </label>\n";
-			$form .= "\t<input name=\"$champ\" id=\"$champ\" value=\"$valeur";
-			$form .= "\" type=\"text\" size=\"$size\" maxlength=\"$maxlength\" ";
-			$form .= "class=\"$classCSS\" $javascript>\n";
-			if ($typeDate)
-				$form .= "\t<span id=\"calendrier\" style=\"position: absolute; z-index: 100;\"></span>";
-			$form .= "</p>\n";
-			break;
-			case 'textarea':
-			$form .= "\t<p><label for=\"$champ\">$label </label>\n";
-			$form .= "\t<textarea cols=\"$colonnes\" rows=\"$lignes\" name=\"$champ\" id=\"$champ\"";
-			$form .= " class=\"$classCSS\" $javascript>";
-			$form .= "$valeur</textarea></p>\n";
-			break;
-			case 'hidden':
-			$form .= "\t<input name=\"$champ\" value=\"$valeur\"";
-			$form .= " type=\"hidden\">\n";
-			break;
-			case 'select':
-			$form .= "\t<p><label for=\"$champ\">$label </label>\n";
-			$form .= "\t<select name=\"$champ\" id=\"champ\">\n";
-			// la liste des options est est à préparer séparément et à insérer à la place
-			// du motif ##options##
-			$form .= "\t##options##\n";
-			$form .= "\t</select>\n";
+            // la variable $typeChamp fait partie des caractéristiques obligatoires (provenant de $$key)
+            switch ($typeChamp) {
+                case 'text':
+                    // s'il s'agit d'une date, convertir de la notation MySQL vers la notation PHP
+                    if ($typeDate)
+                        $valeur = sh_date_sql_php ($valeur);
 
-			// préparation des options s'il s'agit d'un champ "Date de retenue",
-			if ($typeDateRetenue)
-				{
-				// on recherche la liste des dates de retenues pour ce type, dans la BD
-				$listeRetenues = new listesDeRetenues();
-				// le type de retenue est déterminé dans le constructeur
-				$typeDeRetenue = $this->getRubrique('typeDeRetenue');
-				$listeOptions = $listeRetenues->listeOptions($typeDeRetenue, $valeur, true);
+                    $form .= "\t<p><label for=\"$champ\">$label </label>\n";
+                    $form .= "\t<input name=\"$champ\" id=\"$champ\" value=\"$valeur";
+                    $form .= "\" type=\"text\" size=\"$size\" maxlength=\"$maxlength\" ";
+                    $form .= "class=\"$classCSS\" $javascript>\n";
+                    if ($typeDate)
+                        $form .= "\t<span id=\"calendrier\" style=\"position: absolute; z-index: 100;\"></span>";
+                    $form .= "</p>\n";
+                    break;
+                case 'textarea':
+                    $form .= "\t<p><label for=\"$champ\">$label </label>\n";
+                    $form .= "\t<textarea cols=\"$colonnes\" rows=\"$lignes\" name=\"$champ\" id=\"$champ\"";
+                    $form .= " class=\"$classCSS\" $javascript>";
+                    $form .= "$valeur</textarea></p>\n";
+                    break;
+                case 'hidden':
+                    $form .= "\t<input name=\"$champ\" value=\"$valeur\"";
+                    $form .= " type=\"hidden\">\n";
+                    break;
+                case 'select':
+                    $form .= "\t<p><label for=\"$champ\">$label </label>\n";
+                    $form .= "\t<select name=\"$champ\" id=\"champ\">\n";
+                    // la liste des options est est à préparer séparément et à insérer à la place
+                    // du motif ##options##
+                    $form .= "\t##options##\n";
+                    $form .= "\t</select>\n";
 
-				// prévoir le cas où aucune date de retenue n'est définie
-				if (strlen($listeOptions) == 0)
-					{
-					redir ("ficheel.php", "mode=voir&ideleve=$ideleve",
-					"Aucune date de retenue n'est encore d&eacute;finie \nou elles sont toutes cach&eacute;es.",3000);
-					exit;
-					}
-				$form = str_replace("##options##",$listeOptions,$form); 
-				}
-			break;
-			}
-		}
-	}
-//feature is not yet ready
-if(FALSE){
-$labels=Label::GetForFact($this->getRubrique("idfait"));
-$allLabels = Label::GetAll();
-$form .= View::GetHtml("label_edit.inc.php", array(
-    "currentLabels"=> Tools::map("utf8_encode", $labels)
-    , "allLabels" => Tools::map("utf8_encode", $allLabels)
-));
-}
-$form .= "<div style=\"text-align:center\">\n";
-$form .= "<input type=\"submit\" name=\"mode\" value=\"Enregistrer\">\n";
-$form .= "<input type=\"reset\" name=\"submit\" value=\"R&eacute;initialiser\">\n</div>\n";
-$form .= "</form>\n";
-if ($focus != '')
-	$form .= selectChampFormulaire($focus); 
-return $form;
+                    // préparation des options s'il s'agit d'un champ "Date de retenue",
+                    if ($typeDateRetenue) {
+                        // on recherche la liste des dates de retenues pour ce type, dans la BD
+                        $listeRetenues = new listesDeRetenues();
+                        // le type de retenue est déterminé dans le constructeur
+                        $typeDeRetenue = $this->getRubrique('typeDeRetenue');
+                        $listeOptions = $listeRetenues->listeOptions($typeDeRetenue, $valeur, true);
+
+                        // prévoir le cas où aucune date de retenue n'est définie
+                        if (strlen($listeOptions) == 0) {
+                            redir ("ficheel.php", "mode=voir&ideleve=$ideleve",
+                            "Aucune date de retenue n'est encore d&eacute;finie \nou elles sont toutes cach&eacute;es.",3000);
+                            exit;
+                        }
+                        $form = str_replace("##options##",$listeOptions,$form);
+                    }
+                    break;
+            }
+        }
+    }
+    //feature is not yet ready
+    if(FALSE){
+        $labels=Label::GetForFact($this->getRubrique("idfait"));
+        $allLabels = Label::GetAll();
+        $form .= View::GetHtml("label_edit.inc.php", array(
+            "currentLabels"=> Tools::map("utf8_encode", $labels)
+            , "allLabels" => Tools::map("utf8_encode", $allLabels)
+        ));
+    }
+    $form .= "<div style=\"text-align:center\">\n";
+    $form .= "<input type=\"submit\" name=\"mode\" value=\"Enregistrer\">\n";
+    $form .= "<input type=\"reset\" name=\"submit\" value=\"R&eacute;initialiser\">\n</div>\n";
+    $form .= "</form>\n";
+    if ($focus != '')
+        $form .= selectChampFormulaire($focus);
+    return $form;
 }
 
 // ajustement du nombre d'inscrits à chaque retenue avec le contenu de la table des
