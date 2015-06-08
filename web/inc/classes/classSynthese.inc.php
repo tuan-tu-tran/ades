@@ -85,8 +85,10 @@ $date2 = ($date2 !="")? date_php_sql($date2):'';
 $sql = "SELECT ades_eleves.nom, ades_eleves.prenom, ades_eleves.classe, ades_eleves.contrat, ";
 $sql .= "ades_faits.*, ades_retenues.ladate as dateRetenue, ades_retenues.local, ";
 $sql .= "ades_retenues.duree, ades_retenues.heure ";
+$sql .= ", ades_users.user AS AUTHOR ";
 $sql .= "FROM (ades_faits, ades_eleves) ";
 $sql .= "LEFT JOIN ades_retenues ON ades_faits.idretenue = ades_retenues.idretenue ";
+$sql .= "LEFT JOIN ades_users ON ades_faits.qui = ades_users.idedu ";
 $sql .= "WHERE ";
 $sql .= ($date1 != '')?"ades_faits.ladate >= '$date1'":"1 ";
 $sql .= " AND ";
@@ -178,6 +180,7 @@ foreach ($listeFaitsParEleve as $ideleve=>$detailFaitPourEleve)
 				// remplacer les ##machin## par la valeur des champs correspondants
 				$nouvelleLigne = str_replace ("##$nomChamp##", stripslashes($unFait[$nomChamp]), $nouvelleLigne);
 				}
+            $nouvelleLigne = str_replace("##AUTHOR##", $unFait["AUTHOR"], $nouvelleLigne);
 			$pageImpression .= $nouvelleLigne;
 			}
 		$pageImpression .= "</table>\n";
