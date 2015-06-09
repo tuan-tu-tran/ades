@@ -130,6 +130,7 @@ class FactController extends Controller implements IAccessControlled
         $extraStudentIds=$post->get("extraStudentIds");
         $indexIdOrigine=-1;
         $indexIdStudent=-1;
+        $studentId=-1;
         foreach($prototype->fields as $f) {
             $name = $f->name;
             if($name!="idfait"){
@@ -146,6 +147,7 @@ class FactController extends Controller implements IAccessControlled
                     }
                     if($name=="ideleve"){
                         $indexIdStudent = count($values);
+                        $studentId=$v || -1;
                     }
                 }
                 $values[]=$v;
@@ -161,7 +163,9 @@ class FactController extends Controller implements IAccessControlled
             ." ,`dermodif`"
             ." ) VALUES ( ".join(",", $markers).",?)";
         $values[]=new \DateTime();
-        $db->execute($query, $values);
+        if($studentId > 0){
+            $db->execute($query, $values);
+        }
 
         if($extraStudentIds){
             $values[$indexIdOrigine]=0;
