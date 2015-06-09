@@ -49,7 +49,7 @@ class FactController extends Controller implements IAccessControlled
     {
         $student = Student::GetById($studentId) or $this->ThrowNotFoundException("Cet élève n'existe pas");
         $prototype = FactPrototype::GetByIdForForm($factTypeId) or $this->ThrowNotFoundException("Ce type de fait n'existe pas");
-        $fact=Fact::GetNew($factTypeId, $studentId, User::GetId());
+        $fact=Fact::GetNew($factTypeId, User::GetId(), $studentId);
         $params=$this->getFormParams($student, $fact, $prototype, FALSE);
         return $this->View("create.html.twig", $params);
     }
@@ -62,7 +62,8 @@ class FactController extends Controller implements IAccessControlled
             throw new \Exception("could not get prototype id for dentention $dentention with type ".$dentention->typeId);
         }
         $prototype = FactPrototype::GetByIdForForm($factTypeId) or $this->throwException("No prototype for id $factTypeId yielded from detention $detentionId (type: ".$detention->typeId.")");
-        $params=$this->getFormParams(NULL, NULL, $prototype, FALSE);
+        $fact=Fact::GetNew($factTypeId, User::GetId());
+        $params=$this->getFormParams(NULL, $fact, $prototype, FALSE);
         return $this->View("create.html.twig", $params);
     }
 

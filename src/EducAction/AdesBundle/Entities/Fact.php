@@ -50,7 +50,25 @@ class Fact
         }
         return $student;
     }
-    public static function GetNew($typeId, $studentId, $userId)
+    /**
+     * Return a new empty fact of a type authored by a user
+     * and optionally associated with a student
+     *
+     * Some fields, common to all prototypes are initialized with default values:
+     * <ul>
+     *  <li>the date is set to today</li>
+     *  <li>the id is set to -1</li>
+     *  <li>the type id is initialized with the given value</li>
+     *  <li>the user id is initialized with the given value</li>
+     *  <li>the student id is initialized with the given value (-1 by default)</li>
+     * </ul>
+     *
+     * @param int $typeId the id of fact's prototype
+     * @param int $userId the id of the user that creates the fact
+     * @param int $studentId the optional id of the student associated to the fact
+     * @return Fact an empty fact instance.
+     */
+    public static function GetNew($typeId, $userId, $studentId=-1)
     {
         $f=new Fact();
         $f->dbRow["ladate"] = date("Y-m-d");
