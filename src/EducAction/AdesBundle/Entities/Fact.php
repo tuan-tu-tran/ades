@@ -84,4 +84,15 @@ class Fact
     {
         return Tools::GetDefault($this->dbRow, $field->name);
     }
+
+    /**
+     * Set the value for the detention id field
+     *
+     * @param int $id the id to set
+     * @return void
+     */
+    public function setDetentionId($id)
+    {
+        $this->dbRow["idretenue"]=$id;
+    }
 }

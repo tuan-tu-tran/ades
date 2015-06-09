@@ -63,6 +63,7 @@ class FactController extends Controller implements IAccessControlled
         }
         $prototype = FactPrototype::GetByIdForForm($factTypeId) or $this->throwException("No prototype for id $factTypeId yielded from detention $detentionId (type: ".$detention->typeId.")");
         $fact=Fact::GetNew($factTypeId, User::GetId());
+        $fact->setDetentionId($detentionId);
         $params=$this->getFormParams(NULL, $fact, $prototype, FALSE);
         return $this->View("create.html.twig", $params);
     }
