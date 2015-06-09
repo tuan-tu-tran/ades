@@ -62,6 +62,8 @@ class FactController extends Controller implements IAccessControlled
             throw new \Exception("could not get prototype id for dentention $dentention with type ".$dentention->typeId);
         }
         $prototype = FactPrototype::GetByIdForForm($factTypeId) or $this->throwException("No prototype for id $factTypeId yielded from detention $detentionId (type: ".$detention->typeId.")");
+        $params=$this->getFormParams(NULL, NULL, $prototype, FALSE);
+        return $this->View("create.html.twig", $params);
     }
 
     private function getFormParams($student, $fact, $prototype, $editing)
@@ -72,7 +74,7 @@ class FactController extends Controller implements IAccessControlled
         $params->editing=$editing;
         $hasDetentionDate= FALSE;
         foreach($prototype->fields as $f){
-            $f->value=$fact->getValue($f);
+            $f->value=$fact?$fact->getValue($f):NULL;
             if($f->isDetentionDate){
                 if($hasDetentionDate){
                     throw new \Exception("prototype ".$prototype->id." has multiple detention dates");
@@ -95,10 +97,12 @@ class FactController extends Controller implements IAccessControlled
             }
         }
         $allStudents = Student::GetAll();
+        if($student){
         foreach($allStudents as $i=>$s){
             if($s->id == $student->id){
                 unset($allStudents[$i]);
             }
+        }
         }
         usort($allStudents, Tools::CompareBy("class","lastName","firstName"));
         $params->allStudents = $allStudents;

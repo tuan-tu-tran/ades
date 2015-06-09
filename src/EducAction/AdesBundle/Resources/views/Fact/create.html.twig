@@ -57,6 +57,7 @@
 
 <h2>Faits disciplinaires</h2>
 
+{% if student %}
 <h3>
 	Nom : <strong>{{student.lastName}} {{student.firstName}}</strong> :: 
 	Classe : <strong>{{student.class}}</strong>
@@ -64,6 +65,7 @@
 		<span class="impt">Contrat</span>
 	{%endif%}
 </h3>
+{% endif %}
 
 <h3 style="background-color: {{prototype.backgroundColor}}; color: {{prototype.textColor}}">
 	{{prototype.title}}
@@ -83,7 +85,7 @@
 				<input
 					id="{{field.name}}"
                                         name="{{field.name}}"
-                                        value="{{ field.isDate ? field.value|date("j/n/Y") : field.value}}"
+                                        value="{{ field.isDate ? field.value|default("now")|date("j/n/Y") : field.value}}"
 					size="{{field.size}}"
 					maxlength="{{field.maxlength}}"
 					class="{{field.cssClass}}"
