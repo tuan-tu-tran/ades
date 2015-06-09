@@ -31,6 +31,7 @@ class Detention
     public $duration;
     public $date;
     public $time;
+    public $typeId;
 
     private static $mapping=array(
         "idretenue"=>"id",
@@ -39,9 +40,10 @@ class Detention
         "duree"=>"duration",
         "heure"=>"time",
         "ladate"=>"date",
+        "typeDeRetenue"=>"typeId",
     );
 
-    const SELECT_FIELDS=" idretenue, places, occupation, duree, heure, ladate ";
+    const SELECT_FIELDS=" idretenue, places, occupation, duree, heure, ladate, typeDeRetenue ";
 
     public static function getVisibleDates($detentionType)
     {

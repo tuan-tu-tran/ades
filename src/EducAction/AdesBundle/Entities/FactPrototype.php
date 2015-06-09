@@ -71,5 +71,22 @@ class FactPrototype
     {
         return self::GetById($id, "formulaire");
     }
+
+    /**
+     * Return the prototype id that correponds to a given type of detention
+     *
+     * @param int $detentionType the id of the detention type
+     * @return int prototype id or -1 if not found
+     */
+    public static function GetIdByDetentionTypeId($detentionType)
+    {
+        $repo=new \prototypeFait();
+        foreach($repo->descriptionFaits as $prototypeArray){
+            if($prototypeArray["typeDeRetenue"] == $detentionType){
+                return $prototypeArray["id_TypeFait"];
+            }
+        }
+        return -1;
+    }
 }
 
