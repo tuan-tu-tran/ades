@@ -109,5 +109,18 @@ class Controller extends SfController
     {
         throw $this->createNotFoundException($msg);
     }
+
+    /**
+     * Throw an Exception with given message.
+     *
+     * This is useful for constructs like DoSomething or $this->throwException($msg)
+     *
+     * @param string $msg the exception message.
+     * @return void
+     */
+    protected function throwException($msg)
+    {
+        throw new \Exception($msg);
+    }
 }
 

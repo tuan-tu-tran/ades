@@ -61,6 +61,7 @@ class FactController extends Controller implements IAccessControlled
         if($factTypeId < 0){
             throw new \Exception("could not get prototype id for dentention $dentention with type ".$dentention->typeId);
         }
+        $prototype = FactPrototype::GetByIdForForm($factTypeId) or $this->throwException("No prototype for id $factTypeId yielded from detention $detentionId (type: ".$detention->typeId.")");
     }
 
     private function getFormParams($student, $fact, $prototype, $editing)
