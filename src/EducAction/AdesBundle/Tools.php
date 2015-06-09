@@ -105,10 +105,7 @@ class Tools{
     /**
      * Return an array of objects created from an array of db rows
      *
-     * For each row in $dbResult, a default instance of $classname is created.
-     * Then for each (db field => property) pair found in mapping, the object's property is assigned
-     * the value from the db row, optionnally converted using the callable in $conversion
-     * whose key is the db field name.
+     * Shorthand to created an array of objects from an array of db rows, using ormOne
      *
      * @param array $dbResult a list of db rows (array of associative arrays)
      * @param string $classname the class (full) name
@@ -121,6 +118,28 @@ class Tools{
     {
         $result=array();
         foreach($dbResult as $row){
+            $result[]=self::ormOne($row, $classname, $mapping, $conversion);
+        }
+        return $result;
+    }
+
+    /**
+     * Return an object created by mapping a db row
+     *
+     * A default instance of $classname is created.
+     * Then for each (db field => property) pair found in mapping, the object's property is assigned
+     * the value from the db row, optionnally converted using the callable in $conversion
+     * whose key is the db field name.
+     *
+     * @param array $dbRow a db row (associative arrays)
+     * @param string $classname the class (full) name
+     * @param array $mapping an array of string (db field => property) pairs
+     * @param array $conversion an optional array of (db field => callable) pairs. The callable takes the db value as parameter and must return the property value.
+     *
+     * @return object an instance of $classname created from $dbRow
+     */
+    public static function ormOne($row, $classname, &$mapping, &$conversion=NULL)
+    {
             $obj=new $classname();
             foreach($mapping as $src=>$dst){
                 $value = $row[$src];
@@ -129,9 +148,7 @@ class Tools{
                 }
                 $obj->$dst = $value;
             }
-            $result[]=$obj;
-        }
-        return $result;
+            return $obj;
     }
 
     /**

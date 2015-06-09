@@ -55,6 +55,22 @@ class Detention
         return Tools::orm($result, get_class(), self::$mapping);
     }
 
+    /**
+     * Create a Detention instance for the given id
+     *
+     * @param int $id the id of the detention to get
+     * @return Detention the instance or NULL if not found
+     */
+    public static function GetById($id)
+    {
+        $result = Db::GetInstance()->query("SELECT ".self::SELECT_FIELDS." FROM ades_retenues WHERE idretenue = ?", $id);
+        if(count($result) > 0){
+            return Tools::ormOne($result[0], get_class(), self::$mapping);
+        } else {
+            return NULL;
+        }
+    }
+
     public function __get($name)
     {
         $methodname = "get$name";

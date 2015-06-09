@@ -56,6 +56,7 @@ class FactController extends Controller implements IAccessControlled
 
     public function addStudentToDetentionAction($detentionId)
     {
+        $detention = Detention::GetById($detentionId) or $this->ThrowNotFoundException("Cette date de retenue n'existe pas");
     }
 
     private function getFormParams($student, $fact, $prototype, $editing)
