@@ -54,6 +54,10 @@ class FactController extends Controller implements IAccessControlled
         return $this->View("create.html.twig", $params);
     }
 
+    public function addStudentToDetentionAction($detentionId)
+    {
+    }
+
     private function getFormParams($student, $fact, $prototype, $editing)
     {
         $params=new Bag();

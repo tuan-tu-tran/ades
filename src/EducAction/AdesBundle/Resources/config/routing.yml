@@ -151,3 +151,8 @@ educ_action_ades_fact_edit:
     pattern: /fact/edit/{id}
     defaults: { _controller: EducActionAdesBundle:Fact:edit }
     methods: [GET]
+
+educ_action_ades_detention_new_subscription:
+    pattern: /detention/add/{detentionId}
+    defaults: { _controller: EducActionAdesBundle:Fact:addStudentToDetention }
+    methods: [GET]
