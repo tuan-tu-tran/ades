@@ -24,6 +24,7 @@ use EducAction\AdesBundle\Tools;
 
 class FactPrototype
 {
+    public $id;
     public $backgroundColor;
     public $textColor;
     public $focus;
@@ -47,6 +48,7 @@ class FactPrototype
         $data = $repo->descriptionFaitId($id);
         if($data){
         $prototype = new FactPrototype();
+        $prototype->id=$id;
         $prototype->backgroundColor = "#".$data["couleurFond"];
         $prototype->textColor = "#".$data["couleurTexte"];
         $prototype->title = utf8_encode($data["titreFait"]);

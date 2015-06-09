@@ -24,7 +24,25 @@
 {% block post_head %}
 	{{parent()}}
         <script language="javascript" type="text/javascript" src="{{asset("cal/calendrier.js")}}"></script>
+        <script language="javascript" type="text/javascript" src="{{asset("js/fact.js")}}"></script>
         <link rel="stylesheet" href="{{ asset("config/calendrier.css") }}" type="text/css" media="screen">
+        <style type="text/css">
+                #lbAllStudents option[selected]
+                , #lbAllStudents option.hide
+                {
+                        display:none;
+                }
+                #lbAllStudents option:hover
+                ,#tExtraStudents tr:hover
+                {
+                        background-color:yellow;
+                }
+                #lbAllStudents option
+                ,#tExtraStudents tr
+                {
+                        cursor:pointer;
+                }
+        </style>
 {% endblock %}
 
 {% macro javascript(field) %}
@@ -56,6 +74,7 @@
 {%else%}
 
 <form method="POST" onsubmit="return verifForm(this)" action="{{path("educ_action_ades_fact_post")}}">
+        <div style="width:70%; display:inline-block">
 
 	{% for field in prototype.fields %}
 		{% if field.type == "text" %}
@@ -113,9 +132,33 @@
                                                 </option>
                                         {% endfor %}
                                 </select>
+                                <script type="text/javascript">
+                                        {% for d in field.detentions %}
+                                        register_detention_places({{d.id}}, {{d.freePlaces}});
+                                        {% endfor%}
+                                        set_detention_list_id("{{field.name}}", {{editing|json_encode}});
+                                </script>
                         </p>
 		{% endif %}
 	{% endfor %}
+        </div>
+        <div style="width:28%; display:inline-block; vertical-align:top" >
+                <p style="background-color:yellow">Dupliquer ce fait à d'autres élèves</p>
+                <p><select id="lbAllStudents" style="width:100%; height:10em" size="2">
+                        {%for s in allStudents%}
+                                <option value="{{s.id}}">{{"[%s] %s %s"|format(s.class,s.lastName,s.firstName)}}</option>
+                        {%endfor%}
+                </select></p>
+                <p><span style="width:10%">Filtre: </span><input value="par nom et/ou par classe" style="width:70%" id="tbFilter"/></p>
+                <p id="lNoExtraStudent">
+                        Aucun élève sélectionné
+                </p>
+                <p id="lExtraStudents" style="display:none;background-color:yellow">
+                        Elève(s) sélectionné(s):
+                </p>
+                <p><table id="tExtraStudents" style="width:100%">
+                </table></p>
+        </div>
         <div style="text-align:center">
                 <input type="submit" name="mode" value="Enregistrer"/>
                 <input type="submit" name="reset" value="Réinitialiser"/>

@@ -42,7 +42,7 @@ class FactController extends Controller implements IAccessControlled
         $fact=Fact::GetById($id) or $this->throwNotFoundException("Ce fait n'existe pas");
         $student=$fact->getStudent();
         $prototype=FactPrototype::GetByIdForForm($fact->prototypeId);
-        $params=$this->getFormParams($student, $fact, $prototype);
+        $params=$this->getFormParams($student, $fact, $prototype, TRUE);
         return $this->View("create.html.twig", $params);
     }
     public function createAction($factTypeId, $studentId)
@@ -50,18 +50,24 @@ class FactController extends Controller implements IAccessControlled
         $student = Student::GetById($studentId) or $this->ThrowNotFoundException("Cet élève n'existe pas");
         $prototype = FactPrototype::GetByIdForForm($factTypeId) or $this->ThrowNotFoundException("Ce type de fait n'existe pas");
         $fact=Fact::GetNew($factTypeId, $studentId, User::GetId());
-        $params=$this->getFormParams($student, $fact, $prototype);
+        $params=$this->getFormParams($student, $fact, $prototype, FALSE);
         return $this->View("create.html.twig", $params);
     }
 
-    private function getFormParams($student, $fact, $prototype)
+    private function getFormParams($student, $fact, $prototype, $editing)
     {
         $params=new Bag();
         $params->student = $student;
         $params->prototype = $prototype;
+        $params->editing=$editing;
+        $hasDetentionDate= FALSE;
         foreach($prototype->fields as $f){
             $f->value=$fact->getValue($f);
             if($f->isDetentionDate){
+                if($hasDetentionDate){
+                    throw new \Exception("prototype ".$prototype->id." has multiple detention dates");
+                }
+                $hasDetentionDate=TRUE;
                 $f->detentions=Detention::getVisibleDates($prototype->detentionType);
                 if(count($f->detentions)==0){
                     $params->no_dates=TRUE;
@@ -78,6 +84,15 @@ class FactController extends Controller implements IAccessControlled
                 }
             }
         }
+        $allStudents = Student::GetAll();
+        foreach($allStudents as $i=>$s){
+            if($s->id == $student->id){
+                unset($allStudents[$i]);
+            }
+        }
+        usort($allStudents, Tools::CompareBy("class","lastName","firstName"));
+        $params->allStudents = $allStudents;
+
         return $params;
     }
 
@@ -96,6 +111,9 @@ class FactController extends Controller implements IAccessControlled
         $values=array();
         $markers=array();
         $all=$post->all();
+        $extraStudentIds=$post->get("extraStudentIds");
+        $indexIdOrigine=-1;
+        $indexIdStudent=-1;
         foreach($prototype->fields as $f) {
             $name = $f->name;
             if($name!="idfait"){
@@ -104,15 +122,23 @@ class FactController extends Controller implements IAccessControlled
                     $v=User::GetId();
                 }elseif($name=="idorigine"){
                     $v=$id;
+                    $indexIdOrigine=count($values);
                 } else {
                     Tools::TryGet($all, $name, $v) or $this->throwNotFoundException("post: $name");
                     if($f->isDate){
                         $v=\DateTime::createFromFormat("j/n/Y", $v);
                     }
+                    if($name=="ideleve"){
+                        $indexIdStudent = count($values);
+                    }
                 }
                 $values[]=$v;
                 $markers[]="?";
             }
+        }
+
+        if($extraStudentIds && ($indexIdOrigine<0 || $indexIdStudent <0)){
+            throw new \Exception("could not find index for idorigine $indexIdOrigine or ideleve $indexIdStudent to handle mulitple facts: ".var_export($post->all(), TRUE));
         }
         $query="INSERT INTO ades_faits("
             .join(",",$fields)
@@ -120,6 +146,14 @@ class FactController extends Controller implements IAccessControlled
             ." ) VALUES ( ".join(",", $markers).",?)";
         $values[]=new \DateTime();
         $db->execute($query, $values);
+
+        if($extraStudentIds){
+            $values[$indexIdOrigine]=0;
+            foreach($extraStudentIds as $id){
+                $values[$indexIdStudent]=$id;
+                $db->execute($query, $values);
+            }
+        }
 
         $db->execute("
             UPDATE ades_retenues
