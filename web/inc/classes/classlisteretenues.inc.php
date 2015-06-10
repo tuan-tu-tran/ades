@@ -163,7 +163,14 @@ $tableau .= "\t<td>Local</td>\n";
 $tableau .= "\t<td>Places</td>\n";
 $tableau .= "\t<td>Occupation</td>\n";
 $tableau .= "\t<td>Visible</td>\n";
-$tableau .= "\t<td width=\"16\">&nbsp;</td>\n";
+$imageWidth=16;
+foreach ($this->listes[$typeDeRetenue] as $UneRetenue){
+    if($UneRetenue["occupation"] < $UneRetenue["places"]){
+        $imageWidth*=2;
+    }
+}
+
+$tableau .= "\t<td width=\"$imageWidth\">&nbsp;</td>\n";
 
 foreach ($this->listes[$typeDeRetenue] as $UneRetenue)
 	{
@@ -184,7 +191,11 @@ foreach ($this->listes[$typeDeRetenue] as $UneRetenue)
 	$tableau .= "\t<td>".$UneRetenue['places']."</td>\n";
 	$tableau .= "\t<td>".$UneRetenue['occupation']."</td>\n";
 	$tableau .= "\t<td style=\"text-align:center\">".$this->caseACocher($UneRetenue['affiche'], $UneRetenue['idretenue'])."</td>\n";
-	$tableau .= "\t<td><a href=\"retenue.php?mode=editer&amp;idretenue=$idretenue\">$imgedt</a></td>\n";
+    $tableau .= "\t<td><a href=\"retenue.php?mode=editer&amp;idretenue=$idretenue\">$imgedt</a>";
+    if($UneRetenue["occupation"] < $UneRetenue["places"]){
+        $tableau .= "<a href='detention/add/$idretenue'><img src='images/add.png' width='16' height='16' border='0' alt='ajouter' title='ajouter un élève'></a>\n";
+    }
+    $tableau .= "</td>\n";
 	$tableau .= "</tr>\n";	
 	}
 $tableau .= $finTable;

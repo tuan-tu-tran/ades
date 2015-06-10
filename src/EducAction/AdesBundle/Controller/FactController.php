@@ -49,8 +49,22 @@ class FactController extends Controller implements IAccessControlled
     {
         $student = Student::GetById($studentId) or $this->ThrowNotFoundException("Cet élève n'existe pas");
         $prototype = FactPrototype::GetByIdForForm($factTypeId) or $this->ThrowNotFoundException("Ce type de fait n'existe pas");
-        $fact=Fact::GetNew($factTypeId, $studentId, User::GetId());
+        $fact=Fact::GetNew($factTypeId, User::GetId(), $studentId);
         $params=$this->getFormParams($student, $fact, $prototype, FALSE);
+        return $this->View("create.html.twig", $params);
+    }
+
+    public function addStudentToDetentionAction($detentionId)
+    {
+        $detention = Detention::GetById($detentionId) or $this->ThrowNotFoundException("Cette date de retenue n'existe pas");
+        $factTypeId = FactPrototype::GetIdByDetentionTypeId($detention->typeId);
+        if($factTypeId < 0){
+            throw new \Exception("could not get prototype id for detention $detentionId with type ".$detention->typeId);
+        }
+        $prototype = FactPrototype::GetByIdForForm($factTypeId) or $this->throwException("No prototype for id $factTypeId yielded from detention $detentionId (type: ".$detention->typeId.")");
+        $fact=Fact::GetNew($factTypeId, User::GetId());
+        $fact->setDetentionId($detentionId);
+        $params=$this->getFormParams(NULL, $fact, $prototype, FALSE);
         return $this->View("create.html.twig", $params);
     }
 
@@ -62,7 +76,7 @@ class FactController extends Controller implements IAccessControlled
         $params->editing=$editing;
         $hasDetentionDate= FALSE;
         foreach($prototype->fields as $f){
-            $f->value=$fact->getValue($f);
+            $f->value=$fact?$fact->getValue($f):NULL;
             if($f->isDetentionDate){
                 if($hasDetentionDate){
                     throw new \Exception("prototype ".$prototype->id." has multiple detention dates");
@@ -85,10 +99,12 @@ class FactController extends Controller implements IAccessControlled
             }
         }
         $allStudents = Student::GetAll();
+        if($student){
         foreach($allStudents as $i=>$s){
             if($s->id == $student->id){
                 unset($allStudents[$i]);
             }
+        }
         }
         usort($allStudents, Tools::CompareBy("class","lastName","firstName"));
         $params->allStudents = $allStudents;
@@ -114,6 +130,7 @@ class FactController extends Controller implements IAccessControlled
         $extraStudentIds=$post->get("extraStudentIds");
         $indexIdOrigine=-1;
         $indexIdStudent=-1;
+        $studentId=-1;
         foreach($prototype->fields as $f) {
             $name = $f->name;
             if($name!="idfait"){
@@ -130,6 +147,7 @@ class FactController extends Controller implements IAccessControlled
                     }
                     if($name=="ideleve"){
                         $indexIdStudent = count($values);
+                        $studentId=$v=$v?$v:-1;
                     }
                 }
                 $values[]=$v;
@@ -145,7 +163,9 @@ class FactController extends Controller implements IAccessControlled
             ." ,`dermodif`"
             ." ) VALUES ( ".join(",", $markers).",?)";
         $values[]=new \DateTime();
-        $db->execute($query, $values);
+        if($studentId > 0){
+            $db->execute($query, $values);
+        }
 
         if($extraStudentIds){
             $values[$indexIdOrigine]=0;
@@ -167,15 +187,23 @@ class FactController extends Controller implements IAccessControlled
             WHERE occupation != real_occ
         ");
 
-        $this->flash()->set("studentId", $post->get("ideleve"));
+        if($studentId>0){
+            $redirectUrl="ficheel.php?mode=voir&ideleve=$studentId";
+        }else{
+            $detentionId=$post->get("idretenue") or $this->throwException("no detentionId in post: ".var_export($post->all(), TRUE));
+            $detention=Detention::GetById($detentionId) or $this->throwException("Could not get detention for id $detentionId");
+            $redirectUrl="retenue.php?typeDeRetenue=".$detention->typeId;
+        }
+        $redirectUrl=$this->container->get('templating.helper.assets')->getUrl($redirectUrl);
+        $this->flash()->set("redirectUrl", $redirectUrl);
 
         return $this->redirectRoute("educ_action_ades_fact_done");
     }
 
     public function showDoneAction()
     {
-        $studentId = $this->flash()->get("studentId") or $this->throwNotFoundException("Missing student");
-        return $this->View("done.html.twig", array("studentId"=>$studentId));
+        $redirectUrl=$this->flash()->get("redirectUrl") or $this->throwNotFoundException("Missing redirect url");
+        return $this->View("done.html.twig", array("redirectUrl"=>$redirectUrl));
     }
 }
 

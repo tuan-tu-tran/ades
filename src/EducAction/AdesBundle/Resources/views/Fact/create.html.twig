@@ -57,6 +57,7 @@
 
 <h2>Faits disciplinaires</h2>
 
+{% if student %}
 <h3>
 	Nom : <strong>{{student.lastName}} {{student.firstName}}</strong> :: 
 	Classe : <strong>{{student.class}}</strong>
@@ -64,6 +65,7 @@
 		<span class="impt">Contrat</span>
 	{%endif%}
 </h3>
+{% endif %}
 
 <h3 style="background-color: {{prototype.backgroundColor}}; color: {{prototype.textColor}}">
 	{{prototype.title}}
@@ -73,7 +75,7 @@
         {{ redirect("Aucune date de retenue n'est encore définie ou elles sont toutes cachées ou pleines", asset("ficheel.php?mode=voir&ideleve="~student.id), 3000) }}
 {%else%}
 
-<form method="POST" onsubmit="return verifForm(this)" action="{{path("educ_action_ades_fact_post")}}">
+<form method="POST" onsubmit="return verifForm(this)" action="{{path("educ_action_ades_fact_post")}}" id="mainform">
         <div style="width:70%; display:inline-block">
 
 	{% for field in prototype.fields %}
@@ -83,7 +85,7 @@
 				<input
 					id="{{field.name}}"
                                         name="{{field.name}}"
-                                        value="{{ field.isDate ? field.value|date("j/n/Y") : field.value}}"
+                                        value="{{ field.isDate ? field.value|default("now")|date("j/n/Y") : field.value}}"
 					size="{{field.size}}"
 					maxlength="{{field.maxlength}}"
 					class="{{field.cssClass}}"
@@ -143,7 +145,7 @@
 	{% endfor %}
         </div>
         <div style="width:28%; display:inline-block; vertical-align:top" >
-                <p style="background-color:yellow">Dupliquer ce fait à d'autres élèves</p>
+                <p style="background-color:yellow" id="lSelectStudents"></p>
                 <p><select id="lbAllStudents" style="width:100%; height:10em" size="2">
                         {%for s in allStudents%}
                                 <option value="{{s.id}}">{{"[%s] %s %s"|format(s.class,s.lastName,s.firstName)}}</option>

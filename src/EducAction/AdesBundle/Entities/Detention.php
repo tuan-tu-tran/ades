@@ -31,6 +31,7 @@ class Detention
     public $duration;
     public $date;
     public $time;
+    public $typeId;
 
     private static $mapping=array(
         "idretenue"=>"id",
@@ -39,9 +40,10 @@ class Detention
         "duree"=>"duration",
         "heure"=>"time",
         "ladate"=>"date",
+        "typeDeRetenue"=>"typeId",
     );
 
-    const SELECT_FIELDS=" idretenue, places, occupation, duree, heure, ladate ";
+    const SELECT_FIELDS=" idretenue, places, occupation, duree, heure, ladate, typeDeRetenue ";
 
     public static function getVisibleDates($detentionType)
     {
@@ -53,6 +55,22 @@ class Detention
             ORDER BY ladate
         ", $detentionType);
         return Tools::orm($result, get_class(), self::$mapping);
+    }
+
+    /**
+     * Create a Detention instance for the given id
+     *
+     * @param int $id the id of the detention to get
+     * @return Detention the instance or NULL if not found
+     */
+    public static function GetById($id)
+    {
+        $result = Db::GetInstance()->query("SELECT ".self::SELECT_FIELDS." FROM ades_retenues WHERE idretenue = ?", $id);
+        if(count($result) > 0){
+            return Tools::ormOne($result[0], get_class(), self::$mapping);
+        } else {
+            return NULL;
+        }
     }
 
     public function __get($name)
