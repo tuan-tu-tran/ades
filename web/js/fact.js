@@ -58,6 +58,21 @@ var register_detention_places, set_detention_list_id;
                                 e.stopPropagation();
                         }
                 });
+                var _selectedCount = 0;
+                /**
+                 * Return the number of free places for the given detention
+                 * taking into account the currently selected students
+                 */
+                function freePlaces(detentionId)
+                {
+                        var free=_freePlacesByDentention[detentionId];
+                        //the "current" student takes a spot, unless we're editing and we're selecting the initial detention
+                        if(!(_editing && _initialDetentionId==detentionId)){
+                                free-=1;
+                        }
+                        free-=_selectedCount;
+                        return free;
+                }
                 var _detentionList;
                 var _initialDetentionId;
                 var _lastDetentionId;
@@ -70,12 +85,7 @@ var register_detention_places, set_detention_list_id;
                         _detentionList.change(function(){
                                 //allow the change only if the room constraint can be met
                                 var newDetentionId=_detentionList.val();
-                                var free=_freePlacesByDentention[newDetentionId];
-                                //the "current" student takes a spot, unless we're editing and we're selecting the initial detention
-                                if(!(_editing && _initialDetentionId==newDetentionId)){
-                                        free-=1;
-                                }
-                                free-=_selectedCount;
+                                var free=freePlaces(newDetentionId);
                                 if(free<0){
                                         //the change would lead to overflow
                                         alert("La retenue sélectionnée ne peut pas accueillir le nombre d'élèves sélectionnés!");
@@ -85,7 +95,6 @@ var register_detention_places, set_detention_list_id;
                 }
                 var lNoExtraStudent=$("#lNoExtraStudent");
                 var lExtraStudents=$("#lExtraStudents");
-                var _selectedCount = 0;
                 var _table=$("#tExtraStudents");
                 var _lbAllStudents = $("#lbAllStudents").scrollTop(0);
                 _lbAllStudents[0].selectedIndex=-1;
@@ -93,15 +102,8 @@ var register_detention_places, set_detention_list_id;
                         var canAdd;
                         if(_detentionList){
                                 //handle the limit of places in detention
-                                var selectedStudentsCount = _selectedCount;
                                 var detentionId = _detentionList.val();
-                                var free=_freePlacesByDentention[detentionId];
-                                var initfree=free;
-                                //the "current" student takes a spot, unless we're editing and haven't change the detention
-                                if(!(_editing && _initialDetentionId==detentionId)){
-                                        free-=1;
-                                }
-                                free-=selectedStudentsCount;
+                                var free=freePlaces(detentionId);
                                 if(free>0){
                                         canAdd=true;
                                 }else{
