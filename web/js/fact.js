@@ -74,6 +74,15 @@ var register_detention_places, set_detention_list_id;
                         free-=_selectedCount;
                         return free;
                 }
+
+                if(!_hasDefaultStudent){
+                        $("#mainform").submit(function(e){
+                                if(!e.isDefaultPrevented() && _selectedCount <= 0){
+                                        alert("Veuillez selectionner au moins un élève à mettre en retenue.");
+                                        e.preventDefault();
+                                }
+                        });
+                }
                 var _detentionList;
                 var _initialDetentionId;
                 var _lastDetentionId;
