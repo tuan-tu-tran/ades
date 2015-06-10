@@ -243,12 +243,12 @@ class Db{
                     $resultRow[$f->name]=$row[$f->name];
                     $resultRow[]=&$resultRow[$f->name];
                 }
-                $resut[]=$resultRow;
+                $result[]=$resultRow;
                 if($onlyOne){
                     break;
                 }
             }
-            return $resut;
+            return $result;
         }
     }
 
