@@ -59,7 +59,7 @@ class FactController extends Controller implements IAccessControlled
         $detention = Detention::GetById($detentionId) or $this->ThrowNotFoundException("Cette date de retenue n'existe pas");
         $factTypeId = FactPrototype::GetIdByDetentionTypeId($detention->typeId);
         if($factTypeId < 0){
-            throw new \Exception("could not get prototype id for dentention $dentention with type ".$dentention->typeId);
+            throw new \Exception("could not get prototype id for detention $detentionId with type ".$detention->typeId);
         }
         $prototype = FactPrototype::GetByIdForForm($factTypeId) or $this->throwException("No prototype for id $factTypeId yielded from detention $detentionId (type: ".$detention->typeId.")");
         $fact=Fact::GetNew($factTypeId, User::GetId());
