@@ -147,7 +147,7 @@ class FactController extends Controller implements IAccessControlled
                     }
                     if($name=="ideleve"){
                         $indexIdStudent = count($values);
-                        $studentId=$v || -1;
+                        $studentId=$v=$v?$v:-1;
                     }
                 }
                 $values[]=$v;
@@ -187,15 +187,23 @@ class FactController extends Controller implements IAccessControlled
             WHERE occupation != real_occ
         ");
 
-        $this->flash()->set("studentId", $post->get("ideleve"));
+        if($studentId>0){
+            $redirectUrl="ficheel.php?mode=voir&ideleve=$studentId";
+        }else{
+            $detentionId=$post->get("idretenue") or $this->throwException("no detentionId in post: ".var_export($post->all(), TRUE));
+            $detention=Detention::GetById($detentionId) or $this->throwException("Could not get detention for id $detentionId");
+            $redirectUrl="retenue.php?typeDeRetenue=".$detention->typeId;
+        }
+        $redirectUrl=$this->container->get('templating.helper.assets')->getUrl($redirectUrl);
+        $this->flash()->set("redirectUrl", $redirectUrl);
 
         return $this->redirectRoute("educ_action_ades_fact_done");
     }
 
     public function showDoneAction()
     {
-        $studentId = $this->flash()->get("studentId") or $this->throwNotFoundException("Missing student");
-        return $this->View("done.html.twig", array("studentId"=>$studentId));
+        $redirectUrl=$this->flash()->get("redirectUrl") or $this->throwNotFoundException("Missing redirect url");
+        return $this->View("done.html.twig", array("redirectUrl"=>$redirectUrl));
     }
 }
 
