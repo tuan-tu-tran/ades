@@ -59,6 +59,7 @@ var register_detention_places, set_detention_list_id;
                         }
                 });
                 var _selectedCount = 0;
+                var _hasDefaultStudent = $("input[name=ideleve]").val()>0;
                 /**
                  * Return the number of free places for the given detention
                  * taking into account the currently selected students
@@ -67,7 +68,7 @@ var register_detention_places, set_detention_list_id;
                 {
                         var free=_freePlacesByDentention[detentionId];
                         //the "current" student takes a spot, unless we're editing and we're selecting the initial detention
-                        if(!(_editing && _initialDetentionId==detentionId)){
+                        if(_hasDefaultStudent && !(_editing && _initialDetentionId==detentionId)){
                                 free-=1;
                         }
                         free-=_selectedCount;
