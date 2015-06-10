@@ -83,6 +83,7 @@ var register_detention_places, set_detention_list_id;
                                 }
                         });
                 }
+                $("#lSelectStudents").text(_hasDefaultStudent?"Dupliquer ce fait à d'autres élèves":"Sélectionner un ou plusieurs élèves");
                 var _detentionList;
                 var _initialDetentionId;
                 var _lastDetentionId;
