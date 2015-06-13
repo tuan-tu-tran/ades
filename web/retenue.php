@@ -135,7 +135,7 @@ switch ($mode)
 	default:        // lister les retenues
 		require ("inc/classes/classlisteretenues.inc.php");
 		$listeDeRetenues = new listesDeRetenues;
-		echo $listeDeRetenues->formulaireChoixTypeRetenue($typeDeRetenue);
+		echo $listeDeRetenues->formulaireChoixTypeRetenue($typeDeRetenue, "GET");
 
 		if (isset($typeDeRetenue)) // écrire la liste des retenues du type voulu
 			echo $listeDeRetenues->ecrireTableau($typeDeRetenue);
