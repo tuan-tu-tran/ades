@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-var register_detention_places, set_detention_list_id;
+var register_detention_places, set_detention_list_id, setDeleteImgSrc;
 (function(){
         var _freePlacesByDentention={};
         register_detention_places=function(id, places){
@@ -28,6 +28,11 @@ var register_detention_places, set_detention_list_id;
         set_detention_list_id=function(id, editing){
                 _detentionListId=id;
                 _editing=editing;
+        }
+
+        var _deleteImgSrc=null;
+        setDeleteImgSrc=function(src){
+                _deleteImgSrc=src;
         }
 
         jQuery(function($){
@@ -140,6 +145,9 @@ var register_detention_places, set_detention_list_id;
                         $("<td>").text(this.text).append(
                                 $("<input type='hidden' name='extraStudentIds[]'/>").val(this.value)
                         ).appendTo(row);
+                        row.append($("<td>").append(
+                                $("<img>").attr("src",_deleteImgSrc)
+                        ));
                         _table.append(row);
                         _selectedCount+=1;
                         lNoExtraStudent.hide();
