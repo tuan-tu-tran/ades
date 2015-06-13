@@ -134,6 +134,7 @@ var register_detention_places, set_detention_list_id, setDeleteImgSrc;
                         option.attr("selected","selected");
                         var row=$("<tr>");
                         row.addClass("clearButton").click(function(){
+                                nd();
                                 row.remove();
                                 option.removeAttr("selected");
                                 _selectedCount-=1;
@@ -148,6 +149,9 @@ var register_detention_places, set_detention_list_id, setDeleteImgSrc;
                         row.append($("<td>").append(
                                 $("<img>").attr("src",_deleteImgSrc)
                         ));
+                        row.hover(function(){
+                                overlib("Cliquez pour retirer l'élève de la selection")
+                        }, nd);
                         _table.append(row);
                         _selectedCount+=1;
                         lNoExtraStudent.hide();
