@@ -347,12 +347,12 @@ $options .= "</select>\n";
 return $options;
 }
 //------------------------------------------------------------------------------------
-function formulaireChoixTypeRetenue($type=0)
+function formulaireChoixTypeRetenue($type=0, $method="POST")
 {
 // établissement de la liste de sélection à présenter dans le formulaire
 // de choix du type de retenue
 $options = $this->selectTypeRetenue($type);
-$form ="<form name=\"form1\" method=\"POST\" action=\"{$_SERVER['PHP_SELF']}\">";
+$form ="<form name=\"form1\" method=\"$method\" action=\"{$_SERVER['PHP_SELF']}\">";
 if (utilisateurParmi ("educ", "admin"))
 	// le bouton d'ajout d'une nouvelle retenue apparaît seulement pour admin et éducateur
 	{
