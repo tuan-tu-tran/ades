@@ -164,6 +164,7 @@ $tableau .= "\t<td>Places</td>\n";
 $tableau .= "\t<td>Occupation</td>\n";
 $tableau .= "\t<td>Visible</td>\n";
 $tableau .= "\t<td style=\"width:4em\">Editer</td>\n";
+$tableau .= "\t<td style=\"width:4em\">Liste</td>\n";
 $showAdd = FALSE;
 foreach ($this->listes[$typeDeRetenue] as $UneRetenue){
     if($UneRetenue["occupation"] < $UneRetenue["places"]){
@@ -194,6 +195,7 @@ foreach ($this->listes[$typeDeRetenue] as $UneRetenue)
 	$tableau .= "\t<td>".$UneRetenue['occupation']."</td>\n";
 	$tableau .= "\t<td style=\"text-align:center\">".$this->caseACocher($UneRetenue['affiche'], $UneRetenue['idretenue'])."</td>\n";
     $tableau .= "\t<td style='text-align:center'><a href=\"retenue.php?mode=editer&amp;idretenue=$idretenue\">$imgedt</a></td>\n";
+    $tableau .= "\t<td style='text-align:center'><a href='listeretenues.php?mode=Liste&amp;idRetenue=$idretenue' ".overlib("Voir la liste des élèves de cette retenue")." title=''><img style='width:16px; height:16px' src='images/list.png' alt='list des élèves'/></a></td>\n";
     if($showAdd){
         $tableau .= "\t<td style='text-align:center'>";
         if($UneRetenue["occupation"] < $UneRetenue["places"]){

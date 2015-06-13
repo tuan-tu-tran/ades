@@ -45,9 +45,9 @@ require ("inc/menu.inc.php");
 <div id="texte">
 <h2 class="inv">Listes des élèves en retenue</h2>
 <?php
-$mode = isset($_POST['mode'])?$_POST['mode']:Null;
+$mode = isset($_REQUEST['mode'])?$_REQUEST['mode']:Null;
 $typeDeRetenue = (isset($_POST['typeDeRetenue'])?$_POST['typeDeRetenue']:Null);
-$idRetenue = (isset($_POST['idRetenue']))?$_POST['idRetenue']:Null;
+$idRetenue = (isset($_REQUEST['idRetenue']))?$_REQUEST['idRetenue']:Null;
 
 require ("inc/classes/classlisteretenues.inc.php");
 $listeDeRetenues = new listesDeRetenues();
