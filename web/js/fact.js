@@ -31,7 +31,7 @@ var register_detention_places, set_detention_list_id;
         }
 
         jQuery(function($){
-                var initFilter="par nom et/ou par classe";
+                var initFilter="Entrez un nom et/ou une classe";
                 var _tbFilterFocus=function(){
                         this.value="";
                         $(this).unbind("focus", _tbFilterFocus);
