@@ -167,7 +167,9 @@
                         {%endfor%}
                 </select></p>
                 <p style="background-color:yellow; margin-bottom:3px">Rechercher par nom et/ou par classe</p>
-                <p style="margin-top:0"><input value="par nom et/ou par classe" style="width:95%" id="tbFilter"/></p>
+                <p style="margin-top:0"><input value="par nom et/ou par classe" style="width:95%" id="tbFilter"
+                        {{ "Entrez le nom, prénom et/ou la classe d'un élève à rechercher, séparés par un espace. Appuyez sur ENTER pour ajouter l'élève sélectionné."|overlib}}
+                /></p>
                 <p id="lNoExtraStudent" style="background-color:yellow">
                         Aucun élève sélectionné
                 </p>
