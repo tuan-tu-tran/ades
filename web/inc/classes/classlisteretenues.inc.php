@@ -246,6 +246,7 @@ mysql_close ($lienDB);
 $nombre = mysql_num_rows($resultat);
 if(!isset($texte)){$texte="";}
 $texte .= "<h3>Date : $ladate à $heure :: Durée : $duree h </h3>\n";
+$texte .="<p class='inv'><input type='submit' onclick='window.location.href=&apos;detention/add/$idretenue&apos;;return false;' value='Ajouter un élève' style='cursor:pointer'/></p>";
 
 if ($nombre>0)
 	{
