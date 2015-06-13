@@ -196,10 +196,10 @@ foreach ($this->listes[$typeDeRetenue] as $UneRetenue)
     $tableau .= "\t<td><a href=\"retenue.php?mode=editer&amp;idretenue=$idretenue\">$imgedt</a></td>\n";
     if($showAdd){
         $tableau .= "\t<td>";
-    if($UneRetenue["occupation"] < $UneRetenue["places"]){
-        $tableau .= "<a href='detention/add/$idretenue'><img src='images/add.png' width='16' height='16' border='0' alt='ajouter' title='ajouter un élève'></a>\n";
-    }
-    $tableau .= "</td>\n";
+        if($UneRetenue["occupation"] < $UneRetenue["places"]){
+            $tableau .= "<a href='detention/add/$idretenue'><img src='images/add.png' width='16' height='16' border='0' alt='ajouter' title='ajouter un élève'></a>\n";
+        }
+        $tableau .= "</td>\n";
     }
 	$tableau .= "</tr>\n";	
 	}
