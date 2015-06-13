@@ -197,7 +197,7 @@ foreach ($this->listes[$typeDeRetenue] as $UneRetenue)
     if($showAdd){
         $tableau .= "\t<td style='text-align:center'>";
         if($UneRetenue["occupation"] < $UneRetenue["places"]){
-            $tableau .= "<a href='detention/add/$idretenue'><img src='images/add.png' width='16' height='16' border='0' alt='ajouter' title='ajouter un élève'></a>\n";
+            $tableau .= "<a href='detention/add/$idretenue' ".overlib("Ajouter un élève à la retenue")." title=''><img src='images/add.png' width='16' height='16' border='0' alt='ajouter' ></a>\n";
         }
         $tableau .= "</td>\n";
     }
