@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
-var register_detention_places, set_detention_list_id;
+var register_detention_places, set_detention_list_id, setDeleteImgSrc;
 (function(){
         var _freePlacesByDentention={};
         register_detention_places=function(id, places){
@@ -30,8 +30,13 @@ var register_detention_places, set_detention_list_id;
                 _editing=editing;
         }
 
+        var _deleteImgSrc=null;
+        setDeleteImgSrc=function(src){
+                _deleteImgSrc=src;
+        }
+
         jQuery(function($){
-                var initFilter="par nom et/ou par classe";
+                var initFilter="Entrez un nom et/ou une classe";
                 var _tbFilterFocus=function(){
                         this.value="";
                         $(this).unbind("focus", _tbFilterFocus);
@@ -129,6 +134,7 @@ var register_detention_places, set_detention_list_id;
                         option.attr("selected","selected");
                         var row=$("<tr>");
                         row.addClass("clearButton").click(function(){
+                                nd();
                                 row.remove();
                                 option.removeAttr("selected");
                                 _selectedCount-=1;
@@ -140,6 +146,12 @@ var register_detention_places, set_detention_list_id;
                         $("<td>").text(this.text).append(
                                 $("<input type='hidden' name='extraStudentIds[]'/>").val(this.value)
                         ).appendTo(row);
+                        row.append($("<td>").append(
+                                $("<img>").attr("src",_deleteImgSrc)
+                        ));
+                        row.hover(function(){
+                                overlib("Cliquez pour retirer l'élève de la selection")
+                        }, nd);
                         _table.append(row);
                         _selectedCount+=1;
                         lNoExtraStudent.hide();

@@ -47,6 +47,7 @@ class TwigExtension extends \Twig_Extension
         $filters=array();
         $filters[]=new \Twig_SimpleFilter("file_size", array($this, "formatFileSize"));
         $filters[]=new \Twig_SimpleFilter("weekday", array($this, "getWeekDay"));
+        $filters[]=new \Twig_SimpleFilter("overlib", array($this, "overlib"), array("is_safe"=>array("html")));
         return $filters;
     }
 

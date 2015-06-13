@@ -25,6 +25,9 @@
 	{{parent()}}
         <script language="javascript" type="text/javascript" src="{{asset("cal/calendrier.js")}}"></script>
         <script language="javascript" type="text/javascript" src="{{asset("js/fact.js")}}"></script>
+        <script type="text/javascript">
+                setDeleteImgSrc("{{ asset("images/suppr.png") }}");
+        </script>
         <link rel="stylesheet" href="{{ asset("config/calendrier.css") }}" type="text/css" media="screen">
         <style type="text/css">
                 #lbAllStudents option[selected]
@@ -33,14 +36,26 @@
                         display:none;
                 }
                 #lbAllStudents option:hover
-                ,#tExtraStudents tr:hover
                 {
                         background-color:yellow;
+                }
+                #tExtraStudents tr:hover
+                {
+                        background-color:lightsalmon;
                 }
                 #lbAllStudents option
                 ,#tExtraStudents tr
                 {
                         cursor:pointer;
+                }
+                #tExtraStudents
+                {
+                        border-collapse:collapse;
+                }
+                #tExtraStudents img
+                {
+                        width:16px;
+                        height:16px;
                 }
         </style>
 {% endblock %}
@@ -151,15 +166,18 @@
                                 <option value="{{s.id}}">{{"[%s] %s %s"|format(s.class,s.lastName,s.firstName)}}</option>
                         {%endfor%}
                 </select></p>
-                <p><span style="width:10%">Filtre: </span><input value="par nom et/ou par classe" style="width:70%" id="tbFilter"/></p>
-                <p id="lNoExtraStudent">
+                <p style="background-color:yellow; margin-bottom:3px">Rechercher par nom et/ou par classe</p>
+                <p style="margin-top:0"><input value="par nom et/ou par classe" style="width:95%" id="tbFilter"
+                        {{ "Entrez le nom, prénom et/ou la classe d'un élève à rechercher, séparés par un espace. Appuyez sur ENTER pour ajouter l'élève sélectionné."|overlib}}
+                /></p>
+                <p id="lNoExtraStudent" style="background-color:yellow">
                         Aucun élève sélectionné
                 </p>
-                <p id="lExtraStudents" style="display:none;background-color:yellow">
+                <p id="lExtraStudents" style="display:none;background-color:yellow; margin-bottom:2px">
                         Elève(s) sélectionné(s):
                 </p>
-                <p><table id="tExtraStudents" style="width:100%">
-                </table></p>
+                <table id="tExtraStudents" style="width:100%; background-color:lightblue">
+                </table>
         </div>
         <div style="text-align:center">
                 <input type="submit" name="mode" value="Enregistrer"/>
