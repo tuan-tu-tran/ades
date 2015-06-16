@@ -246,6 +246,11 @@ mysql_close ($lienDB);
 $nombre = mysql_num_rows($resultat);
 if(!isset($texte)){$texte="";}
 $texte .= "<h3>Date : $ladate à $heure :: Durée : $duree h </h3>\n";
+$addDisabled="";
+if($ligne["occupation"] >= $ligne["places"]){
+    $addDisabled="disabled='disabled'";
+}
+$texte .="<p class='inv'><button id='bAdd' onclick='window.location.href=&apos;detention/add/$idretenue&apos;;return false;' style='cursor:pointer' $addDisabled >Ajouter un élève</button></p>";
 
 if ($nombre>0)
 	{
