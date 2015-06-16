@@ -31,6 +31,28 @@ Normalisation();
   <link media="screen" rel="stylesheet" href="config/screen.css" type="text/css">
   <link  type="text/css" rel="stylesheet" href="config/print.css" media="print" >
   <link rel="stylesheet" href="config/menu.css" type="text/css" media="screen">
+  <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+        jQuery(function($){
+            var b=$("#bAdd:disabled");
+            if(b.length>0){
+                var p=b.position();
+                var d=$("<div>");
+                d.css({
+                    position:"absolute",
+                    display:"inline-block",
+                    left:p.left,
+                    top:p.top,
+                    width:b.outerWidth(),
+                    height:b.outerHeight(),
+                    "vertical-align":"top",
+                    cursor:"pointer",
+                }).hover(function(){
+                    overlib("Cette retenue est actuellement pleine et ne peut pas accepter d'élève supplémentaire");
+                }, nd).insertAfter(b);
+            }
+        });
+    </script>
   <script type="text/javascript" src="inc/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup -->
   </script>
 </head>
