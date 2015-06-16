@@ -151,8 +151,8 @@ EOF;
 		$file=fopen(Config::SchoolConfigFile(),"wt");
 		if($file){
 			fprintf($file, $format
-				, var_export($this->params->schoolname, true)
-				, var_export($this->params->title, true)
+				, mb_convert_encoding(var_export($this->params->schoolname, true), "latin1","utf8")
+				, mb_convert_encoding(var_export($this->params->title, true), "latin1","utf8")
 			);
 			fclose($file);
 			return true;
