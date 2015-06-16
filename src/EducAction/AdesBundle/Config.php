@@ -77,8 +77,8 @@ class Config{
             if(file_exists($fname)) {
                 require_once $fname;
                 self::$schoolConfig=array(
-                    "name"=>ECOLE,
-                    "title"=>TITRE
+                    "name"=>mb_convert_encoding(ECOLE, "utf8","latin1"),
+                    "title"=>mb_convert_encoding(TITRE, "utf8","latin1")
                 );
             } else {
                 self::$schoolConfig=array(
