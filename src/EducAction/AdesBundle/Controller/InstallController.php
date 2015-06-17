@@ -35,6 +35,7 @@ class InstallController extends Controller
     {
         $configure_db_result=$this->flash()->peek("configure_db_result");
         if(file_exists(Config::DbConfigFile()) && !$configure_db_result) {
+            $this->flash()->clear();
             $this->checkCanConfigureSchool();
             return $this->View("overwrite_forbidden.html.twig");
         } elseif (!$configure_db_result) {
