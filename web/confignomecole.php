@@ -30,7 +30,7 @@ if(isset($_POST['ecole']) && isset($_POST['titre']))
 		//Si vide on ne fait rien
 		//variable rempli on créer le dossier
 		// Rami Adrien création du fichier confdb.inc.php
-		$fichierconstantesinc = fopen("config/constantes.inc.php","w");
+		$fichierconstantesinc = fopen("../local/constantes.inc.php","w");
         $template=<<<EOF
 <?php
 define("ECOLE", %s);
