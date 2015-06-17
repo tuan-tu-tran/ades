@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ADES.  If not, see <http://www.gnu.org/licenses/>.
 */
+require "../vendor/autoload.php";
 require ("inc/prive.inc.php");
 require ("config/constantes.inc.php");
 require ("inc/fonctions.inc.php");
@@ -53,7 +54,7 @@ $nbEleves = mysql_num_rows($eleves);
 
 echo "<p class=\"impt\">La synthèse pour les $nbEleves élèves est à votre disposition.</p>";
 
-if (!($fp=fopen("synthese.csv", "w"))) die ("Impossible d'ouvrir le fichier");
+if (!($fp=fopen(EducAction\AdesBundle\Config::LocalFile("synthese.csv"), "w"))) die ("Impossible d'ouvrir le fichier");
 
 // lire la liste de tous les types de faits existants
 $descriptionFaits = parse_ini_file("config/descriptionfaits.ini", TRUE);
