@@ -126,7 +126,7 @@ function syntheseEleves ($date1, $date2, $classe, $resultat)
 {
 $prototype = new prototypeFait();
 // initialisation de la page HTML externe pour impression
-$pageImpression = entetePageHtml(ECOLE);
+$pageImpression = "";
 // initialisation de la liste des liens vers les fiches individuelles
 
 $lignesLiens = $this->enteteFaits ($date1, $date2, $classe);;
@@ -189,7 +189,6 @@ foreach ($listeFaitsParEleve as $ideleve=>$detailFaitPourEleve)
 		}
 	$pageImpression .= $this->ClotureEleve();
 	}
-$pageImpression .= finPageHTML();
 if (!($fp=fopen(Config::LocalFile("synthese.html"), "w"))) die ("Impossible d'ouvrir le fichier");
 fwrite ($fp, $pageImpression);
 fclose ($fp);

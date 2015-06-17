@@ -28,6 +28,8 @@ class SummaryController extends Controller
     {
         $src=Config::LocalFile("synthese.html");
         if(file_exists($src)){
+            $content = utf8_encode(file_get_contents($src));
+            return $this->View("summary.html.twig", array("content" => $content));
         } else {
             throw $this->createNotFoundException("cette page n'existe pas");
         }
