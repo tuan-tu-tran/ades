@@ -22,7 +22,7 @@ namespace EducAction\AdesBundle\Controller;
 
 use EducAction\AdesBundle\Config;
 
-class SummaryController extends Controller
+class SummaryController extends Controller implements IProtected
 {
     public function showAction()
     {
