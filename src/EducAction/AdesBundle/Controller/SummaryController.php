@@ -34,4 +34,18 @@ class SummaryController extends Controller implements IProtected
             throw $this->createNotFoundException("cette page n'existe pas");
         }
     }
+
+    public function downloadCsvAction()
+    {
+        $src=Config::LocalFile("synthese.csv");
+        if(file_exists($src)){
+            $content = utf8_encode(file_get_contents($src));
+            $response=new \Symfony\Component\HttpFoundation\Response($content);
+            $response->headers->set("Content-Type", "text/csv");
+            $response->headers->set("Content-Disposition", "attachment; filename=\"synthese.csv\"");
+            return $response;
+        } else {
+            throw $this->createNotFoundException("cette page n'existe pas");
+        }
+    }
 }

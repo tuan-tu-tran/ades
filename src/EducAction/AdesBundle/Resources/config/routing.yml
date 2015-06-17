@@ -86,3 +86,8 @@ educ_action_summary_show:
     pattern: /synthese.html
     defaults: {_controller: EducActionAdesBundle:Summary:show }
     methods: [GET]
+
+educ_action_summary_csv:
+    pattern: /synthese.csv
+    defaults: {_controller: EducActionAdesBundle:Summary:downloadCsv }
+    methods: [GET]
