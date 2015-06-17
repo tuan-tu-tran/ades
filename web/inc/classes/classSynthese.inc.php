@@ -1,6 +1,7 @@
 <?php
 /**
  * Copyright (c) 2014 Educ-Action
+ * Copyright (c) 2015 Tuan-Tu Tran
  * 
  * This file is part of ADES.
  * 
@@ -19,8 +20,11 @@
 */
 require ("inc/classes/classDescriptionFait.inc.php");
 require ("inc/funcdate.inc.php");
+require dirname(__FILE__)."/../../../vendor/autoload.php";
 // classe regroupant l'ensemble des fonctions nécessaires pour
 // les différentes synthèses
+
+use EducAction\AdesBundle\Config;
 
 class synthese {
 
@@ -124,7 +128,7 @@ function syntheseEleves ($date1, $date2, $classe, $resultat)
 {
 $prototype = new prototypeFait();
 // initialisation de la page HTML externe pour impression
-$pageImpression = entetePageHtml(ECOLE);
+$pageImpression = "";
 // initialisation de la liste des liens vers les fiches individuelles
 
 $lignesLiens = $this->enteteFaits ($date1, $date2, $classe);;
@@ -188,8 +192,7 @@ foreach ($listeFaitsParEleve as $ideleve=>$detailFaitPourEleve)
 		}
 	$pageImpression .= $this->ClotureEleve();
 	}
-$pageImpression .= finPageHTML();
-if (!($fp=fopen("synthese.html", w))) die ("Impossible d'ouvrir le fichier");
+if (!($fp=fopen(Config::LocalFile("synthese.html"), "w"))) die ("Impossible d'ouvrir le fichier");
 fwrite ($fp, $pageImpression);
 fclose ($fp);
 echo telecharger ("synthese.html");

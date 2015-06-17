@@ -242,7 +242,7 @@ return $texte;
 
 function finPageHTML ()
 {
-$texte .= "</body>\n</html>\n";
+$texte = "</body>\n</html>\n";
 return $texte;
 }
 
