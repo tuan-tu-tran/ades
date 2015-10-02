@@ -31,6 +31,12 @@ if ($occupation == 0)
 	$options .= "<input name=\"typeDeRetenue\" id=\"typeDeRetenue\" value=\"$typeDeRetenue\" type=\"hidden\">\n";
 	$options .= "<br />\n";
 	}
+
+if (isset($ladate)) {
+	$detentionDatetime = DateTime::createFromFormat("j/m/Y", $ladate);
+} else {
+	$detentionDatetime = new DateTime();
+}
 ?>
 	
 <h2>Edition d'une retenue</h2>
@@ -40,7 +46,7 @@ if ($occupation == 0)
 	<?php echo $options; ?>
 	</p>
 	<p><label for="ladate">Date :</label>
-	<input name="ladate" class="obligatoire" id="ladate" value="<?php echo date("d/m/y");?>" 
+	<input name="ladate" class="obligatoire" id="ladate" value="<?php echo $detentionDatetime->format("j/m/Y");?>"
 	size="10" maxlength="10" onfocus="javascript:blur();dater(0,1,'calendrier');" type="text">
 	<span id="calendrier" style="position: absolute; z-index: 100;"></span></p>
 	<p><label for="heure">Heure :</label>
