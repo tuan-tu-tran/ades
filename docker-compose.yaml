@@ -6,3 +6,14 @@ services:
     ports: ["80:80"]
     volumes:
       - .:/var/www/html
+      - ./docker/php-tzinfo.ini:/usr/local/etc/php/conf.d/tzinfo.ini
+    environment: 
+      - TZ=Europe/Brussels
+  db:
+    image: mariadb:10.5
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    volumes:
+      - ./docker/init.sql:/script/init.sql
+    command: "--init-file /script/init.sql"
+    ports: ["3306:3306"]
