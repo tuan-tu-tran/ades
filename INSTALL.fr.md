@@ -118,7 +118,7 @@ Pour procéder à la mise à jour semi-automatique:
   Si nécessaire la plate-forme procédera à une mise à jour de la base de données.
 * Votre installation est maintenant à jour.
 
-###<a name="fullauto"></a>Mise à jour automatique
+### <a name="fullauto"></a>Mise à jour automatique
 
 Il est possible de configurer GitHub et l'installation d'ADES pour que lors de la publication de nouveau code,
 ce nouveau code soit automatiquement déployé vers votre installation.
