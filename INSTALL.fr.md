@@ -18,7 +18,7 @@ Ce fichier contient les instructions d'installation de la plate-forme ADES.
 
 Le code source de la plate-forme est disponible sur [Github](https://github.com/doc212/ades).
 
-Une archive zip de la dernière version stable de production est disponible [ici](https://github.com/doc212/ades/archive/prod.zip).
+Une archive zip de la dernière version stable de production est disponible [ici](https://github.com/doc212/ades/archive/master.zip).
 
 <a name="fresh"></a>Installation vierge
 -------------------
