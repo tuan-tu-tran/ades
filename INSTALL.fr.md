@@ -67,7 +67,7 @@ Veillez à préparer un accès au serveur MySQL avec tous les droits sur le sch�
 
 Les tables nécessaires seront crées et seront préfixées du préfixe `ades_`.
 
-Il est préférable de partir d'un base de données vierge mais si certaines tables d'ADES existent déjà, **elles ne seront pas recrées**.
+Il est préférable de partir d'un base de données vierge mais si certaines tables d'ADES existent déjà, **elles ne seront pas recréées**.
 
 Si tout se passe bien, le site vous demandera ensuite de configurer le nom de l'école et vous redirigera vers la page d'accueil.
 
