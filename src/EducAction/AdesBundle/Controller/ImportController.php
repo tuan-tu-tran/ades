@@ -216,11 +216,18 @@ class ImportController extends Controller implements IAccessControlled
                     $params[]=$s[$f];
                 }
 
+                /*
+                //I've commented out this code because the table encoding is ut8
+                //so we should put utf8 in there and there is no reason to convert back to latin1.
+                //this actually causes issues when inserting special characters, like unicode E9: é
+                //which translates to 0xE9 in latin1, but that's not valid in utf8.
+                //I found the commit where I added this explicitly, but no good reason why. 
                 foreach($params as &$p){
                     if(is_string($p)) {
                         $p=utf8_decode($p);
                     }
                 }
+                */
                 $db->execute($query, $params);
             }
             return $this->redirectRoute("educ_action_ades_import_proeco_done");
