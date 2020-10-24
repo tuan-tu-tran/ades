@@ -23,7 +23,7 @@ namespace EducAction\AdesBundle;
 
 class Upgrade
 {
-    const Version="2.0";
+    const Version="3.0";
     const _CREATION_SCRIPT = "creation.sql"; //initial db creation script that must be idempotent
 
     /**
