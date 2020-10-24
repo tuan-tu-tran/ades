@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `ades_mail` (
 -- Contenu de la table `ades_mail`
 --
 
-INSERT INTO `ades_mail` (`id_mail`, `ref_expediteur`, `ref_mail`, `sujet`, `texte`, `Brouillon`, `date_envoi`) VALUES
+INSERT IGNORE INTO `ades_mail` (`id_mail`, `ref_expediteur`, `ref_mail`, `sujet`, `texte`, `Brouillon`, `date_envoi`) VALUES
 (0000000025, 1, 0, 'ter', 'gef', 0, '2011-09-28 13:29:31');
 
 -- --------------------------------------------------------
@@ -163,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `ades_mail_dossier` (
 -- Contenu de la table `ades_mail_dossier`
 --
 
-INSERT INTO `ades_mail_dossier` (`id_dossier`, `nom_dossier`) VALUES
+INSERT IGNORE INTO `ades_mail_dossier` (`id_dossier`, `nom_dossier`) VALUES
 (0000000001, 'Boite Principale'),
 (0000000002, 'Archive');
 
@@ -232,5 +232,5 @@ CREATE TABLE IF NOT EXISTS `ades_users` (
 -- Contenu de la table `ades_users`
 --
 
-INSERT INTO `ades_users` (`idedu`, `user`, `nom`, `prenom`, `email`, `mdp`, `privilege`, `timeover`) VALUES
+INSERT IGNORE INTO `ades_users` (`idedu`, `user`, `nom`, `prenom`, `email`, `mdp`, `privilege`, `timeover`) VALUES
 (1, 'admin', 'admin', 'admin', 'admin@ades_edu.net', '21232f297a57a5a743894a0e4a801fc3', 'admin', 0);

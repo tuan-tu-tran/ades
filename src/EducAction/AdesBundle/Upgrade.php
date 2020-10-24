@@ -23,7 +23,8 @@ namespace EducAction\AdesBundle;
 
 class Upgrade
 {
-	const Version="2.0";
+    const Version="2.0";
+    const _CREATION_SCRIPT = "creation.sql"; //initial db creation script that must be idempotent
 
     /**
      * Return whether a db upgrade is required
@@ -124,8 +125,17 @@ class Upgrade
                         break;
                     }else{
                         $result->executedScripts[]=$script;
-                        $result->currentVersion = self::GetScriptVersion($script);
-                        Config::SetDbVersion($result->currentVersion);
+                        if($script != self::_CREATION_SCRIPT)
+                        {
+                            //the creation script is special: you can't get a version from the script name
+                            //and there's not config table yet, so you can't store the version 0.0 in db
+                            $result->currentVersion = self::GetScriptVersion($script);
+                            Config::SetDbVersion($result->currentVersion);
+                        }
+                        else
+                        {
+                            $result->currentVersion = "0.0";
+                        }
                     }
                 }
             }
@@ -148,6 +158,11 @@ class Upgrade
                 return self::CompareVersions($vx,$vy);
             });
             $scriptsToExecute=array();
+            if($versions->fromVersion == "0.0"){
+                $scriptsToExecute[]=self::_CREATION_SCRIPT; //if we start from 0, the creation script may or may not have been executed
+                //but besides this script, nothing was executed
+                //and it's idempotent, so it doesn't harm to re-execute it.
+            }
             foreach($upgradeScripts as $script){
                 $scriptVersion=self::GetScriptVersion($script);
                 if(
