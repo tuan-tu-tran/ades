@@ -1,3 +1,0 @@
-#this is useful for ovh hosted sites
-#comment this line if you don't have the right to use SetEnv in .htaccess
-SetEnv PHP_VER 5_4

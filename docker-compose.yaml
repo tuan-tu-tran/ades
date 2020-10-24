@@ -5,10 +5,8 @@ services:
     image: ades
     ports: ["80:80"]
     volumes:
-      - .:/var/www/html
-      - ./docker/php-tzinfo.ini:/usr/local/etc/php/conf.d/tzinfo.ini
-    environment: 
-      - TZ=Europe/Brussels
+      - .:/ades
+      - ./docker/000-default.conf:/etc/apache2/sites-available/000-default.conf
   db:
     image: mariadb:10.5
     environment:
