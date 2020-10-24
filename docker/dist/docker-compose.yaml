@@ -6,9 +6,9 @@ services:
     volumes:
       - ades_local:/ades/local
   db:
-    image: mariadb:10.5
+    image: mysql:5.5
     environment:
       - MYSQL_ROOT_PASSWORD=password
-    ports: ["3306:3306"]
+    ports: ["3307:3306"]
 volumes:
   ades_local:

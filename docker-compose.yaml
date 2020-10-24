@@ -3,14 +3,14 @@ services:
   web:
     build: ./docker
     image: ades
-    ports: ["80:80"]
+    ports: ["3000:80"]
     volumes:
       - .:/ades
   db:
-    image: mariadb:10.5
+    image: mysql:5.5
     environment:
       - MYSQL_ROOT_PASSWORD=password
     volumes:
       - ./docker/init.sql:/script/init.sql
     command: "--init-file /script/init.sql"
-    ports: ["3306:3306"]
+    ports: ["3309:3306"]
