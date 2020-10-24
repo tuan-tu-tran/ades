@@ -37,3 +37,5 @@
     #RewriteRule .? %{ENV:BASE}/app_dev.php [L]
     RewriteRule .? %{ENV:BASE}/app.php [L]
 </IfModule>
+
+php_value default_charset none
