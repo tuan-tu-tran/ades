@@ -6,7 +6,6 @@ services:
     ports: ["80:80"]
     volumes:
       - .:/ades
-      - ./docker/000-default.conf:/etc/apache2/sites-available/000-default.conf
   db:
     image: mariadb:10.5
     environment:
