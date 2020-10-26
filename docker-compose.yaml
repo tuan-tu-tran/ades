@@ -13,5 +13,8 @@ services:
       - MYSQL_ROOT_PASSWORD=password
     volumes:
       - ./docker/init.sql:/script/init.sql
+      - mysql_data:/var/lib/mysql
     command: "--init-file /script/init.sql"
     ports: ["3307:3306"]
+volumes:
+  mysql_data:
