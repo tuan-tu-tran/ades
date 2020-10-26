@@ -1,7 +1,4 @@
 #!/bin/bash
 
-cd ..
-docker build -t ades-base .
-
-cd dist
+docker build -t ades-base .. -f runtime-base.dockerfile
 docker build -t ades:latest -f Dockerfile ../../

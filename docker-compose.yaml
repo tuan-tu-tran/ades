@@ -1,8 +1,9 @@
 version: "3"
 services:
   web:
-    build: ./docker
-    image: ades
+    build:
+      context: ./docker
+      dockerfile: runtime-base.dockerfile
     ports: ["3000:80"]
     volumes:
       - .:/ades
@@ -13,4 +14,4 @@ services:
     volumes:
       - ./docker/init.sql:/script/init.sql
     command: "--init-file /script/init.sql"
-    ports: ["3309:3306"]
+    ports: ["3307:3306"]
