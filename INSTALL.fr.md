@@ -6,7 +6,7 @@ En particulier, il explique comment installer manuellement l'application.
 Cependant l'approche recommandée est maintenant d'utiliser une image Docker.
 
 Ce fichier-ci ne sera donc plus mis à jour.  
-Pour des informations plus récentes, voir la page [wiki d'installation](https://github.com/tuan-tu-tran/ades/wiki/Installation)
+Pour des informations plus récentes, voir la page [wiki d'installation](../../wiki/Installation)
 
 * [Téléchargement](#download)
 * [Installation vierge](#fresh)
