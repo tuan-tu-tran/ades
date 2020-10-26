@@ -1,7 +1,12 @@
 Installation
 ============
 
-Ce fichier contient les instructions d'installation de la plate-forme ADES.
+Ce fichier contient les instructions d'installation de la plate-forme ADES.  
+En particulier, il explique comment installer manuellement l'application.  
+Cependant l'approche recommandée est maintenant d'utiliser une image Docker.
+
+Ce fichier-ci ne sera donc plus mis à jour.  
+Pour des informations plus récentes, voir la page [wiki d'installation](https://github.com/tuan-tu-tran/ades/wiki/Installation)
 
 * [Téléchargement](#download)
 * [Installation vierge](#fresh)
